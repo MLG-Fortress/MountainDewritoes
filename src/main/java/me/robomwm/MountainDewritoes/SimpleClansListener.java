@@ -39,14 +39,12 @@ public class SimpleClansListener implements Listener
         ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
         if (clanPlayer == null)
             return;
-        System.out.println(player.getName() + " is in SimpleClans db.");
         Clan clan = clanPlayer.getClan();
         if (clan == null) //If not part of a clan, do no more
             return;
 
 
         final String tag = clan.getColorTag();
-        System.out.println(player.getName() + " has a clan: " + tag);
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
@@ -65,7 +63,7 @@ public class SimpleClansListener implements Listener
                 Team team = sb.getTeam(player.getName());
                 if (team == null)
                     return;
-                team.setPrefix(tag + " "); //TODO: Check if a colored tag colors name
+                team.setPrefix(tag + " §f"); //TODO: Get name color and use that instead
             }
         }, 40L); //Ensure healthbar made the team
 
