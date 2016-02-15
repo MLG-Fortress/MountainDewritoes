@@ -81,7 +81,7 @@ public class SimpleClansListener implements Listener
         final Player player = event.getPlayer();
         String mess = event.getMessage();
         if (mess.length() > 30)
-            mess = mess.substring(mess.indexOf(0, 26)) + "...";
+            mess = mess.substring(0, 26) + "...";
         final String message = mess;
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
