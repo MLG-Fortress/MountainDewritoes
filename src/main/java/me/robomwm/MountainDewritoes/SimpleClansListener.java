@@ -52,7 +52,7 @@ public class SimpleClansListener implements Listener
         {
             public void run()
             {
-                player.setPlayerListName(tag + " " + player.getDisplayName());
+                player.setPlayerListName(tag + " §f" + player.getDisplayName());
             }
         }, 30L); //Long delay to ensure this has priority & no need to instantly set
 
