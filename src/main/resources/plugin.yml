@@ -1,0 +1,6 @@
+name: MountainDewritoes
+version: ${project.version}
+#website:
+author: RoboMWM
+main: me.robomwm.MountainDewritoes.Main
+depend: [SimpleClans]
