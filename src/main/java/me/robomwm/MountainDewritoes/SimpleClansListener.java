@@ -63,7 +63,7 @@ public class SimpleClansListener implements Listener
                 Team team = sb.getTeam(player.getName());
                 if (team == null)
                     return;
-                team.setPrefix(tag + " §f"); //TODO: Get name color and use that instead
+                team.setPrefix("§7" + tag + " §f"); //TODO: Get name color and use that instead
             }
         }, 40L); //Ensure healthbar made the team
 
@@ -78,8 +78,8 @@ public class SimpleClansListener implements Listener
 
         final Player player = event.getPlayer();
         String mess = event.getMessage();
-        if (mess.length() > 30)
-            mess = mess.substring(0, 26) + "...";
+        if (mess.length() > 14)
+            mess = mess.substring(0, 10) + "...";
         final String message = mess;
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
