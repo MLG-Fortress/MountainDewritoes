@@ -78,13 +78,13 @@ public class ChatListener implements Listener
             //14 spaces for ending scroll
             mess += "              ";
             //For storing in hashmap
-            int[] tasks = new int[mess.length() - 14];
+            int[] tasks = new int[mess.length() - 15];
             String lastMessage = "";
             int maxTime = 0;
             final String firstMess = mess.substring(0, 13);
 
             //Display first part of message
-            tasks[0] = scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
             {
                 public void run()
                 {
@@ -101,7 +101,7 @@ public class ChatListener implements Listener
             {
                 final String message = mess.substring(i, i + 13);
 
-                tasks[i] = scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+                tasks[i - 1] = scheduler.scheduleSyncDelayedTask(instance, new Runnable()
                 {
                     public void run()
                     {
