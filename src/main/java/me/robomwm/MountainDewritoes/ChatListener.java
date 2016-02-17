@@ -6,7 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -37,7 +39,6 @@ public class ChatListener implements Listener
     chat window anyways...
 
     TODO: Handle /me command
-    TODO: Handle "scrolling"
     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event)
@@ -47,16 +48,24 @@ public class ChatListener implements Listener
 
         final Player player = event.getPlayer();
 
-        //Is a prior message bubble being displayed?
+        //Is a prior message bubble being displayed? If so, remove it
         if (messageScrolling.containsKey(player.getName()))
         {
-            int [] tasksToRemove = messageScrolling.get(player.getName());
+            final int [] tasksToRemove = messageScrolling.get(player.getName());
+            final Plugin plugin = instance;
             //C# equivalent: foreach (int i in tasksToRemove)
-            for (int i : tasksToRemove)
+            //for (int i : tasksToRemove) http://stackoverflow.com/a/85206
+            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
             {
-                if ((tasksToRemove[i] != -1) && (scheduler.isQueued(tasksToRemove[i]) == true))
-                    scheduler.cancelTask(i);
-            }
+                public void run()
+                {
+                    for (int i = 0; i < tasksToRemove.length; i++)
+                    {
+                        if (tasksToRemove[i] != -1)
+                            scheduler.cancelTask(i); //TODO: Thread safe?
+                    }
+                }
+            });
             messageScrolling.remove(player.getName());
         }
 
@@ -65,30 +74,48 @@ public class ChatListener implements Listener
         //Feature: Message "scrolling"
         if (mess.length() > 14)
         {
-            int speed = (100 - mess.length()) / 10;
+            int speed = (100 - mess.length()) / 15;
             if (speed < 1)
                 speed = 1;
             //14 spaces for ending scroll
             mess += "              ";
             //For storing in hashmap
-            int[] tasks = new int[speed];
+            int[] tasks = new int[mess.length() - 14];
             String lastMessage = "";
-            for (int i = 0; i < mess.length(); i++)
+            int maxTime = 0;
+            final String firstMess = mess.substring(0, 13);
+
+            //Display first part of message
+            tasks[0] = scheduler.scheduleSyncDelayedTask(instance, new Runnable()
             {
-                final String message = mess.substring(i, i + 10);
+                public void run()
+                {
+                    //TODO: Figure out how to cancel tasks if team ever equals null
+                    Team team = sb.getTeam(player.getName());
+                    if (team == null)
+                        return;
+                    team.setSuffix(": " + firstMess);
+                }
+            });
+
+            //Then print rest of message
+            for (int i = 1; i < (mess.length() - 14); i++)
+            {
+                final String message = mess.substring(i, i + 13);
 
                 tasks[i] = scheduler.scheduleSyncDelayedTask(instance, new Runnable()
                 {
                     public void run()
                     {
-                        //TODO: Figure out how to cancel tasks if team ever equals null
                         Team team = sb.getTeam(player.getName());
                         if (team == null)
                             return;
                         team.setSuffix(": " + message);
                     }
-                }, (40 + (speed * (i + 1))));
+                }, (60 + (speed * (i + 1))));
                 lastMessage = message;
+                System.out.println(tasks[i]);
+                maxTime = (60 + (speed * (i + 1)));
             }
 
             messageScrolling.put(player.getName(), tasks);
@@ -98,14 +125,22 @@ public class ChatListener implements Listener
             {
                 public void run()
                 {
-                    messageScrolling.remove(player.getName());
+
                     Team team = sb.getTeam(player.getName());
                     if ((team == null) || (player == null))
+                    {
+                        messageScrolling.remove(player.getName());
                         return;
+                    }
                     if (team.getSuffix().equals(": " + message))
+                    {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "healthbar reloadplayer " + player.getName());
+                        System.out.println("Dispatched");
+                    }
+                    messageScrolling.remove(player.getName());
+                    System.out.println("Removed hash");
                 }
-            }, 200L);
+            }, maxTime + 1);
 
             return;
         }
@@ -134,6 +169,6 @@ public class ChatListener implements Listener
                 if (team.getSuffix().equals(": " + message))
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "healthbar reloadplayer " + player.getName());
             }
-        }, 200L); //Display for 10 seconds
+        }, 180L); //Display for 9 seconds
     }
 }
