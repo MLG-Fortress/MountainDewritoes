@@ -62,7 +62,7 @@ public class ChatListener implements Listener
                     for (int i = 0; i < tasksToRemove.length; i++)
                     {
                         if (tasksToRemove[i] != -1)
-                            scheduler.cancelTask(i); //TODO: Thread safe?
+                            scheduler.cancelTask(tasksToRemove[i]); //TODO: Thread safe?
                     }
                 }
             });
