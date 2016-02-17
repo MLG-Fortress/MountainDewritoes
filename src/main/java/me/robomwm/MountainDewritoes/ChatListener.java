@@ -13,6 +13,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Robo on 2/16/2016.
@@ -22,7 +23,7 @@ public class ChatListener implements Listener
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
     BukkitScheduler scheduler = Bukkit.getScheduler();
     public Main instance;
-    HashMap<String, int[]> messageScrolling = new HashMap<String, int[]>();
+    ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
 
     public ChatListener(Main main)
     {
@@ -60,10 +61,7 @@ public class ChatListener implements Listener
                 public void run()
                 {
                     for (int i = 0; i < tasksToRemove.length; i++)
-                    {
-                        if (tasksToRemove[i] != -1)
-                            scheduler.cancelTask(tasksToRemove[i]); //TODO: Thread safe?
-                    }
+                        scheduler.cancelTask(tasksToRemove[i]); //TODO: Thread safe?
                 }
             });
             messageScrolling.remove(player.getName());
