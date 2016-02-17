@@ -62,6 +62,8 @@ public class ChatListener implements Listener
                 {
                     for (int i = 0; i < tasksToRemove.length; i++)
                         scheduler.cancelTask(tasksToRemove[i]); //TODO: Thread safe?
+                        //I could also double check if the tasks I'm canceling are mine, but doubt that scheduler will
+                        //overlap task IDs within 10 seconds, and max scheduled is < 100.
                 }
             });
             messageScrolling.remove(player.getName());
