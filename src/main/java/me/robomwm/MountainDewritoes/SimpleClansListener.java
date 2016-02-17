@@ -44,7 +44,11 @@ public class SimpleClansListener implements Listener
             return;
 
 
+        //Get colored clan tag
         final String tag = clan.getColorTag();
+
+        //Get a randomized, consistent color code for player
+        final String colorCode = getColorCode(player);
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
@@ -52,7 +56,7 @@ public class SimpleClansListener implements Listener
         {
             public void run()
             {
-                player.setPlayerListName(tag + " §f" + player.getDisplayName());
+                player.setPlayerListName(tag + " §" + colorCode + player.getDisplayName());
             }
         }, 30L); //Long delay to ensure this has priority & no need to instantly set
 
@@ -63,49 +67,28 @@ public class SimpleClansListener implements Listener
                 Team team = sb.getTeam(player.getName());
                 if (team == null)
                     return;
-                team.setPrefix("§7" + tag + " §f"); //TODO: Get name color and use that instead
+                team.setPrefix("§7" + tag + " §" + colorCode); //TODO: Get name color and use that instead
             }
         }, 40L); //Ensure healthbar made the team
 
     }
 
-    //Not really a SimpleClans feature but too lazy to make it a separate plugin right now
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerChat(AsyncPlayerChatEvent event)
+    public String getColorCode(Player player)
     {
-        if (event.getRecipients().size() < 2)
-            return; //ignore if they're the only one on or softmuted
+        //TODO: Allow owner to choose unique to player or name
+        //Get hash code of player's UUID
+        int colorCode = player.getUniqueId().hashCode();
+        //Ensure number is positive
+        colorCode = Math.abs(colorCode);
 
-        final Player player = event.getPlayer();
-        String mess = event.getMessage();
-        if (mess.length() > 14)
-            mess = mess.substring(0, 10) + "...";
-        final String message = mess;
-        scheduler.scheduleSyncDelayedTask(instance, new Runnable()
-        {
-            public void run()
-            {
-                //TODO: are the 3 lines below thread-safe?
-                Team team = sb.getTeam(player.getName());
-                if (team == null)
-                    return;
-                team.setSuffix(": " + message);
-            }
-        });
+        //Will make configurable, hence this
+        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e,f,g".split(",");
+        //Divide hash code by length of acceptableColors, and use remainder
+        //to determine which index to use (like a hashtable/map/whatever)
+        colorCode = (colorCode % acceptableColors.length);
+        String stringColorCode = acceptableColors[colorCode];
 
-        scheduler.scheduleSyncDelayedTask(instance, new Runnable()
-        {
-            public void run()
-            {
-                Team team = sb.getTeam(player.getName());
-                if (team == null)
-                    return;
-                if (team.getSuffix().equals(": " + message))
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "healthbar reloadplayer " + player.getName());
-            }
-        }, 140L);
-
-
+        return stringColorCode;
     }
 
 }
