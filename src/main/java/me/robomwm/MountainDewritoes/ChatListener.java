@@ -61,7 +61,7 @@ public class ChatListener implements Listener
                 {
                     for (int i = 0; i < tasksToRemove.length; i++)
                     {
-                        if (tasksToRemove[i] != -1)
+                        if ((tasksToRemove[i] != -1) && (scheduler.getPendingTasks().get(tasksToRemove[i]).getOwner() == plugin))
                             scheduler.cancelTask(tasksToRemove[i]); //TODO: Thread safe?
                     }
                 }
