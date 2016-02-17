@@ -114,7 +114,6 @@ public class ChatListener implements Listener
                     }
                 }, (60 + (speed * (i + 1))));
                 lastMessage = message;
-                System.out.println(tasks[i]);
                 maxTime = (60 + (speed * (i + 1)));
             }
 
@@ -135,10 +134,8 @@ public class ChatListener implements Listener
                     if (team.getSuffix().equals(": " + message))
                     {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "healthbar reloadplayer " + player.getName());
-                        System.out.println("Dispatched");
                     }
                     messageScrolling.remove(player.getName());
-                    System.out.println("Removed hash");
                 }
             }, maxTime + 1);
 
