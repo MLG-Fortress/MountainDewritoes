@@ -120,7 +120,7 @@ public class SimpleClansListener implements Listener
         //compatible with other prefix/suffix plugins since we just set PlayerListName
         scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
             public void run() {
-                player.setPlayerListName(tag + " §" + colorCode + player.getDisplayName());
+                player.setPlayerListName("§7" + tag + " §" + colorCode + player.getDisplayName());
             }
         }, 30L); //Long delay to ensure this has priority & no need to instantly set
 
