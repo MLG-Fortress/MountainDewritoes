@@ -33,7 +33,7 @@ public class SimpleClansListener implements Listener
     }
 
     //Set colors and prefix onJoin
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         setClanPrefix(event.getPlayer());
