@@ -33,7 +33,7 @@ public class SimpleClansListener implements Listener
     }
 
     //Set colors and prefix onJoin
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         setClanPrefix(event.getPlayer());
@@ -53,7 +53,7 @@ public class SimpleClansListener implements Listener
                 {
                     setClanPrefix(player);
                 }
-            }, 30L);
+            }, 10L);
         }
     }
 
@@ -67,7 +67,7 @@ public class SimpleClansListener implements Listener
         colorCode = Math.abs(colorCode);
 
         //Will make configurable, hence this
-        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e,f,g".split(",");
+        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
         //Divide hash code by length of acceptableColors, and use remainder
         //to determine which index to use (like a hashtable/map/whatever)
         colorCode = (colorCode % acceptableColors.length);
@@ -86,7 +86,7 @@ public class SimpleClansListener implements Listener
             {
                 player.setPlayerListName(player.getDisplayName());
             }
-        }, 30L); //Long delay to ensure this has priority & no need to instantly set
+        });
     }
 
     public void setClanPrefix(Player p)
@@ -120,9 +120,9 @@ public class SimpleClansListener implements Listener
         //compatible with other prefix/suffix plugins since we just set PlayerListName
         scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
             public void run() {
-                player.setPlayerListName("§7" + tag + " §" + colorCode + player.getDisplayName());
+                player.setPlayerListName("§7" + tag + " " + player.getDisplayName());
             }
-        }, 30L); //Long delay to ensure this has priority & no need to instantly set
+        });
 
 
         scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
