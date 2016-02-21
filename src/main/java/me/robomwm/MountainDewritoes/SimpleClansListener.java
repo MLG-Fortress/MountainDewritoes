@@ -76,71 +76,77 @@ public class SimpleClansListener implements Listener
         return stringColorCode;
     }
 
-    //Set playerListName if they are not in a clan
-    public void setListName(Player p)
+    //Delayed set playerListName (Primarily for onJoin, since Essentials sets displayName late)
+    //Automatically adds appropriate spacing
+    public void setListName(final String p, final String prefix, final String colorCode)
     {
-        final Player player = p;
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
             public void run()
             {
-                player.setPlayerListName(player.getDisplayName());
+                Player player = Bukkit.getPlayer(p);
+                if (player == null)
+                    return;
+                player.setPlayerListName(prefix + colorCode + " " + player.getDisplayName());
             }
-        });
+        }, 20L);
     }
 
-    public void setClanPrefix(Player p)
+    //Delayed setDisplayName
+    public void setDisplayName(final String p, final String colorCode)
     {
-        final Player player = p;
-        final String colorCode = getColorCode(player);
-
         //Don't alter if player name is already colored
         scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
             public void run() {
-                Player player1 = Bukkit.getPlayer(player.getName());
+                Player player1 = Bukkit.getPlayer(p);
                 if (player1 == null)
                     return;
                 if (player1.getDisplayName().startsWith(player1.getName()))
                     player1.setDisplayName("§" + colorCode + player1.getName());
             }
         }, 20L); //Ensure Essentials sets displayName before we set displayName (Essentials sets it later)
+    }
 
+    //Sets a player's appropriate chat color and prefix.
+    public void setClanPrefix(Player player)
+    {
+        final String playerName = player.getName();
+        final String colorCode = getColorCode(player);
 
-        ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
-        if (clanPlayer == null) {
-            setListName(player);
-            return;
-        }
+        //Set colored display name
+        setDisplayName(playerName, colorCode);
 
+        ClanPlayer clanPlayer = clanManager.getClanPlayer(player); //TODO: null check needed?
         Clan clan = clanPlayer.getClan();
-        if (clan == null) //If not part of a clan, do no more
+        if (clan == null)
         {
-            setListName(player);
+            //If not part of a clan, set colored prefix and do no more
+            setListName(player.getName(), colorCode, "");
             return;
         }
 
-
-        //Get colored clan tag
-        final String tag = clan.getColorTag();
-
+        final String tag = ("§7" + clan.getColorTag());
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
-        scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
-            public void run() {
-                player.setPlayerListName("§7" + tag + " " + player.getDisplayName());
-            }
-        });
+        setListName(playerName, tag, colorCode);
 
-
-        scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
-            public void run() {
-                Team team = sb.getTeam(player.getName());
-                if (team == null)
+        //Feature: set prefix in nameplate
+        scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+        {
+            public void run()
+            {
+                Player player = Bukkit.getPlayerExact(playerName);
+                Team team = sb.getTeam(playerName);
+                if (team == null || player == null)
                     return;
-                team.setPrefix("§7" + tag + " §" + colorCode); //TODO: Get name color and use that instead
+                //Get displayName color (player can change color via /nick)
+                String color = player.getDisplayName().substring(0,2);
+                team.setPrefix(tag + " " + color);
             }
         }, 40L); //Ensure healthbar made the team
     }
+
+
 
 }
