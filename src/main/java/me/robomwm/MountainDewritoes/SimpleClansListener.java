@@ -33,7 +33,7 @@ public class SimpleClansListener implements Listener
     }
 
     //Set colors and prefix onJoin
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         setClanPrefix(event.getPlayer());
@@ -95,8 +95,16 @@ public class SimpleClansListener implements Listener
         final String colorCode = getColorCode(player);
 
         //Don't alter if player name is already colored
-        if (player.getDisplayName().startsWith(player.getName()))
-            player.setDisplayName("§" + colorCode + player.getName());
+        scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
+            public void run() {
+                Player player1 = Bukkit.getPlayer(player.getName());
+                if (player1 == null)
+                    return;
+                if (player1.getDisplayName().startsWith(player1.getName()))
+                    player1.setDisplayName("§" + colorCode + player1.getName());
+            }
+        }, 20L); //Ensure Essentials sets displayName before we set displayName (Essentials sets it later)
+
 
         ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
         if (clanPlayer == null) {
