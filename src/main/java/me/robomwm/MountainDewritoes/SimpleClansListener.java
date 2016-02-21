@@ -87,7 +87,7 @@ public class SimpleClansListener implements Listener
                 Player player = Bukkit.getPlayer(p);
                 if (player == null)
                     return;
-                player.setPlayerListName(prefix + colorCode + " " + player.getDisplayName());
+                player.setPlayerListName(prefix + "§" + colorCode + " " + player.getDisplayName());
             }
         }, 20L);
     }
@@ -141,8 +141,14 @@ public class SimpleClansListener implements Listener
                 if (team == null || player == null)
                     return;
                 //Get displayName color (player can change color via /nick)
-                String color = player.getDisplayName().substring(0,2);
-                team.setPrefix(tag + " " + color);
+                String color = "";
+                char[] charName = player.getDisplayName().toCharArray();
+                if (charName[2] == '§') //If they have a staff prefix
+                    color = String.valueOf(charName[3]);
+                else
+                    color = String.valueOf(charName[1]);
+
+                team.setPrefix(tag + " §" + color);
             }
         }, 40L); //Ensure healthbar made the team
     }
