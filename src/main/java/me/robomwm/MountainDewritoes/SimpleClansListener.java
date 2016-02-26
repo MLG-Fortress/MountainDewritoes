@@ -116,7 +116,13 @@ public class SimpleClansListener implements Listener
         //Set colored display name
         setDisplayName(playerName, colorCode);
 
-        ClanPlayer clanPlayer = clanManager.getClanPlayer(player); //TODO: null check needed?
+        ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
+        if (clanPlayer == null)
+        {
+            //Yes, a nullcheck is needed
+            setListName(player.getName(), colorCode, "");
+            return;
+        }
         Clan clan = clanPlayer.getClan();
         if (clan == null)
         {
