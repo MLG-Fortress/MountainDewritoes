@@ -146,15 +146,17 @@ public class SimpleClansListener implements Listener
                 Team team = sb.getTeam(playerName);
                 if (team == null || player == null)
                     return;
+                //Feature: color nameplate name
                 //Get displayName color (player can change color via /nick)
-                String color = "";
-                char[] charName = player.getDisplayName().toCharArray();
-                if (charName[2] == '§') //If they have a staff prefix
-                    color = String.valueOf(charName[3]);
-                else
-                    color = String.valueOf(charName[1]);
+                //Temporarily removed since some colors are hard to see
+//                String color = "";
+//                char[] charName = player.getDisplayName().toCharArray();
+//                if (charName[2] == '§') //If they have a staff prefix
+//                    color = String.valueOf(charName[3]);
+//                else
+//                    color = String.valueOf(charName[1]);
 
-                team.setPrefix(tag + " §" + color);
+                team.setPrefix(tag + " §f");
             }
         }, 40L); //Ensure healthbar made the team
     }
