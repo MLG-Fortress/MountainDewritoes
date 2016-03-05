@@ -5,6 +5,6 @@ IP: mlgfort.us.to
 
 Some features include:
 
-### Message bubbles (click to watch):
+### [Message bubbles (click to watch):](http://www.youtube.com/watch?v=UDQeqLJ3jik)
 
 [![Message Bubbles demonstration video](http://img.youtube.com/vi/UDQeqLJ3jik/0.jpg)](http://www.youtube.com/watch?v=UDQeqLJ3jik)
