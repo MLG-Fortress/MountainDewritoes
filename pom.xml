@@ -6,7 +6,7 @@
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>3.5</version>
+    <version>3.6</version>
     <repositories>
         <repository>
             <id>spigot-repo</id>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <version>1.9-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
