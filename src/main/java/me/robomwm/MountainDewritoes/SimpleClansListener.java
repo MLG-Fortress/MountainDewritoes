@@ -1,4 +1,4 @@
-package me.robomwm.MountainDewritoes;
+﻿package me.robomwm.MountainDewritoes;
 
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
@@ -78,7 +78,7 @@ public class SimpleClansListener implements Listener
 
     //Delayed set playerListName (Primarily for onJoin, since Essentials sets displayName late)
     //Automatically adds appropriate spacing
-    public void setListName(final String p, final String prefix, final String colorCode)
+    public void setListName(final String p, final String prefix)
     {
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
@@ -87,9 +87,9 @@ public class SimpleClansListener implements Listener
                 Player player = Bukkit.getPlayer(p);
                 if (player == null)
                     return;
-                player.setPlayerListName(prefix + "§" + colorCode + " " + player.getDisplayName());
+                player.setPlayerListName(prefix + " " + player.getDisplayName());
             }
-        }, 20L);
+        }, 21L);
     }
 
     //Delayed setDisplayName
@@ -120,14 +120,14 @@ public class SimpleClansListener implements Listener
         if (clanPlayer == null)
         {
             //Yes, a nullcheck is needed
-            setListName(player.getName(), colorCode, "");
+            setListName(player.getName(), "");
             return;
         }
         Clan clan = clanPlayer.getClan();
         if (clan == null)
         {
             //If not part of a clan, set colored prefix and do no more
-            setListName(player.getName(), colorCode, "");
+            setListName(player.getName(), "");
             return;
         }
 
@@ -135,7 +135,7 @@ public class SimpleClansListener implements Listener
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
-        setListName(playerName, tag, colorCode);
+        setListName(playerName, tag);
 
         //Feature: set prefix in nameplate
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
