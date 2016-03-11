@@ -78,13 +78,12 @@ public class SimpleClansListener implements Listener
 
     //Delayed set playerListName (Primarily for onJoin, since Essentials sets displayName late)
     //Automatically adds appropriate spacing
-    public void setListName(final String p, final String prefix)
+    public void setListName(final Player player, final String prefix)
     {
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
             public void run()
             {
-                Player player = Bukkit.getPlayer(p);
                 if (player == null)
                     return;
                 player.setPlayerListName(prefix + " " + player.getDisplayName());
@@ -93,41 +92,43 @@ public class SimpleClansListener implements Listener
     }
 
     //Delayed setDisplayName
-    public void setDisplayName(final String p, final String colorCode)
+    public void setDisplayName(final Player player1, final String colorCode)
     {
         //Don't alter if player name is already colored
         scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
             public void run() {
-                Player player1 = Bukkit.getPlayer(p);
-                if (player1 == null)
+                if (!player1.isOnline())
                     return;
                 if (player1.getDisplayName().startsWith(player1.getName()))
+                {
                     player1.setDisplayName("§" + colorCode + player1.getName());
+                    System.out.println("display name of " + player1.getName() + " is: " + player1.getDisplayName());
+                }
+
             }
         }, 20L); //Ensure Essentials sets displayName before we set displayName (Essentials sets it later)
     }
 
     //Sets a player's appropriate chat color and prefix.
-    public void setClanPrefix(Player player)
+    public void setClanPrefix(final Player player)
     {
-        final String playerName = player.getName();
         final String colorCode = getColorCode(player);
 
         //Set colored display name
-        setDisplayName(playerName, colorCode);
+        setDisplayName(player, colorCode);
 
         ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
         if (clanPlayer == null)
         {
             //Yes, a nullcheck is needed
-            setListName(player.getName(), "");
+            setListName(player, "");
             return;
         }
         Clan clan = clanPlayer.getClan();
         if (clan == null)
         {
-            //If not part of a clan, set colored prefix and do no more
-            setListName(player.getName(), "");
+            //If not part of a clan, set colored name and do no more
+            setListName(player, "");
             return;
         }
 
@@ -135,16 +136,15 @@ public class SimpleClansListener implements Listener
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
-        setListName(playerName, tag);
+        setListName(player, tag);
 
         //Feature: set prefix in nameplate
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
             public void run()
             {
-                Player player = Bukkit.getPlayerExact(playerName);
-                Team team = sb.getTeam(playerName);
-                if (team == null || player == null)
+                Team team = sb.getTeam(player.getName());
+                if (team == null || !player.isOnline())
                     return;
                 //Feature: color nameplate name
                 //Get displayName color (player can change color via /nick)
