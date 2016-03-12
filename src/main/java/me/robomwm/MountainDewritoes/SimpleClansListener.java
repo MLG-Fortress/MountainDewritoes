@@ -1,4 +1,4 @@
-﻿package me.robomwm.MountainDewritoes;
+package me.robomwm.MountainDewritoes;
 
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
