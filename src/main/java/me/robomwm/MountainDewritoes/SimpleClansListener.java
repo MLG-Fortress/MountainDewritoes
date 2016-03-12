@@ -5,6 +5,7 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -86,27 +87,44 @@ public class SimpleClansListener implements Listener
             {
                 if (player == null)
                     return;
-                player.setPlayerListName(prefix + " " + player.getDisplayName());
+                if (prefix.isEmpty())
+                    player.setPlayerListName(player.getDisplayName());
+                else
+                    player.setPlayerListName(prefix + " " + player.getDisplayName());
             }
-        }, 21L);
+        }, 20L);
     }
 
     //Delayed setDisplayName
+    //Now kinda useless, and not delayed.
     public void setDisplayName(final Player player1, final String colorCode)
     {
-        //Don't alter if player name is already colored
-        scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
-            public void run() {
-                if (!player1.isOnline())
-                    return;
-                if (player1.getDisplayName().startsWith(player1.getName()))
+        if (!player1.hasPlayedBefore() && player1.getDisplayName().startsWith(player1.getName()))
+        {
+            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+            {
+                public void run()
                 {
-                    player1.setDisplayName("§" + colorCode + player1.getName());
-                    System.out.println("display name of " + player1.getName() + " is: " + player1.getDisplayName());
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nick " + player1.getName() + " &" + colorCode + player1.getName());
                 }
+            });
+        }
+        //[16:34:22] RoboMWM: Does EssX constantly set or change the displayName? I'm able to change the displayName (I use it to setPlayerListName) but chat messages revert the color to white
+        //[16:50:46] RoboMWM: Alright, so either I hook into Essentials and grab the nickname from there or implement my own sort of /nick
 
-            }
-        }, 20L); //Ensure Essentials sets displayName before we set displayName (Essentials sets it later)
+        //Don't alter if player name is already colored
+//        scheduler.scheduleSyncDelayedTask(instance, new Runnable() {
+//            public void run() {
+//                if (!player1.isOnline())
+//                    return;
+//                if (player1.getDisplayName().startsWith(player1.getName()))
+//                {
+//                    player1.setDisplayName("§" + colorCode + player1.getName());
+//                    System.out.println("display name of " + player1.getName() + " is: " + player1.getDisplayName());
+//                }
+//
+//            }
+//        }, 20L); //Ensure Essentials sets displayName before we set displayName (Essentials sets it later)
     }
 
     //Sets a player's appropriate chat color and prefix.

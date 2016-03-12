@@ -6,7 +6,7 @@
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>3.6.1</version>
+    <version>3.7</version>
     <repositories>
         <repository>
             <id>spigot-repo</id>
