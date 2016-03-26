@@ -53,19 +53,8 @@ public class ChatListener implements Listener
         if (messageScrolling.containsKey(player.getName()))
         {
             final int [] tasksToRemove = messageScrolling.get(player.getName());
-            final Plugin plugin = instance;
-            //C# equivalent: foreach (int i in tasksToRemove)
-            //for (int i : tasksToRemove) http://stackoverflow.com/a/85206
-            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
-            {
-                public void run()
-                {
-                    for (int i = 0; i < tasksToRemove.length; i++)
-                        scheduler.cancelTask(tasksToRemove[i]); //TODO: Thread safe?
-                        //I could also double check if the tasks I'm canceling are mine, but doubt that scheduler will
-                        //overlap task IDs within 10 seconds, and max scheduled is < 100.
-                }
-            });
+            for (int i = 0; i < tasksToRemove.length; i++)
+                scheduler.cancelTask(tasksToRemove[i]);
             messageScrolling.remove(player.getName());
         }
 
@@ -103,6 +92,7 @@ public class ChatListener implements Listener
             {
                 final String message = mess.substring(i, i + 13);
 
+                //Store messages in int array
                 tasks[i - 1] = scheduler.scheduleSyncDelayedTask(instance, new Runnable()
                 {
                     public void run()
@@ -117,7 +107,9 @@ public class ChatListener implements Listener
                 maxTime = (60 + (speed * (i + 1)));
             }
 
+            //Store int array in hashmap
             messageScrolling.put(player.getName(), tasks);
+
             final String message = lastMessage;
 
             scheduler.scheduleSyncDelayedTask(instance, new Runnable()

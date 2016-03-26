@@ -22,8 +22,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.15" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.9-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.Phaed:PreciousStones:10.0.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.Phaed.simpleclans:SimpleClans:2.5.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.Phaed:PreciousStones:10.1.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.phaed.simpleclans:SimpleClans:2.6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.getspout:spoutplugin:dev-SNAPSHOT" level="project" />
   </component>
 </module>
