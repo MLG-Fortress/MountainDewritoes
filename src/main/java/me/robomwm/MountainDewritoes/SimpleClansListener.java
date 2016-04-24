@@ -85,7 +85,7 @@ public class SimpleClansListener implements Listener
         {
             public void run()
             {
-                if (player == null)
+                if (!player.isOnline())
                     return;
                 if (prefix.isEmpty())
                     player.setPlayerListName(player.getDisplayName());
