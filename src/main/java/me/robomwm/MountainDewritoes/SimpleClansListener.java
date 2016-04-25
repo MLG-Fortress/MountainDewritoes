@@ -119,7 +119,7 @@ public class SimpleClansListener implements Listener
 //                    return;
 //                if (player1.getDisplayName().startsWith(player1.getName()))
 //                {
-//                    player1.setDisplayName("§" + colorCode + player1.getName());
+//                    player1.setDisplayName("\u00A76" + colorCode + player1.getName());
 //                    System.out.println("display name of " + player1.getName() + " is: " + player1.getDisplayName());
 //                }
 //
@@ -150,7 +150,7 @@ public class SimpleClansListener implements Listener
             return;
         }
 
-        final String tag = ("§7" + clan.getColorTag());
+        final String tag = ("\u00A767" + clan.getColorTag());
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
@@ -169,12 +169,12 @@ public class SimpleClansListener implements Listener
                 //Temporarily removed since some colors are hard to see
 //                String color = "";
 //                char[] charName = player.getDisplayName().toCharArray();
-//                if (charName[2] == '§') //If they have a staff prefix
+//                if (charName[2] == '\u00A76') //If they have a staff prefix
 //                    color = String.valueOf(charName[3]);
 //                else
 //                    color = String.valueOf(charName[1]);
 
-                team.setPrefix(tag + " §f");
+                team.setPrefix(tag + " \u00A76f");
             }
         }, 40L); //Ensure healthbar made the team
     }
