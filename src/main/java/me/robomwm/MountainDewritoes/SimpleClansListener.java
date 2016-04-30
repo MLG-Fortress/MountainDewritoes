@@ -46,7 +46,8 @@ public class SimpleClansListener implements Listener
     {
         String command = event.getMessage();
         final Player player = event.getPlayer();
-        if (command.startsWith("/clan create ") || command.startsWith("/clan resign") || command.startsWith("/accept") || command.startsWith("/clan disband"))
+        //I'm 400,000% sure there's a better way to do this
+        if (command.startsWith("/clan create ") || command.startsWith("/clan resign") || command.startsWith("/accept") || command.startsWith("/clan disband") || command.startsWith("/nick "))
         {
             scheduler.scheduleSyncDelayedTask(instance, new Runnable()
             {
