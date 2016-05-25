@@ -23,6 +23,8 @@ public class LongFallBoots implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onPlayerFallDamage(EntityDamageEvent event)
     {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
+            return;
         if (event.getEntityType() != EntityType.PLAYER)
             return;
         Player player = (Player)event.getEntity();
