@@ -30,18 +30,15 @@ public class DeathListener implements Listener
         //it just plays player_hurt, so yea...
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1.0f, 1.0f);
 
-        //Auto-respawn player if they haven't clicked respawn within the last few seconds
-        //Helps prevent weird client problems like client-side entity buildup or whatever
+        //Auto-respawn player if they haven't clicked respawn within the last 20 seconds
+        //Helps prevent weird client problems like client-side entity buildup or whatever,
+        //thus freezing the client or idk that's what happened to me.
         new BukkitRunnable()
         {
             public void run()
             {
-                if (player.isDead()) //may not be necessary
-                {
-                    player.spigot().respawn();
-                }
-
+                player.spigot().respawn();
             }
-        }.runTaskLater(instance, 200L);
+        }.runTaskLater(instance, 400L);
     }
 }

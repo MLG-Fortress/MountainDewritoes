@@ -39,8 +39,8 @@ public class LongFallBoots implements Listener
     {
         ItemStack item = event.getCurrentItem();
         if (item == null || item.getType() != Material.IRON_BOOTS)
-            return;
-        if (item.hasItemMeta())
+            item = event.getCursor();
+        if (item == null || item.getType() != Material.IRON_BOOTS)
             return;
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta.hasLore())
@@ -52,6 +52,6 @@ public class LongFallBoots implements Listener
         lore.add("You've got braces");
         lore.add("on your legs.");
         itemMeta.setLore(lore);
-        //item.setItemMeta(itemMeta); idk taking shots in dark rn
+        item.setItemMeta(itemMeta);
     }
 }
