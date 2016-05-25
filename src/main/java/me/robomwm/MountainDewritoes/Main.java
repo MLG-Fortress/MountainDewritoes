@@ -13,5 +13,6 @@ public class Main extends JavaPlugin
         getServer().getPluginManager().registerEvents(new SimpleClansListener(this), this);
         //Displays "Message Bubbles"
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new LongFallBoots(), this);
     }
 }
