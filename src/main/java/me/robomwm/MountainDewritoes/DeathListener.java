@@ -1,9 +1,14 @@
 package me.robomwm.MountainDewritoes;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created by RoboMWM on 5/25/2016.
@@ -11,9 +16,32 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  */
 public class DeathListener implements Listener
 {
+    Main instance;
+    DeathListener(Main iKnowIShouldntCallItMain)
+    {
+        instance = iKnowIShouldntCallItMain;
+    }
+
     @EventHandler
     void onPlayerSadness(PlayerDeathEvent event)
     {
-        event.getEntity().playSound(event.getEntity().getLocation(), Sound.ENTITY_PLAYER_DEATH, 1.0f, 1.0f);
+        final Player player = event.getEntity();
+        //Believe it or not, the Minecraft client does not even trigger this sound on player death,
+        //it just plays player_hurt, so yea...
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1.0f, 1.0f);
+
+        //Auto-respawn player if they haven't clicked respawn within the last few seconds
+        //Helps prevent weird client problems like client-side entity buildup or whatever
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (player.isDead()) //may not be necessary
+                {
+                    player.spigot().respawn();
+                }
+
+            }
+        }.runTaskLater(instance, 200L);
     }
 }
