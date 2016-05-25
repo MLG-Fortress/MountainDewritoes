@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class LongFallBoots implements Listener
 {
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     void onPlayerFallDamage(EntityDamageEvent event)
     {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
