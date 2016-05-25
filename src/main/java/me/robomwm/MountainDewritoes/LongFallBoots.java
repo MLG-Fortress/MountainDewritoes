@@ -43,7 +43,7 @@ public class LongFallBoots implements Listener
         if (item.hasItemMeta())
             return;
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta.hasLore() || itemMeta.hasDisplayName())
+        if (itemMeta.hasLore())
             return;
         itemMeta.setDisplayName("Long fall boots");
         List<String> lore = new ArrayList<String>();
