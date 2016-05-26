@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class LongFallBoots implements Listener
 {
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     void onPlayerFallDamageWearingLongFallBoots(EntityDamageEvent event)
     {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
@@ -64,5 +64,4 @@ public class LongFallBoots implements Listener
         item.setItemMeta(itemMeta);
     }
     */
-    @EventHandler
 }
