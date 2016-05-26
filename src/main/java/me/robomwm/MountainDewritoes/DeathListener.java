@@ -28,7 +28,7 @@ public class DeathListener implements Listener
         final Player player = event.getEntity();
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1.0f, 1.0f);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1.0f, 1.0f);
 
         //Auto-respawn player if they haven't clicked respawn within the last 20 seconds
         //Helps prevent weird client problems like client-side entity buildup or whatever,
