@@ -34,17 +34,17 @@ public class BetterZeldaHearts implements Listener
     {
         if (!(event.getEntity() instanceof Monster))
             return;
-        System.out.println("is a monster");
         Monster entity = (Monster)event.getEntity();
         if (entity.getKiller() == null || entity.getKiller().getType() != EntityType.PLAYER)
             return;
         System.out.println("Killer is a player");
+
         //Decrease probability as player obtains higher maxHealth.
-        Player player = (Player)event.getEntity();
+        Player player = entity.getKiller();
         int randomInt = new Random().nextInt((int)player.getMaxHealth() * 2);
         if (randomInt != 1)
             return;
-        System.out.println("Won da lottery");
+
         //Prepare a new health canister
         ItemStack healthCanister = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
@@ -55,7 +55,6 @@ public class BetterZeldaHearts implements Listener
         lore.add("your max health.");
         healthCanister.setItemMeta(potionMeta);
         event.getDrops().add(healthCanister);
-        System.out.println("attempted to add health thingy to drops");
     }
 
     /**
