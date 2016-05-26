@@ -15,5 +15,6 @@ public class Main extends JavaPlugin
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getServer().getPluginManager().registerEvents(new LongFallBoots(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
+        getServer().getPluginManager().registerEvents(new BetterZeldaHearts(), this);
     }
 }
