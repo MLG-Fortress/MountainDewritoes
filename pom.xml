@@ -7,6 +7,10 @@
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
     <version>3.8</version>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <repositories>
         <repository>
             <id>paper-repo</id>

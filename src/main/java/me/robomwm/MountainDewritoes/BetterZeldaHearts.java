@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -37,7 +38,6 @@ public class BetterZeldaHearts implements Listener
         Monster entity = (Monster)event.getEntity();
         if (entity.getKiller() == null || entity.getKiller().getType() != EntityType.PLAYER)
             return;
-        System.out.println("Killer is a player");
 
         //Decrease probability as player obtains higher maxHealth.
         Player player = entity.getKiller();
@@ -50,9 +50,10 @@ public class BetterZeldaHearts implements Listener
         PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
         potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
         potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
-        List<String> lore = potionMeta.getLore();
+        List<String> lore = new ArrayList<>();
         lore.add("Permanently increases");
         lore.add("your max health.");
+        potionMeta.setLore(lore);
         healthCanister.setItemMeta(potionMeta);
         event.getDrops().add(healthCanister);
     }
