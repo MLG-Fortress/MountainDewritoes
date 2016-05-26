@@ -1,12 +1,15 @@
 package me.robomwm.MountainDewritoes;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,22 +24,26 @@ import java.util.List;
 public class LongFallBoots implements Listener
 {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    void onPlayerFallDamage(EntityDamageEvent event)
+    void onPlayerFallDamageWearingLongFallBoots(EntityDamageEvent event)
     {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
-        if (event.getEntityType() != EntityType.PLAYER)
+        if (!(event.getEntity() instanceof LivingEntity))
             return;
-        Player player = (Player)event.getEntity();
-        if (player.getInventory().getBoots().getType() == Material.IRON_BOOTS)
+        LivingEntity entity = (LivingEntity)event.getEntity();
+        if (entity.getEquipment().getBoots().getType() == Material.IRON_BOOTS)
+        {
+            entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);
             event.setCancelled(true);
+        }
     }
 
-    /**
+    /** (Currently disabled)
+     * (Replaced with custom fastcraftplus recipe)
      * When player clicks some iron boots
      * @param event
      */
-    @EventHandler(ignoreCancelled = true)
+    /*@EventHandler(ignoreCancelled = true)
     void onPlayerSomehowAcquireSomeBoots(InventoryClickEvent event)
     {
         ItemStack item = event.getCurrentItem();
@@ -56,4 +63,6 @@ public class LongFallBoots implements Listener
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
     }
+    */
+    @EventHandler
 }
