@@ -36,8 +36,8 @@ public class Schematic {
 
     public static void save(Player player, String schematicName) {
         try {
-            File schematic = new File(Bukkit.getWorldContainer().getAbsolutePath(), "plugins/WorldEdit/schematics/" + schematicName);
-            File dir = new File(Bukkit.getWorldContainer().getAbsolutePath(), "plugins/WorldEdit/schematics/");
+            File schematic = new File(Bukkit.getWorldContainer(), "plugins/WorldEdit/schematics/" + schematicName);
+            File dir = new File(Bukkit.getWorldContainer(), "plugins/WorldEdit/schematics/");
             if (!dir.exists())
                 dir.mkdirs();
 
@@ -69,7 +69,7 @@ public class Schematic {
 
     public static void paste(String schematicName, Location pasteLoc) {
         try {
-            File dir = new File(Bukkit.getWorldContainer().getAbsolutePath(), "plugins/WorldEdit/schematics/" + schematicName);
+            File dir = new File(Bukkit.getWorldContainer(), "plugins/WorldEdit/schematics/" + schematicName);
 
             EditSession editSession = new EditSession(new BukkitWorld(pasteLoc.getWorld()), 999999999);
             editSession.enableQueue();
