@@ -31,7 +31,6 @@ import com.sk89q.worldedit.session.ClipboardHolder;
  *
  */
 
-@SuppressWarnings("deprecation")
 public class Schematic {
 
     public static void save(Player player, String schematicName) {
@@ -69,13 +68,14 @@ public class Schematic {
 
     public static void paste(String schematicName, Location pasteLoc) {
         try {
-            File dir = new File(Bukkit.getWorldContainer(), "/plugins/WorldEdit/schematics/" + schematicName);
+            File dir = new File(Bukkit.getWorldContainer(), "/plugins/WorldEdit/schematics/" + schematicName + ".schematic");
 
             EditSession editSession = new EditSession(new BukkitWorld(pasteLoc.getWorld()), 999999999);
             editSession.enableQueue();
 
             SchematicFormat schematic = SchematicFormat.getFormat(dir);
             System.out.println(dir);
+            System.out.println(schematic);
             CuboidClipboard clipboard = schematic.load(dir);
 
             clipboard.paste(editSession, BukkitUtil.toVector(pasteLoc), true);
