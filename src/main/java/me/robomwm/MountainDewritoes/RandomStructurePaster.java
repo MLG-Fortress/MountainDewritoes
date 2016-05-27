@@ -57,9 +57,9 @@ public class RandomStructurePaster implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
-    void onChunkGen(ChunkPopulateEvent event) //This is always called for new chunks, yea?
+    void onChunkGen(ChunkLoadEvent event) //This is always called for new chunks, yea?
     {
-        if (!event.getWorld().equals(world))
+        if (!event.getWorld().equals(world) || !event.isNewChunk())
             return;
 
         if (random.nextInt(200) != 1)
