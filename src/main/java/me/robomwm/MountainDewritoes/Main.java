@@ -11,10 +11,10 @@ public class Main extends JavaPlugin
     {
         //Modifies PlayerListName and prefixes
         getServer().getPluginManager().registerEvents(new SimpleClansListener(this), this);
-        //Displays "Message Bubbles"
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getServer().getPluginManager().registerEvents(new LongFallBoots(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         getServer().getPluginManager().registerEvents(new BetterZeldaHearts(), this);
+        getServer().getPluginManager().registerEvents(new RandomStructurePaster(this), this);
     }
 }
