@@ -52,7 +52,7 @@ public class RandomStructurePaster implements Listener
         schematics.add("tylerboyer360amn_shop");
         schematics.add("war-Lazy");
         schematics.add("ravens_prey_spleef");
-        random = new Random(schematics.size());
+        random = new Random();
         iKnowIShouldntCallItMainOhWell = blah;
     }
 
@@ -70,7 +70,7 @@ public class RandomStructurePaster implements Listener
         {
             public void run()
             {
-                Schematic.paste(schematics.get(random.nextInt()), location);
+                Schematic.paste(schematics.get(random.nextInt(schematics.size())), location);
             }
         }.runTaskLater(iKnowIShouldntCallItMainOhWell, 20L);
     }
