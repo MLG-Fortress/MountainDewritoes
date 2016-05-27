@@ -62,7 +62,7 @@ public class RandomStructurePaster implements Listener
         if (!event.getWorld().equals(world))
             return;
 
-        if (new Random().nextInt(20) != 1)
+        if (random.nextInt(20) != 1)
             return;
 
         Location location = event.getChunk().getBlock(7,64,7).getLocation();
