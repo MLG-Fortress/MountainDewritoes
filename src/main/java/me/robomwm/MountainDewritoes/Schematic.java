@@ -74,8 +74,6 @@ public class Schematic {
             editSession.enableQueue();
 
             SchematicFormat schematic = SchematicFormat.getFormat(dir);
-            System.out.println(dir);
-            System.out.println(schematic);
             CuboidClipboard clipboard = schematic.load(dir);
 
             clipboard.paste(editSession, BukkitUtil.toVector(pasteLoc), true);
