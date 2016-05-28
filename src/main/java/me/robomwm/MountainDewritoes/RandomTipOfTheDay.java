@@ -18,7 +18,7 @@ public class RandomTipOfTheDay implements Listener
 {
     Main illRefactorSomeday;
     List<String> randomTips = new ArrayList<>();
-    Random random;
+    Random random = new Random();
     RandomTipOfTheDay(Main blah)
     {
         illRefactorSomeday = blah;
