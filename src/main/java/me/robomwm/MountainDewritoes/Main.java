@@ -27,6 +27,7 @@ public class Main extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new BetterZeldaHearts(), this);
         getServer().getPluginManager().registerEvents(new RandomStructurePaster(this), this);
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new RandomTipOfTheDay(this), this);
     }
 
     //Warn new players that /ec costs money to use
