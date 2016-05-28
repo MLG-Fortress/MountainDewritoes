@@ -31,23 +31,12 @@ public class RandomStructurePaster implements Listener
     Main iKnowIShouldntCallItMainOhWell;
     RandomStructurePaster(Main blah)
     {
-        schematics.add("banditplayz");
-        schematics.add("bradymc_loopysquish_blockhunt");
-        schematics.add("diamond");
-        schematics.add("diamond1");
-        schematics.add("diamond2");
-        schematics.add("diamond3");
-        schematics.add("Etanarvazac_MobArena_Idea");
-        schematics.add("hazedfordayz");
-        schematics.add("iagario_shop");
-        schematics.add("iagario_village");
         schematics.add("lazyspawn");
         schematics.add("lazyspawnquartz");
         schematics.add("loopysquish_brickhouse");
-        schematics.add("loyalpvp_blockhunt");
         schematics.add("Monsta-Lazy");
-        schematics.add("nikita_cheetah_village");
-        schematics.add("nikita_cheetah_beach");
+        //schematics.add("nikita_cheetah_village");
+        //schematics.add("nikita_cheetah_beach");
         schematics.add("tylerboyer360amn_parkour");
         schematics.add("tylerboyer360amn_shop");
         schematics.add("war-Lazy");
@@ -65,7 +54,7 @@ public class RandomStructurePaster implements Listener
         if (random.nextInt(200) != 1)
             return;
 
-        Location location = event.getChunk().getBlock(7,44,7).getLocation();
+        Location location = event.getChunk().getBlock(7,64,7).getLocation();
         new BukkitRunnable()
         {
             public void run()
