@@ -33,16 +33,20 @@ public class Main extends JavaPlugin implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     void onPlayerPreprocess(PlayerCommandPreprocessEvent event)
     {
-        Player player = event.getPlayer();
-        //If player isn't new or if we've already warned this player before...
-        if (!player.hasPlayedBefore() || usedEC.contains(player))
-            return;
         //Check if player is attempting to access enderchest via command
         String message = event.getMessage().toLowerCase();
         if (!message.startsWith("/ec") && !message.startsWith("/pv"))
             return;
 
+        Player player = event.getPlayer();
+        //If player isn't new or if we've already warned this player before...
+        if (!player.hasPlayedBefore() || usedEC.contains(player))
+        {
+            player.sendMessage("Charged 1337 dogecoins to provide access to your enderchest via command.");
+            return;
+        }
         player.sendMessage(ChatColor.GOLD + "Accessing the enderchest via a slash command costs 1337 dogecoins. To confirm, type /ec again.");
         event.setCancelled(true);
+        usedEC.add(player);
     }
 }
