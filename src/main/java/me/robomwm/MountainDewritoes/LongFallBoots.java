@@ -31,6 +31,8 @@ public class LongFallBoots implements Listener
         if (!(event.getEntity() instanceof LivingEntity))
             return;
         LivingEntity entity = (LivingEntity)event.getEntity();
+        if (entity.getEquipment() == null || entity.getEquipment().getBoots() == null)
+            return;
         if (entity.getEquipment().getBoots().getType() == Material.IRON_BOOTS)
         {
             entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);
