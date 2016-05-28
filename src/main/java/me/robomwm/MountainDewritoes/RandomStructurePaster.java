@@ -40,7 +40,6 @@ public class RandomStructurePaster implements Listener
         schematics.add("tylerboyer360amn_parkour");
         schematics.add("tylerboyer360amn_shop");
         schematics.add("war-Lazy");
-        schematics.add("ravens_prey_spleef");
         random = new Random();
         iKnowIShouldntCallItMainOhWell = blah;
     }
@@ -51,7 +50,7 @@ public class RandomStructurePaster implements Listener
         if (!event.getWorld().equals(world) || !event.isNewChunk())
             return;
 
-        if (random.nextInt(200) != 1)
+        if (random.nextInt(100) != 1)
             return;
 
         Location location = event.getChunk().getBlock(7,64,7).getLocation();

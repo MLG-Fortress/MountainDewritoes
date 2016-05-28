@@ -42,7 +42,7 @@ public class BetterZeldaHearts implements Listener
         //Decrease probability as player obtains higher maxHealth.
         //TODO: Make exponential?
         Player player = entity.getKiller();
-        if (new Random().nextInt((int)player.getMaxHealth() * 2) != 1)
+        if (new Random().nextInt((int)player.getMaxHealth()) != 1)
             return;
 
         //Prepare a new health canister

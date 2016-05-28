@@ -44,7 +44,7 @@ public class SimpleClansListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event)
     {
-        String command = event.getMessage();
+        String command = event.getMessage().toLowerCase();
         final Player player = event.getPlayer();
         //I'm 400,000% sure there's a better way to do this
         if (command.startsWith("/clan create ") || command.startsWith("/clan resign") || command.startsWith("/accept") || command.startsWith("/clan disband") || command.startsWith("/nick "))
