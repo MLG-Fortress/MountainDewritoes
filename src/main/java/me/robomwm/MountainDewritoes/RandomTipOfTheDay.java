@@ -22,9 +22,13 @@ public class RandomTipOfTheDay implements Listener
     RandomTipOfTheDay(Main blah)
     {
         illRefactorSomeday = blah;
-        randomTips.add("Mobs may drop a health canister, which you can use to add an extra heart.");
-        randomTips.add("Long fall boots negate all fall damage! Just craft some iron boots to get 'em.");
+        randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
+        randomTips.add("Long fall boots (iron boots) prevent all fall damage!");
         randomTips.add("We could always use more staff, feel free to /apply");
+        randomTips.add("Bored? Talk to U_W0T_B0T by mentioning its name in chat!");
+        randomTips.add("We run polls in the /motd so you can vote on new features!");
+        randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
+        randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
     }
     @EventHandler
     void onPlayerJoinToDeliverATip(PlayerJoinEvent event)
@@ -41,6 +45,6 @@ public class RandomTipOfTheDay implements Listener
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aa send " + player.getName() + " 10 " + tip);
                 }
             }
-        }.runTaskLater(illRefactorSomeday, 2400L);
+        }.runTaskLater(illRefactorSomeday, 1200L);
     }
 }

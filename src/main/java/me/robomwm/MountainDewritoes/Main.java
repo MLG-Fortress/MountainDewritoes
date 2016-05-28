@@ -43,7 +43,7 @@ public class Main extends JavaPlugin implements Listener
         //If player isn't new or if we've already warned this player before...
         if (!player.hasPlayedBefore() || usedEC.contains(player))
         {
-            player.sendMessage("Charged 1337 dogecoins to provide access to your enderchest via command.");
+            player.sendMessage(ChatColor.GREEN + "Charged 1337 dogecoins to provide access to your enderchest via command.");
             return;
         }
         player.sendMessage(ChatColor.GOLD + "Accessing the enderchest via a slash command costs 1337 dogecoins. To confirm, type /ec again.");
