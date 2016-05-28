@@ -33,7 +33,7 @@ public class RandomTipOfTheDay implements Listener
     @EventHandler
     void onPlayerJoinToDeliverATip(PlayerJoinEvent event)
     {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         new BukkitRunnable()
         {
             public void run()
