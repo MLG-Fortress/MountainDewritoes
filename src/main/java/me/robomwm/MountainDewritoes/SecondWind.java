@@ -4,6 +4,7 @@ import com.destroystokyo.paper.Title;
 import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +46,7 @@ public class SecondWind implements Listener
         secondWindTitle = title.build();
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //2 lazy 2 softdepend
     void onPlayerGetsHurt(EntityDamageEvent event)
     {
         if (event.getFinalDamage() <= 0)
@@ -69,6 +70,7 @@ public class SecondWind implements Listener
             player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(800, 0));
             player.setHealth(player.getMaxHealth());
             player.setWalkSpeed(0.04f);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f);
             //Play dramatic moozik
             new BukkitRunnable()
             {
@@ -104,7 +106,9 @@ public class SecondWind implements Listener
     {
         if (event.getEntity().getKiller() == null)
             return;
-        resetPlayer(event.getEntity().getKiller(), true);
+        Player player = event.getEntity().getKiller();
+        if (fallenPlayers.containsKey(player))
+            resetPlayer(event.getEntity().getKiller(), true);
     }
 
     /**
@@ -156,7 +160,7 @@ public class SecondWind implements Listener
             player.removePotionEffect(PotionEffectType.GLOWING);
             player.removePotionEffect(PotionEffectType.JUMP);
             player.removePotionEffect(PotionEffectType.BLINDNESS);
-            player.setHealth(player.getMaxHealth() / 3);
+            player.setHealth(player.getMaxHealth() / 3f);
             player.sendTitle(secondWindTitle);
         }
     }
@@ -165,8 +169,6 @@ public class SecondWind implements Listener
     {
         StringBuilder hello = new StringBuilder();
         if (health > 10)
-            hello.append(ChatColor.GREEN);
-        else if (health > 5)
             hello.append(ChatColor.YELLOW);
         else
             hello.append(ChatColor.RED);
