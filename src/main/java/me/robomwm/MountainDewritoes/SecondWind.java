@@ -88,6 +88,7 @@ public class SecondWind implements Listener
                 }
             }.runTaskTimer(instance, 0L, 20L);
         }
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
