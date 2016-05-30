@@ -35,7 +35,7 @@ public class SecondWind implements Listener
     {
         instance = yeaIKnow;
         Title.Builder title = new Title.Builder();
-        title.title(ChatColor.RED + "Fight 4 ur lyfe!");
+        title.title(ChatColor.RED + "Fite 4 ur lyfe!");
         title.subtitle("Get a kill 2 revive!");
         title.stay(100);
         title.fadeOut(60);
@@ -60,7 +60,7 @@ public class SecondWind implements Listener
         //Reduce damage for fallenPlayers
         if (fallenPlayers.containsKey(player))
         {
-            event.setDamage(event.getFinalDamage() / player.getMaxHealth());
+            event.setDamage(event.getFinalDamage() / (180f - player.getMaxHealth()));
             player.setNoDamageTicks(40);
             return;
         }
@@ -73,7 +73,7 @@ public class SecondWind implements Listener
             player.sendTitle(fallTitle);
             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(800, 0));
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
-            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(800, 0));
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(7200, 0));
             player.setHealth(player.getMaxHealth());
             player.setWalkSpeed(0.04f);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f);

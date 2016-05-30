@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,7 +43,7 @@ public class RandomTipOfTheDay implements Listener
                 if (player.isOnline())
                 {
                     String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    ActionAPI.sendTimedPlayerAnnouncement(illRefactorSomeday, player, tip, 10);
+                    ActionAPI.sendTimedPlayerAnnouncement(illRefactorSomeday, player, ChatColor.BLUE + tip, 10);
                 }
             }
         }.runTaskLater(illRefactorSomeday, 1200L);
