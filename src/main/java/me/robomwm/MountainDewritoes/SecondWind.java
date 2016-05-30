@@ -91,7 +91,6 @@ public class SecondWind implements Listener
                     if (healthTime <= 0)
                     {
                         player.setHealth(0D);
-                        resetPlayer(player, false);
                         this.cancel();
                         return;
                     }
