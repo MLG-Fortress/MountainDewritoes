@@ -31,23 +31,18 @@ public class RandomStructurePaster implements Listener
     Main iKnowIShouldntCallItMainOhWell;
     RandomStructurePaster(Main blah)
     {
-        schematics.add("lazyspawn");
-        schematics.add("lazyspawnquartz");
         schematics.add("loopysquish_brickhouse");
         schematics.add("Monsta-Lazy");
         //schematics.add("nikita_cheetah_village");
         //schematics.add("nikita_cheetah_beach");
-        schematics.add("tylerboyer360amn_parkour");
-        schematics.add("tylerboyer360amn_shop");
-        schematics.add("war-Lazy");
         random = new Random();
         iKnowIShouldntCallItMainOhWell = blah;
     }
 
     @EventHandler(ignoreCancelled = true)
-    void onChunkGen(ChunkLoadEvent event)
+    void onChunkGen(ChunkPopulateEvent event) //only new chunks call this, yes?
     {
-        if (!event.isNewChunk() || !event.getWorld().equals(world))
+        if (!event.getWorld().equals(world))
             return;
 
         if (random.nextInt(1000) != 1)

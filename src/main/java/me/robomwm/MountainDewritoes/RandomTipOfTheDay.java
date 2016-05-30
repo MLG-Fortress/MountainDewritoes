@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,8 +42,7 @@ public class RandomTipOfTheDay implements Listener
                 if (player.isOnline())
                 {
                     String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    //Too lazy to add a dependency right now, especially since it's not mavenized
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aa send " + player.getName() + " 10 " + tip);
+                    ActionAPI.sendTimedPlayerAnnouncement(illRefactorSomeday, player, tip, 10);
                 }
             }
         }.runTaskLater(illRefactorSomeday, 1200L);
