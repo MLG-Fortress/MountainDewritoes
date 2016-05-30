@@ -4,6 +4,7 @@ import com.destroystokyo.paper.Title;
 import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -56,8 +57,13 @@ public class SecondWind implements Listener
 
         final Player player = (Player)event.getEntity();
 
+        //Reduce damage for fallenPlayers
         if (fallenPlayers.containsKey(player))
+        {
+            event.setDamage(event.getFinalDamage() / player.getMaxHealth());
+            player.setNoDamageTicks(40);
             return;
+        }
 
         //If the blow is gunna kill 'em
         if (event.getFinalDamage() >= player.getHealth())
@@ -90,6 +96,7 @@ public class SecondWind implements Listener
                     }
                     fallenPlayers.put(player, --healthTime);
                     ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
+                    player.getWorld().spigot().playEffect(player.getLocation(), Effect.VILLAGER_THUNDERCLOUD);
                     if (player.getWalkSpeed() > 0.04f)
                         player.setWalkSpeed(0.04f);
                 }
