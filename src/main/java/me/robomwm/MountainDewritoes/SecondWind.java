@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.getspout.spoutapi.material.item.Potion;
@@ -37,13 +38,11 @@ public class SecondWind implements Listener
         Title.Builder title = new Title.Builder();
         title.title(ChatColor.RED + "Fite 4 ur lyfe!");
         title.subtitle("Get a kill 2 revive!");
-        title.stay(100);
-        title.fadeOut(60);
+        title.fadeIn(0);
+        title.stay(40);
         fallTitle = title.build();
         title.title(ChatColor.GREEN + "Second Wind!");
-        title.subtitle("");
-        title.stay(40);
-        title.fadeOut(20);
+        title.fadeOut(10);
         secondWindTitle = title.build();
     }
 
@@ -57,11 +56,12 @@ public class SecondWind implements Listener
 
         final Player player = (Player)event.getEntity();
 
-        //Reduce damage for fallenPlayers
+        //Stop executing this event handler if player is a fallenPlayer
+        //Also stop entity-caused damage for just-added fallenPlayers
         if (fallenPlayers.containsKey(player))
         {
-            event.setDamage(event.getFinalDamage() / (180f - player.getMaxHealth()));
-            player.setNoDamageTicks(40);
+            if (fallenPlayers.get(player) >= 20 && entityCausedDamage(event.getCause()))
+                event.setCancelled(true);
             return;
         }
 
@@ -71,13 +71,13 @@ public class SecondWind implements Listener
             fallenPlayers.put(player, 20);
 
             player.sendTitle(fallTitle);
-            player.addPotionEffect(PotionEffectType.GLOWING.createEffect(800, 0));
+            player.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
             player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(7200, 0));
             player.setHealth(player.getMaxHealth());
             player.setWalkSpeed(0.04f);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f);
-            //Play dramatic moozik
+            //TODO: Play dramatic moozik
             new BukkitRunnable()
             {
                 public void run()
@@ -95,12 +95,13 @@ public class SecondWind implements Listener
                         return;
                     }
                     fallenPlayers.put(player, --healthTime);
-                    ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
+                    player.sendTitle(getFiteTitleIdk(healthTime));
                     player.getWorld().spigot().playEffect(player.getLocation(), Effect.VILLAGER_THUNDERCLOUD);
+                    player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
                     if (player.getWalkSpeed() > 0.04f)
                         player.setWalkSpeed(0.04f);
                 }
-            }.runTaskTimer(instance, 0L, 20L);
+            }.runTaskTimer(instance, 40L, 20L);
         }
         event.setCancelled(true);
     }
@@ -142,6 +143,15 @@ public class SecondWind implements Listener
         if (fallenPlayers.containsKey(player));
             resetPlayer(player, false);
     }
+    /**
+     * Fallen player attempts to teleport
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onPlayerAttemptTeleport(PlayerTeleportEvent event)
+    {
+        if (fallenPlayers.containsKey(event.getPlayer()))
+            event.setCancelled(true);
+    }
 
     /**
      * Fallen player gets splashed with potion that regens health somehow
@@ -169,6 +179,7 @@ public class SecondWind implements Listener
             player.removePotionEffect(PotionEffectType.BLINDNESS);
             player.setHealth(player.getMaxHealth() / 3f);
             player.sendTitle(secondWindTitle);
+            //TODO: Stop suspenseful moozik, play cool moozik
         }
     }
 
@@ -184,5 +195,21 @@ public class SecondWind implements Listener
         for (int i = 0; i < health; i++)
             hello.append("\u258C"); // ▌
         return hello.toString();
+    }
+
+    Title getFiteTitleIdk(int health)
+    {
+        Title.Builder title = new Title.Builder();
+        title.title(ChatColor.RED + "Fite 4 ur lyfe!");
+        title.subtitle("Get a kill 2 revive!" + dyingHealth(health));
+        title.fadeIn(0);
+        return title.build();
+    }
+
+    boolean entityCausedDamage(EntityDamageEvent.DamageCause damageCause)
+    {
+        return damageCause == EntityDamageEvent.DamageCause.CONTACT ||
+                damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK ||
+                damageCause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION;
     }
 }
