@@ -91,6 +91,7 @@ public class SecondWind implements Listener
                     if (healthTime <= 0)
                     {
                         player.setHealth(0D);
+                        resetPlayer(player, false);
                         this.cancel();
                         return;
                     }
@@ -210,6 +211,7 @@ public class SecondWind implements Listener
     {
         return damageCause == EntityDamageEvent.DamageCause.CONTACT ||
                 damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK ||
-                damageCause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION;
+                damageCause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||
+                damageCause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION;
     }
 }
