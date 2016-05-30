@@ -63,9 +63,9 @@ public class SecondWind implements Listener
             fallenPlayers.put(player, 20);
 
             player.sendTitle(fallTitle);
-            player.addPotionEffect(PotionEffectType.GLOWING.createEffect(400, 0));
-            player.addPotionEffect(PotionEffectType.JUMP.createEffect(400, -5));
-            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(400, 0));
+            player.addPotionEffect(PotionEffectType.GLOWING.createEffect(800, 0));
+            player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(800, 0));
             player.setHealth(player.getMaxHealth());
             player.setWalkSpeed(0.04f);
             //Play dramatic moozik
@@ -82,11 +82,10 @@ public class SecondWind implements Listener
                     if (healthTime <= 0)
                     {
                         player.setHealth(0D);
-                        resetPlayer(player, false);
                         this.cancel();
                         return;
                     }
-                    fallenPlayers.put(player, healthTime - 1);
+                    fallenPlayers.put(player, healthTime--);
                     ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
                 }
             }.runTaskTimer(instance, 0L, 20L);
@@ -94,6 +93,9 @@ public class SecondWind implements Listener
         event.setCancelled(true);
     }
 
+    /**
+     * Fallen player kills another entity
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     void onEntityDeath(EntityDeathEvent event)
     {
@@ -101,6 +103,10 @@ public class SecondWind implements Listener
             return;
         fallenPlayers.remove(event.getEntity().getKiller());
     }
+
+    /**
+     * Fallen player disconnects
+     */
     @EventHandler
     void onPlayerChickenOut(PlayerQuitEvent event)
     {
@@ -111,6 +117,10 @@ public class SecondWind implements Listener
             resetPlayer(player, false);
         }
     }
+
+    /**
+     * Fallen player dies
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     void onPlayerDie(PlayerDeathEvent event)
     {
@@ -155,7 +165,7 @@ public class SecondWind implements Listener
 
         //Is this a good way to do this..?
         for (int i = 0; i < health; i++)
-            hello.append("▌");
+            hello.append("\u258C"); // ▌
         return hello.toString();
     }
 }
