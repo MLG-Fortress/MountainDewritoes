@@ -103,8 +103,8 @@ public class SecondWind implements Listener
                         player.setWalkSpeed(0.04f);
                 }
             }.runTaskTimer(instance, 40L, 20L);
+            event.setCancelled(true);
         }
-        event.setCancelled(true);
     }
 
     /**
