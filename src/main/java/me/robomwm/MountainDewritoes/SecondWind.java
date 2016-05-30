@@ -73,7 +73,7 @@ public class SecondWind implements Listener
             player.sendTitle(fallTitle);
             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
-            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(7200, 0));
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1024, 0)); //Idk, blindness tick duration is weird
             player.setHealth(player.getMaxHealth());
             player.setWalkSpeed(0.04f);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f);
