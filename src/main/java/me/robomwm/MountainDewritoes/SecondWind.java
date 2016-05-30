@@ -86,7 +86,7 @@ public class SecondWind implements Listener
                         this.cancel();
                         return;
                     }
-                    fallenPlayers.put(player, healthTime--);
+                    fallenPlayers.put(player, --healthTime);
                     ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
                 }
             }.runTaskTimer(instance, 0L, 20L);
