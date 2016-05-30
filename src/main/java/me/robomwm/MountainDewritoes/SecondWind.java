@@ -13,6 +13,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.getspout.spoutapi.material.item.Potion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,9 @@ public class SecondWind implements Listener
             player.sendTitle(fallTitle);
             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(400, 0));
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(400, -5));
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(400, 0));
             player.setHealth(player.getMaxHealth());
+            player.setWalkSpeed(0.04f);
             //Play dramatic moozik
             new BukkitRunnable()
             {
@@ -83,7 +86,7 @@ public class SecondWind implements Listener
                         this.cancel();
                         return;
                     }
-                    player.setWalkSpeed(0.04f);
+                    fallenPlayers.put(player, healthTime - 1);
                     ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
                 }
             }.runTaskTimer(instance, 0L, 20L);
@@ -128,12 +131,13 @@ public class SecondWind implements Listener
     void resetPlayer(Player player, boolean revive)
     {
         player.setWalkSpeed(0.2f);
-        player.removePotionEffect(PotionEffectType.GLOWING);
-        player.removePotionEffect(PotionEffectType.JUMP);
         fallenPlayers.remove(player);
         //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound");
         if (revive)
         {
+            player.removePotionEffect(PotionEffectType.GLOWING);
+            player.removePotionEffect(PotionEffectType.JUMP);
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
             player.setHealth(player.getMaxHealth() / 3);
             player.sendTitle(revivedTitle);
         }
