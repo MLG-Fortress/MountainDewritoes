@@ -27,7 +27,6 @@ public class SecondWind implements Listener
     Map<Player, Integer> fallenPlayers = new HashMap<>();
     Title fallTitle;
     Title secondWindTitle;
-    Title revivedTitle;
     Main instance;
 
     SecondWind(Main yeaIKnow)
@@ -41,7 +40,9 @@ public class SecondWind implements Listener
         fallTitle = title.build();
         title.title(ChatColor.GREEN + "Second Wind!");
         title.subtitle("");
-        revivedTitle = title.build();
+        title.stay(40);
+        title.fadeOut(20);
+        secondWindTitle = title.build();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -101,7 +102,7 @@ public class SecondWind implements Listener
     {
         if (event.getEntity().getKiller() == null)
             return;
-        fallenPlayers.remove(event.getEntity().getKiller());
+        resetPlayer(event.getEntity().getKiller(), true);
     }
 
     /**
@@ -128,6 +129,10 @@ public class SecondWind implements Listener
         if (fallenPlayers.containsKey(player));
             resetPlayer(player, false);
     }
+
+    /**
+     * Fallen player gets splashed with potion that regens health somehow
+     */
     @EventHandler
     void onPlayerRegainHealth(EntityRegainHealthEvent event)
     {
@@ -138,6 +143,7 @@ public class SecondWind implements Listener
         Player player = (Player)event.getEntity();
         resetPlayer(player, true);
     }
+
     void resetPlayer(Player player, boolean revive)
     {
         player.setWalkSpeed(0.2f);
@@ -149,7 +155,7 @@ public class SecondWind implements Listener
             player.removePotionEffect(PotionEffectType.JUMP);
             player.removePotionEffect(PotionEffectType.BLINDNESS);
             player.setHealth(player.getMaxHealth() / 3);
-            player.sendTitle(revivedTitle);
+            player.sendTitle(secondWindTitle);
         }
     }
 
