@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  * Created by RoboMWM on 6/1/2016.
@@ -36,5 +37,17 @@ public class ShoppingMall implements Listener
             player.setWalkSpeed(0.6f);
             //TODO: play fitting music for mall
         }
+    }
+
+    /**
+     * Set walking speed if player joins inside mall
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    void onPlayerJoinInMall(PlayerJoinEvent event)
+    {
+        Player player = event.getPlayer();
+        if (player.getWorld().equals(mallWorld))
+            player.setWalkSpeed(0.6f);
+        if (event.getJoinMessage())
     }
 }

@@ -204,7 +204,7 @@ public class SecondWind implements Listener
         for (int i = hello.length(); i < 20; i++)
             hello.append("  ");
         if (hello.length() % 2 == 1)
-            hello.deleteCharAt(hello.length()); //attempt to maintain fixed subtitle width
+            hello.deleteCharAt(hello.length() - 1); //attempt to maintain fixed subtitle width
         return hello.toString();
     }
 
