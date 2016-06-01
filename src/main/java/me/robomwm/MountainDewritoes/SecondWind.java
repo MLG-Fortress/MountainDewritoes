@@ -202,6 +202,8 @@ public class SecondWind implements Listener
     {
         Title.Builder title = new Title.Builder();
         title.fadeIn(0);
+        title.stay(30);
+        title.title(ChatColor.RED + "FITE 4 UR LYFE!");
         title.subtitle("GET A KILL 2 REVIVE " + dyingHealth(health));
         return title.build();
     }
