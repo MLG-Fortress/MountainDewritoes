@@ -40,9 +40,10 @@ public class SecondWind implements Listener
         title.subtitle("Get a kill 2 revive!");
         title.fadeIn(0);
         title.stay(40);
+        title.fadeOut(5);
         fallTitle = title.build();
-        title.title(ChatColor.GREEN + "Second Wind!");
-        title.fadeOut(10);
+        title.title("");
+        title.subtitle(ChatColor.AQUA + "SECOND WIND!");
         secondWindTitle = title.build();
     }
 
@@ -73,7 +74,7 @@ public class SecondWind implements Listener
             player.sendTitle(fallTitle);
             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
-            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1024, 0)); //Idk, blindness tick duration is weird
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(256, 0)); //Idk, blindness tick duration is weird
             player.setHealth(player.getMaxHealth());
             player.setWalkSpeed(0.04f);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f);
@@ -200,9 +201,7 @@ public class SecondWind implements Listener
     Title getFiteTitleIdk(int health)
     {
         Title.Builder title = new Title.Builder();
-        title.title(ChatColor.RED + "Fite 4 ur lyfe!");
         title.subtitle("Get a kill 2 revive!" + dyingHealth(health));
-        title.fadeIn(0);
         return title.build();
     }
 
