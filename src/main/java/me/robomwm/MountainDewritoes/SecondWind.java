@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.getspout.spoutapi.material.item.Potion;
 
 import java.util.HashMap;
@@ -31,6 +33,7 @@ public class SecondWind implements Listener
     Title fallTitle;
     Title secondWindTitle;
     Main instance;
+    Scoreboard mainScoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 
     SecondWind(Main yeaIKnow)
     {
@@ -76,12 +79,13 @@ public class SecondWind implements Listener
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
             player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(256, 0)); //Idk, blindness tick duration is weird
             player.setHealth(player.getMaxHealth()); //Refill health
-            player.setWalkSpeed(0.04f); //Set player's speed
+            player.setWalkSpeed(0.03f); //Set player's speed
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f); //Play hurt noise (since we cancel damage)
             event.setCancelled(true);
             //TODO: Play dramatic moozik
             new BukkitRunnable()
             {
+                Team team = mainScoreboard.getTeam(player.getName());
                 public void run()
                 {
                     if (!fallenPlayers.containsKey(player))
@@ -100,8 +104,9 @@ public class SecondWind implements Listener
                     player.sendTitle(getFiteTitleIdk(healthTime));
                     player.getWorld().spigot().playEffect(player.getLocation(), Effect.VILLAGER_THUNDERCLOUD);
                     player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
-                    if (player.getWalkSpeed() > 0.04f)
-                        player.setWalkSpeed(0.04f);
+                    team.setSuffix(ChatColor.RED + " is dying!");
+                    if (player.getWalkSpeed() > 0.03f)
+                        player.setWalkSpeed(0.03f);
                 }
             }.runTaskTimer(instance, 40L, 20L);
         }
@@ -180,6 +185,7 @@ public class SecondWind implements Listener
             player.removePotionEffect(PotionEffectType.BLINDNESS);
             player.setHealth(player.getMaxHealth() / 3f);
             player.sendTitle(secondWindTitle);
+            mainScoreboard.getTeam(player.getName()).setSuffix(ChatColor.GREEN + " revived!");
             //TODO: Stop suspenseful moozik, play cool moozik
         }
     }
@@ -195,6 +201,8 @@ public class SecondWind implements Listener
         //Is this a good way to do this..?
         for (int i = 0; i < health; i++)
             hello.append("\u258C"); // ▌
+        for (int i = hello.length(); i < 20; i++)
+            hello.append(" ");
         return hello.toString();
     }
 
