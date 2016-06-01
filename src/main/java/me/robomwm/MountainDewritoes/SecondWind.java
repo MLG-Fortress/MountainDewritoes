@@ -75,9 +75,10 @@ public class SecondWind implements Listener
             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(800, -5));
             player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(256, 0)); //Idk, blindness tick duration is weird
-            player.setHealth(player.getMaxHealth());
-            player.setWalkSpeed(0.04f);
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f);
+            player.setHealth(player.getMaxHealth()); //Refill health
+            player.setWalkSpeed(0.04f); //Set player's speed
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f); //Play hurt noise (since we cancel damage)
+            event.setCancelled(true);
             //TODO: Play dramatic moozik
             new BukkitRunnable()
             {
@@ -103,7 +104,6 @@ public class SecondWind implements Listener
                         player.setWalkSpeed(0.04f);
                 }
             }.runTaskTimer(instance, 40L, 20L);
-            event.setCancelled(true);
         }
     }
 
@@ -201,6 +201,7 @@ public class SecondWind implements Listener
     Title getFiteTitleIdk(int health)
     {
         Title.Builder title = new Title.Builder();
+        title.title("");
         title.subtitle("Get a kill 2 revive!" + dyingHealth(health));
         return title.build();
     }
