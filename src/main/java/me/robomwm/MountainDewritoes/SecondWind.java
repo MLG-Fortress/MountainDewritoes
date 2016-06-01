@@ -203,6 +203,8 @@ public class SecondWind implements Listener
             hello.append("\u258C"); // ▌
         for (int i = hello.length(); i < 20; i++)
             hello.append("  ");
+        if (hello.length() % 2 == 1)
+            hello.deleteCharAt(hello.length()); //attempt to maintain fixed subtitle width
         return hello.toString();
     }
 
