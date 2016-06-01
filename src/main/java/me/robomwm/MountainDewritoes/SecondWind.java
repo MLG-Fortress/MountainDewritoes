@@ -51,7 +51,7 @@ public class SecondWind implements Listener
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //2 lazy 2 softdepend
-    void onPlayerGetsHurt(EntityDamageEvent event)
+    void onPlayerGetsHurt(final EntityDamageEvent event)
     {
         if (event.getFinalDamage() <= 0)
             return;
@@ -64,7 +64,7 @@ public class SecondWind implements Listener
         //Also stop entity-caused damage for just-added fallenPlayers
         if (fallenPlayers.containsKey(player))
         {
-            if ((fallenPlayers.get(player) >= 20) && entityCausedDamage(event.getCause()))
+            if ((fallenPlayers.get(player) >= 19) && entityCausedDamage(event.getCause()))
                 event.setCancelled(true);
             return;
         }
@@ -86,6 +86,7 @@ public class SecondWind implements Listener
             new BukkitRunnable()
             {
                 Team team = mainScoreboard.getTeam(player.getName());
+                EntityDamageEvent damageEvent = event;
                 public void run()
                 {
                     if (!fallenPlayers.containsKey(player))
@@ -94,8 +95,11 @@ public class SecondWind implements Listener
                         return;
                     }
                     int healthTime = fallenPlayers.get(player);
+                    if (player.getLastDamageCause() != null)
+                        damageEvent = player.getLastDamageCause();
                     if (healthTime <= 0)
                     {
+                        player.setLastDamageCause(damageEvent);
                         player.setHealth(0D);
                         this.cancel();
                         return;
@@ -203,8 +207,6 @@ public class SecondWind implements Listener
             hello.append("\u258C"); // ▌
         for (int i = hello.length(); i < 20; i++)
             hello.append("  ");
-        if (hello.length() % 2 == 1)
-            hello.deleteCharAt(hello.length() - 1); //attempt to maintain fixed subtitle width
         return hello.toString();
     }
 
