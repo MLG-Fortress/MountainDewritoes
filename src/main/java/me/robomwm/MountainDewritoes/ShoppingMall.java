@@ -48,6 +48,5 @@ public class ShoppingMall implements Listener
         Player player = event.getPlayer();
         if (player.getWorld().equals(mallWorld))
             player.setWalkSpeed(0.6f);
-        if (event.getJoinMessage())
     }
 }
