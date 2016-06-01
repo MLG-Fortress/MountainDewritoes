@@ -29,6 +29,7 @@ public class Main extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new RandomTipOfTheDay(this), this);
         getServer().getPluginManager().registerEvents(new SecondWind(this), this);
+        getServer().getPluginManager().registerEvents(new ShoppingMall(), this);
     }
 
     //Warn new players that /ec costs money to use
