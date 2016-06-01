@@ -51,7 +51,7 @@ public class SecondWind implements Listener
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //2 lazy 2 softdepend
-    void onPlayerGetsHurt(final EntityDamageEvent event)
+    void onPlayerGetsHurt(EntityDamageEvent event)
     {
         if (event.getFinalDamage() <= 0)
             return;
@@ -64,7 +64,7 @@ public class SecondWind implements Listener
         //Also stop entity-caused damage for just-added fallenPlayers
         if (fallenPlayers.containsKey(player))
         {
-            if ((fallenPlayers.get(player) >= 19) && entityCausedDamage(event.getCause()))
+            if ((fallenPlayers.get(player) >= 15) && entityCausedDamage(event.getCause()))
                 event.setCancelled(true);
             return;
         }
@@ -72,7 +72,7 @@ public class SecondWind implements Listener
         //If the blow is gunna kill 'em
         if (event.getFinalDamage() >= player.getHealth())
         {
-            fallenPlayers.put(player, 20);
+            fallenPlayers.put(player, 15);
 
             player.sendTitle(fallTitle);
             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
@@ -86,7 +86,6 @@ public class SecondWind implements Listener
             new BukkitRunnable()
             {
                 Team team = mainScoreboard.getTeam(player.getName());
-                EntityDamageEvent damageEvent = event;
                 public void run()
                 {
                     if (!fallenPlayers.containsKey(player))
@@ -95,18 +94,15 @@ public class SecondWind implements Listener
                         return;
                     }
                     int healthTime = fallenPlayers.get(player);
-                    if (player.getLastDamageCause() != null)
-                        damageEvent = player.getLastDamageCause();
                     if (healthTime <= 0)
                     {
-                        EntityDamageEvent newDamageEvent = new EntityDamageEvent(damageEvent.getEntity(), damageEvent.getCause(), 99999999999999999D);
-                        Bukkit.getPluginManager().callEvent(newDamageEvent); //simulate last damage to set a death message
-                        //player.setHealth(0D);
+                        player.setHealth(0D);
                         this.cancel();
                         return;
                     }
                     fallenPlayers.put(player, --healthTime);
-                    player.sendTitle(getFiteTitleIdk(healthTime));
+                    player.sendTitle(fallTitle);
+                    ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
                     player.getWorld().spigot().playEffect(player.getLocation(), Effect.VILLAGER_THUNDERCLOUD);
                     player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
                     team.setSuffix(ChatColor.RED + " is dying!");
@@ -197,8 +193,8 @@ public class SecondWind implements Listener
 
     String dyingHealth(int health)
     {
-        StringBuilder hello = new StringBuilder();
-        if (health > 10)
+        StringBuilder hello = new StringBuilder("Max time: ");
+        if (health > 7)
             hello.append(ChatColor.YELLOW);
         else
             hello.append(ChatColor.RED);
@@ -206,12 +202,12 @@ public class SecondWind implements Listener
         //Is this a good way to do this..?
         for (int i = 0; i < health; i++)
             hello.append("\u258C"); // ▌
-        for (int i = hello.length(); i < 20; i++)
+        for (int i = hello.length(); i < 15; i++)
             hello.append("  ");
         return hello.toString();
     }
 
-    Title getFiteTitleIdk(int health)
+    Title getFiteTitleIdk(int health) //Currently unused
     {
         Title.Builder title = new Title.Builder();
         title.fadeIn(0);
