@@ -99,8 +99,8 @@ public class SecondWind implements Listener
                         damageEvent = player.getLastDamageCause();
                     if (healthTime <= 0)
                     {
+                        damageEvent.setDamage(999999999999999999D);
                         Bukkit.getPluginManager().callEvent(damageEvent); //simulate last damage to set a death message
-                        player.setHealth(0D);
                         this.cancel();
                         return;
                     }
