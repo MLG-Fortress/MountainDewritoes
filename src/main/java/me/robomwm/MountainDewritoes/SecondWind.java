@@ -64,7 +64,7 @@ public class SecondWind implements Listener
         //Also stop entity-caused damage for just-added fallenPlayers
         if (fallenPlayers.containsKey(player))
         {
-            if (fallenPlayers.get(player) >= 20 && entityCausedDamage(event.getCause()))
+            if ((fallenPlayers.get(player) >= 20) && entityCausedDamage(event.getCause()))
                 event.setCancelled(true);
             return;
         }
@@ -202,7 +202,7 @@ public class SecondWind implements Listener
         for (int i = 0; i < health; i++)
             hello.append("\u258C"); // ▌
         for (int i = hello.length(); i < 20; i++)
-            hello.append(" ");
+            hello.append("  ");
         return hello.toString();
     }
 
