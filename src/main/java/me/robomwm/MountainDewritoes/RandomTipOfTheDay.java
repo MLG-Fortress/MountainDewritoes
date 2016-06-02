@@ -25,12 +25,13 @@ public class RandomTipOfTheDay implements Listener
     {
         illRefactorSomeday = blah;
         randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
-        randomTips.add("Long fall boots (iron boots) prevent all fall damage!");
+        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.AQUA + "ALL fall damage!");
         randomTips.add("We could always use more staff, feel free to /apply");
         randomTips.add("Bored? Talk to U_W0T_B0T by mentioning its name in chat!");
         randomTips.add("We run polls in the /motd so you can vote on new features!");
         randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
         randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
+        randomTips.add("Need a crate key? You could win one via an /ad or see if anyone is selling one at the /mall");
     }
     @EventHandler
     void onPlayerJoinToDeliverATip(PlayerJoinEvent event)

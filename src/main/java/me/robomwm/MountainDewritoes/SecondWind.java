@@ -42,7 +42,7 @@ public class SecondWind implements Listener
         instance = yeaIKnow;
         Title.Builder title = new Title.Builder();
         title.title(ChatColor.RED + "FITE 4 UR LYFE!");
-        title.subtitle("GET A KILL 2 REVIVE");
+        title.subtitle(ChatColor.RED + "GET A KILL 2 REVIVE");
         title.fadeIn(0);
         title.stay(40);
         title.fadeOut(5);
