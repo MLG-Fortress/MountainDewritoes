@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -31,6 +32,7 @@ public class SecondWind implements Listener
 {
     Map<Player, Integer> fallenPlayers = new HashMap<>();
     Title fallTitle;
+    Title dyingTitle;
     Title secondWindTitle;
     Main instance;
     Scoreboard mainScoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -46,7 +48,9 @@ public class SecondWind implements Listener
         title.fadeOut(5);
         fallTitle = title.build();
         title.title("");
-        title.subtitle(ChatColor.AQUA + "SECOND WIND!");
+        dyingTitle = title.build();
+        title.title(ChatColor.AQUA + "SECOND WIND!");
+        title.subtitle("");
         secondWindTitle = title.build();
     }
 
@@ -62,7 +66,7 @@ public class SecondWind implements Listener
 
         //Stop executing this event handler if player is a fallenPlayer
         //Also stop entity-caused damage for just-added fallenPlayers
-        if (fallenPlayers.)containsKey(player)
+        if (fallenPlayers.containsKey(player))
         {
             if ((fallenPlayers.get(player) >= 15) && entityCausedDamage(event.getCause()))
                 event.setCancelled(true);
@@ -80,8 +84,7 @@ public class SecondWind implements Listener
             player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(256, 0)); //Idk, blindness tick duration is weird
             player.setHealth(player.getMaxHealth()); //Refill health
             player.setWalkSpeed(0.03f); //Set player's speed
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 1.0f); //Play hurt noise (since we cancel damage)
-            event.setCancelled(true);
+            event.setDamage(0D);
             //TODO: Play dramatic moozik
             new BukkitRunnable()
             {
@@ -101,7 +104,7 @@ public class SecondWind implements Listener
                         return;
                     }
                     fallenPlayers.put(player, --healthTime);
-                    player.sendTitle(fallTitle);
+                    player.sendTitle(dyingTitle);
                     ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
                     player.getWorld().spigot().playEffect(player.getLocation(), Effect.VILLAGER_THUNDERCLOUD);
                     player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
@@ -173,6 +176,16 @@ public class SecondWind implements Listener
         Player player = (Player)event.getEntity();
         if (fallenPlayers.containsKey(player))
             resetPlayer(player, true);
+    }
+
+    /**
+     * Fallen player attempts to drink or eat
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onPlayerConsume(PlayerItemConsumeEvent event)
+    {
+        if (fallenPlayers.containsKey(event.getPlayer()))
+            event.setCancelled(true);
     }
 
     void resetPlayer(Player player, boolean revive)

@@ -43,7 +43,7 @@ public class RandomTipOfTheDay implements Listener
                 if (player.isOnline())
                 {
                     String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    ActionAPI.sendTimedPlayerAnnouncement(illRefactorSomeday, player, ChatColor.YELLOW + tip, 10);
+                    ActionAPI.sendTimedPlayerAnnouncement(illRefactorSomeday, player, ChatColor.GOLD + tip, 20);
                 }
             }
         }.runTaskLater(illRefactorSomeday, 1200L);
