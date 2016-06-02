@@ -62,7 +62,7 @@ public class SecondWind implements Listener
 
         //Stop executing this event handler if player is a fallenPlayer
         //Also stop entity-caused damage for just-added fallenPlayers
-        if (fallenPlayers.containsKey(player))
+        if (fallenPlayers.)containsKey(player)
         {
             if ((fallenPlayers.get(player) >= 15) && entityCausedDamage(event.getCause()))
                 event.setCancelled(true);
@@ -171,7 +171,8 @@ public class SecondWind implements Listener
         if (event.getEntityType() != EntityType.PLAYER)
             return;
         Player player = (Player)event.getEntity();
-        resetPlayer(player, true);
+        if (fallenPlayers.containsKey(player))
+            resetPlayer(player, true);
     }
 
     void resetPlayer(Player player, boolean revive)
