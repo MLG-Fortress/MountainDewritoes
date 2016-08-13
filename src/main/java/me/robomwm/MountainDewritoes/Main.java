@@ -38,7 +38,7 @@ public class Main extends JavaPlugin implements Listener
     {
         //Check if player is attempting to access enderchest via command
         String message = event.getMessage().toLowerCase();
-        if (!message.startsWith("/ec") && !message.startsWith("/pv"))
+        if (!message.equalsIgnoreCase("/ec") && !message.equalsIgnoreCase("/pv"))
             return;
 
         Player player = event.getPlayer();
