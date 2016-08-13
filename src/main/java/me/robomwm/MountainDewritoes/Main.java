@@ -43,7 +43,7 @@ public class Main extends JavaPlugin implements Listener
 
         Player player = event.getPlayer();
         //If player isn't new or if we've already warned this player before...
-        if (!player.hasPlayedBefore() || usedEC.contains(player))
+        if (player.hasPlayedBefore() || usedEC.contains(player))
         {
             player.sendMessage(ChatColor.GREEN + "Charged 1337 dogecoins to provide access to your enderchest via command.");
             return;
