@@ -34,7 +34,7 @@ public class DeathListener implements Listener
         final Player player = event.getEntity();
 
         //Only drop some items (randomly determined)
-        ItemStack drop;
+        /*ItemStack drop;
         List<ItemStack> drops = event.getDrops();
         Iterator<ItemStack> iterator = drops.iterator();
         while (iterator.hasNext())
@@ -44,7 +44,7 @@ public class DeathListener implements Listener
             drop = iterator.next();
             player.getInventory().addItem(drop);
             iterator.remove();
-        }
+        }*/
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
