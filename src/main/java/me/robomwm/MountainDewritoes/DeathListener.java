@@ -6,14 +6,14 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by RoboMWM on 5/25/2016.
@@ -23,6 +23,7 @@ public class DeathListener implements Listener
 {
     Main instance;
     Random random = new Random();
+    HashMap<Player, HashSet<ItemStack>> deathItems = new HashMap<>();
     DeathListener(Main iKnowIShouldntCallItMain)
     {
         instance = iKnowIShouldntCallItMain;
@@ -34,17 +35,20 @@ public class DeathListener implements Listener
         final Player player = event.getEntity();
 
         //Only drop some items (randomly determined)
-        /*ItemStack drop;
+        ItemStack drop;
         List<ItemStack> drops = event.getDrops();
         Iterator<ItemStack> iterator = drops.iterator();
+        HashSet<ItemStack> dropsToReturn = new HashSet<>();
         while (iterator.hasNext())
         {
-            if (random.nextInt(2) == 0)
+            if (random.nextInt(3) != 0)
                 continue;
-            drop = iterator.next();
-            player.getInventory().addItem(drop);
+            dropsToReturn.add(iterator.next());
             iterator.remove();
-        }*/
+        }
+        deathItems.put(player, dropsToReturn);
+
+
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
@@ -60,5 +64,19 @@ public class DeathListener implements Listener
                 player.spigot().respawn();
             }
         }.runTaskLater(instance, 400L);
+    }
+
+    /**
+     * Give back items that were not dropped on death
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onPlayerRespawn(PlayerRespawnEvent event)
+    {
+        Player player = event.getPlayer();
+        if (!deathItems.containsKey(player))
+            return;
+
+        for (ItemStack drop : deathItems.get(player))
+            player.getInventory().addItem(drop);
     }
 }
