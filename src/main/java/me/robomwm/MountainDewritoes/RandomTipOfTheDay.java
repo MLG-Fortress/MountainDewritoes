@@ -1,7 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
 import me.clip.actionannouncer.ActionAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,10 +17,10 @@ import java.util.Random;
  */
 public class RandomTipOfTheDay implements Listener
 {
-    Main illRefactorSomeday;
+    MountainDewritoes illRefactorSomeday;
     List<String> randomTips = new ArrayList<>();
     Random random = new Random();
-    RandomTipOfTheDay(Main blah)
+    RandomTipOfTheDay(MountainDewritoes blah)
     {
         illRefactorSomeday = blah;
         randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");

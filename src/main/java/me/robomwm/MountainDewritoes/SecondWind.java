@@ -5,7 +5,6 @@ import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
-import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +18,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.getspout.spoutapi.material.item.Potion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +32,10 @@ public class SecondWind implements Listener
     Title fallTitle;
     Title dyingTitle;
     Title secondWindTitle;
-    Main instance;
+    MountainDewritoes instance;
     Scoreboard mainScoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 
-    SecondWind(Main yeaIKnow)
+    SecondWind(MountainDewritoes yeaIKnow)
     {
         instance = yeaIKnow;
         Title.Builder title = new Title.Builder();

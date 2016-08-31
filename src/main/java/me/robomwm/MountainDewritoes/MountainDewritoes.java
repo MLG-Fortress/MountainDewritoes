@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Created by Robo on 2/13/2016.
  */
-public class Main extends JavaPlugin implements Listener
+public class MountainDewritoes extends JavaPlugin implements Listener
 {
     Set<Player> usedEC = new HashSet<>();
     public void onEnable()

@@ -6,13 +6,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,12 +19,12 @@ public class ChatListener implements Listener
 {
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
     BukkitScheduler scheduler = Bukkit.getScheduler();
-    public Main instance;
+    public MountainDewritoes instance;
     ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
 
-    public ChatListener(Main main)
+    public ChatListener(MountainDewritoes mountainDewritoes)
     {
-        instance = main;
+        instance = mountainDewritoes;
     }
 
     /*

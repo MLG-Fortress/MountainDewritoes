@@ -5,7 +5,6 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,13 +23,13 @@ public class SimpleClansListener implements Listener
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
     ClanManager clanManager;
     BukkitScheduler scheduler = Bukkit.getScheduler();
-    public Main instance;
+    public MountainDewritoes instance;
 
-    public SimpleClansListener(Main main)
+    public SimpleClansListener(MountainDewritoes mountainDewritoes)
     {
         SimpleClans sc = (SimpleClans)Bukkit.getPluginManager().getPlugin("SimpleClans");
         clanManager = sc.getClanManager();
-        instance = main;
+        instance = mountainDewritoes;
     }
 
     //Set colors and prefix onJoin

@@ -2,6 +2,6 @@ name: MountainDewritoes
 version: ${project.version}
 #website:
 author: RoboMWM
-main: me.robomwm.MountainDewritoes.Main
+mountainDewritoes: me.robomwm.MountainDewritoes.MountainDewritoes
 depend: [SimpleClans]
 softdepend: [ExtraHardMode, Healthbar, Multiverse-Core]

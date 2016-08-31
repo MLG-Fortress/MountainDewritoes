@@ -1,21 +1,15 @@
 package me.robomwm.MountainDewritoes;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 /**
  * Created by RoboMWM on 5/26/2016.
@@ -28,15 +22,15 @@ public class RandomStructurePaster implements Listener
     World world = Bukkit.getWorld("world");
     List<String> schematics = new ArrayList<>();
     Random random;
-    Main iKnowIShouldntCallItMainOhWell;
-    RandomStructurePaster(Main blah)
+    MountainDewritoes iKnowIShouldntCallItMountainDewritoesOhWell;
+    RandomStructurePaster(MountainDewritoes blah)
     {
         //schematics.add("loopysquish_brickhouse");
         //schematics.add("Monsta-Lazy");
         //schematics.add("nikita_cheetah_village");
         //schematics.add("nikita_cheetah_beach");
         random = new Random();
-        iKnowIShouldntCallItMainOhWell = blah;
+        iKnowIShouldntCallItMountainDewritoesOhWell = blah;
     }
 
     //@EventHandler(ignoreCancelled = true)
@@ -55,6 +49,6 @@ public class RandomStructurePaster implements Listener
             {
                 Schematic.paste(schematics.get(random.nextInt(schematics.size())), location);
             }
-        }.runTaskLater(iKnowIShouldntCallItMainOhWell, 20L);
+        }.runTaskLater(iKnowIShouldntCallItMountainDewritoesOhWell, 20L);
     }
 }
