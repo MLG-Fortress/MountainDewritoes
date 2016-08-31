@@ -57,8 +57,8 @@ public class DeathListener implements Listener
         /**
          * Only lose 8 XP (vs. all XP on death)
          */
-        if (player.getTotalExperience() > 8)
-            deathExp.put(player, player.getTotalExperience() - 8);
+        if (player.getLevel() > 8)
+            deathExp.put(player, player.getLevel() - 8);
 
         //Stop all playing sounds, if any.
         player.stopSound("doesnotmatter.apparently");
@@ -98,7 +98,7 @@ public class DeathListener implements Listener
         //Experience
         if (deathExp.containsKey(player))
         {
-            player.setTotalExperience(deathExp.get(player));
+            player.setLevel(deathExp.get(player));
             deathExp.remove(player);
         }
     }
