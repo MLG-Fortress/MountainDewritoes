@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,6 +31,7 @@ public class Main extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new RandomTipOfTheDay(this), this);
         //getServer().getPluginManager().registerEvents(new SecondWind(this), this);
         getServer().getPluginManager().registerEvents(new ShoppingMall(), this);
+        getServer().getPluginManager().registerEvents(new LowHealth(), this);
     }
 
     //Warn new players that /ec costs money to use
