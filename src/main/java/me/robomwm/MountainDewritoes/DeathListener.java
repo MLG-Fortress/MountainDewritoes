@@ -67,7 +67,7 @@ public class DeathListener implements Listener
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
         player.playSound(player.getLocation(), "fortress.death", 1.0f, 1.0f);
 
-        /**Auto-respawn player if they haven't clicked respawn within the last 5 seconds
+        /**Auto-respawn player if they haven't clicked respawn within the last 6.5 seconds
         //Helps prevent weird client problems like client-side entity buildup or whatever,
         thus freezing the client or idk that's what happened to me.
          */
@@ -77,7 +77,7 @@ public class DeathListener implements Listener
             {
                 player.spigot().respawn();
             }
-        }.runTaskLater(instance, 100L);
+        }.runTaskLater(instance, 130L);
     }
 
     /**
