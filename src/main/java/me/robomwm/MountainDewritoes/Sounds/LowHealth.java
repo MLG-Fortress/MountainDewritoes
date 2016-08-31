@@ -40,7 +40,7 @@ public class LowHealth implements Listener
         double health = player.getHealth() - event.getFinalDamage();
         if (health < 4.0D)
         {
-            player.playSound(player.getLocation(), "fortress.lowhealth", 1.0f, 1.0f);
+            player.playSound(player.getLocation(), "fortress.lowhealth", 0.3f, 1.0f);
             alreadyLowHealth.add(player);
         }
     }
