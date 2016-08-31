@@ -23,7 +23,7 @@ public class DeathListener implements Listener
 {
     Main instance;
     Random random = new Random();
-    HashMap<Player, HashSet<ItemStack>> deathItems = new HashMap<>();
+    HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     HashMap<Player, Integer> deathExp = new HashMap<>();
     DeathListener(Main iKnowIShouldntCallItMain)
     {
@@ -41,7 +41,7 @@ public class DeathListener implements Listener
         ItemStack drop;
         List<ItemStack> drops = event.getDrops();
         Iterator<ItemStack> iterator = drops.iterator();
-        HashSet<ItemStack> dropsToReturn = new HashSet<>();
+        List<ItemStack> dropsToReturn = new ArrayList<>();
         while (iterator.hasNext())
         {
             if (random.nextInt(3) != 0)
@@ -61,7 +61,7 @@ public class DeathListener implements Listener
             deathExp.put(player, player.getTotalExperience() - 8);
 
         //Stop all playing sounds, if any.
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName());
+        player.stopSound("doesnotmatter.apparently");
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
