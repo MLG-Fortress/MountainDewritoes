@@ -45,7 +45,10 @@ public class DeathListener implements Listener
         while (iterator.hasNext())
         {
             if (random.nextInt(3) != 0)
+            {
+                iterator.next();
                 continue;
+            }
             dropsToReturn.add(iterator.next());
             iterator.remove();
         }
