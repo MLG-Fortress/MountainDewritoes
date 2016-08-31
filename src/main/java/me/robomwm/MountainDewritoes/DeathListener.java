@@ -83,7 +83,7 @@ public class DeathListener implements Listener
     /**
      * Give back items and exp that were not dropped on death
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //some plugin is clearing experience!
     void onPlayerRespawn(PlayerRespawnEvent event)
     {
         Player player = event.getPlayer();
