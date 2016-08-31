@@ -1,11 +1,13 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.HashSet;
@@ -29,7 +31,7 @@ public class LowHealth implements Listener
         if (alreadyLowHealth.contains(player))
         {
             double health = player.getHealth() - event.getFinalDamage();
-            if (health >= 10.0D)
+            if (health >= 10.0)
             {
                 player.stopSound("fortress.lowhealth");
                 alreadyLowHealth.remove(player);
@@ -37,10 +39,13 @@ public class LowHealth implements Listener
             return;
         }
 
+        if (player.getFoodLevel() >= 20 && player.getSaturation() > 0)
+            return; //ignore rapid health regeneration
+
         double health = player.getHealth() - event.getFinalDamage();
-        if (health < 4.0D)
+        if (health <= 4.0)
         {
-            player.playSound(player.getLocation(), "fortress.lowhealth", 0.3f, 1.0f);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
             alreadyLowHealth.add(player);
         }
     }
@@ -48,5 +53,24 @@ public class LowHealth implements Listener
     void resetLowHealthIndicator(PlayerRespawnEvent event)
     {
         alreadyLowHealth.remove(event.getPlayer());
+    }
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onRegainHealth(EntityRegainHealthEvent event)
+    {
+        //Only care about players
+        if (event.getEntityType() != EntityType.PLAYER)
+            return;
+
+        Player player = (Player)event.getEntity();
+
+        if (!alreadyLowHealth.contains(player))
+            return;
+        double health = player.getHealth() + event.getAmount();
+
+        if (health >= 10.0)
+        {
+            player.stopSound("fortress.lowhealth");
+            alreadyLowHealth.remove(player);
+        }
     }
 }
