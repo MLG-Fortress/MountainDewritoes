@@ -20,7 +20,6 @@ public class DeathListener implements Listener
     MountainDewritoes instance;
     Random random = new Random();
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
-    HashMap<Player, Integer> deathExp = new HashMap<>();
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
@@ -54,7 +53,7 @@ public class DeathListener implements Listener
          * Only lose 8 XP (vs. all XP on death)
          */
         if (player.getLevel() > 8)
-            deathExp.put(player, player.getLevel() - 8);
+            event.setNewLevel(player.getLevel() - 8);
 
         //Stop all playing sounds, if any.
         player.stopSound("doesnotmatter.apparently");
@@ -89,23 +88,6 @@ public class DeathListener implements Listener
             for (ItemStack drop : deathItems.get(player))
                 player.getInventory().addItem(drop);
             deathItems.remove(player);
-        }
-
-        //Experience
-        //Some evil plugin is resetting experience of all non-opped players
-        //If you know what plugins do this evil stuff, LET ME KNOW make an issue or something
-        if (deathExp.containsKey(player))
-        {
-            new BukkitRunnable()
-            {
-                public void run()
-                {
-                    {
-                        player.setLevel(deathExp.get(player));
-                        deathExp.remove(player);
-                    }
-                }
-            }.runTaskLater(instance, 1L);
         }
     }
 }
