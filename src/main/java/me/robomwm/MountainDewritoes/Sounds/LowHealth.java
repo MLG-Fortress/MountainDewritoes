@@ -65,20 +65,24 @@ public class LowHealth implements Listener
                 public void run()
                 {
                     if (!alreadyLowHealth.containsKey(player))
+                    {
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
-                    //Has it been 18 seconds yet?
-                    if ((System.currentTimeMillis() - 18000L) < alreadyLowHealth.get(player))
                         return;
+                    }
                     if (player.getHealth() > 5f)
                     {
                         alreadyLowHealth.remove(player);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
                         cancel(); //Player is not at critical health
+                        return;
                     }
+                    //Has it been 18 seconds yet?
+                    if ((System.currentTimeMillis() - 18000L) < alreadyLowHealth.get(player))
+                        return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
                     player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
                 }
-            }.runTaskTimer(instance, 300L, 2L);
+            }.runTaskTimer(instance, 100L, 2L);
         }
     }
     @EventHandler(ignoreCancelled = true)
