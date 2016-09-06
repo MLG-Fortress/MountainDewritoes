@@ -55,7 +55,7 @@ public class LowHealth implements Listener
             return; //ignore rapid health regeneration
 
         double health = player.getHealth() - event.getFinalDamage();
-        if (health <= 4.0 && !alreadyLowHealth.containsKey(player))
+        if (health <= 5.0f && !alreadyLowHealth.containsKey(player))
         {
             player.playSound(player.getLocation(), "fortress.lowhealth", 300000f, 1.0f);
             //TODO: add gasp
