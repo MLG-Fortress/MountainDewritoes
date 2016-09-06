@@ -57,7 +57,7 @@ public class LowHealth implements Listener
         double health = player.getHealth() - event.getFinalDamage();
         if (health <= 4.0 && !alreadyLowHealth.containsKey(player))
         {
-            player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
+            player.playSound(player.getLocation(), "fortress.lowhealth", 300000f, 1.0f);
             //TODO: add gasp
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
@@ -75,7 +75,7 @@ public class LowHealth implements Listener
                         cancel(); //Player is not at critical health
                     }
                     alreadyLowHealth.put(player, System.currentTimeMillis());
-                    player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
+                    player.playSound(player.getLocation(), "fortress.lowhealth", 300000f, 1.0f);
                 }
             }.runTaskTimer(instance, 300L, 2L);
         }

@@ -60,7 +60,7 @@ public class DeathListener implements Listener
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
-        player.playSound(player.getLocation(), "fortress.death", 3000000f, 1.0f);
+        player.playSound(player.getLocation(), "fortress.death", 300000f, 1.0f);
 
         /**Auto-respawn player if they haven't clicked respawn within the last 6.5 seconds
         //Helps prevent weird client problems like client-side entity buildup or whatever,
