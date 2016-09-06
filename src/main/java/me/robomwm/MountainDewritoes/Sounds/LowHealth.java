@@ -55,7 +55,7 @@ public class LowHealth implements Listener
             return; //ignore rapid health regeneration
 
         double health = player.getHealth() - event.getFinalDamage();
-        if (health <= 5.0f && !alreadyLowHealth.containsKey(player))
+        if (health <= 4.0f && !alreadyLowHealth.containsKey(player))
         {
             player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
             //TODO: add gasp
@@ -72,6 +72,7 @@ public class LowHealth implements Listener
                     if (player.getHealth() > 5f)
                     {
                         alreadyLowHealth.remove(player);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
                         cancel(); //Player is not at critical health
                     }
                     alreadyLowHealth.put(player, System.currentTimeMillis());
