@@ -22,7 +22,7 @@ import java.util.HashSet;
  */
 public class LowHealth implements Listener
 {
-    HashMap<Player, Long> alreadyLowHealth = new HashSet<>();
+    HashMap<Player, Long> alreadyLowHealth = new HashMap<>();
     MountainDewritoes instance;
     public LowHealth(MountainDewritoes mountainDewritoes)
     {
