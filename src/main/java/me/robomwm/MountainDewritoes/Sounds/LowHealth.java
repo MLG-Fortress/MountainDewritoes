@@ -77,7 +77,7 @@ public class LowHealth implements Listener
                         return;
                     }
                     //Has it been 18 seconds yet?
-                    if ((System.currentTimeMillis() - 18000L) < alreadyLowHealth.get(player))
+                    if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
                     player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
