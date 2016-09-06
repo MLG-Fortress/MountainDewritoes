@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -69,7 +70,7 @@ public class LowHealth implements Listener
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
-                    if (player.getHealth() > 5f || !player.isOnline())
+                    if (player.getHealth() > 5f)
                     {
                         alreadyLowHealth.remove(player);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
@@ -90,6 +91,11 @@ public class LowHealth implements Listener
     void resetLowHealthIndicator(PlayerDeathEvent event)
     {
         alreadyLowHealth.remove(event.getEntity());
+    }
+    @EventHandler
+    void onPlayerQuit(PlayerQuitEvent event)
+    {
+        alreadyLowHealth.remove(event.getPlayer());
     }
 //    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 //    void onRegainHealth(EntityRegainHealthEvent event)
