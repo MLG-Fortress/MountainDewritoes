@@ -69,7 +69,7 @@ public class LowHealth implements Listener
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
-                    if (player.getHealth() > 5f)
+                    if (player.getHealth() > 5f || !player.isOnline())
                     {
                         alreadyLowHealth.remove(player);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
