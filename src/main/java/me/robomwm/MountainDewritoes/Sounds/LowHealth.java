@@ -57,7 +57,7 @@ public class LowHealth implements Listener
         double health = player.getHealth() - event.getFinalDamage();
         if (health <= 4.0f && !alreadyLowHealth.containsKey(player))
         {
-            player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
             //TODO: add gasp
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
@@ -80,7 +80,8 @@ public class LowHealth implements Listener
                     if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
-                    player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
+                    //player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
                 }
             }.runTaskTimer(instance, 100L, 2L);
         }
