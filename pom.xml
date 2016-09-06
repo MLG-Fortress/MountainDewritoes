@@ -30,7 +30,7 @@
         <finalName>${project.name}</finalName>
         <resources>
             <resource>
-                <directory>${basedir}/src/mountainDewritoes/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>plugin.yml</include>
