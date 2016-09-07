@@ -17,12 +17,12 @@ import java.util.Random;
  */
 public class RandomTipOfTheDay implements Listener
 {
-    MountainDewritoes illRefactorSomeday;
+    MountainDewritoes instance;
     List<String> randomTips = new ArrayList<>();
     Random random = new Random();
     RandomTipOfTheDay(MountainDewritoes blah)
     {
-        illRefactorSomeday = blah;
+        instance = blah;
         randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
         randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.AQUA + "ALL fall damage!");
         randomTips.add("We could always use more staff, feel free to /apply");
@@ -43,9 +43,9 @@ public class RandomTipOfTheDay implements Listener
                 if (player.isOnline())
                 {
                     String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    ActionAPI.sendTimedPlayerAnnouncement(illRefactorSomeday, player, ChatColor.GOLD + tip, 20);
+                    ActionAPI.sendTimedPlayerAnnouncement(instance, player, ChatColor.GOLD + tip, 20);
                 }
             }
-        }.runTaskLater(illRefactorSomeday, 1200L);
+        }.runTaskLater(instance, 1200L);
     }
 }
