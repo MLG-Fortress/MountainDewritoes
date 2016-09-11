@@ -85,7 +85,7 @@ public class BetterZeldaHearts implements Listener
         else
         {
             player.setMaxHealth(player.getMaxHealth() + 2D);
-            player.playSound(player.getLocation(), "fortress.healthcanister", 1.0f, 1.0f);
+            player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
         }
     }
 
