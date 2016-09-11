@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -85,9 +86,14 @@ public class DeathListener implements Listener
         //Items
         if (deathItems.containsKey(player))
         {
+            int itemCount = 0;
             for (ItemStack drop : deathItems.get(player))
+            {
                 player.getInventory().addItem(drop);
+                itemCount++;
+            }
             deathItems.remove(player);
+            ActionAPI.sendTimedPlayerAnnouncement(instance, player, "Saved " + String.valueOf(itemCount) + " items from your inventory when you died.", 5);
         }
     }
 }
