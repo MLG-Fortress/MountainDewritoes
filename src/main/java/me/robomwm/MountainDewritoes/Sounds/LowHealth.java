@@ -59,7 +59,7 @@ public class LowHealth implements Listener
         if (health <= 4.0f && !alreadyLowHealth.containsKey(player))
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
-            //TODO: add gasp
+            player.playSound(player.getLocation(), "fortress.lowhealthgasp", 3000000f, 1.0f);
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
             {
