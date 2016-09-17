@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -45,11 +46,13 @@ public class BetterZeldaHearts implements Listener
             return;
 
         //Should we spawn a heart (heals on pickup)
-        if (random.nextInt(20) == 5)
+        if (random.nextInt(10) == 5)
         {
             ItemStack heart = new ItemStack(Material.INK_SACK);
             heart.setDurability((short)1);
-            heart.getItemMeta().setDisplayName("healthHeart");
+            ItemMeta heartMeta = heart.getItemMeta();
+            heartMeta.setDisplayName("healthHeart");
+            heart.setItemMeta(heartMeta);
             event.getDrops().add(heart);
             return;
         }
