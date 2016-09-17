@@ -11,9 +11,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
@@ -40,23 +43,33 @@ public class BetterZeldaHearts implements Listener
         if (entity.getKiller() == null || entity.getKiller().getType() != EntityType.PLAYER)
             return;
 
-        //Decrease probability as player obtains higher maxHealth.
-        //TODO: Make exponential?
-        Player player = entity.getKiller();
-        if (random.nextInt((int)player.getMaxHealth() - 4) != 0)
+        //Should we spawn a heart (heals on pickup)
+        if (random.nextInt(20) == 5)
+        {
+            ItemStack heart = new ItemStack(Material.INK_SACK);
+            heart.setDurability((short)1);
+            heart.getItemMeta().setDisplayName("healthHeart");
+            event.getDrops().add(heart);
             return;
+        }
 
-        //Prepare a new health canister
-        ItemStack healthCanister = new ItemStack(Material.POTION);
-        PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
-        potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
-        potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
-        List<String> lore = new ArrayList<>();
-        lore.add("Permanently increases");
-        lore.add("your max health.");
-        potionMeta.setLore(lore);
-        healthCanister.setItemMeta(potionMeta);
-        event.getDrops().add(healthCanister);
+        //Otherwise, check if we should spawn a health canister
+        //Now a fixed value to encourage using health canisters
+        else if (random.nextInt(100) == 1)
+        {
+            //Prepare a new health canister
+            ItemStack healthCanister = new ItemStack(Material.POTION);
+            PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
+            potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+            potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
+            List<String> lore = new ArrayList<>();
+            lore.add("Permanently increases");
+            lore.add("your max health.");
+            potionMeta.setLore(lore);
+            healthCanister.setItemMeta(potionMeta);
+            event.getDrops().add(healthCanister);
+            return;
+        }
     }
 
     /**
@@ -73,6 +86,7 @@ public class BetterZeldaHearts implements Listener
             return;
         if (!potionMeta.hasLore())
             return;
+        //Why aren't we checking the name? Because it's likely we'll change it... soooon
         List<String> lore = potionMeta.getLore();
         if (!lore.get(0).equals("Permanently increases") || !lore.get(1).equals("your max health."))
             return;
@@ -90,12 +104,31 @@ public class BetterZeldaHearts implements Listener
     }
 
     /**
-     * Set new player's health to 5 hearts
+     * Set new player's health to 13 hearts
      */
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
         if (!event.getPlayer().hasPlayedBefore())
-            event.getPlayer().setMaxHealth(10D);
+            event.getPlayer().setMaxHealth(26D);
+    }
+
+    /**
+     * Player collecting healthHeart
+     * You think up a better internal name for that
+     */
+    @EventHandler
+    void onHealthHeartPickup(PlayerPickupItemEvent event)
+    {
+        if (event.getItem().getItemStack().getType() != Material.INK_SACK)
+            return;
+        ItemStack item = event.getItem().getItemStack();
+        if (!item.hasItemMeta())
+            return;
+        if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"))
+        {
+            event.getPlayer().addPotionEffect(PotionEffectType.HEAL.createEffect(1, 0));
+            event.getItem().remove();
+        }
     }
 }
