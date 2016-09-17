@@ -46,7 +46,7 @@ public class BetterZeldaHearts implements Listener
             return;
 
         //Should we spawn a heart (heals on pickup)
-        if (random.nextInt(10) == 5)
+        if (random.nextInt(5) == 1)
         {
             ItemStack heart = new ItemStack(Material.INK_SACK);
             heart.setDurability((short)1);
