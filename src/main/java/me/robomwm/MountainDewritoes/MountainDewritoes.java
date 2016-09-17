@@ -41,7 +41,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         //Check if player is attempting to access enderchest via command
         String message = event.getMessage().toLowerCase();
-        if (!message.equalsIgnoreCase("/ec") && !message.equalsIgnoreCase("/pv"))
+        if (!message.equalsIgnoreCase("/ec") && !message.equalsIgnoreCase("/pv") && !message.equalsIgnoreCase("/echest"))
             return;
 
         Player player = event.getPlayer();
