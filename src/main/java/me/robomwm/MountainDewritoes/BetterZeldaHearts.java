@@ -134,7 +134,7 @@ public class BetterZeldaHearts implements Listener
         if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"))
         {
             event.getPlayer().addPotionEffect(PotionEffectType.HEAL.createEffect(1, 0));
-            event.getItem().remove();
+            event.setCancelled(true);
         }
     }
 }

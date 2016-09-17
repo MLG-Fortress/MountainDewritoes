@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 /**
  * Created by RoboMWM on 9/17/2016.
@@ -70,9 +71,19 @@ public class HitSound implements Listener
 
         attacker.playSound(attacker.getLocation(), Sound.UI_BUTTON_CLICK, 3000000f, 1f);
 
-        if (event.getFinalDamage() < 6)
+        if (event.getFinalDamage() < 10)
             attacker.sendTitle(hitMarker);
         else
             attacker.sendTitle(largeHitMarker);
+    }
+
+    @EventHandler
+    void onEntityDeath(EntityDeathEvent event)
+    {
+        Player killer = event.getEntity().getKiller();
+        if (killer == null || killer.getType() != EntityType.PLAYER)
+            return;
+
+        killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
     }
 }
