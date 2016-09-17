@@ -42,8 +42,11 @@ public class TeleportingEffects implements Listener
         if (preTeleportingPlayers.containsKey(player))
             return;
 
-        String message = event.getMessage().toLowerCase();
-        if (message.startsWith("/tpa") || message.startsWith("/warp") || message.startsWith("/spawn") || message.startsWith("/mall") || message.startsWith("/back"))
+        String[] message = event.getMessage().split(" ");
+        String command = message[0].toLowerCase();
+        //I really wish EssentialsX provided an API/event for this. Am gonna make issue 4 dis now
+        if ((message.length > 1 && (command.equals("/tpa") || command.equals("/tpask") || command.equals("/warp")))
+                || (command.equals("/spawn") || command.equals("/mall") || command.equals("/back")))
         {
             preTeleportingPlayers.put(player, player.getLocation());
             new BukkitRunnable()
