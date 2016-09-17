@@ -22,7 +22,7 @@ public class HitSound implements Listener
 {
     Title hitMarker;
     Title largeHitMarker;
-    HitSound()
+    public HitSound()
     {
         Title.Builder title = new Title.Builder();
         title.title(" ");
