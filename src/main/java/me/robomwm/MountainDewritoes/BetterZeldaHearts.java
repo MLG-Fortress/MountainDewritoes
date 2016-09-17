@@ -33,6 +33,7 @@ public class BetterZeldaHearts implements Listener
     Random random = new Random();
     /**
      * Chance of a "heart canister" dropping upon killing a hostile mob
+     * and other stuff I add in the future like healthHearts
      */
     @EventHandler(priority = EventPriority.LOW)
     void onEntityDeath(EntityDeathEvent event)
@@ -110,6 +111,8 @@ public class BetterZeldaHearts implements Listener
     void onNewJoin(PlayerJoinEvent event)
     {
         if (!event.getPlayer().hasPlayedBefore())
+            event.getPlayer().setMaxHealth(26D);
+        else if (event.getPlayer().getMaxHealth() < 26D)
             event.getPlayer().setMaxHealth(26D);
     }
 
