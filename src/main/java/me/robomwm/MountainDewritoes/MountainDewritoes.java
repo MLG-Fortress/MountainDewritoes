@@ -9,8 +9,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,6 +22,7 @@ import java.util.Set;
 public class MountainDewritoes extends JavaPlugin implements Listener
 {
     Set<Player> usedEC = new HashSet<>();
+    Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     public void onEnable()
     {
         //Modifies PlayerListName and prefixes
@@ -34,7 +38,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new ShoppingMall(), this);
         getServer().getPluginManager().registerEvents(new LowHealth(this), this);
         getServer().getPluginManager().registerEvents(new TeleportingEffects(this), this);
-        getServer().getPluginManager().registerEvents(new HitSound(), this);
+        getServer().getPluginManager().registerEvents(new HitSound(this), this);
     }
 
     //Warn new players that /ec costs money to use
@@ -56,5 +60,29 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         player.sendMessage(ChatColor.GOLD + "Accessing the enderchest via a slash command costs 1337 dogecoins. To confirm, type /ec again.");
         event.setCancelled(true);
         usedEC.add(player);
+    }
+
+    public boolean isUsingTitle(Player player)
+    {
+        return usingTitlePlayers.containsKey(player);
+    }
+    public void addUsingTitle(Player player, Long ticks)
+    {
+        int index = 0;
+        if (isUsingTitle(player))
+            index += usingTitlePlayers.get(player);
+        final int finalIndex = index;
+        usingTitlePlayers.put(player, index);
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (!isUsingTitle(player))
+                    return;
+                if (usingTitlePlayers.get(player) == finalIndex)
+                    usingTitlePlayers.remove(player);
+                //Otherwise, another addUsingTitle had overrided our previous addUsingTitle invokation
+            }
+        }.runTaskLater(this, ticks);
     }
 }
