@@ -38,9 +38,9 @@ public class HitSound implements Listener
         largeHitMarker = title.build();
         eliminationBuilder = new Title.Builder();
         eliminationBuilder.title(" ");
-        eliminationBuilder.fadeIn(10);
+        eliminationBuilder.fadeIn(5);
         eliminationBuilder.stay(40);
-        eliminationBuilder.fadeOut(20);
+        eliminationBuilder.fadeOut(10);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -95,7 +95,7 @@ public class HitSound implements Listener
             return;
 
         killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
-        instance.addUsingTitle(killer, 70L);
+        instance.addUsingTitle(killer, 55L);
         if (event.getEntityType() == EntityType.PLAYER)
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntity().getName());
         else
