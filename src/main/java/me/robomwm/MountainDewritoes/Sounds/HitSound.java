@@ -10,9 +10,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 /**
@@ -58,13 +56,12 @@ public class HitSound implements Listener
             return;
 
         //Get the attacker
-        boolean critical;
-        Player attacker = null;
+        Player attacker;
         if (damager instanceof Projectile)
         {
             Projectile projectile = (Projectile)damager;
             if (!(projectile.getShooter() instanceof Player))
-                return; //Dispenser
+                return; //Dispenser or Skelly
             attacker = (Player)projectile.getShooter();
         }
         else
@@ -78,6 +75,7 @@ public class HitSound implements Listener
             attacker.sendTitle(largeHitMarker);
     }
 
+    //TODO: Elimination messages. Might have to remove hitmarker :(
     @EventHandler
     void onEntityDeath(EntityDeathEvent event)
     {
