@@ -42,12 +42,13 @@ public class HitSound implements Listener
         handleEntityDamageEventCuzThxSpigot(event);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    void onPlayerIgniteWithArrow(EntityCombustByEntityEvent event)
-    {
-        EntityDamageByEntityEvent eventWrapper = new EntityDamageByEntityEvent(event.getCombuster(), event.getEntity(), EntityDamageEvent.DamageCause.FIRE_TICK, event.getDuration());
-        handleEntityDamageEventCuzThxSpigot(eventWrapper);
-    }
+    //Not necessary for what I'm doing
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+//    void onPlayerIgniteWithArrow(EntityCombustByEntityEvent event)
+//    {
+//        EntityDamageByEntityEvent eventWrapper = new EntityDamageByEntityEvent(event.getCombuster(), event.getEntity(), EntityDamageEvent.DamageCause.FIRE_TICK, event.getDuration());
+//        handleEntityDamageEventCuzThxSpigot(eventWrapper);
+//    }
 
     void handleEntityDamageEventCuzThxSpigot(EntityDamageByEntityEvent event)
     {
