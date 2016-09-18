@@ -63,7 +63,7 @@ public class TeleportingEffects implements Listener
                             this.cancel();
                         }
                     }
-                    catch (Exception e)
+                    catch (IllegalArgumentException e)
                     {
                         preTeleportingPlayers.remove(player);
                         this.cancel();

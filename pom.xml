@@ -69,6 +69,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/ActionAnnouncer.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>fr.mrsheepsheep</groupId>
+            <artifactId>tinthealth</artifactId>
+            <version>1.4.6</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/TintHealth.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

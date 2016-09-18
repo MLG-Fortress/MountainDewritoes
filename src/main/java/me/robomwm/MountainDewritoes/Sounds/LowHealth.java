@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
+import fr.mrsheepsheep.tinthealth.THAPI;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
@@ -60,6 +61,7 @@ public class LowHealth implements Listener
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
             player.playSound(player.getLocation(), "fortress.lowhealthgasp", 3000000f, 1.0f);
+            THAPI.setTint(player, 100);
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
             {
@@ -67,12 +69,14 @@ public class LowHealth implements Listener
                 {
                     if (!alreadyLowHealth.containsKey(player))
                     {
+                        THAPI.removeTint(player);
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
                     if (player.getHealth() > 10f)
                     {
                         alreadyLowHealth.remove(player);
+                        THAPI.fadeTint(player, 100, 3);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
                         cancel(); //Player is not at critical health
                         return;

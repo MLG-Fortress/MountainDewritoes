@@ -46,5 +46,14 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: fr.mrsheepsheep:tinthealth:1.4.6">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/TintHealth.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
