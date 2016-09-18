@@ -19,7 +19,6 @@ import java.util.*;
 public class DeathListener implements Listener
 {
     MountainDewritoes instance;
-    Random random = new Random();
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     DeathListener(MountainDewritoes yayNoMain)
     {
@@ -40,6 +39,7 @@ public class DeathListener implements Listener
         List<ItemStack> dropsToReturn = new ArrayList<>();
         while (iterator.hasNext())
         {
+            Random random = new Random();
             if (random.nextInt(2) != 0)
             {
                 iterator.next();
