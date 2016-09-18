@@ -1,8 +1,10 @@
 package me.robomwm.MountainDewritoes;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,13 +50,15 @@ public class BetterZeldaHearts implements Listener
         //Should we spawn a heart (heals on pickup)
         if (random.nextInt(3) == 1)
         {
+            Location location = event.getEntity().getLocation();
             ItemStack heart = new ItemStack(Material.INK_SACK);
             heart.setDurability((short)1);
             ItemMeta heartMeta = heart.getItemMeta();
             heartMeta.setDisplayName("healthHeart");
             heart.setItemMeta(heartMeta);
-            event.getDrops().add(heart);
-            return;
+            Item heartItem = location.getWorld().dropItem(location, heart);
+            heartItem.setCustomName(ChatColor.RED + "health");
+            heartItem.setCustomNameVisible(true);
         }
 
         //Otherwise, check if we should spawn a health canister
@@ -72,7 +76,6 @@ public class BetterZeldaHearts implements Listener
             potionMeta.setLore(lore);
             healthCanister.setItemMeta(potionMeta);
             event.getDrops().add(healthCanister);
-            return;
         }
     }
 
