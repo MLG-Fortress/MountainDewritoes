@@ -29,8 +29,8 @@ public class HitSound implements Listener
         title.title(" ");
         title.subtitle(ChatColor.WHITE + "x");
         title.fadeIn(0);
-        title.stay(2);
-        title.fadeOut(3);
+        title.stay(1);
+        title.fadeOut(2);
         hitMarker = title.build();
         title.subtitle(ChatColor.WHITE + "X");
         largeHitMarker = title.build();
