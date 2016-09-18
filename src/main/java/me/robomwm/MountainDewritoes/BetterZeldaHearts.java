@@ -136,6 +136,7 @@ public class BetterZeldaHearts implements Listener
             event.getPlayer().addPotionEffect(PotionEffectType.HEAL.createEffect(1, 0));
             event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.healthheart", 3000000f, 1f);
             event.setCancelled(true);
+            event.getItem().remove();
         }
     }
 }
