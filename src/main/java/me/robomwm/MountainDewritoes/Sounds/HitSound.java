@@ -28,13 +28,14 @@ public class HitSound implements Listener
     {
         instance = mountainDewritoes;
         Title.Builder title = new Title.Builder();
-        title.title(" ");
-        title.subtitle(ChatColor.WHITE + "x");
+        title.title(ChatColor.WHITE + "╲ ╱");
+        title.subtitle(ChatColor.WHITE + "╱  ╲");
         title.fadeIn(0);
         title.stay(1);
         title.fadeOut(7);
         hitMarker = title.build();
-        title.subtitle(ChatColor.WHITE + "X");
+        title.title(ChatColor.WHITE + "\\ /");
+        title.subtitle(ChatColor.WHITE + "/ \\");
         largeHitMarker = title.build();
         eliminationBuilder = new Title.Builder();
         eliminationBuilder.title(" ");
