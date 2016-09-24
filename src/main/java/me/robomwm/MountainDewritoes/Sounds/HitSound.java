@@ -29,7 +29,7 @@ public class HitSound implements Listener
         instance = mountainDewritoes;
         Title.Builder title = new Title.Builder();
         title.title(ChatColor.WHITE + "\u2572 \u2571"); //╲ ╱
-        title.subtitle(ChatColor.WHITE + "\u2571 \u2572"); //╱  ╲
+        title.subtitle(ChatColor.WHITE + "\u2571 \u2572"); //╱ ╲
         title.fadeIn(0);
         title.stay(1);
         title.fadeOut(4);

@@ -76,7 +76,7 @@ public class LowHealth implements Listener
                     if (player.getHealth() > 10f)
                     {
                         alreadyLowHealth.remove(player);
-                        THAPI.fadeTint(player, 100, 2);
+                        THAPI.fadeTint(player, 100, 1);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
                         cancel(); //Player is not at critical health
                         return;
