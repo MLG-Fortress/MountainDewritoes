@@ -85,6 +85,7 @@ public class LowHealth implements Listener
                     if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
+                    THAPI.setTint(player, 100);
                     //player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
                 }

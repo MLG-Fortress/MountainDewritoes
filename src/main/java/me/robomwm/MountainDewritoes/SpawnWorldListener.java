@@ -13,12 +13,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Created by RoboMWM on 9/18/2016.
  */
-public class JoinListener implements Listener
+public class SpawnWorldListener implements Listener
 {
     World spawn;
     Location spawnLocation;
     MountainDewritoes instance;
-    public JoinListener(MountainDewritoes mountainDewritoes)
+    public SpawnWorldListener(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
         spawn = Bukkit.getWorld("minigames");
@@ -28,9 +28,9 @@ public class JoinListener implements Listener
     void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
-        if (player.hasPermission("i.am.jailed")) //ignore jailed players
-            return;
         if (player.getWorld() != spawn)
+            return;
+        if (player.hasPermission("i.am.jailed")) //ignore jailed players
             return;
 
         new BukkitRunnable()

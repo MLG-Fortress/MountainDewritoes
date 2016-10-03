@@ -35,11 +35,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new RandomTipOfTheDay(this), this);
         //getServer().getPluginManager().registerEvents(new SecondWind(this), this);
-        getServer().getPluginManager().registerEvents(new ShoppingMall(), this);
+        getServer().getPluginManager().registerEvents(new ShoppingMall(this), this);
         getServer().getPluginManager().registerEvents(new LowHealth(this), this);
         getServer().getPluginManager().registerEvents(new TeleportingEffects(this), this);
         getServer().getPluginManager().registerEvents(new HitSound(this), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new SpawnWorldListener(this), this);
         getServer().getPluginManager().registerEvents(new GamemodeInventoryManager(), this);
     }
 

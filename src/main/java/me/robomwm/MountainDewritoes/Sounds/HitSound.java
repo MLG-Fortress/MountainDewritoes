@@ -40,7 +40,7 @@ public class HitSound implements Listener
         eliminationBuilder = new Title.Builder();
         eliminationBuilder.title(" ");
         eliminationBuilder.fadeIn(5);
-        eliminationBuilder.stay(40);
+        eliminationBuilder.stay(20);
         eliminationBuilder.fadeOut(10);
     }
 

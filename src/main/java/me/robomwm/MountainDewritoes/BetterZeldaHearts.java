@@ -59,7 +59,7 @@ public class BetterZeldaHearts implements Listener
             Item heartItem = location.getWorld().dropItem(location, heart);
             heartItem.setCustomName(ChatColor.RED + "health");
             heartItem.setCustomNameVisible(true);
-            heartItem.setPickupDelay(0);
+            heartItem.setPickupDelay(10);
         }
 
         //Otherwise, check if we should spawn a health canister
