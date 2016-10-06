@@ -40,7 +40,7 @@ public class DeathListener implements Listener
         while (iterator.hasNext())
         {
             Random random = new Random();
-            if (random.nextInt(2) != 0)
+            if (random.nextInt(4) == 0)
             {
                 iterator.next();
                 continue;
@@ -90,7 +90,7 @@ public class DeathListener implements Listener
             {
                 player.getInventory().addItem(drop);
             }
-            player.sendMessage("Saved " + String.valueOf(deathItems.get(player).size()) + " items from your inventory when you died.");
+            player.sendMessage("Saved " + String.valueOf(deathItems.get(player).size()) + " item stacks from your inventory when you died.");
             deathItems.remove(player);
         }
     }
