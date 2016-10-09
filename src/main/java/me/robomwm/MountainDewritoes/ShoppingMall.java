@@ -58,8 +58,8 @@ public class ShoppingMall implements Listener
             public void run()
             {
                 if (player.getWorld().equals(mallWorld))
-                    player.setWalkSpeed(0.6f);
+                    player.setWalkSpeed(0.5f);
             }
-        }.runTaskLater(instance, 1L);
+        }.runTaskLater(instance, 2L);
     }
 }
