@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Created by Robo on 2/13/2016.
@@ -23,6 +24,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 {
     Set<Player> usedEC = new HashSet<>();
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
+    Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     public void onEnable()
     {
         //Modifies PlayerListName and prefixes
@@ -49,16 +51,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         //Check if player is attempting to access enderchest via command
         String message = event.getMessage().toLowerCase();
-        if (!message.equalsIgnoreCase("/ec") && !message.equalsIgnoreCase("/pv") && !message.equalsIgnoreCase("/echest"))
+        if (!ec.matcher(message).matches())
             return;
 
         Player player = event.getPlayer();
         //If player isn't new or if we've already warned this player before...
         if (player.hasPlayedBefore() || usedEC.contains(player))
-        {
-            player.sendMessage(ChatColor.GREEN + "Charged 1337 dogecoins to provide access to your enderchest via command.");
             return;
-        }
+
         player.sendMessage(ChatColor.GOLD + "Accessing the enderchest via a slash command costs 1337 dogecoins. To confirm, type /ec again.");
         event.setCancelled(true);
         usedEC.add(player);

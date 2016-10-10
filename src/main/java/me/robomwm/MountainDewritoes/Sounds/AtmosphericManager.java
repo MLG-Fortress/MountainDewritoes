@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes.Sounds;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,9 +12,6 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
@@ -137,7 +133,7 @@ public class AtmosphericManager implements Listener
         if (!hasItBeen10minutes(false))
             return;
 
-        String message = ChatColor.stripColor(event.getMessage());
+        String message = ChatColor.stripColor(event.getMessage().toLowerCase());
 
         //No need to block the event to check this
         new BukkitRunnable()

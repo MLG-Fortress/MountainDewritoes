@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/25/2016.
@@ -20,6 +21,7 @@ public class DeathListener implements Listener
 {
     MountainDewritoes instance;
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
+    Random random = new Random();
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
@@ -39,8 +41,7 @@ public class DeathListener implements Listener
         List<ItemStack> dropsToReturn = new ArrayList<>();
         while (iterator.hasNext())
         {
-            Random random = new Random();
-            if (random.nextInt(4) == 0)
+            if (ThreadLocalRandom.current().nextInt(4) == 0)
             {
                 iterator.next();
                 continue;
