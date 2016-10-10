@@ -2,7 +2,9 @@ package me.robomwm.MountainDewritoes.Sounds;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,7 +21,7 @@ public class Footsteps implements Listener
     World SPAWN = Bukkit.getWorld("minigames");
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    void onPlayerMoveFootstep(PlayerMoveEvent event)
+    void onPlayerFootstep(PlayerMoveEvent event)
     {
         //Don't care if player is just looking around
         if (event.getFrom().distanceSquared(event.getTo()) <= 0)
@@ -31,10 +33,33 @@ public class Footsteps implements Listener
 
         //TODO: world checks
 
+        final Material floorMaterial = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
+        //TODO: play according sound
+        String soundToPlay = "fortress.stone.step";
+        switch (floorMaterial)
+        {
+            case CARPET:
+            case WOOL:
+                soundToPlay = "fortress.cloth.step";
+                break;
+            case SNOW:
+            case SNOW_BLOCK:
+                soundToPlay = "fortress.snow.step";
+                break;
+            case WOOD:
+            case LOG:
+            case LOG_2:
+            case FENCE:
+            case FENCE_GATE:
+            case ACACIA_FENCE:
+            case DARK_OAK_FENCE:
+                soundToPlay = "fortress.wood.step";
+                break;
+        }
+        //etc. If not performance, this is going to be the reason why I'm not doing this
+
         final Location playerLocation = player.getLocation();
         final World playerWorld = player.getWorld();
-
-        //TODO: check material under player's feet, and play according sound
 
         for (Player target : Bukkit.getOnlinePlayers())
         {
