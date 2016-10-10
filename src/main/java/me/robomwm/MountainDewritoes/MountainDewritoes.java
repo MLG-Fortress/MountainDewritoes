@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Sounds.Footsteps;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import org.bukkit.ChatColor;
@@ -43,6 +44,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new HitSound(this), this);
         getServer().getPluginManager().registerEvents(new SpawnWorldListener(this), this);
         getServer().getPluginManager().registerEvents(new GamemodeInventoryManager(), this);
+        getServer().getPluginManager().registerEvents(new Footsteps(), this);
     }
 
     //Warn new players that /ec costs money to use
