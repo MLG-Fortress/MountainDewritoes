@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
+import me.robomwm.MountainDewritoes.SimpleClansListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -67,8 +68,11 @@ public class Footsteps implements Listener
                 return;
             if (target.getWorld() != playerWorld)
                 return;
-            if (target.getLocation().distanceSquared(playerLocation) < 256)
-                target.playSound(playerLocation, "fortress.stone.step", 1.0f, 1.0f);
+            if (target.getLocation().distanceSquared(playerLocation) > 256)
+                return;
+            //if (!SimpleClansListener.isInSameClan(player, target))
+            //    return;
+            target.playSound(playerLocation, soundToPlay, 1.0f, 1.0f);
         }
 
 

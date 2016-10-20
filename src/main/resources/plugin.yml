@@ -3,5 +3,5 @@ version: ${project.version}
 #website:
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
-depend: [SimpleClans]
-softdepend: [ExtraHardMode, Healthbar, Multiverse-Core, ActionAPI]
+depend: [SimpleClans, ActionAPI]
+softdepend: [ExtraHardMode, Healthbar, Multiverse-Core]

@@ -179,6 +179,13 @@ public class SimpleClansListener implements Listener
         }, 40L); //Ensure healthbar made the team
     }
 
-
+//    static public boolean isInSameClan(Player player, Player target)
+//    {
+//        ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
+//        ClanPlayer clanTarget = clanManager.getClanPlayer(target);
+//        if (clanPlayer == null || clanTarget == null)
+//            return false;
+//        return clanPlayer.getClan() == clanTarget.getClan();
+//    }
 
 }

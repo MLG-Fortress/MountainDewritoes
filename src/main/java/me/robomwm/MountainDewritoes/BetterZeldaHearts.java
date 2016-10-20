@@ -127,7 +127,7 @@ public class BetterZeldaHearts implements Listener
      * Player collecting healthHeart
      * You think up a better internal name for that
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     void onHealthHeartPickup(PlayerPickupItemEvent event)
     {
         if (event.getItem().getItemStack().getType() != Material.INK_SACK)
