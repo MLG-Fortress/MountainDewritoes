@@ -79,6 +79,7 @@ public class NoKnockback implements Listener
         {
             case ENTITY_ATTACK:
             case PROJECTILE:
+            case THORNS:
                 break;
             default:
                 ignoreDamageEventForThisTick(damager);
