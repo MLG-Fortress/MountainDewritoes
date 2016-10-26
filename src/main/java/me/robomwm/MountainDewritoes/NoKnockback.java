@@ -21,7 +21,8 @@ import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 /**
  * Created by RoboMWM on 10/25/2016.
- * Removes default knockback from entity_attack damage from entities
+ * "Removes" default knockback from melee and projectile damage
+ * Also reduces noDamageTicks for attacks which we "remove" knockback from
  */
 public class NoKnockback implements Listener
 {
@@ -84,6 +85,8 @@ public class NoKnockback implements Listener
                 return;
         }
 
+        target.setNoDamageTicks(5);
+
         //"Special" case for players (Cancel PlayerVelocityEvent instead to avoid momentary "slowdown" when getting hit).
         if (target.getType() == EntityType.PLAYER)
         {
@@ -96,7 +99,13 @@ public class NoKnockback implements Listener
             return;
         }
 
-        target.setVelocity(new Vector(0, 0, 0)); //Likely need to schedule
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                target.setVelocity(new Vector(0, 0, 0));
+            }
+        }.runTaskLater(instance, 1L);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST) //We still want to remove entries in cancelKnockback map even if event is canceled
