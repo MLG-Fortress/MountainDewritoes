@@ -127,9 +127,10 @@ public class BetterZeldaHearts implements Listener
      * Player collecting healthHeart
      * You think up a better internal name for that
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     void onHealthHeartPickup(PlayerPickupItemEvent event)
     {
+
         if (event.getItem().getItemStack().getType() != Material.INK_SACK)
             return;
         ItemStack item = event.getItem().getItemStack();
@@ -137,9 +138,11 @@ public class BetterZeldaHearts implements Listener
             return;
         if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"))
         {
+            event.setCancelled(true);
+            if (event.getPlayer().getHealth() == event.getPlayer().getMaxHealth())
+                return;
             event.getPlayer().addPotionEffect(PotionEffectType.HEAL.createEffect(1, 0));
             event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.healthheart", 3000000f, 1f);
-            event.setCancelled(true);
             event.getItem().remove();
         }
     }
