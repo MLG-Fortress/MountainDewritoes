@@ -35,7 +35,6 @@ public class ChatListener implements Listener
     ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
     DataStore ds;
     ClanManager clanManager;
-    Pattern colorFormatting = Pattern.compile("&([0-9a-f])");
     Set<Pattern> filterThingy = new HashSet<>();
     List<String> replacements = new ArrayList<>();
 
@@ -207,7 +206,6 @@ public class ChatListener implements Listener
             return;
 
         message = message.substring(4);
-        message = colorFormatting.matcher(message).replaceAll(""); //remove color codes
 
         boolean filtered = false;
         for (Pattern pattern : filterThingy)
