@@ -201,7 +201,7 @@ public class ChatListener implements Listener
         if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
             return;
 
-        String message = ChatColor.stripColor(event.getMessage());
+        String message = ChatColor.stripColor(event.getMessage().toLowerCase());
         boolean filtered = false;
         for (Pattern pattern : filterThingy)
         {
@@ -218,7 +218,7 @@ public class ChatListener implements Listener
             instance.getLogger().info("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
             event.getRecipients().remove(event.getPlayer());
             event.setMessage(message);
-            event.getPlayer().sendMessage(String.format(event.getFormat(), event.getMessage()));
+            event.getPlayer().sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage()));
         }
 
     }
