@@ -224,7 +224,7 @@ public class ChatListener implements Listener
             String name = player.getDisplayName();
             if (clanManager.getClanPlayer(player) != null)
                 name = clanManager.getClanPlayer(player).getClan().getColorTag() + name;
-            event.getPlayer().sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage()));
+            event.getPlayer().sendMessage(String.format(event.getFormat(), name, event.getMessage()));
             event.setMessage(message);
         }
 
