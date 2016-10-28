@@ -75,7 +75,7 @@ public class AtmosphericManager implements Listener
     void playSound(String sound, int lengthInSeconds, World world, int delay)
     {
         Long length = lengthInSeconds * 20L;
-        Long time = System.currentTimeMillis();
+        Long time = System.currentTimeMillis(); //Used to determine if metadata should be removed
         new BukkitRunnable()
         {
             public void run()
@@ -91,6 +91,9 @@ public class AtmosphericManager implements Listener
                     {
                         public void run()
                         {
+							if (!player.hasMetadata("ListeningToMusic")
+								return;
+							//Can happen if another event removed metadata earlier (worldchange) and player received new music
                             if (player.getMetadata("ListeningToMusic").equals(time))
                                 player.removeMetadata("ListeningToMusic", instance);
                         }
