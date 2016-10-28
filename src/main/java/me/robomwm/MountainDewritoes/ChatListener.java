@@ -15,10 +15,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -78,11 +75,11 @@ public class ChatListener implements Listener
 
     TODO: Handle /me command
     */
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true) //Not modifying
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
-        if (event.getRecipients().size() < 2 || event.getRecipients().size() < instance.getServer().getOnlinePlayers().size())
-            return; //ignore if they're the only one on or softmuted
+        if (event.getRecipients().size() < 2)
+            return; //ignore if they're the only one on
 
         final Player player = event.getPlayer();
 
