@@ -205,8 +205,13 @@ public class ChatListener implements Listener
         if (!message.startsWith("/me "))
             return;
 
-        message = message.substring(4);
+        if (event.isCancelled())
+        {
+            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "* " + event.getPlayer().getDisplayName() + ChatColor.DARK_PURPLE + event.getMessage().substring(3));
+            return;
+        }
 
+        message = message.substring(4);
         boolean filtered = false;
         for (Pattern pattern : filterThingy)
         {
@@ -214,7 +219,7 @@ public class ChatListener implements Listener
             if (matcher.matches())
             {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "* " + event.getPlayer().getDisplayName() + ChatColor.DARK_PURPLE + message);
+                event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "* " + event.getPlayer().getDisplayName() + ChatColor.DARK_PURPLE + event.getMessage().substring(3));
                 return;
             }
         }
