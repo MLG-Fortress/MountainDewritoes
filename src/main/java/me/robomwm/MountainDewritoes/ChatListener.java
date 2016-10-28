@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -32,15 +33,17 @@ public class ChatListener implements Listener
     public MountainDewritoes instance;
     ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
     DataStore ds;
+    ClanManager clanManager;
     Set<Pattern> filterThingy = new HashSet<>();
     List<String> replacements = new ArrayList<>();
 
 
-    public ChatListener(MountainDewritoes mountainDewritoes)
+    public ChatListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
-        instance = mountainDewritoes;
+        this.instance = mountainDewritoes;
         GriefPrevention gp = (GriefPrevention)instance.getServer().getPluginManager().getPlugin("GriefPrevention");
-        ds = gp.dataStore;
+        this.ds = gp.dataStore;
+        this.clanManager = clanManager;
         filterThingy.add(Pattern.compile("n[^a](gg|99)+(a|er|uh)"));
         filterThingy.add(Pattern.compile("\\bfag+(s)?\\b|fag+.t|gay"));
         filterThingy.add(Pattern.compile("(i hate|fuck)+ this server|this server is (shit|crap)+|server sucks"));
@@ -215,10 +218,14 @@ public class ChatListener implements Listener
 
         if (filtered)
         {
+            Player player = event.getPlayer();
             instance.getLogger().info("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
             event.getRecipients().remove(event.getPlayer());
-            event.setMessage(message);
+            String name = player.getDisplayName();
+            if (clanManager.getClanPlayer(player) != null)
+                name = clanManager.getClanPlayer(player).getClan().getColorTag() + name;
             event.getPlayer().sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage()));
+            event.setMessage(message);
         }
 
     }

@@ -5,6 +5,9 @@ import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,10 +35,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void onEnable()
     {
+        SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
+        ClanManager clanManager = sc.getClanManager();
         getServer().getPluginManager().registerEvents(this, this);
         //Modifies PlayerListName and prefixes
-        getServer().getPluginManager().registerEvents(new SimpleClansListener(this), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new SimpleClansListener(this, clanManager), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this, clanManager), this);
         getServer().getPluginManager().registerEvents(new LongFallBoots(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         getServer().getPluginManager().registerEvents(new BetterZeldaHearts(), this);

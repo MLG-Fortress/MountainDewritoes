@@ -25,10 +25,9 @@ public class SimpleClansListener implements Listener
     BukkitScheduler scheduler = Bukkit.getScheduler();
     public MountainDewritoes instance;
 
-    public SimpleClansListener(MountainDewritoes mountainDewritoes)
+    public SimpleClansListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
-        SimpleClans sc = (SimpleClans)Bukkit.getPluginManager().getPlugin("SimpleClans");
-        clanManager = sc.getClanManager();
+        this.clanManager = clanManager;
         instance = mountainDewritoes;
     }
 
