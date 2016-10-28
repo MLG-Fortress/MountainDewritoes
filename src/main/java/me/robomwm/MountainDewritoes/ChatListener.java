@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -34,6 +35,7 @@ public class ChatListener implements Listener
     ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
     DataStore ds;
     ClanManager clanManager;
+    Pattern colorFormatting = Pattern.compile("&([0-9a-f])");
     Set<Pattern> filterThingy = new HashSet<>();
     List<String> replacements = new ArrayList<>();
 
@@ -197,10 +199,33 @@ public class ChatListener implements Listener
         }, 180L); //Display for 9 seconds
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    void onPlayerMeMessage(PlayerCommandPreprocessEvent event)
+    {
+        String message = event.getMessage().toLowerCase();
+        if (!message.startsWith("/me "))
+            return;
+
+        message = message.substring(4);
+        message = colorFormatting.matcher(message).replaceAll(""); //remove color codes
+
+        boolean filtered = false;
+        for (Pattern pattern : filterThingy)
+        {
+            Matcher matcher = pattern.matcher(message);
+            if (matcher.matches())
+            {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "* " + event.getPlayer().getDisplayName() + ChatColor.DARK_PURPLE + message);
+                return;
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     void onPlayerChatFilter(AsyncPlayerChatEvent event)
     {
-        //Employ softmute check, since no need to filter if muted
+        //Employ softmute check, since no need to filter if softmuted
         if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
             return;
 
