@@ -36,7 +36,6 @@ public class NoKnockback implements Listener
 
     void ignoreDamageEventForThisTick(Entity entity)
     {
-        cancelKnockback.remove(entity);
         //Cancel existing "remove player from ignoreDamageEvent"
         BukkitTask task = ignoreDamageEvent.get(entity);
         if (task != null)
@@ -93,7 +92,7 @@ public class NoKnockback implements Listener
         {
             Player player = (Player)target;
             boolean isMelee = false;
-            //Generally indicates a melee attack. Not always. See https://gist.github.com/RoboMWM/8dd1db97726544805ab0c8353ce31975
+            //Generally indicates a melee attack. If not, ignoreDamageEventForThisTick() should have been called earlier in the tick, provided plugins fire a custom damage event before calling Entity#damage() See https://gist.github.com/RoboMWM/8dd1db97726544805ab0c8353ce31975
             if (event.getCause() == DamageCause.ENTITY_ATTACK && damager.getType() == EntityType.PLAYER)
                 isMelee = true;
             letPlayerVelocityEventHandleIt(player, isMelee);
