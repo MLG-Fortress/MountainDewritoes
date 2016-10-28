@@ -3,11 +3,14 @@ package me.robomwm.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Sounds.Footsteps;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
+import me.ryanhamshire.GriefPrevention.DataStore;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,8 +29,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     Set<Player> usedEC = new HashSet<>();
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
+
     public void onEnable()
     {
+        getServer().getPluginManager().registerEvents(this, this);
         //Modifies PlayerListName and prefixes
         getServer().getPluginManager().registerEvents(new SimpleClansListener(this), this);
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
@@ -35,7 +40,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         getServer().getPluginManager().registerEvents(new BetterZeldaHearts(), this);
         getServer().getPluginManager().registerEvents(new RandomStructurePaster(this), this);
-        getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new RandomTipOfTheDay(this), this);
         //getServer().getPluginManager().registerEvents(new SecondWind(this), this);
         getServer().getPluginManager().registerEvents(new ShoppingMall(this), this);

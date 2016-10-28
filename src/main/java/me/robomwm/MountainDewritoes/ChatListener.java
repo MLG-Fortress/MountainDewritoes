@@ -1,6 +1,9 @@
 package me.robomwm.MountainDewritoes;
 
+import me.ryanhamshire.GriefPrevention.DataStore;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,7 +13,14 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Robo on 2/16/2016.
@@ -21,13 +31,39 @@ public class ChatListener implements Listener
     BukkitScheduler scheduler = Bukkit.getScheduler();
     public MountainDewritoes instance;
     ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
+    DataStore ds;
+    Set<Pattern> filterThingy = new HashSet<>();
+    List<String> replacements = new ArrayList<>();
+
 
     public ChatListener(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        GriefPrevention gp = (GriefPrevention)instance.getServer().getPluginManager().getPlugin("GriefPrevention");
+        ds = gp.dataStore;
+        filterThingy.add(Pattern.compile("n[^a](gg|99)+(a|er|uh)"));
+        filterThingy.add(Pattern.compile("\\bfag+(s)?\\b|fag+.t|gay"));
+        filterThingy.add(Pattern.compile("(i hate|fuck)+ this server|this server is (shit|crap)+|server sucks"));
+        filterThingy.add(Pattern.compile("\\bass\\b"));
+        filterThingy.add(Pattern.compile("f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+|f+u+c+");
+        filterThingy.add(Pattern.compile("cunt|whore|fag|slut|queer|bitch|bastard|damn|crap|shit"));
+        filterThingy.add(Pattern.compile("\\bd\\s*i\\s*c?\\s*k\\b|\\bp\\s*e\\s*n(\\s|\\.)*i\\s*s\\b"));
+        filterThingy.add(Pattern.compile("\\bb\\s*o\\s*o\\s*b\\b|\\bb\\s*r\\s*e\\s*a\\s*s\\s*t(\\s*s)?\\b|\\bt\\s*i\\s*t(\\s*s|\\s*t\\s*y|\\s*t\\s*i\\s*e\\s*s)?\\b"));
+        filterThingy.add(Pattern.compile("\\bn\\s*i\\s*g\\s*(g\\s*)?(a|a\\s*h|e\\s*r)?\\b"));
+        filterThingy.add(Pattern.compile("\\bl\\s*e(\\s*s|\\s*z)\\s*b?(\\s*o|\\s*i\\s*a\\s*n)?\\b|\\bd\\s*y\\s*k\\s*e\\b"));
+        replacements.add("wut");
+        replacements.add("cool");
+        replacements.add("mlg");
+        replacements.add("hmm");
+        replacements.add("oh");
+        replacements.add("meme");
+        replacements.add("nice");
+        replacements.add("n0sc0p3");
+        replacements.add("w0t");
+        replacements.add("");
     }
 
-    /*
+    /**
     Message "Bubbles"
     I'd rather use the objective field since I have a slightly higher character limit,
 
@@ -38,10 +74,10 @@ public class ChatListener implements Listener
 
     TODO: Handle /me command
     */
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true) //Not modifying
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
-        if (event.getRecipients().size() < 2)
+        if (event.getRecipients().size() < 2 || event.getRecipients().size() < instance.getServer().getOnlinePlayers().size())
             return; //ignore if they're the only one on or softmuted
 
         final Player player = event.getPlayer();
@@ -156,5 +192,59 @@ public class ChatListener implements Listener
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "healthbar reloadplayer " + player.getName());
             }
         }, 180L); //Display for 9 seconds
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    void onPlayerChatFilter(AsyncPlayerChatEvent event)
+    {
+        //Employ softmute check, since no need to filter if muted
+        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
+            return;
+
+        String message = ChatColor.stripColor(event.getMessage());
+        boolean filtered = false;
+        for (Pattern pattern : filterThingy)
+        {
+            Matcher matcher = pattern.matcher(message);
+            if (matcher.matches())
+            {
+                filtered = true;
+                message = matcher.replaceAll(replacements.get(ThreadLocalRandom.current().nextInt(replacements.size())));
+            }
+        }
+
+        if (filtered)
+        {
+            instance.getLogger().info("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
+            event.getRecipients().remove(event.getPlayer());
+            event.setMessage(message);
+            event.getPlayer().sendMessage(String.format(event.getFormat(), event.getMessage()));
+        }
+
+    }
+
+    Set<AsyncPlayerChatEvent> softmutedChats = new HashSet<>();
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    void onPlayerChatCheckSoftmute(AsyncPlayerChatEvent event)
+    {
+        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
+        {
+            event.setCancelled(true);
+            softmutedChats.add(event);
+            instance.getLogger().info("Detected softmute for " + event.getPlayer().getName());
+            for (Player player : instance.getServer().getOnlinePlayers())
+            {
+                if (player.hasPermission("idont.thinkso"))
+                    player.sendMessage(ChatColor.GRAY + "Detected softmute: " + event.getPlayer().getName() + ": " + event.getMessage());
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    void onPlayerWasSoftmuted(AsyncPlayerChatEvent event)
+    {
+        if (softmutedChats.remove(event))
+            event.setCancelled(false);
     }
 }

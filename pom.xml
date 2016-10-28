@@ -25,6 +25,10 @@
             <id>worldedit-worldguard-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
     <build>
         <finalName>${project.name}</finalName>
@@ -75,6 +79,12 @@
             <version>1.4.6</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/TintHealth.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.github.TechFortress</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>15.2.3</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
