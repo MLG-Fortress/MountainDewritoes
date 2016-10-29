@@ -67,7 +67,7 @@ public class DamageIndicators implements Listener
         displayIndicator(entity.getLocation(), event.getAmount() / 2D, true);
     }
 
-    public static Double r4nd0m(Double max, Double min) {
+    public static Double r4nd0m(Double min, Double max) {
         return ThreadLocalRandom.current().nextDouble(min, max + 1);
     }
 
