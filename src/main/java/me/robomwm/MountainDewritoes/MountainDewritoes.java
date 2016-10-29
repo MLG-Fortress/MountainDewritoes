@@ -32,6 +32,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     Set<Player> usedEC = new HashSet<>();
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
+    DamageIndicators damageIndicators = new DamageIndicators(this);
 
     public void onEnable()
     {
@@ -55,6 +56,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new GamemodeInventoryManager(), this);
         //getServer().getPluginManager().registerEvents(new Footsteps(), this);
         getServer().getPluginManager().registerEvents(new NoKnockback(this), this);
+        getServer().getPluginManager().registerEvents(damageIndicators, this);
+    }
+
+    public void onDisable()
+    {
+        getLogger().info("Cleaning up any active damage indicator holograms...");
+        getLogger().info(String.valueOf(damageIndicators.cleanupDamageIndicators()) + " holograms removed.");
     }
 
     //Warn new players that /ec costs money to use
