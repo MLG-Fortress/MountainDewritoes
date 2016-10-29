@@ -16,7 +16,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 /**
  * Created by RoboMWM on 9/17/2016.
- * TODO: add "self-damage" sounds
  */
 public class HitSound implements Listener
 {
@@ -40,8 +39,8 @@ public class HitSound implements Listener
         eliminationBuilder = new Title.Builder();
         eliminationBuilder.title(" ");
         eliminationBuilder.fadeIn(5);
-        eliminationBuilder.stay(20);
-        eliminationBuilder.fadeOut(10);
+        eliminationBuilder.stay(30);
+        eliminationBuilder.fadeOut(20);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -96,11 +95,13 @@ public class HitSound implements Listener
             return;
 
         killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
-        instance.addUsingTitle(killer, 55L);
+
         if (event.getEntityType() == EntityType.PLAYER)
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntity().getName());
         else
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntityType().toString().toLowerCase());
-        killer.sendTitle(eliminationBuilder.build());
+        Title title = eliminationBuilder.build();
+        killer.sendTitle(title);
+        instance.addUsingTitle(killer, title.getFadeIn() + title.getStay());
     }
 }

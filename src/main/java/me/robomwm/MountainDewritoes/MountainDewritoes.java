@@ -88,7 +88,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         return usingTitlePlayers.containsKey(player);
     }
-    public void addUsingTitle(Player player, Long ticks)
+    public void addUsingTitle(Player player, int ticks)
     {
         int index = 0;
         if (isUsingTitle(player))
