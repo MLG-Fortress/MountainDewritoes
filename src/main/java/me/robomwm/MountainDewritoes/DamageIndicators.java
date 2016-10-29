@@ -68,14 +68,14 @@ public class DamageIndicators implements Listener
     }
 
     public static Double r4nd0m(Double min, Double max) {
-        return ThreadLocalRandom.current().nextDouble(min, max + 1);
+        return ThreadLocalRandom.current().nextDouble(min, max);
     }
 
     void displayIndicator(Location location, Double value, boolean isDamage)
     {
         double x = r4nd0m(-0.5D, 0.5D);
         double z = r4nd0m(-0.5D, 0.5D);
-        Hologram hologram = HologramsAPI.createHologram(instance, location.add(x, 2, z));
+        Hologram hologram = HologramsAPI.createHologram(instance, location.add(x, 2.5D, z));
         if (isDamage)
             hologram.appendTextLine(ChatColor.RED + "-" + df.format(value));
         else
