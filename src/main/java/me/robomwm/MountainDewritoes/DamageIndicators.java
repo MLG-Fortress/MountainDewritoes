@@ -64,7 +64,7 @@ public class DamageIndicators implements Listener
         if (!(event.getEntity() instanceof LivingEntity))
             return;
         Entity entity = event.getEntity();
-        displayIndicator(entity.getLocation(), event.getAmount() / 2D, true);
+        displayIndicator(entity.getLocation(), event.getAmount() / 2D, false);
     }
 
     public static Double r4nd0m(Double min, Double max) {
