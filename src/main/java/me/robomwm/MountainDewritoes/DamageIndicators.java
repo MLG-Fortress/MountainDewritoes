@@ -75,7 +75,7 @@ public class DamageIndicators implements Listener
     {
         double x = r4nd0m(-0.5D, 0.5D);
         double z = r4nd0m(-0.5D, 0.5D);
-        Hologram hologram = HologramsAPI.createHologram(instance, location.add(x, 2.5D, z));
+        Hologram hologram = HologramsAPI.createHologram(instance, location.add(x, 3D, z));
         if (isDamage)
             hologram.appendTextLine(ChatColor.RED + "-" + df.format(value));
         else
@@ -84,7 +84,7 @@ public class DamageIndicators implements Listener
         Long duration = 20L;
         //Display longer if value is in double digits
         if (value >= 10)
-            duration = 50L;
+            duration = 40L;
         new BukkitRunnable()
         {
             public void run()
