@@ -42,6 +42,8 @@ public class JukeboxManager implements Listener
         Material disc = event.getMaterial();
         Block block = event.getClickedBlock();
 
+        if (player.isSneaking())
+            return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX)
             return;
 
@@ -59,7 +61,7 @@ public class JukeboxManager implements Listener
 
             PermissionAttachment attachment = player.addAttachment(instance);
             attachment.setPermission("minecraft.command.stopsound", true);
-            player.performCommand("stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
+            player.chat("/stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
             player.removeAttachment(attachment);
             block.removeMetadata("SONG", instance);
             return;
@@ -98,7 +100,7 @@ public class JukeboxManager implements Listener
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
         PermissionAttachment attachment = player.addAttachment(instance);
         attachment.setPermission("minecraft.command.playsound", true);
-        player.performCommand("playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
+        player.chat("/playsound " + songToPlay + " record @a[r=2000] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
         player.removeAttachment(attachment);
     }
 }

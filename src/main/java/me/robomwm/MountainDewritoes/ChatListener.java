@@ -47,7 +47,7 @@ public class ChatListener implements Listener
         filterThingy.add(Pattern.compile("(i hate|fuck)+ this server|this server is (shit|crap)+|server sucks"));
         filterThingy.add(Pattern.compile("\\bass\\b"));
         filterThingy.add(Pattern.compile("f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+|f+u+c+"));
-        filterThingy.add(Pattern.compile("cunt|whore|fag|slut|queer|bitch|bastard|damn|crap|shit"));
+        filterThingy.add(Pattern.compile("cunt|whore|fag|slut|queer|bitch|bastard|damn|damm|crap|shit"));
         filterThingy.add(Pattern.compile("\\bd\\s*i\\s*c?\\s*k\\b|\\bp\\s*e\\s*n(\\s|\\.)*i\\s*s\\b"));
         filterThingy.add(Pattern.compile("\\bb\\s*o\\s*o\\s*b\\b|\\bb\\s*r\\s*e\\s*a\\s*s\\s*t(\\s*s)?\\b|\\bt\\s*i\\s*t(\\s*s|\\s*t\\s*y|\\s*t\\s*i\\s*e\\s*s)?\\b"));
         filterThingy.add(Pattern.compile("\\bn\\s*i\\s*g\\s*(g\\s*)?(a|a\\s*h|e\\s*r)?\\b"));
@@ -244,7 +244,7 @@ public class ChatListener implements Listener
         if (filtered)
         {
             Player player = event.getPlayer();
-            instance.getLogger().info("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
+            log("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
             event.getRecipients().remove(event.getPlayer());
             String name = player.getDisplayName();
             if (clanManager.getClanPlayer(player) != null)
@@ -264,12 +264,8 @@ public class ChatListener implements Listener
         {
             event.setCancelled(true);
             softmutedChats.add(event);
-            instance.getLogger().info("Detected softmute for " + event.getPlayer().getName());
-            for (Player player : instance.getServer().getOnlinePlayers())
-            {
-                if (player.hasPermission("idont.thinkso"))
-                    player.sendMessage(ChatColor.GRAY + "Detected softmute: " + event.getPlayer().getName() + ": " + event.getMessage());
-            }
+            log(ChatColor.GRAY + "Detected softmute: " + event.getPlayer().getName() + ": " + event.getMessage());
+
         }
     }
 
@@ -278,5 +274,15 @@ public class ChatListener implements Listener
     {
         if (softmutedChats.remove(event))
             event.setCancelled(false);
+    }
+
+    void log(String message)
+    {
+        for (Player player : instance.getServer().getOnlinePlayers())
+        {
+            if (player.hasPermission("idont.thinkso"))
+                player.sendMessage(message);
+        }
+        instance.getServer().getLogger().info(ChatColor.stripColor(message));
     }
 }
