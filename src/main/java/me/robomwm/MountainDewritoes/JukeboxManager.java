@@ -44,7 +44,7 @@ public class JukeboxManager implements Listener
 
         Jukebox jukebox = (Jukebox)event.getClickedBlock().getState();
         List<MetadataValue> jukeboxMeta = jukebox.getMetadata("SONG");
-        Location loc = jukebox.getLocation();
+        Location loc = event.getClickedBlock().getLocation();
 
         //If there's already a disc in here, eject it and stop playing
         if (jukebox.eject())
@@ -84,6 +84,7 @@ public class JukeboxManager implements Listener
             return;
 
         jukebox.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
+        instance.getLogger().info("playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + "4");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + "4");
     }
 }
