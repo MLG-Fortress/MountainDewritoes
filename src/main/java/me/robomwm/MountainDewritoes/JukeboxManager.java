@@ -37,13 +37,12 @@ public class JukeboxManager implements Listener
         Material disc = event.getMaterial();
         Block block = event.getClickedBlock();
 
-        if (!disc.isRecord())
-            return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX)
             return;
 
         Jukebox jukebox = (Jukebox)event.getClickedBlock().getState();
         List<MetadataValue> blockMetadata = block.getMetadata("SONG");
+
         Location loc = block.getLocation();
 
         //If there's already a disc in here, eject it and stop playing
@@ -52,10 +51,14 @@ public class JukeboxManager implements Listener
             //Don't stop sounds if... we didn't start the sound...
             if (!block.hasMetadata("SONG"))
                 return;
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0));
+            instance.getLogger().info("stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
             block.removeMetadata("SONG", instance);
             return;
         }
+
+        if (!disc.isRecord())
+            return;
 
         //Otherwise, let's play a song, yay
         String songToPlay = null;
