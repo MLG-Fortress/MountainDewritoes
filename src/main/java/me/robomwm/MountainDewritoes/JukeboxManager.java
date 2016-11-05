@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.CommandBlock;
 import org.bukkit.block.Jukebox;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -59,12 +61,10 @@ public class JukeboxManager implements Listener
             if (!block.hasMetadata("SONG"))
                 return;
 
-            PermissionAttachment attachment = player.addAttachment(instance);
-            attachment.setPermission("minecraft.command.stopsound", true);
-            player.setOp(true);
-            player.chat("/stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
-            player.setOp(false);
-            player.removeAttachment(attachment);
+            block.getRelative(event.getBlockFace()).setType(Material.COMMAND);
+            CommandBlock commandBlock = (CommandBlock)block.getRelative(event.getBlockFace()).getState();
+            instance.getServer().dispatchCommand((BlockCommandSender)commandBlock, "/stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
+            block.getRelative(event.getBlockFace()).setType(Material.AIR);
             block.removeMetadata("SONG", instance);
             return;
         }
@@ -100,11 +100,9 @@ public class JukeboxManager implements Listener
 
         String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
-        PermissionAttachment attachment = player.addAttachment(instance);
-        attachment.setPermission("minecraft.command.playsound", true);
-        player.setOp(true);
-        player.chat("/playsound " + songToPlay + " record @a[r=2000] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
-        player.setOp(false);
-        player.removeAttachment(attachment);
+        block.getRelative(event.getBlockFace()).setType(Material.COMMAND);
+        CommandBlock commandBlock = (CommandBlock)block.getRelative(event.getBlockFace()).getState();
+        instance.getServer().dispatchCommand((BlockCommandSender)commandBlock, "/playsound " + songToPlay + " record @a[r=2000] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
+        block.getRelative(event.getBlockFace()).setType(Material.AIR);
     }
 }
