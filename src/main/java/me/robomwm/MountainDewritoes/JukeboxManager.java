@@ -84,7 +84,6 @@ public class JukeboxManager implements Listener
             return;
 
         jukebox.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
-        instance.getLogger().info("playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + "4");
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + "4");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
     }
 }
