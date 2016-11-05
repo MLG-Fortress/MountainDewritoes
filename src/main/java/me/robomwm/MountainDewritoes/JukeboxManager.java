@@ -61,7 +61,9 @@ public class JukeboxManager implements Listener
 
             PermissionAttachment attachment = player.addAttachment(instance);
             attachment.setPermission("minecraft.command.stopsound", true);
+            player.setOp(true);
             player.chat("/stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
+            player.setOp(false);
             player.removeAttachment(attachment);
             block.removeMetadata("SONG", instance);
             return;
@@ -100,7 +102,9 @@ public class JukeboxManager implements Listener
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
         PermissionAttachment attachment = player.addAttachment(instance);
         attachment.setPermission("minecraft.command.playsound", true);
+        player.setOp(true);
         player.chat("/playsound " + songToPlay + " record @a[r=2000] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
+        player.setOp(false);
         player.removeAttachment(attachment);
     }
 }
