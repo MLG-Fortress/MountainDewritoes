@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
@@ -36,6 +35,7 @@ public class JukeboxManager implements Listener
     {
         Player player = event.getPlayer();
         Material disc = event.getMaterial();
+        Block block = event.getClickedBlock();
 
         if (!disc.isRecord())
             return;
@@ -43,17 +43,17 @@ public class JukeboxManager implements Listener
             return;
 
         Jukebox jukebox = (Jukebox)event.getClickedBlock().getState();
-        List<MetadataValue> jukeboxMeta = jukebox.getMetadata("SONG");
-        Location loc = event.getClickedBlock().getLocation();
+        List<MetadataValue> blockMetadata = block.getMetadata("SONG");
+        Location loc = block.getLocation();
 
         //If there's already a disc in here, eject it and stop playing
         if (jukebox.eject())
         {
             //Don't stop sounds if... we didn't start the sound...
-            if (!jukebox.hasMetadata("SONG"))
+            if (!block.hasMetadata("SONG"))
                 return;
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + jukeboxMeta.get(0));
-            jukebox.removeMetadata("SONG", instance);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0));
+            block.removeMetadata("SONG", instance);
             return;
         }
 
@@ -83,7 +83,7 @@ public class JukeboxManager implements Listener
         if (songToPlay == null)
             return;
 
-        jukebox.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
+        block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
     }
 }
