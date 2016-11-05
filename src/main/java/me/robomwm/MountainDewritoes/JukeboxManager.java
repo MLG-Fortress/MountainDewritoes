@@ -59,7 +59,7 @@ public class JukeboxManager implements Listener
             instance.getLogger().info("stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
             String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
             player.setMetadata(dumSecurity, new FixedMetadataValue(instance, "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString()));
-            player.performCommand("whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
+            player.chat("/whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
             block.removeMetadata("SONG", instance);
             return;
         }
@@ -96,7 +96,7 @@ public class JukeboxManager implements Listener
         String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
         player.setMetadata(dumSecurity, new FixedMetadataValue(instance, "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4"));
-        player.performCommand("whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
+        player.chat("/whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
