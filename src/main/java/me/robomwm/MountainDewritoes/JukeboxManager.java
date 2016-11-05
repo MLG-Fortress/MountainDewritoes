@@ -5,15 +5,20 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 11/5/2016.
@@ -52,7 +57,9 @@ public class JukeboxManager implements Listener
             if (!block.hasMetadata("SONG"))
                 return;
             instance.getLogger().info("stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
+            String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
+            player.setMetadata(dumSecurity, new FixedMetadataValue(instance, "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString()));
+            player.performCommand("whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
             block.removeMetadata("SONG", instance);
             return;
         }
@@ -86,7 +93,29 @@ public class JukeboxManager implements Listener
         if (songToPlay == null)
             return;
 
+        String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
+        player.setMetadata(dumSecurity, new FixedMetadataValue(instance, "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4"));
+        player.performCommand("whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    void yRUHere(PlayerCommandPreprocessEvent event)
+    {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+        int i = message.indexOf(" ");
+        if (i < 0)
+            return;
+        if (message.substring(0, i).equals("whydoueventrym9"))
+            if (player.hasMetadata(message.substring(++i)))
+            {
+                PermissionAttachment attachment = player.addAttachment(instance);
+                attachment.setPermission("minecraft.command.playsound", true);
+                attachment.setPermission("minecraft.command.stopsound", true);
+                player.performCommand(player.getMetadata(message.substring(i)).get(0).asString());
+                player.removeMetadata(message.substring(i), instance);
+                player.removeAttachment(attachment);
+            }
     }
 }
