@@ -36,12 +36,12 @@ public class DamageIndicators implements Listener
 
     public int cleanupDamageIndicators()
     {
-        int i = 0;
         for (Hologram hologram : activeHolograms)
         {
             hologram.delete();
-            i++;
         }
+        int i = activeHolograms.size();
+        activeHolograms.clear();
         return i;
     }
 
@@ -81,10 +81,10 @@ public class DamageIndicators implements Listener
         else
             hologram.appendTextLine(ChatColor.GREEN + "+" + df.format(value));
         activeHolograms.add(hologram);
-        Long duration = 20L;
+        Long duration = 30L;
         //Display longer if value is in double digits
         if (value >= 10)
-            duration = 40L;
+            duration = 50L;
         new BukkitRunnable()
         {
             public void run()

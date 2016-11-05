@@ -30,8 +30,8 @@ public class HitSound implements Listener
         title.title(ChatColor.WHITE + "\u2572 \u2571"); //╲ ╱
         title.subtitle(ChatColor.WHITE + "\u2571 \u2572"); //╱ ╲
         title.fadeIn(0);
-        title.stay(1);
-        title.fadeOut(4);
+        title.stay(2);
+        title.fadeOut(5);
         hitMarker = title.build();
         title.title(ChatColor.WHITE + "\\ /");
         title.subtitle(ChatColor.WHITE + "/ \\");
