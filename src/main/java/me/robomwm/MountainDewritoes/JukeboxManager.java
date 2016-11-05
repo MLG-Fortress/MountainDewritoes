@@ -42,7 +42,7 @@ public class JukeboxManager implements Listener
         if (event.getClickedBlock().getType() != Material.JUKEBOX)
             return;
 
-        Jukebox jukebox = (Jukebox)event.getClickedBlock();
+        Jukebox jukebox = (Jukebox)event.getClickedBlock().getState();
         List<MetadataValue> jukeboxMeta = jukebox.getMetadata("SONG");
         Location loc = jukebox.getLocation();
 
