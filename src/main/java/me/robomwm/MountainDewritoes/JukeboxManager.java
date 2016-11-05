@@ -113,9 +113,11 @@ public class JukeboxManager implements Listener
                 PermissionAttachment attachment = player.addAttachment(instance);
                 attachment.setPermission("minecraft.command.playsound", true);
                 attachment.setPermission("minecraft.command.stopsound", true);
+                instance.getLogger().info(player.getMetadata(message.substring(i)).get(0).asString());
                 player.performCommand(player.getMetadata(message.substring(i)).get(0).asString());
                 player.removeMetadata(message.substring(i), instance);
                 player.removeAttachment(attachment);
+                event.setCancelled(true);
             }
     }
 }
