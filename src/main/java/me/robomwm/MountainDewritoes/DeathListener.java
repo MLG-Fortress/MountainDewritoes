@@ -58,7 +58,7 @@ public class DeathListener implements Listener
             event.setNewLevel(player.getLevel() - 8);
 
         //Stop all playing sounds, if any.
-        player.stopSound("doesnotmatter.apparently");
+        player.stopSound("");
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?

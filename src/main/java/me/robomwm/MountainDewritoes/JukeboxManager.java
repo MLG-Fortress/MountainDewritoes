@@ -61,10 +61,12 @@ public class JukeboxManager implements Listener
             if (!block.hasMetadata("SONG"))
                 return;
 
-            block.getRelative(event.getBlockFace()).setType(Material.COMMAND);
-            CommandBlock commandBlock = (CommandBlock)block.getRelative(event.getBlockFace()).getState();
-            instance.getServer().dispatchCommand((BlockCommandSender)commandBlock, "/stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
-            block.getRelative(event.getBlockFace()).setType(Material.AIR);
+            String songToStop =  blockMetadata.get(0).asString();
+            for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
+            {
+                if (onlinePlayer.getLocation().distanceSquared(loc) < 10000)
+                    player.stopSound(songToStop);
+            }
             block.removeMetadata("SONG", instance);
             return;
         }
@@ -98,11 +100,8 @@ public class JukeboxManager implements Listener
         if (songToPlay == null)
             return;
 
-        String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
-        block.getRelative(event.getBlockFace()).setType(Material.COMMAND);
-        CommandBlock commandBlock = (CommandBlock)block.getRelative(event.getBlockFace()).getState();
-        instance.getServer().dispatchCommand((BlockCommandSender)commandBlock, "/playsound " + songToPlay + " record @a[r=2000] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
+        block.getWorld().playSound(loc, songToPlay, 4.0f, 1.0f);
         block.getRelative(event.getBlockFace()).setType(Material.AIR);
     }
 }
