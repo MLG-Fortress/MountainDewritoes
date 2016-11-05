@@ -56,10 +56,11 @@ public class JukeboxManager implements Listener
             //Don't stop sounds if... we didn't start the sound...
             if (!block.hasMetadata("SONG"))
                 return;
-            instance.getLogger().info("stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
-            String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
-            player.setMetadata(dumSecurity, new FixedMetadataValue(instance, "stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString()));
-            player.chat("/whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
+
+            PermissionAttachment attachment = player.addAttachment(instance);
+            attachment.setPermission("minecraft.command.stopsound", true);
+            player.performCommand("stopsound @a[x=" + loc.getBlockX() + ",y=" + loc.getBlockY() + ",z=" + loc.getBlockZ() + ",r=100] record " + blockMetadata.get(0).asString());
+            player.removeAttachment(attachment);
             block.removeMetadata("SONG", instance);
             return;
         }
@@ -95,29 +96,9 @@ public class JukeboxManager implements Listener
 
         String dumSecurity = String.valueOf(ThreadLocalRandom.current().nextInt());
         block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
-        player.setMetadata(dumSecurity, new FixedMetadataValue(instance, "playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4"));
-        player.chat("/whydoueventrym9 " + dumSecurity); //TODO: does this trigger vanilla anti-spam?
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    void yRUHere(PlayerCommandPreprocessEvent event)
-    {
-        Player player = event.getPlayer();
-        String message = event.getMessage();
-        int i = message.indexOf(" ");
-        if (i < 0)
-            return;
-        if (message.substring(0, i).equals("whydoueventrym9"))
-            if (player.hasMetadata(message.substring(++i)))
-            {
-                PermissionAttachment attachment = player.addAttachment(instance);
-                attachment.setPermission("minecraft.command.playsound", true);
-                attachment.setPermission("minecraft.command.stopsound", true);
-                instance.getLogger().info(player.getMetadata(message.substring(i)).get(0).asString());
-                player.performCommand(player.getMetadata(message.substring(i)).get(0).asString());
-                player.removeMetadata(message.substring(i), instance);
-                player.removeAttachment(attachment);
-                event.setCancelled(true);
-            }
+        PermissionAttachment attachment = player.addAttachment(instance);
+        attachment.setPermission("minecraft.command.playsound", true);
+        player.performCommand("playsound " + songToPlay + " record @a " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " 4");
+        player.removeAttachment(attachment);
     }
 }
