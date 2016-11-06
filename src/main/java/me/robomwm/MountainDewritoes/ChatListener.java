@@ -232,7 +232,6 @@ public class ChatListener implements Listener
             event.setCancelled(true);
             softmutedChats.add(event);
             log(ChatColor.GRAY + "Detected softmute: " + event.getPlayer().getName() + ": " + event.getMessage());
-
         }
     }
 
@@ -254,7 +253,7 @@ public class ChatListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    void onPlayerChatFilter(AsyncPlayerChatEvent event)
+    void _onPlayerChatFilter(AsyncPlayerChatEvent event)
     {
         //Employ softmute check, since no need to filter if softmuted
         if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
