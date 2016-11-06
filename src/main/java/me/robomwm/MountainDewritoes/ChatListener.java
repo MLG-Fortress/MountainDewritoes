@@ -234,7 +234,7 @@ public class ChatListener implements Listener
         for (Pattern pattern : filterThingy)
         {
             Matcher matcher = pattern.matcher(message);
-            if (matcher.matches())
+            if (matcher.find())
             {
                 filtered = true;
                 message = matcher.replaceAll(replacements.get(ThreadLocalRandom.current().nextInt(replacements.size())));
