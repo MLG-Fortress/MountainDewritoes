@@ -222,39 +222,6 @@ public class ChatListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    void onPlayerChatFilter(AsyncPlayerChatEvent event)
-    {
-        //Employ softmute check, since no need to filter if softmuted
-        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
-            return;
-
-        String message = ChatColor.stripColor(event.getMessage().toLowerCase());
-        boolean filtered = false;
-        for (Pattern pattern : filterThingy)
-        {
-            Matcher matcher = pattern.matcher(message);
-            if (matcher.matches())
-            {
-                filtered = true;
-                message = matcher.replaceAll(replacements.get(ThreadLocalRandom.current().nextInt(replacements.size())));
-            }
-        }
-
-        if (filtered)
-        {
-            Player player = event.getPlayer();
-            log("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
-            event.getRecipients().remove(event.getPlayer());
-            String name = player.getDisplayName();
-            if (clanManager.getClanPlayer(player) != null)
-                name = ChatColor.GRAY + clanManager.getClanPlayer(player).getClan().getColorTag() + " " + name;
-            event.getPlayer().sendMessage(String.format(event.getFormat(), name, event.getMessage()));
-            event.setMessage(message);
-        }
-
-    }
-
     Set<AsyncPlayerChatEvent> softmutedChats = new HashSet<>();
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -284,5 +251,37 @@ public class ChatListener implements Listener
                 player.sendMessage(message);
         }
         instance.getServer().getLogger().info(ChatColor.stripColor(message));
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    void onPlayerChatFilter(AsyncPlayerChatEvent event)
+    {
+        //Employ softmute check, since no need to filter if softmuted
+        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
+            return;
+
+        String message = ChatColor.stripColor(event.getMessage().toLowerCase());
+        boolean filtered = false;
+        for (Pattern pattern : filterThingy)
+        {
+            Matcher matcher = pattern.matcher(message);
+            if (matcher.matches())
+            {
+                filtered = true;
+                message = matcher.replaceAll(replacements.get(ThreadLocalRandom.current().nextInt(replacements.size())));
+            }
+        }
+
+        if (filtered)
+        {
+            Player player = event.getPlayer();
+            log(ChatColor.GRAY + "Filtered original: " + event.getPlayer().getName() + ": " + event.getMessage());
+            event.getRecipients().remove(event.getPlayer());
+            String name = player.getDisplayName();
+            if (clanManager.getClanPlayer(player) != null)
+                name = ChatColor.GRAY + clanManager.getClanPlayer(player).getClan().getColorTag() + " " + name;
+            event.getPlayer().sendMessage(String.format(event.getFormat(), name, event.getMessage()));
+            event.setMessage(message);
+        }
     }
 }
