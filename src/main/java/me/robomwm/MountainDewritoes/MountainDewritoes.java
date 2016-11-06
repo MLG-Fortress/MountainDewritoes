@@ -57,7 +57,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //getServer().getPluginManager().registerEvents(new Footsteps(), this);
         getServer().getPluginManager().registerEvents(new NoKnockback(this), this);
         getServer().getPluginManager().registerEvents(damageIndicators, this);
-        getServer().getPluginManager().registerEvents(new JukeboxManager(this), this);
+        //getServer().getPluginManager().registerEvents(new JukeboxManager(this), this);
     }
 
     public void onDisable()
