@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     DamageIndicators damageIndicators = new DamageIndicators(this);
-    String acceptableColors = "Aqua, Blue, Dark_Blue, Green, Dark_Green, Light_Purple, Dark_Purple, Red, Dark_Red, Gold, Yellow";
+    String acceptableColors;
 
     public void onEnable()
     {
@@ -61,6 +62,15 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new NoKnockback(this), this);
         getServer().getPluginManager().registerEvents(damageIndicators, this);
         //getServer().getPluginManager().registerEvents(new JukeboxManager(this), this);
+        StringBuilder builder = new StringBuilder();
+        Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
+        for (String ok : colorThingy)
+        {
+            builder.append(ChatColor.valueOf(ok.toUpperCase()));
+            builder.append(ok);
+            builder.append(", ");
+        }
+        acceptableColors = builder.toString().substring(0, builder.length() - 3);
     }
 
     public void onDisable()
