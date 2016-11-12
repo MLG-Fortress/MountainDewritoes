@@ -14,3 +14,6 @@ softdepend:
 - Chester
 - EssentialsChat
 - HolographicDisplays
+commands:
+  nick:
+    aliases: [color]
