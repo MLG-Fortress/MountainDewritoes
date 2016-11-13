@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import com.destroystokyo.paper.Title;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -145,6 +146,7 @@ public class DeathListener implements Listener
         hasRecentlyDied.put(player, 120);
         new BukkitRunnable()
         {
+            Title.Builder timeTillRespawn = new Title.Builder();
             public void run()
             {
                 if (!hasRecentlyDied.containsKey(player))
@@ -158,7 +160,10 @@ public class DeathListener implements Listener
                     hasRecentlyDied.remove(player);
                     return;
                 }
-
+                timeTillRespawn.title("Respawning in");
+                timeTillRespawn.subtitle(String.valueOf((hasRecentlyDied.get(player) / 20)));
+                timeTillRespawn.stay(20);
+                player.sendTitle(timeTillRespawn.build());
                 hasRecentlyDied.put(player, hasRecentlyDied.get(player) - 1);
             }
         }.runTaskTimer(instance, 1L, 1L);
@@ -209,7 +214,7 @@ public class DeathListener implements Listener
         if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
             vector = victimsKiller.remove(player).getLocation().toVector().subtract(player.getLocation().toVector());
         else //Point down
-            vector = player.getLocation().subtract(0, 1, 0).toVector();
+            vector = player.getLocation().subtract(player.getLocation().subtract(0, 1, 0).toVector()).toVector();
         event.setRespawnLocation(player.getLocation().add(0, 1, 0).setDirection(vector));
     }
 
