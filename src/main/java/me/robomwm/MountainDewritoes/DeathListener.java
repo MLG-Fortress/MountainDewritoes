@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -182,7 +183,9 @@ public class DeathListener implements Listener
                 {
                     //If so, teleport half a block above
                     wasDead = false;
+                    player.setMetadata("DEAD_MOVE", new FixedMetadataValue(instance, true));
                     player.teleport(player.getLocation().add(0, 0.5, 0).setDirection(vector));
+                    player.removeMetadata("DEAD_MOVE", instance);
                 }
 
                 //Track killer
@@ -255,7 +258,7 @@ public class DeathListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onPlayerTryToTeleportWhenDead(PlayerTeleportEvent event)
     {
-        if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN)
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
             return;
         Player player = event.getPlayer();
         if (player.hasMetadata("DEAD"))
@@ -268,6 +271,21 @@ public class DeathListener implements Listener
         Player player = event.getPlayer();
         if (player.hasMetadata("DEAD") && !event.getMessage().toLowerCase().startsWith("/me "))
             event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    void onPlayerQuitWhileSpectatingOrDead(PlayerQuitEvent event)
+    {
+        Player player = event.getPlayer();
+        if (player.isDead())
+            player.spigot().respawn();
+        if (player.hasMetadata("DEAD"))
+        {
+            hasRecentlyDied.remove(player);
+            player.removeMetadata("DEAD", instance);
+            player.teleport(respawnLocation);
+            player.setGameMode(GameMode.SURVIVAL);
+        }
     }
 
     //TODO: handle chat (set permissions???)
