@@ -176,8 +176,8 @@ public class DeathListener implements Listener
                     return;
                 }
 
-                //Was player dead last tick?
-                if (!wasDead && !player.isDead())
+                //Was player dead last tick and now alive this tick?
+                if (wasDead && !player.isDead())
                 {
                     //If so, teleport half a block above
                     wasDead = false;
