@@ -177,29 +177,29 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         switch (color)
         {
             case AQUA:
-                return "&b ";
+                return "&b";
             case BLUE:
-                return "&9 ";
+                return "&9";
             case DARK_AQUA:
-                return "&3 ";
+                return "&3";
             case DARK_BLUE:
-                return "&1 ";
+                return "&1";
             case DARK_GREEN:
-                return "&2 ";
+                return "&2";
             case DARK_PURPLE:
-                return "&5 ";
+                return "&5";
             case DARK_RED:
-                return "&4 ";
+                return "&4";
             case GOLD:
-                return "&6 ";
+                return "&6";
             case GREEN:
-                return "&a ";
+                return "&a";
             case LIGHT_PURPLE:
-                return "&d ";
+                return "&d";
             case RED:
-                return "&c ";
+                return "&c";
             case YELLOW:
-                return "&e ";
+                return "&e";
         }
         return null;
     }
