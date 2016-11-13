@@ -67,12 +67,13 @@ public class DeathListener implements Listener
         //Get the attacker
         Entity attacker = null;
         if (damager instanceof LivingEntity)
-            attacker = (Entity)damager;
+            attacker = damager;
         else if (damager instanceof Projectile)
         {
             Projectile arrow = (Projectile)damager;
-            if (!(arrow.getShooter() instanceof Entity))
+            if (!(arrow.getShooter() instanceof LivingEntity))
                 return; //Dispenser
+            attacker = (Entity)arrow.getShooter();
         }
         Player player = (Player)event.getEntity();
         final Entity badGuy = attacker;
