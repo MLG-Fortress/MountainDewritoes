@@ -187,7 +187,7 @@ public class DeathListener implements Listener
                 {
                     //If so, teleport half a block above
                     wasDead = false;
-                    player.teleport(player.getLocation().add(0, 0.5, 0));
+                    player.teleport(player.getLocation().add(0, 0.5, 0).setDirection(vector));
                 }
 
                 //Track killer
