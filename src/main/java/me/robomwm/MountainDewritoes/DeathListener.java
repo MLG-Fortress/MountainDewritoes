@@ -144,9 +144,16 @@ public class DeathListener implements Listener
          * Keeps track of how long the player has been dead (counts down)
          */
         hasRecentlyDied.put(player, 180);
+        Entity killerNotFinal = null;
+        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
+            killerNotFinal = victimsKiller.remove(player);
+        final Entity killer = killerNotFinal;
         new BukkitRunnable()
         {
             Title.Builder timeTillRespawn = new Title.Builder();
+            //Point down by default
+            Vector vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
+
             public void run()
             {
                 if (!hasRecentlyDied.containsKey(player))
@@ -160,12 +167,24 @@ public class DeathListener implements Listener
                     hasRecentlyDied.remove(player);
                     return;
                 }
-                timeTillRespawn.title("Respawning in");
-                timeTillRespawn.subtitle(String.valueOf((hasRecentlyDied.get(player) / 20)));
-                timeTillRespawn.fadeIn(0);
-                timeTillRespawn.fadeOut(0);
-                timeTillRespawn.stay(10);
-                player.sendTitle(timeTillRespawn.build());
+
+                //Track killer
+                if (!player.isDead() && killer != null && killer.getWorld() == player.getWorld())
+                {
+                    vector = killer.getLocation().toVector().subtract(player.getLocation().toVector());
+                    player.teleport(player.getLocation().setDirection(vector));
+                }
+
+                //Only send title every half second
+                if (hasRecentlyDied.get(player) % 10 == 0)
+                {
+                    timeTillRespawn.title("Respawning in");
+                    timeTillRespawn.subtitle(String.valueOf((hasRecentlyDied.get(player) / 20)));
+                    timeTillRespawn.fadeIn(0);
+                    timeTillRespawn.fadeOut(2);
+                    timeTillRespawn.stay(15);
+                    player.sendTitle(timeTillRespawn.build());
+                }
                 hasRecentlyDied.put(player, hasRecentlyDied.get(player) - 1);
             }
         }.runTaskTimer(instance, 1L, 1L);
@@ -212,17 +231,14 @@ public class DeathListener implements Listener
         player.setMetadata("DEAD", new FixedMetadataValue(instance, true));
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
-        Vector vector = new Vector();
-        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
-            vector = victimsKiller.remove(player).getLocation().toVector().subtract(player.getLocation().toVector());
-        else //Point down
-            vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
-        event.setRespawnLocation(player.getLocation().add(0, 1, 0).setDirection(vector));
+        event.setRespawnLocation(player.getLocation().add(0, 1, 0));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onPlayerTryToTeleportWhenDead(PlayerTeleportEvent event)
     {
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN)
+            return;
         Player player = event.getPlayer();
         if (player.hasMetadata("DEAD"))
             event.setCancelled(true);
