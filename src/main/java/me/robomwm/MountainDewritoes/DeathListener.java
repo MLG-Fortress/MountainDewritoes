@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class DeathListener implements Listener
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     Map<Player, Integer> hasRecentlyDied = new HashMap<>();
     Map<Player, Entity> victimsKiller = new HashMap<>();
+    Map<Player, BukkitTask> wenUr2Lazy2MakeAClass = new HashMap<>();
     Location respawnLocation;
     DeathListener(MountainDewritoes yayNoMain)
     {
@@ -80,15 +82,17 @@ public class DeathListener implements Listener
         if (badGuy == player)
             return;
         victimsKiller.put(player, badGuy);
-        new BukkitRunnable()
+        BukkitTask task = new BukkitRunnable()
         {
             public void run()
             {
+                if (wenUr2Lazy2MakeAClass.containsKey(player))
+                    wenUr2Lazy2MakeAClass.remove(player).cancel();
                 if (badGuy == victimsKiller.get(player))
                     victimsKiller.remove(player);
             }
         }.runTaskLater(instance, 300L);
-
+        wenUr2Lazy2MakeAClass.put(player, task);
     }
 
     @EventHandler
@@ -216,7 +220,6 @@ public class DeathListener implements Listener
         /**
          * Death spectating
          */
-
         //Schedule task to teleport player in (6 - time spent while dead) seconds
         new BukkitRunnable()
         {
@@ -254,4 +257,6 @@ public class DeathListener implements Listener
         if (player.hasMetadata("DEAD") && !event.getMessage().toLowerCase().startsWith("/me "))
             event.setCancelled(true);
     }
+
+    //TODO: handle chat (set permissions???)
 }

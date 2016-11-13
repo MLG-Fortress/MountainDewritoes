@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -202,5 +203,26 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 return "&e";
         }
         return null;
+    }
+
+    /**
+     * Make chunk loading when teleporting seem faster
+     * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
+     * @param event
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onPlayerTeleportsSetViewDistance(PlayerTeleportEvent event)
+    {
+        Player player = event.getPlayer();
+        if (player.hasMetadata("DEAD"))
+            return;
+        player.setViewDistance(3);
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                player.setViewDistance(8);
+            }
+        }.runTaskLater(this, 100L);
     }
 }
