@@ -38,8 +38,6 @@ public class DeathListener implements Listener
     MountainDewritoes instance;
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     Map<Player, Integer> hasRecentlyDied = new HashMap<>();
-    Map<Player, Entity> victimsKiller = new HashMap<>();
-    Map<Player, BukkitTask> wenUr2Lazy2MakeAClass = new HashMap<>();
     Location respawnLocation;
     DeathListener(MountainDewritoes yayNoMain)
     {
@@ -47,11 +45,13 @@ public class DeathListener implements Listener
         respawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
     }
 
-    /**
+    /*
      * Have death spectator camera point towards the killer
      * To do this, we need to store who last damaged the victim
+     * That feeling when you forget the Entity object has getKiller()...
      * @param event
-     */
+    Map<Player, Entity> victimsKiller = new HashMap<>();
+    Map<Player, BukkitTask> wenUr2Lazy2MakeAClass = new HashMap<>();
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void storeLastDamager(EntityDamageByEntityEvent event)
     {
@@ -96,6 +96,7 @@ public class DeathListener implements Listener
             wenUr2Lazy2MakeAClass.remove(player).cancel();
         wenUr2Lazy2MakeAClass.put(player, task);
     }
+     */
 
     @EventHandler
     void onPlayerSadness(PlayerDeathEvent event)
@@ -151,16 +152,21 @@ public class DeathListener implements Listener
          * Keeps track of how long the player has been dead (counts down)
          */
         hasRecentlyDied.put(player, 180);
-        Entity killerNotFinal = null;
-        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
-            killerNotFinal = victimsKiller.remove(player);
-        final Entity killer = killerNotFinal;
+
+//        Entity killerNotFinal = null;
+//        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
+//            killerNotFinal = victimsKiller.remove(player);
+//        final Entity killer = killerNotFinal;
+
+
         new BukkitRunnable()
         {
             Title.Builder timeTillRespawn = new Title.Builder();
             boolean wasDead = true;
             //Point down by default
+            //https://bukkit.org/threads/vectors.152310/#post-1703396
             Vector vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
+            Entity killer = player.getKiller();
 
             public void run()
             {
