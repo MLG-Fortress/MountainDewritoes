@@ -225,6 +225,7 @@ public class DeathListener implements Listener
                 player.removeMetadata("DEAD", instance);
                 player.teleport(respawnLocation);
                 player.setGameMode(GameMode.SURVIVAL);
+                player.setViewDistance(8);
             }
         }.runTaskLater(instance, hasRecentlyDied.get(player));
 
@@ -232,6 +233,7 @@ public class DeathListener implements Listener
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
         event.setRespawnLocation(player.getLocation().add(0, 1, 0));
+        player.setViewDistance(2);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
