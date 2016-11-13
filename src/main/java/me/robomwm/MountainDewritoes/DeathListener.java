@@ -62,9 +62,6 @@ public class DeathListener implements Listener
         //Check if victim is a player
         if (event.getEntityType() != EntityType.PLAYER)
             return;
-        //Check if attacker is an entity or projectile (we don't care about explosions, for example)
-        if (damager.getType() != EntityType.PLAYER && !(damager instanceof Projectile))
-            return;
 
         //Get the attacker
         Entity attacker = null;
@@ -77,6 +74,11 @@ public class DeathListener implements Listener
                 return; //Dispenser
             attacker = (Entity)arrow.getShooter();
         }
+        
+        //Don't care if attacker is not a LivingEntity or Projectile (we don't care about explosions, for example)
+        if (attacker == null)
+            return;
+
         Player player = (Player)event.getEntity();
         final Entity badGuy = attacker;
         if (badGuy == player)
@@ -181,7 +183,7 @@ public class DeathListener implements Listener
                 }
 
                 //Only send title every half second
-                if (hasRecentlyDied.get(player) % 10 == 0)
+                if (!player.isDead() && hasRecentlyDied.get(player) % 10 == 0)
                 {
                     timeTillRespawn.title("Respawning in");
                     timeTillRespawn.subtitle(String.valueOf((hasRecentlyDied.get(player) / 20)));
