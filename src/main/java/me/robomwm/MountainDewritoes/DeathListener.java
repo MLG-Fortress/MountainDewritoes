@@ -74,7 +74,7 @@ public class DeathListener implements Listener
                 return; //Dispenser
             attacker = (Entity)arrow.getShooter();
         }
-        
+
         //Don't care if attacker is not a LivingEntity or Projectile (we don't care about explosions, for example)
         if (attacker == null)
             return;
@@ -158,6 +158,7 @@ public class DeathListener implements Listener
         new BukkitRunnable()
         {
             Title.Builder timeTillRespawn = new Title.Builder();
+            boolean wasDead = true;
             //Point down by default
             Vector vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
 
@@ -173,6 +174,14 @@ public class DeathListener implements Listener
                 {
                     hasRecentlyDied.remove(player);
                     return;
+                }
+
+                //Was player dead last tick?
+                if (!wasDead && !player.isDead())
+                {
+                    //If so, teleport half a block above
+                    wasDead = false;
+                    player.teleport(player.getLocation().add(0, 0.5, 0));
                 }
 
                 //Track killer
@@ -238,7 +247,7 @@ public class DeathListener implements Listener
         player.setMetadata("DEAD", new FixedMetadataValue(instance, true));
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
-        event.setRespawnLocation(player.getLocation().add(0, 1, 0));
+        event.setRespawnLocation(player.getLocation().add(0, 0, 0));
         player.setViewDistance(2);
     }
 
