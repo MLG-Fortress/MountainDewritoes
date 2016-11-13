@@ -143,7 +143,7 @@ public class DeathListener implements Listener
          * Death spectating timer
          * Keeps track of how long the player has been dead (counts down)
          */
-        hasRecentlyDied.put(player, 120);
+        hasRecentlyDied.put(player, 180);
         new BukkitRunnable()
         {
             Title.Builder timeTillRespawn = new Title.Builder();
@@ -162,7 +162,9 @@ public class DeathListener implements Listener
                 }
                 timeTillRespawn.title("Respawning in");
                 timeTillRespawn.subtitle(String.valueOf((hasRecentlyDied.get(player) / 20)));
-                timeTillRespawn.stay(20);
+                timeTillRespawn.fadeIn(0);
+                timeTillRespawn.fadeOut(0);
+                timeTillRespawn.stay(10);
                 player.sendTitle(timeTillRespawn.build());
                 hasRecentlyDied.put(player, hasRecentlyDied.get(player) - 1);
             }
@@ -214,7 +216,7 @@ public class DeathListener implements Listener
         if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
             vector = victimsKiller.remove(player).getLocation().toVector().subtract(player.getLocation().toVector());
         else //Point down
-            vector = player.getLocation().subtract(player.getLocation().subtract(0, 1, 0).toVector()).toVector();
+            vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
         event.setRespawnLocation(player.getLocation().add(0, 1, 0).setDirection(vector));
     }
 
