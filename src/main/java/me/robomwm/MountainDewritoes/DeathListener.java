@@ -86,12 +86,12 @@ public class DeathListener implements Listener
         {
             public void run()
             {
-                if (wenUr2Lazy2MakeAClass.containsKey(player))
-                    wenUr2Lazy2MakeAClass.remove(player).cancel();
                 if (badGuy == victimsKiller.get(player))
                     victimsKiller.remove(player);
             }
         }.runTaskLater(instance, 300L);
+        if (wenUr2Lazy2MakeAClass.containsKey(player))
+            wenUr2Lazy2MakeAClass.remove(player).cancel();
         wenUr2Lazy2MakeAClass.put(player, task);
     }
 
