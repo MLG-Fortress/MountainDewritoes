@@ -2,10 +2,15 @@ package me.robomwm.MountainDewritoes;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -13,8 +18,13 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -26,12 +36,57 @@ public class DeathListener implements Listener
     MountainDewritoes instance;
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     Map<Player, Integer> hasRecentlyDied = new HashMap<>();
-    Random random = new Random();
+    Map<Player, Entity> victimsKiller = new HashMap<>();
     Location respawnLocation;
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
         respawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
+    }
+
+    /**
+     * Have death spectator camera point towards the killer
+     * To do this, we need to store who last damaged the victim
+     * @param event
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    void storeLastDamager(EntityDamageByEntityEvent event)
+    {
+        //Check if the thing did any damage at all
+        if (event.getDamage() <= 0D)
+            return;
+        Entity damager = event.getDamager();
+        //Check if victim is a player
+        if (event.getEntityType() != EntityType.PLAYER)
+            return;
+        //Check if attacker is an entity or projectile (we don't care about explosions, for example)
+        if (damager.getType() != EntityType.PLAYER && !(damager instanceof Projectile))
+            return;
+
+        //Get the attacker
+        Entity attacker = null;
+        if (damager instanceof LivingEntity)
+            attacker = (Entity)damager;
+        else if (damager instanceof Projectile)
+        {
+            Projectile arrow = (Projectile)damager;
+            if (!(arrow.getShooter() instanceof Entity))
+                return; //Dispenser
+        }
+        Player player = (Player)event.getEntity();
+        final Entity badGuy = attacker;
+        if (badGuy == player)
+            return;
+        victimsKiller.put(player, badGuy);
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (badGuy == victimsKiller.get(player))
+                    victimsKiller.remove(player);
+            }
+        }.runTaskLater(instance, 300L);
+
     }
 
     @EventHandler
@@ -143,12 +198,19 @@ public class DeathListener implements Listener
                 hasRecentlyDied.remove(player); //Just in case I guess
                 player.removeMetadata("DEAD", instance);
                 player.teleport(respawnLocation);
+                player.setGameMode(GameMode.SURVIVAL);
             }
         }.runTaskLater(instance, hasRecentlyDied.get(player));
 
         player.setMetadata("DEAD", new FixedMetadataValue(instance, true));
         player.setGameMode(GameMode.SPECTATOR);
-        event.setRespawnLocation(player.getLocation());
+        player.setFlySpeed(0.0f);
+        Vector vector = new Vector();
+        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
+            vector = victimsKiller.remove(player).getLocation().toVector().subtract(player.getLocation().toVector());
+        else //Point down
+            vector = player.getLocation().subtract(0, 1, 0).toVector();
+        event.setRespawnLocation(player.getLocation().add(0, 1, 0).setDirection(vector));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
