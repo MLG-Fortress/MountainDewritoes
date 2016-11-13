@@ -140,8 +140,9 @@ public class DeathListener implements Listener
         {
             public void run()
             {
-                player.teleport(respawnLocation);
+                hasRecentlyDied.remove(player); //Just in case I guess
                 player.removeMetadata("DEAD", instance);
+                player.teleport(respawnLocation);
             }
         }.runTaskLater(instance, hasRecentlyDied.get(player));
 
