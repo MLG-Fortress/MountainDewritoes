@@ -70,7 +70,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             builder.append(ok);
             builder.append(", ");
         }
-        acceptableColors = builder.toString().substring(0, builder.length() - 3);
+        acceptableColors = builder.toString().substring(0, builder.length() - 2);
     }
 
     public void onDisable()
