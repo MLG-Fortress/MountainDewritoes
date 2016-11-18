@@ -258,11 +258,18 @@ public class DeathListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onPlayerTryToTeleportWhenDead(PlayerTeleportEvent event)
     {
-        if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
-            return;
         Player player = event.getPlayer();
-        if (player.hasMetadata("DEAD"))
-            event.setCancelled(true);
+        if (!player.hasMetadata("DEAD"))
+            return;
+        try
+        {
+            if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
+                return;
+        }
+        catch (IllegalArgumentException e) //If teleporting to another world, yes of course stop that
+        {}
+
+        event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

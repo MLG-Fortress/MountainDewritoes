@@ -53,8 +53,8 @@ public class LowHealth implements Listener
 //            return;
 //        }
 
-        if (player.getFoodLevel() >= 20 && player.getSaturation() > 0)
-            return; //ignore rapid health regeneration
+//        if (player.getFoodLevel() >= 20 && player.getSaturation() > 0)
+//            return; //ignore rapid health regeneration
 
         double health = player.getHealth() - event.getFinalDamage();
         if (health <= 10f && !alreadyLowHealth.containsKey(player))

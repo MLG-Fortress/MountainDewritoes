@@ -12,6 +12,14 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Random;
+import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
@@ -150,5 +158,52 @@ public class AtmosphericManager implements Listener
                 //TODO: etc.
             }
         }.runTaskAsynchronously(instance);
+    }
+
+
+}
+
+class MusicThing
+{
+    private String soundName;
+    private int length;
+    public MusicThing(String name, int length)
+    {
+        this.soundName = name;
+        this.length = length;
+    }
+    public String getSoundName()
+    {
+        return this.soundName;
+    }
+    public int getLength()
+    {
+        return this.length;
+    }
+}
+
+class MusicManager
+{
+    private Map<String, MusicThing> demSongz = new HashMap<>();
+    private List<MusicThing> mall = new ArrayList<>();
+
+    public MusicManager()
+    {
+        //TODO: create all dem objects and store dem in dis hashmap
+    }
+
+    /**
+     * Get a specific song
+     * @param song
+     * @return null if song doesn't exist
+     */
+    public MusicThing getSong(String song)
+    {
+        return demSongz.get(song);
+    }
+
+    public MusicThing getMallSong()
+    {
+        return mall.get(ThreadLocalRandom.current().nextInt(mall.size()));
     }
 }
