@@ -81,6 +81,10 @@ public class ChatListener implements Listener
         if (event.getRecipients().size() < 2)
             return; //ignore if they're the only one on
 
+        //MC 1.11 increased length of chat messages. We aren't even going to try if it's too long.
+        if (event.getMessage().length() > 100)
+            return;
+
         final Player player = event.getPlayer();
 
         //Is a prior message bubble being displayed? If so, remove it
