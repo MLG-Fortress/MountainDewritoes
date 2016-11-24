@@ -63,7 +63,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.TechFortress:GriefPrevention:15.2.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.TechFortress:GriefPrevention:16.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sk89q:worldguard:6.1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sk89q:worldedit:5.5.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sk89q.spigot:bukkit-classloader-check:1.8-R0.1-SNAPSHOT" level="project" />

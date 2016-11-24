@@ -235,7 +235,7 @@ public class DeathListener implements Listener
         /**
          * Death spectating
          */
-        //Schedule task to teleport player in (6 - time spent while dead) seconds
+        //Schedule task to teleport player in (9 - time spent while dead) seconds
         new BukkitRunnable()
         {
             public void run()
@@ -244,7 +244,6 @@ public class DeathListener implements Listener
                 player.removeMetadata("DEAD", instance);
                 player.teleport(respawnLocation);
                 player.setGameMode(GameMode.SURVIVAL);
-                player.setViewDistance(8);
             }
         }.runTaskLater(instance, hasRecentlyDied.get(player));
 
@@ -287,12 +286,7 @@ public class DeathListener implements Listener
         if (player.isDead())
             player.spigot().respawn();
         if (player.hasMetadata("DEAD"))
-        {
             hasRecentlyDied.remove(player);
-            player.removeMetadata("DEAD", instance);
-            player.teleport(respawnLocation);
-            player.setGameMode(GameMode.SURVIVAL);
-        }
     }
 
     //TODO: handle chat (set permissions???)

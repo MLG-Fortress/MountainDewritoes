@@ -21,7 +21,7 @@ public class SpawnWorldListener implements Listener
     public SpawnWorldListener(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        spawn = Bukkit.getWorld("minigames");
+        spawn = instance.getServer().getWorld("minigames");
         spawnLocation = new Location(spawn, -389D, 5D, -124D, 180.344f, -18.881f);
     }
     @EventHandler(priority = EventPriority.HIGHEST)

@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -206,12 +207,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     }
 
     /**
-     * Make chunk loading when teleporting seem faster
-     * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
+     * Make chunk loading when teleporting between worlds seem faster
+     * We aren't doing this for every teleport since plugins might perform teleports in same chunk (e.g. PortalStick)
+     * On teleporting, sets view distance to 3, then back to 8 after 10 seconds
      * @param event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    void onPlayerTeleportsSetViewDistance(PlayerTeleportEvent event)
+    void onPlayerTeleportsSetViewDistance(PlayerChangedWorldEvent event)
     {
         Player player = event.getPlayer();
         if (player.hasMetadata("DEAD"))
@@ -223,6 +225,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             {
                 player.setViewDistance(8);
             }
-        }.runTaskLater(this, 100L);
+        }.runTaskLater(this, 200L);
     }
 }
