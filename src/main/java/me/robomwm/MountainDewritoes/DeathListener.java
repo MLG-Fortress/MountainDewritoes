@@ -108,12 +108,11 @@ public class DeathListener implements Listener
         List<ItemStack> dropsToReturn = new ArrayList<>();
         while (iterator.hasNext())
         {
+            ItemStack itemStack = iterator.next();
+            instance.getLogger().info(itemStack.getType().toString());
             if (ThreadLocalRandom.current().nextInt(4) == 0)
-            {
-                iterator.next();
                 continue;
-            }
-            dropsToReturn.add(iterator.next());
+            dropsToReturn.add(itemStack);
             iterator.remove();
         }
         deathItems.put(player, dropsToReturn);
