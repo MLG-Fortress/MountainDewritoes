@@ -30,24 +30,24 @@ class MusicManager
         //TODO: then obviously make copies for mall and whatnot so we can get a random song for a specific category
         battle.add(put("andyougotmesayin", 35));
         battle.add(put("SteelDeDeDrum", 60+36));
-        boss.add(put("BulletForMyMeme", 119));
-        boss.add(put("FreshSqueezedMemes100FollowerSpecial", 60+18));
-        mall.add(put("AlphysShopChannel", 110));
-        mall.add(put("AnimalLobby", 46));
+        boss.add(put("bulletformymeme", 119));
+        boss.add(put("freshsqueezedmemes100followerspecial", 60+18));
+        mall.add(put("alphysshopchannel", 110));
+        mall.add(put("animallobby", 46));
         mall.add(put("buysomething", 31));
         mall.add(put("fleamarket", 127));
         mall.add(put("fleamarket2", 132));
-        mall.add(put("GrandDadInAnElevator", 16));
-        mall.add(put("LetsShop", 58));
-        mall.add(put("Nintendogsong", 70));
-        mall.add(put("SplatoonBooyahBaseShopping", 90));
+        mall.add(put("granddadinanelevator", 16));
+        mall.add(put("letsshop", 58));
+        mall.add(put("nintendogsong", 70));
+        mall.add(put("splatoonbooyahbaseshopping", 90));
         mall.add(put("torielnospeakamericano", 120+33));
-        mall.add(put("WiiShopChannel", 90));
-        mall.add(put("WiiShoppingInsideaHouse", 59));
+        mall.add(put("wiishopchannel", 90));
+        mall.add(put("wiishoppinginsideahouse", 59));
         morning.add(put("badblood", 51));
         morning.add(put("crazyfrog", 43));
         morning.add(put("justdoit1", 128));
-        morning.add(put("Meow-croRow", 94));
+        morning.add(put("meow-crorow", 94));
         morning.add(put("rickroll", 40));
         morning.add(put("soldierboy", 29));
         morning.add(put("strawberryshortcake", 35));
@@ -58,13 +58,13 @@ class MusicManager
         night.add(put("sonsfavorite", 42));
         night.add(put("whymca", 57));
         spawn.add(put("hotel303", 42));
-        spawn.add(put("HotelBarkley", 50));
-        spawn.add(put("spawn", 49)); //Needs credit
+        spawn.add(put("hotelbarkley", 50));
+        spawn.add(put("spawn", 49)); //needs credit
         spawn.add(put("spawn2", 32));
         spawn.add(put("thegrandshow", 60+18));
-        spawn.add(put("SkrillexReplacesChip", 60));
-        pokemon.add(put("HiddenMishaSwamp", 131));
-        weather.add(put("SomeNewFleaswallowRap", 120+17));
+        spawn.add(put("skrillexreplaceschip", 60));
+        pokemon.add(put("hiddenmishaswamp", 131));
+        weather.add(put("somenewfleaswallowrap", 120+17));
     }
 
     private MusicThing put(String name, int length)

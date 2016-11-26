@@ -111,12 +111,14 @@ public class AtmosphericManager implements Listener
                         {
                             if (!player.hasMetadata("LISTENING"))
                                 return;
+                            instance.getLogger().info("removing metadata");
                             //Can happen if another event removed metadata earlier (worldchange) and player received new music
                             if (player.getMetadata("LISTENING").equals(time))
                                 player.removeMetadata("LISTENING", instance);
                         }
                     }.runTaskLater(instance, sound.getLength());
                     player.playSound(player.getLocation(), sound.getSoundName(), SoundCategory.AMBIENT, 3000000f, 1.0f);
+                    instance.getLogger().info(sound.getSoundName());
                 }
             }
         }.runTaskLater(instance, delay * 20L);
@@ -136,7 +138,7 @@ public class AtmosphericManager implements Listener
         if (world == MALL)
             playSound(musicManager.getMallSong(), MALL, 10);
         else if (world == SPAWN)
-            playSound(musicManager.getSpawnSong(), SPAWN, 30);
+            playSound(musicManager.getSpawnSong(), SPAWN, 20);
     }
 
     /** Play sounds globally based on certain keywords
