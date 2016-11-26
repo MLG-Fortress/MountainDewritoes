@@ -251,7 +251,7 @@ public class DeathListener implements Listener
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
         event.setRespawnLocation(player.getLocation().add(0, 0, 0));
-        player.setViewDistance(2);
+        player.setViewDistance(3);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

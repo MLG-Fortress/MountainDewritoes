@@ -209,7 +209,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     /**
      * Make chunk loading when teleporting between worlds seem faster
      * We aren't doing this for every teleport since plugins might perform teleports in same chunk (e.g. PortalStick)
-     * On teleporting, sets view distance to 3, then back to 8 after 10 seconds
+     * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
      * @param event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -225,6 +225,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             {
                 player.setViewDistance(8);
             }
-        }.runTaskLater(this, 200L);
+        }.runTaskLater(this, 100L);
     }
 }
