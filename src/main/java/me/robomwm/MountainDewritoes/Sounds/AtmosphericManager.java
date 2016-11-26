@@ -109,9 +109,9 @@ public class AtmosphericManager implements Listener
                     {
                         public void run()
                         {
-							if (!player.hasMetadata("ListeningToMusic"))
-								return;
-							//Can happen if another event removed metadata earlier (worldchange) and player received new music
+                            if (!player.hasMetadata("ListeningToMusic"))
+                                return;
+                            //Can happen if another event removed metadata earlier (worldchange) and player received new music
                             if (player.getMetadata("ListeningToMusic").equals(time))
                                 player.removeMetadata("ListeningToMusic", instance);
                         }
