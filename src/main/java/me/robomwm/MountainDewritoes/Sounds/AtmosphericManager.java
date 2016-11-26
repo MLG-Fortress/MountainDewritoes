@@ -242,7 +242,7 @@ class MusicManager
         spawn.add(put("HotelBarkley", 50));
         spawn.add(put("spawn", 49)); //Needs credit
         spawn.add(put("spawn2", 32));
-        spawn.add(put("TheGrandShow", 60+18));
+        spawn.add(put("thegrandshow", 60+18));
         spawn.add(put("SkrillexReplacesChip", 60));
         pokemon.add(put("HiddenMishaSwamp", 131));
         weather.add(put("SomeNewFleaswallowRap", 120+17));
