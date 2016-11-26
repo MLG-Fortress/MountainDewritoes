@@ -133,7 +133,7 @@ public class AtmosphericManager implements Listener
     {
         Player player = event.getPlayer();
         World world = player.getWorld();
-
+        instance.getLogger().info("Teleported to " + world.getName());
         if (world == MALL)
             playSound(musicManager.getMallSong(), MALL, 10);
         else if (world == SPAWN)
@@ -229,13 +229,13 @@ class MusicManager
         morning.add(put("crazyfrog", 43));
         morning.add(put("justdoit1", 128));
         morning.add(put("Meow-croRow", 94));
-        morning.add(put("minecrafttrapremix", 120+34));
         morning.add(put("rickroll", 40));
         morning.add(put("soldierboy", 29));
         morning.add(put("strawberryshortcake", 35));
         morning.add(put("subway", 26));
         morning.add(put("sunrise", 45));
         morning.add(put("sunrise2", 67));
+        night.add(put("minecrafttrapremix", 120+34));
         night.add(put("sonsfavorite", 42));
         night.add(put("whymca", 57));
         spawn.add(put("hotel303", 42));
