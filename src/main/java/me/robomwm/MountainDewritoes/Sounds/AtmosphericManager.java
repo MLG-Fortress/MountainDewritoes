@@ -133,7 +133,6 @@ public class AtmosphericManager implements Listener
     {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        instance.getLogger().info("Teleported to " + world.getName());
         if (world == MALL)
             playSound(musicManager.getMallSong(), MALL, 10);
         else if (world == SPAWN)
