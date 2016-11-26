@@ -40,12 +40,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     //Set<Player> usedEC = new HashSet<>();
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
-    DamageIndicators damageIndicators = new DamageIndicators(this);
-    AtmosphericManager atmosphericManager = new AtmosphericManager(this);
+    DamageIndicators damageIndicators;
+    AtmosphericManager atmosphericManager;
     String acceptableColors;
 
     public void onEnable()
     {
+        damageIndicators = new DamageIndicators(this);
+        atmosphericManager = new AtmosphericManager(this);
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
         ClanManager clanManager = sc.getClanManager();
