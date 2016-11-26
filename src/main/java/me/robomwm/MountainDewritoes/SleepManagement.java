@@ -32,7 +32,7 @@ public class SleepManagement implements Listener
         World world = instance.getServer().getWorld("world");
         World cityworld = instance.getServer().getWorld("cityworld");
         World mall = instance.getServer().getWorld("mall");
-        World spawn = instance.getServer().getWorld("spawn");
+        World spawn = instance.getServer().getWorld("minigames");
 
         cityworld.setTime(world.getTime()); //Initial sync
         mall.setTime(world.getTime());
