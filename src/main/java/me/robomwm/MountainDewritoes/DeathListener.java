@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import com.destroystokyo.paper.Title;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -109,8 +110,7 @@ public class DeathListener implements Listener
         while (iterator.hasNext())
         {
             ItemStack itemStack = iterator.next();
-            instance.getLogger().info(itemStack.getType().toString());
-            if (ThreadLocalRandom.current().nextInt(4) == 0)
+            if (itemStack.getType() == Material.AIR || ThreadLocalRandom.current().nextInt(4) == 0)
                 continue;
             dropsToReturn.add(itemStack);
             iterator.remove();
