@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import com.destroystokyo.paper.Title;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -102,7 +103,6 @@ public class DeathListener implements Listener
         /**
         Only drop some items (randomly determined)
          */
-        ItemStack drop;
         List<ItemStack> drops = event.getDrops();
         Iterator<ItemStack> iterator = drops.iterator();
         List<ItemStack> dropsToReturn = new ArrayList<>();
@@ -128,19 +128,22 @@ public class DeathListener implements Listener
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it just plays player_hurt, so yea...
         //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
-        player.playSound(player.getLocation(), "fortress.death", 3000000f, 1.0f);
+        //Note: deciding to play death message when spectating (half a second after death)
 
         /**Auto-respawn player if they haven't clicked respawn within the last 6.5 seconds
-        //Helps prevent weird client problems like client-side entity buildup or whatever,
+        Helps prevent weird client problems like client-side entity buildup or whatever,
         thus freezing the client or idk that's what happened to me.
+
+        Though now we're just going to respawn them within a half second.
          */
         new BukkitRunnable()
         {
             public void run()
             {
                 player.spigot().respawn();
+                player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
             }
-        }.runTaskLater(instance, 130L);
+        }.runTaskLater(instance, 10L);
 
         /**
          * Death spectating timer
