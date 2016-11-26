@@ -135,10 +135,9 @@ public class AtmosphericManager implements Listener
     {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        instance.getLogger().info(String.valueOf(world = MALL));
-        if (world.equals(MALL))
+        if (world == MALL)
             playSound(musicManager.getMallSong(), MALL, 10);
-        else if (world.equals(SPAWN))
+        else if (world == SPAWN)
             playSound(musicManager.getSpawnSong(), SPAWN, 20);
     }
 
