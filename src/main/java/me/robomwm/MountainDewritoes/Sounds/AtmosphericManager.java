@@ -81,7 +81,7 @@ public class AtmosphericManager implements Listener
     @EventHandler
     void changeWorldResetMetadata(PlayerChangedWorldEvent event)
     {
-        event.getPlayer().removeMetadata("ListeningToMusic", instance);
+        event.getPlayer().removeMetadata("LISTENING", instance);
     }
 
     /**
@@ -100,20 +100,20 @@ public class AtmosphericManager implements Listener
             {
                 for (Player player : instance.getServer().getOnlinePlayers())
                 {
-                    if (player.hasMetadata("ListeningToMusic") || player.hasMetadata("DEAD") || player.isDead())
+                    if (player.hasMetadata("LISTENING") || player.hasMetadata("DEAD") || player.isDead())
                         continue;
                     if (world != null && player.getWorld() != world)
                         continue;
-                    player.setMetadata("ListeningToMusic", new FixedMetadataValue(instance, time));
+                    player.setMetadata("LISTENING", new FixedMetadataValue(instance, time));
                     new BukkitRunnable()
                     {
                         public void run()
                         {
-                            if (!player.hasMetadata("ListeningToMusic"))
+                            if (!player.hasMetadata("LISTENING"))
                                 return;
                             //Can happen if another event removed metadata earlier (worldchange) and player received new music
-                            if (player.getMetadata("ListeningToMusic").equals(time))
-                                player.removeMetadata("ListeningToMusic", instance);
+                            if (player.getMetadata("LISTENING").equals(time))
+                                player.removeMetadata("LISTENING", instance);
                         }
                     }.runTaskLater(instance, sound.getLength());
                     player.playSound(player.getLocation(), sound.getSoundName(), SoundCategory.AMBIENT, 3000000f, 1.0f);
