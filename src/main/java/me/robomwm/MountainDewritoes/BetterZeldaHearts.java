@@ -117,10 +117,9 @@ public class BetterZeldaHearts implements Listener
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
-        if (!event.getPlayer().hasPlayedBefore())
-            event.getPlayer().setMaxHealth(26D);
-        else if (event.getPlayer().getMaxHealth() < 26D)
-            event.getPlayer().setMaxHealth(26D);
+        if (event.getPlayer().getMaxHealth() < 50D)
+            event.getPlayer().setMaxHealth(50D);
+        event.getPlayer().setMaximumAir(60);
     }
 
     /**
