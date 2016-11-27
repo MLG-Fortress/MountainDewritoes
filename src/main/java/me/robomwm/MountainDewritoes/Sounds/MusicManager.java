@@ -30,6 +30,7 @@ class MusicManager
         //TODO: then obviously make copies for mall and whatnot so we can get a random song for a specific category
         battle.add(put("andyougotmesayin", 35));
         battle.add(put("SteelDeDeDrum", 60+36));
+        battle.add(put("thegrandshow", 60+18));
         boss.add(put("bulletformymeme", 119));
         boss.add(put("freshsqueezedmemes100followerspecial", 60+18));
         mall.add(put("alphysshopchannel", 110));
@@ -54,14 +55,13 @@ class MusicManager
         morning.add(put("subway", 26));
         morning.add(put("sunrise", 45));
         morning.add(put("sunrise2", 67));
+        morning.add(put("spawn2", 32));
         night.add(put("minecrafttrapremix", 120+34));
         night.add(put("sonsfavorite", 42));
         night.add(put("whymca", 57));
         spawn.add(put("hotel303", 42));
         spawn.add(put("hotelbarkley", 50));
         spawn.add(put("spawn", 49)); //needs credit
-        spawn.add(put("spawn2", 32));
-        spawn.add(put("thegrandshow", 60+18));
         spawn.add(put("skrillexreplaceschip", 60));
         pokemon.add(put("hiddenmishaswamp", 131));
         weather.add(put("somenewfleaswallowrap", 120+17));

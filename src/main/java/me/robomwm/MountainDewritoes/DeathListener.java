@@ -1,12 +1,16 @@
 package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.Title;
+import me.clip.actionannouncer.ActionAPI;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,10 +41,20 @@ public class DeathListener implements Listener
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     Map<Player, Integer> hasRecentlyDied = new HashMap<>();
     Location respawnLocation;
+    List<String> deathMessages = new ArrayList<>();
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
         respawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
+        deathMessages.add("lol u g0t rekt");
+        deathMessages.add("U were eliminated");
+        deathMessages.add("u r ded");
+        deathMessages.add("u r ded, not big sooprise");
+    }
+
+    String getRandomDeathMessage()
+    {
+        return deathMessages.get(ThreadLocalRandom.current().nextInt(deathMessages.size()));
     }
 
     /*
@@ -125,25 +139,6 @@ public class DeathListener implements Listener
 
         //Stop all playing sounds, if any.
         player.stopSound("");
-        //Believe it or not, the Minecraft client does not even trigger this sound on player death,
-        //it just plays player_hurt, so yea...
-        //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
-        //Note: deciding to play death message when spectating (half a second after death)
-
-        /**Auto-respawn player if they haven't clicked respawn within the last 6.5 seconds
-        Helps prevent weird client problems like client-side entity buildup or whatever,
-        thus freezing the client or idk that's what happened to me.
-
-        Though now we're just going to respawn them within a half second.
-         */
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                player.spigot().respawn();
-                player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            }
-        }.runTaskLater(instance, 10L);
 
         /**
          * Death spectating timer
@@ -156,15 +151,60 @@ public class DeathListener implements Listener
 //            killerNotFinal = victimsKiller.remove(player);
 //        final Entity killer = killerNotFinal;
 
+        //I totally forgot that Entity#getLastDamageCause is a thing, lol
+        Entity killerNotFinal = player.getKiller();
+        if (player.getKiller() == null)
+        {
+            killerNotFinal = player.getLastDamageCause().getEntity();
+            if (killerNotFinal != null && killerNotFinal instanceof Projectile)
+            {
+                Projectile arrow = (Projectile)killerNotFinal;
+                if (!(arrow.getShooter() instanceof LivingEntity))
+                    return; //Dispenser
+                killerNotFinal = (Entity)arrow.getShooter();
+            }
+        }
+
+        final Entity killer = killerNotFinal;
+
+        //Believe it or not, the Minecraft client does not even trigger this sound on player death,
+        //it just plays player_hurt, so yea...
+        //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
+
+        /**Auto-respawn player if they haven't clicked respawn within the last 6.5 seconds
+         Helps prevent weird client problems like client-side entity buildup or whatever,
+         thus freezing the client or idk that's what happened to me.
+         Note: Though now auto-respawn is dependent on how the player died
+         */
+
+        Long delayNotFinal = 0L;
+        if (killer == null)
+        {
+            player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
+            delayNotFinal = 200L;
+        }
+        final Long delay = delayNotFinal;
 
         new BukkitRunnable()
         {
-            Title.Builder timeTillRespawn = new Title.Builder();
+            public void run()
+            {
+                player.spigot().respawn();
+                if (delay > 0L)
+                    player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
+            }
+        }.runTaskLater(instance, delay);
+
+        /**
+         * Death spectating code
+         * dont u copy m9
+         */
+        new BukkitRunnable()
+        {
+            Title.Builder deathMessageTitle = new Title.Builder();
             boolean wasDead = true;
-            //Point down by default
-            //https://bukkit.org/threads/vectors.152310/#post-1703396
+            //Point down by default https://bukkit.org/threads/vectors.152310/#post-1703396
             Vector vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
-            Entity killer = player.getKiller();
 
             public void run()
             {
@@ -197,15 +237,19 @@ public class DeathListener implements Listener
                     player.teleport(player.getLocation().setDirection(vector));
                 }
 
-                //Only send title every half second
+                //Only send title, action message every half second
                 if (!player.isDead() && hasRecentlyDied.get(player) % 10 == 0)
                 {
-                    timeTillRespawn.title("Respawning in");
-                    timeTillRespawn.subtitle(String.valueOf((hasRecentlyDied.get(player) / 20)));
-                    timeTillRespawn.fadeIn(0);
-                    timeTillRespawn.fadeOut(2);
-                    timeTillRespawn.stay(15);
-                    player.sendTitle(timeTillRespawn.build());
+                    ActionAPI.sendPlayerAnnouncement(player, "Respawning in " + String.valueOf((hasRecentlyDied.get(player) / 20)));
+
+                    deathMessageTitle.title(ChatColor.RED + getRandomDeathMessage());
+                    if (killer != null)
+                        deathMessageTitle.subtitle("Eliminated by " + ChatColor.RED + killer.getName());
+                    deathMessageTitle.fadeIn(0);
+                    deathMessageTitle.fadeOut(2);
+                    deathMessageTitle.stay(15);
+                    player.sendTitle(deathMessageTitle.build());
+
                 }
                 hasRecentlyDied.put(player, hasRecentlyDied.get(player) - 1);
             }
