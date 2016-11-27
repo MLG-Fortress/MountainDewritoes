@@ -221,10 +221,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
      * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
      * @param event
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerChangesWorldSetViewDistance(PlayerChangedWorldEvent event)
     {
         Player player = event.getPlayer();
+        World world = event.getPlayer().getWorld();
         if (player.hasMetadata("DEAD"))
             return;
         player.setViewDistance(3);
@@ -232,8 +233,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         {
             public void run()
             {
-                player.setViewDistance(8);
+                //Don't execute if another task is scheduled
+                if (player.getWorld() != world)
+                    this.cancel();
+                //Wait for player to land before resetting view distance
+                else if (player.isOnGround())
+                {
+                    player.setViewDistance(8);
+                    this.cancel();
+                }
             }
-        }.runTaskLater(this, 100L);
+        }.runTaskTimer(this, 100L, 100L);
     }
 }
