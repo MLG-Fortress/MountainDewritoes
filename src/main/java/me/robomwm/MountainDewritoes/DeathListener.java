@@ -159,10 +159,11 @@ public class DeathListener implements Listener
             if (killerNotFinal != null && killerNotFinal instanceof Projectile)
             {
                 Projectile arrow = (Projectile)killerNotFinal;
-                if (!(arrow.getShooter() instanceof LivingEntity))
-                    return; //Dispenser
-                killerNotFinal = (Entity)arrow.getShooter();
+                if (arrow.getShooter() instanceof LivingEntity)
+                    killerNotFinal = (Entity)arrow.getShooter();
             }
+            if (killerNotFinal == player)
+                killerNotFinal = null;
         }
 
         final Entity killer = killerNotFinal;
