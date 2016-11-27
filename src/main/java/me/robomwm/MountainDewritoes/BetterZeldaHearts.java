@@ -119,7 +119,7 @@ public class BetterZeldaHearts implements Listener
     {
         if (event.getPlayer().getMaxHealth() < 50D)
             event.getPlayer().setMaxHealth(50D);
-        event.getPlayer().setMaximumAir(3600);
+        event.getPlayer().setMaximumAir(1200);
     }
 
     /**
