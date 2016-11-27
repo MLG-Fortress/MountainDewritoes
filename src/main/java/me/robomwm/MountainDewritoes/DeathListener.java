@@ -15,6 +15,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -162,9 +163,9 @@ public class DeathListener implements Listener
 
         //I totally forgot that Entity#getLastDamageCause is a thing, lol
         Entity killerNotFinal = player.getKiller();
-        if (player.getKiller() == null)
+        if (player.getKiller() == null && player.getLastDamageCause() instanceof EntityDamageByEntityEvent)
         {
-            killerNotFinal = player.getLastDamageCause().getEntity();
+            killerNotFinal = ((EntityDamageByEntityEvent) player.getLastDamageCause()).getDamager();
             if (killerNotFinal != null && killerNotFinal instanceof Projectile)
             {
                 Projectile arrow = (Projectile)killerNotFinal;
@@ -251,16 +252,12 @@ public class DeathListener implements Listener
                 //Only send title, action message every half second
                 if (!player.isDead() && hasRecentlyDied.get(player) % 10 == 0)
                 {
-                    ActionAPI.sendPlayerAnnouncement(player, "Respawning in " + String.valueOf((hasRecentlyDied.get(player) / 20)));
-
                     deathMessageTitle.title(ChatColor.RED + deathMessage);
-                    if (killer != null)
-                        deathMessageTitle.subtitle("Eliminated by " + ChatColor.RED + killer.getName());
+                    deathMessageTitle.subtitle("Respawning in " + String.valueOf((hasRecentlyDied.get(player) / 20)));
                     deathMessageTitle.fadeIn(0);
                     deathMessageTitle.fadeOut(2);
                     deathMessageTitle.stay(15);
                     player.sendTitle(deathMessageTitle.build());
-
                 }
                 hasRecentlyDied.put(player, hasRecentlyDied.get(player) - 1);
             }
