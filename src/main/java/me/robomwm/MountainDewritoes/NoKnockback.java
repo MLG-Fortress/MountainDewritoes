@@ -101,6 +101,7 @@ public class NoKnockback implements Listener
         if (target.getType() == EntityType.PLAYER)
         {
             Player player = (Player)target;
+            //We need to handle melee attacks from players a tad differently, since canceling the first velocity event causes a second one to be fired.
             boolean isMelee = false;
             //Generally indicates a melee attack. If not, ignoreDamageEventForThisTick() should have been called earlier in the tick, provided plugins fire a custom event before calling Entity#damage() See https://gist.github.com/RoboMWM/8dd1db97726544805ab0c8353ce31975
             if (event.getCause() == DamageCause.ENTITY_ATTACK && damager.getType() == EntityType.PLAYER)
@@ -119,7 +120,7 @@ public class NoKnockback implements Listener
                 {
                     target.setVelocity(new Vector(0, 0, 0));
                 }
-            }.runTaskLater(instance, 0L);
+            }.runTask(instance);
         }
     }
 

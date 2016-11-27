@@ -205,6 +205,7 @@ public class DeathListener implements Listener
             boolean wasDead = true;
             //Point down by default https://bukkit.org/threads/vectors.152310/#post-1703396
             Vector vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
+            String deathMessage = getRandomDeathMessage();
 
             public void run()
             {
@@ -242,7 +243,7 @@ public class DeathListener implements Listener
                 {
                     ActionAPI.sendPlayerAnnouncement(player, "Respawning in " + String.valueOf((hasRecentlyDied.get(player) / 20)));
 
-                    deathMessageTitle.title(ChatColor.RED + getRandomDeathMessage());
+                    deathMessageTitle.title(ChatColor.RED + deathMessage);
                     if (killer != null)
                         deathMessageTitle.subtitle("Eliminated by " + ChatColor.RED + killer.getName());
                     deathMessageTitle.fadeIn(0);
@@ -289,7 +290,7 @@ public class DeathListener implements Listener
                 hasRecentlyDied.remove(player); //Just in case I guess
                 player.removeMetadata("DEAD", instance);
                 player.teleport(respawnLocation);
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.ADVENTURE);
             }
         }.runTaskLater(instance, hasRecentlyDied.get(player));
 
