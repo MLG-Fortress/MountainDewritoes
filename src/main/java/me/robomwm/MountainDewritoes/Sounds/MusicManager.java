@@ -56,13 +56,13 @@ class MusicManager
         morning.add(put("sunrise", 45));
         morning.add(put("sunrise2", 67));
         morning.add(put("spawn2", 32));
+        morning.add(put("skrillexreplaceschip", 60));
         night.add(put("minecrafttrapremix", 120+34));
         night.add(put("sonsfavorite", 42));
         night.add(put("whymca", 57));
         spawn.add(put("hotel303", 42));
         spawn.add(put("hotelbarkley", 50));
         spawn.add(put("spawn", 49)); //needs credit
-        spawn.add(put("skrillexreplaceschip", 60));
         pokemon.add(put("hiddenmishaswamp", 131));
         weather.add(put("somenewfleaswallowrap", 120+17));
     }

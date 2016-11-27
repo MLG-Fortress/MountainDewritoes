@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import com.projectkorra.projectkorra.event.AbilityDamageEntityEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -57,6 +58,15 @@ public class NoKnockback implements Listener
         //Otherwise we'd have to do what we did in ignoreDamageEventForThisTick
     }
 
+    //Do not cancel velocity events from bending abilities
+    //A number of abilities set custom velocities, and it uses Entity#damage to damage the entity
+    //And since Entity#damage(damage, sourceEntity) uses ENTITY_ATTACK as its cause, we can't tell a plugin called this in the damage event.
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onDamagedByBending(AbilityDamageEntityEvent event)
+    {
+        ignoreDamageEventForThisTick(event.getSource());
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //We aren't modifying this event, only responding to it
     void onEntityGetsHurt(EntityDamageByEntityEvent event)
     {
@@ -92,20 +102,25 @@ public class NoKnockback implements Listener
         {
             Player player = (Player)target;
             boolean isMelee = false;
-            //Generally indicates a melee attack. If not, ignoreDamageEventForThisTick() should have been called earlier in the tick, provided plugins fire a custom damage event before calling Entity#damage() See https://gist.github.com/RoboMWM/8dd1db97726544805ab0c8353ce31975
+            //Generally indicates a melee attack. If not, ignoreDamageEventForThisTick() should have been called earlier in the tick, provided plugins fire a custom event before calling Entity#damage() See https://gist.github.com/RoboMWM/8dd1db97726544805ab0c8353ce31975
             if (event.getCause() == DamageCause.ENTITY_ATTACK && damager.getType() == EntityType.PLAYER)
                 isMelee = true;
             letPlayerVelocityEventHandleIt(player, isMelee);
             return;
         }
-
-        new BukkitRunnable()
+        //Otherwise, set mob's velocity to 0 on the next tick
+        //Note: there is a very small, visible "jump" the entity makes before its velocity is set to 0 on next tick
+        //Is there a reasonable way to set velocity after the MC server processes the damage event besides waiting for the next tick?
+        else
         {
-            public void run()
+            new BukkitRunnable()
             {
-                target.setVelocity(new Vector(0, 0, 0));
-            }
-        }.runTaskLater(instance, 1L);
+                public void run()
+                {
+                    target.setVelocity(new Vector(0, 0, 0));
+                }
+            }.runTaskLater(instance, 0L);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST) //We still want to remove entries in cancelKnockback map even if event is canceled
@@ -114,9 +129,10 @@ public class NoKnockback implements Listener
         Player player = event.getPlayer();
         if (!cancelKnockback.containsKey(player))
             return;
+
         boolean isMelee = cancelKnockback.remove(player);
-        if (isMelee)
-            cancelKnockback.put(player, false);
+        if (isMelee && !event.isCancelled())
+            cancelKnockback.put(player, false); //See https://gist.github.com/RoboMWM/8dd1db97726544805ab0c8353ce31975
         event.setCancelled(true);
     }
 }
