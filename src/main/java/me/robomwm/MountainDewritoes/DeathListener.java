@@ -8,12 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -139,6 +141,13 @@ public class DeathListener implements Listener
 
         //Stop all playing sounds, if any.
         player.stopSound("");
+
+        //Do not execute Death spectating feature if player died to the void
+        if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.VOID)
+        {
+            player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
+            return;
+        }
 
         /**
          * Death spectating timer
@@ -335,6 +344,22 @@ public class DeathListener implements Listener
             player.spigot().respawn();
         if (player.hasMetadata("DEAD"))
             hasRecentlyDied.remove(player);
+    }
+
+    //Instantly respawn players that are death spectating in the void
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    void onPlayerTakeDamageFromVoid(EntityDamageEvent event)
+    {
+        if (event.getEntityType() != EntityType.PLAYER)
+            return;
+        Player player = (Player)event.getEntity();
+        if (player.getGameMode() == GameMode.SPECTATOR && player.hasMetadata("DEAD"))
+        {
+            hasRecentlyDied.remove(player);
+            player.removeMetadata("DEAD", instance);
+            player.teleport(respawnLocation);
+            player.setGameMode(GameMode.ADVENTURE);
+        }
     }
 
     //TODO: handle chat (set permissions???)
