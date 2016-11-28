@@ -130,7 +130,7 @@ public class DeathListener implements Listener
         while (iterator.hasNext())
         {
             ItemStack itemStack = iterator.next();
-            if (itemStack.getType() == Material.AIR || ThreadLocalRandom.current().nextInt(4) == 0)
+            if (ThreadLocalRandom.current().nextInt(4) == 0)
                 continue;
             dropsToReturn.add(itemStack);
             iterator.remove();
