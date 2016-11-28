@@ -204,7 +204,7 @@ public class DeathListener implements Listener
             public void run()
             {
                 player.spigot().respawn();
-                if (delay > 0L)
+                if (delay < 1L)
                     player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
             }
         }.runTaskLater(instance, delay);
@@ -328,7 +328,7 @@ public class DeathListener implements Listener
         try
         {
             //if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
-            if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && event.getFrom().distanceSquared(event.getTo()) == 0);
+            if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && event.getFrom().distanceSquared(event.getTo()) == 0)
                 return;
         }
         catch (IllegalArgumentException e) //If teleporting to another world, yes of course stop that
