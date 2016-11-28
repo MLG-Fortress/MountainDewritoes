@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes.Sounds;
 import fr.mrsheepsheep.tinthealth.THAPI;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Bukkit;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,10 +58,10 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         double health = player.getHealth() - event.getFinalDamage();
-        if (health <= 10f && !alreadyLowHealth.containsKey(player))
+        if (health <= 8f && !alreadyLowHealth.containsKey(player))
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
-            player.playSound(player.getLocation(), "fortress.lowhealthgasp", 3000000f, 1.0f);
+            player.playSound(player.getLocation(), "fortress.lowhealthgasp", SoundCategory.PLAYERS, 3000000f, 1.0f);
             THAPI.setTint(player, 100);
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
@@ -73,11 +74,12 @@ public class LowHealth implements Listener
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
-                    if (player.getHealth() > 10f)
+                    if (player.getHealth() > 8f)
                     {
                         alreadyLowHealth.remove(player);
                         THAPI.fadeTint(player, 100, 1);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
+                        player.stopSound("fortress.lowhealth", SoundCategory.PLAYERS);
                         cancel(); //Player is not at critical health
                         return;
                     }
@@ -86,8 +88,8 @@ public class LowHealth implements Listener
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
                     THAPI.setTint(player, 100);
-                    //player.playSound(player.getLocation(), "fortress.lowhealth", 3000000f, 1.0f);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
+                    player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
+                    //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
                 }
             }.runTaskTimer(instance, 100L, 2L);
         }
