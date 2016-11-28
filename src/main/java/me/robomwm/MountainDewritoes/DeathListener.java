@@ -19,9 +19,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -228,19 +231,19 @@ public class DeathListener implements Listener
 
                 if (hasRecentlyDied.get(player) < 2)
                 {
-                    hasRecentlyDied.remove(player);
+                    instance.getLogger().info("Respawned player with death task: " + String.valueOf(respawnPlayer(player)));
                     return;
                 }
 
                 //Was player dead last tick and now alive this tick?
-                if (wasDead && !player.isDead())
-                {
-                    //If so, teleport half a block above
-                    wasDead = false;
-                    player.setMetadata("DEAD_MOVE", new FixedMetadataValue(instance, true));
-                    player.teleport(player.getLocation().add(0, 0.5, 0).setDirection(vector));
-                    player.removeMetadata("DEAD_MOVE", instance);
-                }
+//                if (wasDead && !player.isDead())
+//                {
+//                    //If so, teleport half a block above
+//                    wasDead = false;
+//                    player.setMetadata("DEAD_MOVE", new FixedMetadataValue(instance, true));
+//                    player.teleport(player.getLocation().add(0, 0.5, 0).setDirection(vector));
+//                    player.removeMetadata("DEAD_MOVE", instance);
+//                }
 
                 //Track killer
                 if (!player.isDead() && killer != null && killer.getWorld() == player.getWorld())
@@ -290,22 +293,30 @@ public class DeathListener implements Listener
          * Death spectating
          */
         //Schedule task to teleport player in (9 - time spent while dead) seconds
+        //TODO: may be redundant
         new BukkitRunnable()
         {
             public void run()
             {
-                hasRecentlyDied.remove(player); //Just in case I guess
-                player.removeMetadata("DEAD", instance);
-                player.teleport(respawnLocation);
-                player.setGameMode(GameMode.ADVENTURE);
+                instance.getLogger().info("Respawned player with respawn task: " + String.valueOf(respawnPlayer(player)));
             }
         }.runTaskLater(instance, hasRecentlyDied.get(player));
 
         player.setMetadata("DEAD", new FixedMetadataValue(instance, true));
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
-        event.setRespawnLocation(player.getLocation().add(0, 0, 0));
+        event.setRespawnLocation(player.getLocation()); //TODO: Might return a "safe" location (i.e. not where they died)
         player.setViewDistance(3);
+    }
+
+    boolean respawnPlayer(Player player)
+    {
+        if (hasRecentlyDied.remove(player) == null)
+            return false;
+        player.removeMetadata("DEAD", instance);
+        player.teleport(respawnLocation);
+        player.setGameMode(GameMode.ADVENTURE);
+        return true;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -316,13 +327,29 @@ public class DeathListener implements Listener
             return;
         try
         {
-            if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
+            //if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
+            if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && event.getFrom().distanceSquared(event.getTo()) == 0);
                 return;
         }
         catch (IllegalArgumentException e) //If teleporting to another world, yes of course stop that
         {}
 
         event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    void onPlayerTryToInteractWhenDead(PlayerInteractEvent event)
+    {
+        if (event.getPlayer().hasMetadata("DEAD"))
+            event.setCancelled(true);
+    }
+
+    //Stops some abilities from being used
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    void onPlayerTryToSneakWhenDead (PlayerToggleSneakEvent event)
+    {
+        if (event.getPlayer().hasMetadata("DEAD") && event.isSneaking())
+            event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -343,9 +370,9 @@ public class DeathListener implements Listener
             hasRecentlyDied.remove(player);
     }
 
-    //Instantly respawn players that are death spectating in the void
+    //Instantly "respawn" players that take damage while death spectating (e.g. from void)
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void onPlayerTakeDamageFromVoid(EntityDamageEvent event)
+    void onPlayerTakeDamageWhileSpectating(EntityDamageEvent event)
     {
         if (event.getEntityType() != EntityType.PLAYER)
             return;
