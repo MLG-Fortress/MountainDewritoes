@@ -368,6 +368,7 @@ public class DeathListener implements Listener
             player.spigot().respawn();
         if (player.hasMetadata("DEAD"))
             hasRecentlyDied.remove(player);
+        player.removeMetadata("DEAD", instance);
     }
 
     //Instantly "respawn" players that take damage while death spectating (e.g. from void)

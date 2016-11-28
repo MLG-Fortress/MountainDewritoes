@@ -84,6 +84,13 @@ public class AtmosphericManager implements Listener
         event.getPlayer().removeMetadata("LISTENING", instance);
     }
 
+    /**In case metadata doesn't get removed for w/e reason*/
+    @EventHandler
+    void onQuitResetMetadata(PlayerChangedWorldEvent event)
+    {
+        event.getPlayer().removeMetadata("LISTENING", instance);
+    }
+
     /**
      * Plays sound to players, unless they're already listening to something else
      * "Thread-safe"
