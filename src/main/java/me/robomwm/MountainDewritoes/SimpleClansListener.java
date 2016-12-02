@@ -1,10 +1,12 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.BetterTPA.BetterTPA;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +18,9 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 /**
- * Created by Robo on 2/13/2016.
+ * Created by RoboMWM on 2/13/2016.
+ * Adds prefix based on clan tag
+ * "Handles" clan home teleportation
  */
 public class SimpleClansListener implements Listener
 {
@@ -24,6 +28,7 @@ public class SimpleClansListener implements Listener
     ClanManager clanManager;
     BukkitScheduler scheduler = Bukkit.getScheduler();
     public MountainDewritoes instance;
+    BetterTPA betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
 
     public SimpleClansListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
@@ -178,6 +183,27 @@ public class SimpleClansListener implements Listener
         }, 40L); //Ensure healthbar made the team
     }
 
+    /**
+     * Teleports player to clan home via our warmup methods and whatnot
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onWantToGoToClanHome(PlayerCommandPreprocessEvent event)
+    {
+        String message = event.getMessage().toLowerCase();
+        Player player = event.getPlayer();
+
+        if (message.equals("/clan home") || message.equals("home"))
+        {
+            event.setCancelled(true);
+            Clan clan = clanManager.getClanByPlayerUniqueId(event.getPlayer().getUniqueId());
+            if (clan == null)
+            {
+                player.sendMessage(ChatColor.RED + "You are not in a /clan");
+                return;
+            }
+            betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
+        }
+    }
 //    static public boolean isInSameClan(Player player, Player target)
 //    {
 //        ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
