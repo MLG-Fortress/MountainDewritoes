@@ -210,7 +210,7 @@ public class DeathListener implements Listener
         }.runTaskLater(instance, delay);
 
         /**
-         * Death spectating code
+         * Death spectating
          * dont u copy m9
          */
         new BukkitRunnable()

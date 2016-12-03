@@ -28,12 +28,13 @@ public class SimpleClansListener implements Listener
     ClanManager clanManager;
     BukkitScheduler scheduler = Bukkit.getScheduler();
     public MountainDewritoes instance;
-    BetterTPA betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
+    BetterTPA betterTPA;
 
     public SimpleClansListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
         this.clanManager = clanManager;
         instance = mountainDewritoes;
+        betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
     }
 
     //Set colors and prefix onJoin
