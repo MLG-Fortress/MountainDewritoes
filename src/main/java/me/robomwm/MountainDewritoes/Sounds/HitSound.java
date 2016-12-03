@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created by RoboMWM on 9/17/2016.
@@ -94,14 +95,22 @@ public class HitSound implements Listener
         if (killer == null || killer.getType() != EntityType.PLAYER)
             return;
 
-        killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
-
         if (event.getEntityType() == EntityType.PLAYER)
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntity().getName());
         else
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntityType().toString().toLowerCase());
         Title title = eliminationBuilder.build();
-        killer.sendTitle(title);
-        instance.addUsingTitle(killer, title.getFadeIn() + title.getStay());
+
+        //Delay by 0.25 seconds (so we don't override hitmarker sound)
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
+                killer.sendTitle(title);
+                instance.addUsingTitle(killer, title.getFadeIn() + title.getStay());
+            }
+        }.runTaskLater(instance, 5L);
+
     }
 }
