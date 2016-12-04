@@ -110,7 +110,7 @@ public class HitSound implements Listener
                 killer.sendTitle(title);
                 instance.addUsingTitle(killer, title.getFadeIn() + title.getStay());
             }
-        }.runTaskLater(instance, 5L);
+        }.runTaskLater(instance, 3L);
 
     }
 }
