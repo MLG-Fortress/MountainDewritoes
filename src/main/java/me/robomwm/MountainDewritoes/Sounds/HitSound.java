@@ -101,7 +101,7 @@ public class HitSound implements Listener
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntityType().toString().toLowerCase());
         Title title = eliminationBuilder.build();
 
-        //Delay by 0.25 seconds (so we don't override hitmarker sound)
+        //Delay by ~0.15 seconds (so we don't override hitmarker sound)
         new BukkitRunnable()
         {
             public void run()

@@ -46,12 +46,12 @@ public class SleepManagement implements Listener
                     cityworld.setTime(worldTime); //ReSync
                 mall.setTime(worldTime); //Should always be in sync
                 spawn.setTime(worldTime);
-                if (world.getTime() > 22999)
+                if (world.getTime() > 23000)
                     morningEventCall();
-                else if (worldTime > 13500 && worldTime < 14101)
+                else if (worldTime > 13000 && worldTime < 14000)
                     nightEventCall();
             }
-        }.runTaskTimer(instance, 600L, 600L);
+        }.runTaskTimer(instance, 200L, 200L);
     }
 
     void morningEventCall()
@@ -59,14 +59,7 @@ public class SleepManagement implements Listener
         if (playedMorning) return;
         atmosphericManager.morningListener();
         playedMorning = true;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                playedMorning = false;
-            }
-        }.runTaskLater(instance, 1000L);
+        playedNight = false;
     }
 
     void nightEventCall()
@@ -74,14 +67,7 @@ public class SleepManagement implements Listener
         if (playedNight) return;
         atmosphericManager.nightListener();
         playedNight = true;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                playedNight = false;
-            }
-        }.runTaskLater(instance, 1000L);
+        playedMorning = false;
     }
 
     /**
