@@ -33,7 +33,6 @@ public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
     World MALL;
-    World SPAWN;
     AtomicBoolean over10Minutes = new AtomicBoolean(true);
     //Pattern hello = Pattern.compile("\\bhello\\b|\\bhi\\b|\\bhey\\b|\\bhai\\b");
     //Pattern bye = Pattern.compile("\\bsee you\\b|\\bc u\\b|\\bbye\\b");
@@ -42,7 +41,6 @@ public class AtmosphericManager implements Listener
     {
         instance = mountainDewritoes;
         MALL = instance.getServer().getWorld("mall");
-        SPAWN = instance.getServer().getWorld("minigames");
     }
 
     public void morningListener()
@@ -142,8 +140,6 @@ public class AtmosphericManager implements Listener
         World world = player.getWorld();
         if (world == MALL)
             playSound(musicManager.getMallSong(), MALL, 10);
-        else if (world == SPAWN)
-            playSound(musicManager.getSpawnSong(), SPAWN, 60);
     }
 
     /** Play sounds globally based on certain keywords

@@ -60,7 +60,9 @@ public class LowHealth implements Listener
         double health = player.getHealth() - event.getFinalDamage();
         if (health <= 8f && !alreadyLowHealth.containsKey(player))
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
+            player.stopSound("", SoundCategory.PLAYERS);
+            player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
+            //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
             player.playSound(player.getLocation(), "fortress.lowhealthgasp", SoundCategory.PLAYERS, 3000000f, 1.0f);
             THAPI.setTint(player, 100);
             alreadyLowHealth.put(player, System.currentTimeMillis());
@@ -78,7 +80,7 @@ public class LowHealth implements Listener
                     {
                         alreadyLowHealth.remove(player);
                         THAPI.fadeTint(player, 100, 1);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
+                        //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
                         player.stopSound("fortress.lowhealth", SoundCategory.PLAYERS);
                         cancel(); //Player is not at critical health
                         return;
