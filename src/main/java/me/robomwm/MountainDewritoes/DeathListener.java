@@ -316,6 +316,7 @@ public class DeathListener implements Listener
         player.removeMetadata("DEAD", instance);
         player.teleport(respawnLocation);
         player.setGameMode(GameMode.ADVENTURE);
+        player.setFlySpeed(0.2f);
         return true;
     }
 
