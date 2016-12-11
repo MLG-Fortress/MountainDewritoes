@@ -95,7 +95,7 @@ public class NoKnockback implements Listener
                 return;
         }
 
-        target.setNoDamageTicks(5);
+        target.setNoDamageTicks(1);
 
         //"Special" case for players (Cancel PlayerVelocityEvent instead to avoid momentary "slowdown" when getting hit).
         if (target.getType() == EntityType.PLAYER)
