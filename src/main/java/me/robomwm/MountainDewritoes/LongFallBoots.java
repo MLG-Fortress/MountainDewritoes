@@ -80,9 +80,9 @@ public class LongFallBoots implements Listener
         World world = location.getWorld();
 
         if (damage < 5.0D) //Fell less than 8 blocks
-            world.playSound(location, "fortress.fallsmall", SoundCategory.PLAYERS, 1.0f, 1.0f);
+            world.playSound(location, "fortress.small_fall", SoundCategory.PLAYERS, 1.0f, 1.0f);
         else
-            world.playSound(location, "fortress.fallbig", SoundCategory.PLAYERS, 1.0f, 1.0f);
+            world.playSound(location, "fortress.big_fall", SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
     /** (Currently disabled)
