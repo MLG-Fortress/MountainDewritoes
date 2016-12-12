@@ -193,7 +193,7 @@ public class SimpleClansListener implements Listener
         String message = event.getMessage().toLowerCase();
         Player player = event.getPlayer();
 
-        if (message.equals("/clan home") || message.equals("home"))
+        if (message.equals("/clan home") || message.equals("/home"))
         {
             event.setCancelled(true);
             Clan clan = clanManager.getClanByPlayerUniqueId(event.getPlayer().getUniqueId());
