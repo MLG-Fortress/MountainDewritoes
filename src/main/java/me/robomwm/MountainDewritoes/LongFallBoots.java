@@ -1,9 +1,14 @@
 package me.robomwm.MountainDewritoes;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,10 +20,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by robo on 5/25/2016.
+ * Created by RoboMWM on 5/25/2016.
  * This class is exactly what you think it is
  */
 public class LongFallBoots implements Listener
@@ -30,7 +37,9 @@ public class LongFallBoots implements Listener
             return;
         if (!(event.getEntity() instanceof LivingEntity))
             return;
+
         LivingEntity entity = (LivingEntity)event.getEntity();
+
         if (entity.getEquipment() == null || entity.getEquipment().getBoots() == null)
             return;
         if (entity.getEquipment().getBoots().getType() == Material.IRON_BOOTS)
@@ -38,6 +47,42 @@ public class LongFallBoots implements Listener
             entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);
             event.setCancelled(true);
         }
+    }
+
+
+    /**
+     * Play fall damage sound only if the player actually took fall damage
+     * (We only care about players, but this could be extended to all entities)
+     * (resource pack sets sound to silence for players)
+     */
+    Map<EntityDamageEvent, Double> originalDamageValue = new HashMap<>();
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    void onPlayerFallDamageGetOriginalFallDamageValue(EntityDamageEvent event)
+    {
+        if (event.getEntityType() != EntityType.PLAYER || event.getCause() != EntityDamageEvent.DamageCause.FALL)
+            return;
+        originalDamageValue.put(event, event.getDamage());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    void onPlayerFallDamagePlayFallSound(EntityDamageEvent event)
+    {
+        //Always remove, even if canceled
+        Double damage = originalDamageValue.remove(event);
+
+        if (damage == null)
+            return;
+        if (event.isCancelled())
+            return;
+
+        Location location = event.getEntity().getLocation();
+        World world = location.getWorld();
+
+        if (damage < 5.0D) //Fell less than 8 blocks
+            world.playSound(location, "fortress.fallsmall", SoundCategory.PLAYERS, 1.0f, 1.0f);
+        else
+            world.playSound(location, "fortress.fallbig", SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
     /** (Currently disabled)
