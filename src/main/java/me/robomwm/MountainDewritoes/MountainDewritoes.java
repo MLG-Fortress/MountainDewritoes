@@ -1,11 +1,8 @@
 package me.robomwm.MountainDewritoes;
 
 import me.robomwm.MountainDewritoes.Sounds.AtmosphericManager;
-import me.robomwm.MountainDewritoes.Sounds.Footsteps;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
-import me.ryanhamshire.GriefPrevention.DataStore;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
@@ -17,10 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,7 +24,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Created by Robo on 2/13/2016.
@@ -244,5 +237,20 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 }
             }
         }.runTaskTimer(this, 100L, 100L);
+    }
+
+    public void timedBar(Player player, int seconds, String message)
+    {
+        new BukkitRunnable()
+        {
+            int secondsRemaining = seconds;
+            public void run()
+            {
+                player.sendActionBar(message);
+                secondsRemaining--;
+                if (secondsRemaining <= 0)
+                    this.cancel();
+            }
+        }.runTaskTimer(this, 0L, 20L);
     }
 }

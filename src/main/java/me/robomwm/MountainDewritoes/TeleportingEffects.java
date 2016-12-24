@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes;
 
-import me.clip.actionannouncer.ActionAPI;
 import me.robomwm.BetterTPA.PostTPATeleportEvent;
 import me.robomwm.BetterTPA.PreTPATeleportEvent;
 import org.bukkit.Bukkit;
@@ -65,7 +64,7 @@ public class TeleportingEffects implements Listener
         preTeleportingPlayers.remove(event.getPlayer());
         if (event.isCancelled())
             return;
-        ActionAPI.sendTimedPlayerAnnouncement(instance, event.getTarget(), event.getPlayer().getDisplayName() + ChatColor.AQUA + " teleported to you.", 5);
+        instance.timedBar(event.getTarget(), 5, event.getPlayer().getDisplayName() + ChatColor.AQUA + " teleported to you.");
     }
 
     void playTeleportEffect(Player player)

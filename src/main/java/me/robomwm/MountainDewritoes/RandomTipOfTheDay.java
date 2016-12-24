@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes;
 
-import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,13 +23,13 @@ public class RandomTipOfTheDay implements Listener
     {
         instance = blah;
         randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
-        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.AQUA + "ALL fall damage!");
+        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.BOLD + ChatColor.AQUA + "ALL fall damage!");
         randomTips.add("We could always use more staff, feel free to /apply");
-        randomTips.add("Bored? Talk to U_W0T_B0T by mentioning its name in chat!");
-        randomTips.add("We run polls in the /motd so you can vote on new features!");
+        randomTips.add("Bored? Talk 2 U_W0T_B0T by mentioning it in chat!");
+        randomTips.add("Got any suggestions for the MLG pack? Just state your opinions in chat!");
         randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
         randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
-        randomTips.add("Need a crate key? You could win one via an /ad or see if anyone is selling one at the /mall");
+        randomTips.add("Need a crate key? Win one via an /ad or see if there's any at the /mall");
     }
     @EventHandler
     void onPlayerJoinToDeliverATip(PlayerJoinEvent event)
@@ -43,7 +42,7 @@ public class RandomTipOfTheDay implements Listener
                 if (player.isOnline())
                 {
                     String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    ActionAPI.sendTimedPlayerAnnouncement(instance, player, ChatColor.GOLD + tip, 20);
+                    instance.timedBar(player, 20, ChatColor.GOLD + tip);
                 }
             }
         }.runTaskLater(instance, 1200L);

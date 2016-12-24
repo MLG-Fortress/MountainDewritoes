@@ -1,7 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.Title;
-import me.clip.actionannouncer.ActionAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -103,7 +102,7 @@ public class SecondWind implements Listener
                     }
                     fallenPlayers.put(player, --healthTime);
                     player.sendTitle(dyingTitle);
-                    ActionAPI.sendPlayerAnnouncement(player, dyingHealth(healthTime));
+                    player.sendActionBar(dyingHealth(healthTime));
                     player.getWorld().spigot().playEffect(player.getLocation(), Effect.VILLAGER_THUNDERCLOUD);
                     player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
                     team.setSuffix(ChatColor.RED + " is dying!");
@@ -148,7 +147,7 @@ public class SecondWind implements Listener
     void onPlayerDie(PlayerDeathEvent event)
     {
         Player player = event.getEntity();
-        if (fallenPlayers.containsKey(player));
+        if (fallenPlayers.containsKey(player))
             resetPlayer(player, false);
     }
     /**

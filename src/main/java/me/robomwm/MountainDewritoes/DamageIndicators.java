@@ -48,7 +48,7 @@ public class DamageIndicators implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onDisplayDamageIndicator(EntityDamageByEntityEvent event)
     {
-        if (event.getFinalDamage() <= 0.0D)
+        if (event.getFinalDamage() <= 0.05D)
             return;
         if (!(event.getEntity() instanceof LivingEntity))
             return;
@@ -59,7 +59,7 @@ public class DamageIndicators implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onDisplayHealthRegenIndicator(EntityRegainHealthEvent event)
     {
-        if (event.getAmount() <= 0.0D)
+        if (event.getAmount() <= 0.05D)
             return;
         if (!(event.getEntity() instanceof LivingEntity))
             return;
@@ -73,25 +73,29 @@ public class DamageIndicators implements Listener
 
     void displayIndicator(Location location, Double value, boolean isDamage)
     {
-        double x = r4nd0m(-0.5D, 0.5D);
-        double z = r4nd0m(-0.5D, 0.5D);
-        Hologram hologram = HologramsAPI.createHologram(instance, location.add(x, 3D, z));
+        double x = r4nd0m(-0.3D, 0.3D);
+        double z = r4nd0m(-0.3D, 0.3D);
+        Hologram hologram = HologramsAPI.createHologram(instance, location.add(x, 2D, z));
         if (isDamage)
             hologram.appendTextLine(ChatColor.RED + "-" + df.format(value));
         else
             hologram.appendTextLine(ChatColor.GREEN + "+" + df.format(value));
         activeHolograms.add(hologram);
-        Long duration = 30L;
-        //Display longer if value is in double digits
-        if (value >= 10)
-            duration = 50L;
+
         new BukkitRunnable()
         {
+            int duration = 30;
             public void run()
             {
-                hologram.delete();
-                activeHolograms.remove(hologram);
+                hologram.teleport(hologram.getLocation().add(0D, 0.2D, 0D));
+                duration--;
+                if (duration <= 0)
+                {
+                    hologram.delete();
+                    activeHolograms.remove(hologram);
+                    this.cancel();
+                }
             }
-        }.runTaskLater(instance, duration);
+        }.runTaskTimer(instance, 0L, 1L);
     }
 }
