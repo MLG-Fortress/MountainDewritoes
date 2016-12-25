@@ -241,6 +241,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void timedBar(Player player, int seconds, String message)
     {
+        if (message == null || player == null)
+            return;
         new BukkitRunnable()
         {
             int secondsRemaining = seconds;
