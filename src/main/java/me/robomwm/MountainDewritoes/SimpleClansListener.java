@@ -201,6 +201,10 @@ public class SimpleClansListener implements Listener
                 player.sendMessage(ChatColor.RED + "You are not in a /clan");
                 return;
             }
+            if (clan.getHomeLocation() == null)
+            {
+                player.sendMessage(ChatColor.RED + "Your clan does not have a /sethome.");
+            }
             betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
         }
     }

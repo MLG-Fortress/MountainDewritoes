@@ -64,7 +64,8 @@ public class TeleportingEffects implements Listener
         preTeleportingPlayers.remove(event.getPlayer());
         if (event.isCancelled())
             return;
-        instance.timedBar(event.getTarget(), 5, event.getPlayer().getDisplayName() + ChatColor.AQUA + " teleported to you.");
+        if (event.getTarget() != null)
+            instance.timedBar(event.getTarget(), 5, event.getPlayer().getDisplayName() + ChatColor.AQUA + " teleported to you.");
     }
 
     void playTeleportEffect(Player player)

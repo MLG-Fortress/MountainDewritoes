@@ -236,7 +236,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     this.cancel();
                 }
             }
-        }.runTaskTimer(this, 100L, 100L);
+        }.runTaskTimer(this, 200L, 100L);
     }
 
     public void timedBar(Player player, int seconds, String message)
