@@ -248,7 +248,7 @@ public class ChatListener implements Listener
         if (filtered)
         {
             Player player = event.getPlayer();
-            log("Filtered original message: " + event.getPlayer().getName() + ": " + event.getMessage());
+            log("Filtered: " + event.getPlayer().getName() + ": " + event.getMessage());
             event.getRecipients().remove(event.getPlayer());
             String name = player.getDisplayName();
             if (clanManager.getClanPlayer(player) != null)
@@ -268,8 +268,7 @@ public class ChatListener implements Listener
         {
             event.setCancelled(true);
             softmutedChats.add(event);
-            log(ChatColor.GRAY + "Detected softmute: " + event.getPlayer().getName() + ": " + event.getMessage());
-
+            log("softmute: " + event.getPlayer().getName() + ": " + event.getMessage());
         }
     }
 
@@ -278,6 +277,8 @@ public class ChatListener implements Listener
     {
         if (softmutedChats.remove(event))
             event.setCancelled(false);
+        else if (event.isCancelled())
+            log("Canceled: " + event.getMessage());
     }
 
     void log(String message)
@@ -285,7 +286,7 @@ public class ChatListener implements Listener
         for (Player player : instance.getServer().getOnlinePlayers())
         {
             if (player.hasPermission("idont.thinkso"))
-                player.sendMessage(message);
+                player.sendMessage(ChatColor.GRAY + message);
         }
         instance.getServer().getLogger().info(ChatColor.stripColor(message));
     }
