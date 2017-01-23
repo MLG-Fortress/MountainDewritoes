@@ -84,22 +84,20 @@ public class DamageIndicators implements Listener
 
         new BukkitRunnable()
         {
-            //int duration = 30;
-            boolean timeToDelete = false;
+            int duration = 2;
 
             public void run()
             {
-                hologram.teleport(hologram.getLocation().add(0D, 1D, 0D));
-                //duration--;
-                //if (duration <= 0)
-                if (timeToDelete)
+                duration--;
+                if (duration <= 0)
                 {
                     hologram.delete();
                     activeHolograms.remove(hologram);
                     this.cancel();
+                    return;
                 }
-                timeToDelete = true;
+                hologram.teleport(hologram.getLocation().add(0D, 1D, 0D));
             }
-        }.runTaskTimer(instance, 20L, 10L);
+        }.runTaskTimer(instance, 1L, 20L);
     }
 }
