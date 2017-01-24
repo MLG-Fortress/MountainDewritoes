@@ -22,7 +22,7 @@ public class RandomStructurePaster implements Listener
     World world = Bukkit.getWorld("world");
     List<String> schematics = new ArrayList<>();
     Random random;
-    MountainDewritoes iKnowIShouldntCallItMountainDewritoesOhWell;
+    MountainDewritoes instance;
     RandomStructurePaster(MountainDewritoes blah)
     {
         //schematics.add("loopysquish_brickhouse");
@@ -30,7 +30,7 @@ public class RandomStructurePaster implements Listener
         //schematics.add("nikita_cheetah_village");
         //schematics.add("nikita_cheetah_beach");
         random = new Random();
-        iKnowIShouldntCallItMountainDewritoesOhWell = blah;
+        instance = blah;
     }
 
     //@EventHandler(ignoreCancelled = true)
@@ -49,6 +49,6 @@ public class RandomStructurePaster implements Listener
             {
                 Schematic.paste(schematics.get(random.nextInt(schematics.size())), location);
             }
-        }.runTaskLater(iKnowIShouldntCallItMountainDewritoesOhWell, 20L);
+        }.runTaskLater(instance, 20L);
     }
 }
