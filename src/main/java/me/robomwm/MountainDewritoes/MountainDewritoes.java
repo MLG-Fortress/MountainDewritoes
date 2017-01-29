@@ -65,6 +65,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(damageIndicators, this);
         pm.registerEvents(new SleepManagement(this, atmosphericManager), this);
         pm.registerEvents(atmosphericManager, this);
+        pm.registerEvents(new ResourcePackNotifier(), this);
         //pm.registerEvents(new JukeboxManager(this), this);
         StringBuilder builder = new StringBuilder();
         Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
