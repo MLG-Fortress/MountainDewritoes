@@ -8,6 +8,7 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -16,8 +17,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
@@ -271,6 +274,43 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             return;
         if (entity.getType() == EntityType.PAINTING || entity.getType() == EntityType.ITEM_FRAME)
             event.setCancelled(true);
+    }
+
+    /**
+     * Protect dropped items from moving in the mall (and spawn I guess)
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onExplosionPushesItems(EntityExplodeEvent event)
+    {
+        Entity entity = event.getEntity();
+        if (!safeWorlds.contains(entity.getWorld()))
+            return;
+        double yield = event.getYield();
+        for (Entity nearbyEntity : entity.getNearbyEntities(yield, yield, yield))
+        {
+            if (nearbyEntity.getType() == EntityType.DROPPED_ITEM)
+            {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onExplosionPushesItemsButNotViaATNTEntity(BlockExplodeEvent event)
+    {
+        Block block = event.getBlock();
+        if (!safeWorlds.contains(block.getWorld()))
+            return;
+        double yield = 4; //Event debug reveals block.getYield to be infinity??
+        for (Entity nearbyEntity : block.getWorld().getNearbyEntities(block.getLocation(), yield, yield, yield))
+        {
+            if (nearbyEntity.getType() == EntityType.DROPPED_ITEM)
+            {
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
 
     public void timedBar(Player player, int seconds, String message)
