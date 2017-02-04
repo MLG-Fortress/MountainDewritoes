@@ -10,10 +10,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,6 +40,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     DamageIndicators damageIndicators;
     AtmosphericManager atmosphericManager;
     String acceptableColors;
+    Set<World> safeWorlds = new HashSet<>();
 
     public void onEnable()
     {
@@ -76,6 +81,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             builder.append(", ");
         }
         acceptableColors = builder.toString().substring(0, builder.length() - 2);
+        safeWorlds.add(getServer().getWorld("mall"));
+        safeWorlds.add(getServer().getWorld("minigames"));
     }
 
     public void onDisable()
@@ -83,6 +90,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getLogger().info("Cleaning up any active damage indicator holograms...");
         getLogger().info(String.valueOf(damageIndicators.cleanupDamageIndicators()) + " holograms removed.");
     }
+
+    /**
+     * Everything below are solely "miscellaneous" enhancements and fixes
+     */
 
     //Warn new players that /ec costs money to use
 //    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
@@ -103,6 +114,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        usedEC.add(player);
 //    }
 
+    /**
+     * Probably belongs in its own "TitleManager" class.
+     * Only thing that uses this is the hitmarkers, so they don't override any currently-displayed message
+     */
     public boolean isUsingTitle(Player player)
     {
         return usingTitlePlayers.containsKey(player);
@@ -238,6 +253,21 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 }
             }
         }.runTaskTimer(this, 200L, 100L);
+    }
+
+    /**
+     * Worldguard doesn't fully protect paintings and itemframes from being destroyed...
+     * TODO: might need to include "Item" entity
+     * @param event
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onExplosionDestroyPainting(EntityDamageEvent event)
+    {
+        Entity entity = event.getEntity();
+        if (!safeWorlds.contains(entity.getWorld()))
+            return;
+        if (entity.getType() == EntityType.PAINTING || entity.getType() == EntityType.ITEM_FRAME)
+            event.setCancelled(true);
     }
 
     public void timedBar(Player player, int seconds, String message)
