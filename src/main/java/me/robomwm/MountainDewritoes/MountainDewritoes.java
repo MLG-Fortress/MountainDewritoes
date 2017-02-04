@@ -261,9 +261,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
      * @param event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    void onExplosionDestroyPainting(EntityDamageEvent event)
+    void onExplosionDestroyPainting(EntityDamageByEntityEvent event)
     {
         Entity entity = event.getEntity();
+        if (event.getDamager().isOp())
+            return;
         if (!safeWorlds.contains(entity.getWorld()))
             return;
         if (entity.getType() == EntityType.PAINTING || entity.getType() == EntityType.ITEM_FRAME)
