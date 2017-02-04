@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -261,10 +262,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
      * @param event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    void onExplosionDestroyPainting(EntityDamageByEntityEvent event)
+    void onExplosionDestroyPainting(HangingBreakByEntityEvent event)
     {
         Entity entity = event.getEntity();
-        if (event.getDamager().isOp())
+        if (event.getRemover().isOp())
             return;
         if (!safeWorlds.contains(entity.getWorld()))
             return;
