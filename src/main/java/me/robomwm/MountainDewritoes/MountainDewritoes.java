@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Sounds.AtmosphericManager;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
@@ -22,14 +23,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -265,12 +269,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
      * @param event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    void onExplosionDestroyPainting(HangingBreakByEntityEvent event)
+    void onExplosionDestroyPainting(HangingBreakEvent event)
     {
         Entity entity = event.getEntity();
-        if (event.getRemover().isOp())
-            return;
         if (!safeWorlds.contains(entity.getWorld()))
+            return;
+        if (event.getCause() != HangingBreakEvent.RemoveCause.EXPLOSION)
             return;
         event.setCancelled(true);
     }
@@ -295,21 +299,20 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    void onExplosionPushesItemsButNotViaATNTEntity(BlockExplodeEvent event)
+    @EventHandler(priority = EventPriority.HIGHEST)
+    void onExplosionPushesItemsButNotViaATNTEntity(ShoutAreaOfEffectEvent event)
     {
-        Block block = event.getBlock();
-        if (!safeWorlds.contains(block.getWorld()))
+        if (!safeWorlds.contains(event.getAffectedEntities().get(0).getWorld()))
             return;
-        double yield = 4; //Event debug reveals block.getYield to be infinity??
-        for (Entity nearbyEntity : block.getWorld().getNearbyEntities(block.getLocation(), yield, yield, yield))
+        List<Entity> newEntities = new ArrayList<>();
+        for (Entity nearbyEntity : event.getAffectedEntities())
         {
-            if (nearbyEntity.getType() == EntityType.DROPPED_ITEM)
+            if (nearbyEntity.getType() != EntityType.DROPPED_ITEM)
             {
-                event.setCancelled(true);
-                return;
+                newEntities.add(nearbyEntity);
             }
         }
+        event.setAffectedEntities(newEntities);
     }
 
     public void timedBar(Player player, int seconds, String message)

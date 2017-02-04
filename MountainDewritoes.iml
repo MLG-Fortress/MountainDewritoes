@@ -63,5 +63,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:VaultAPI:1.6" level="project" />
     <orderEntry type="library" name="Maven: com.github.MLG-Fortress:BetterTPA:3.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.ProjectKorra:ProjectKorra:cbb3581a12" level="project" />
+    <orderEntry type="library" name="Maven: com.github.MLG-Fortress:TheThuum:0.6" level="project" />
   </component>
 </module>
