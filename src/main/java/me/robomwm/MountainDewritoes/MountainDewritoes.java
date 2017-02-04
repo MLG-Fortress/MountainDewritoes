@@ -272,8 +272,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             return;
         if (!safeWorlds.contains(entity.getWorld()))
             return;
-        if (entity.getType() == EntityType.PAINTING || entity.getType() == EntityType.ITEM_FRAME)
-            event.setCancelled(true);
+        event.setCancelled(true);
     }
 
     /**
