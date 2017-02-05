@@ -37,19 +37,19 @@ public class TeleportingEffects implements Listener
         instance = mountainDewritoes;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void playerWannaTeleport(PlayerCommandPreprocessEvent event)
-    {
-        Player player = event.getPlayer();
-        String[] message = event.getMessage().split(" ");
-        String command = message[0].toLowerCase();
-        //I really wish EssentialsX provided an API/event for this. Am gonna make issue 4 dis now
-        if ((message.length > 1 && command.equals("/warp"))
-                || (command.equals("/spawn") || command.equals("/mall") || command.equals("/back")))
-        {
-            playTeleportEffect(player);
-        }
-    }
+//    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+//    void playerWannaTeleport(PlayerCommandPreprocessEvent event)
+//    {
+//        Player player = event.getPlayer();
+//        String[] message = event.getMessage().split(" ");
+//        String command = message[0].toLowerCase();
+//        //I really wish EssentialsX provided an API/event for this. Am gonna make issue 4 dis now
+//        if ((message.length > 1 && command.equals("/warp"))
+//                || (command.equals("/spawn") || command.equals("/mall") || command.equals("/back")))
+//        {
+//            playTeleportEffect(player);
+//        }
+//    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onPlayerTPA(PreTPATeleportEvent event)
@@ -60,12 +60,15 @@ public class TeleportingEffects implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerTPACancel(PostTPATeleportEvent event)
     {
-        taskThingy.remove(event.getPlayer()).cancel();
+        Player player = event.getPlayer();
+        Location location = player.getLocation();
         preTeleportingPlayers.remove(event.getPlayer());
+        taskThingy.remove(event.getPlayer()).cancel();
         if (event.isCancelled())
             return;
+        location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         if (event.getTarget() != null)
-            instance.timedBar(event.getTarget(), 5, event.getPlayer().getDisplayName() + ChatColor.AQUA + " teleported to you.");
+            instance.timedBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
     }
 
     void playTeleportEffect(Player player)
@@ -86,14 +89,12 @@ public class TeleportingEffects implements Listener
                     {
                         preTeleportingPlayers.remove(player);
                         this.cancel();
-                        taskThingy.remove(player);
                     }
                 }
                 catch (IllegalArgumentException e)
                 {
                     preTeleportingPlayers.remove(player);
                     this.cancel();
-                    taskThingy.remove(player);
                 }
             }
         }.runTaskTimer(instance, 10L, 10L);
