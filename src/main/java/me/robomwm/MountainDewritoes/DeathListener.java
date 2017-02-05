@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -29,9 +30,11 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -43,21 +46,28 @@ public class DeathListener implements Listener
     MountainDewritoes instance;
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     Map<Player, Integer> hasRecentlyDied = new HashMap<>();
-    Location respawnLocation;
+    Location defaultRespawnLocation;
+    Set<World> ignoreWorlds = new HashSet<>();
     List<String> deathMessages = new ArrayList<>();
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
-        respawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
+        defaultRespawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
         deathMessages.add("lol u g0t rekt");
         deathMessages.add("U were eliminated");
         deathMessages.add("u r ded");
         deathMessages.add("u r ded, not big sooprise");
+        ignoreWorlds.add(instance.getServer().getWorld("dogepvp"));
     }
 
     String getRandomDeathMessage()
     {
         return deathMessages.get(ThreadLocalRandom.current().nextInt(deathMessages.size()));
+    }
+
+    boolean isIgnoredWorld(World world)
+    {
+        return ignoreWorlds.contains(world);
     }
 
     /*
@@ -119,20 +129,25 @@ public class DeathListener implements Listener
         final Player player = event.getEntity();
 
         /**
-        Only drop some items (randomly determined)
+         Only drop some items (randomly determined)
+         Except if in an ignored world
          */
-        List<ItemStack> drops = event.getDrops();
-        Iterator<ItemStack> iterator = drops.iterator();
-        List<ItemStack> dropsToReturn = new ArrayList<>();
-        while (iterator.hasNext())
+        if (isIgnoredWorld(player.getWorld()))
         {
-            ItemStack itemStack = iterator.next();
-            if (ThreadLocalRandom.current().nextInt(4) == 0)
-                continue;
-            dropsToReturn.add(itemStack);
-            iterator.remove();
+            List<ItemStack> drops = event.getDrops();
+            Iterator<ItemStack> iterator = drops.iterator();
+            List<ItemStack> dropsToReturn = new ArrayList<>();
+            while (iterator.hasNext())
+            {
+                ItemStack itemStack = iterator.next();
+                if (ThreadLocalRandom.current().nextInt(4) == 0)
+                    continue;
+                dropsToReturn.add(itemStack);
+                iterator.remove();
+            }
+            deathItems.put(player, dropsToReturn);
         }
-        deathItems.put(player, dropsToReturn);
+
 
         /**
          * Only lose 8 XP (vs. all XP on death)
@@ -179,14 +194,7 @@ public class DeathListener implements Listener
         final Entity killer = killerNotFinal;
 
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
-        //it just plays player_hurt, so yea...
-        //Apparently, it actually triggers it for other players, just not the player who died, I guess...?
-
-        /**Auto-respawn player if they haven't clicked respawn within the last 6.5 seconds
-         Helps prevent weird client problems like client-side entity buildup or whatever,
-         thus freezing the client or idk that's what happened to me.
-         Note: Though now auto-respawn is dependent on how the player died
-         */
+        //it does trigger it for other players though, just not the player who died
 
         Long delayNotFinal = 0L;
         if (killer == null)
@@ -213,7 +221,6 @@ public class DeathListener implements Listener
         new BukkitRunnable()
         {
             Title.Builder deathMessageTitle = new Title.Builder();
-            boolean wasDead = true;
             //Point down by default https://bukkit.org/threads/vectors.152310/#post-1703396
             Vector vector = player.getLocation().subtract(player.getLocation().add(0, 1, 0).toVector()).toVector();
             String deathMessage = getRandomDeathMessage();
@@ -231,16 +238,6 @@ public class DeathListener implements Listener
                     instance.getLogger().info("Respawned player with death task: " + String.valueOf(respawnPlayer(player)));
                     return;
                 }
-
-                //Was player dead last tick and now alive this tick?
-//                if (wasDead && !player.isDead())
-//                {
-//                    //If so, teleport half a block above
-//                    wasDead = false;
-//                    player.setMetadata("DEAD_MOVE", new FixedMetadataValue(instance, true));
-//                    player.teleport(player.getLocation().add(0, 0.5, 0).setDirection(vector));
-//                    player.removeMetadata("DEAD_MOVE", instance);
-//                }
 
                 //Track killer
                 if (!player.isDead() && killer != null && killer.getWorld() == player.getWorld())
@@ -265,14 +262,23 @@ public class DeathListener implements Listener
     }
 
     /**
-     * Give back items and exp that were not dropped on death
+     * Respawn handler
+     * Gives back items that weren't dropped
+     * Activates death spectating, if respawned within "respawn time"
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     void onPlayerRespawn(PlayerRespawnEvent event)
     {
-        event.setRespawnLocation(respawnLocation);
         Player player = event.getPlayer();
-        //Items
+        //Determine final respawn location
+        Location respawnLocation = defaultRespawnLocation;
+        boolean ignoredWorld = isIgnoredWorld(player.getWorld());
+        if (ignoredWorld)
+            respawnLocation = player.getWorld().getSpawnLocation();
+
+        event.setRespawnLocation(respawnLocation); //In case player doesn't "death spectate", set respawn location
+
+        //Return items
         if (deathItems.containsKey(player))
         {
             for (ItemStack drop : deathItems.get(player))
@@ -286,32 +292,25 @@ public class DeathListener implements Listener
         if (!hasRecentlyDied.containsKey(player))
             return;
 
-        /**
-         * Death spectating
-         */
-        //Schedule task to teleport player in (9 - time spent while dead) seconds
-        //TODO: may be redundant
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                instance.getLogger().info("Respawned player with respawn task: " + String.valueOf(respawnPlayer(player)));
-            }
-        }.runTaskLater(instance, hasRecentlyDied.get(player));
-
-        player.setMetadata("DEAD", new FixedMetadataValue(instance, true));
+        /**Set appropriate death spectating attributes */
+        player.setMetadata("DEAD", new FixedMetadataValue(instance, respawnLocation));
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
         event.setRespawnLocation(player.getLocation()); //TODO: Might return a "safe" location (i.e. not where they died)
         player.setViewDistance(3);
     }
 
+    /**
+     * "Respawns" player while spectating
+     * @param player
+     * @return false if player was already respawned,
+     */
     boolean respawnPlayer(Player player)
     {
         if (hasRecentlyDied.remove(player) == null)
             return false;
+        player.teleport((Location)player.getMetadata("DEAD").get(0));
         player.removeMetadata("DEAD", instance);
-        player.teleport(respawnLocation);
         player.setGameMode(GameMode.ADVENTURE);
         player.setFlySpeed(0.2f);
         return true;
@@ -326,12 +325,12 @@ public class DeathListener implements Listener
         try
         {
             //if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && (event.getFrom().distanceSquared(event.getTo()) == 0 || event.getPlayer().hasMetadata("DEAD_MOVE")))
+            //Only allow "death spectating" teleports to occur
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN && event.getFrom().distanceSquared(event.getTo()) == 0)
                 return;
         }
-        catch (IllegalArgumentException e) //If teleporting to another world, yes of course stop that
+        catch (IllegalArgumentException e) //If trying to teleport to another world, yes of course stop that
         {}
-
         event.setCancelled(true);
     }
 
@@ -358,18 +357,21 @@ public class DeathListener implements Listener
             event.setCancelled(true);
     }
 
+    /**
+     * Special case when player quits
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     void onPlayerQuitWhileSpectatingOrDead(PlayerQuitEvent event)
     {
         Player player = event.getPlayer();
-        if (player.isDead())
+        if (player.isDead()) //Save items if they haven't respawned (item saving occurs on respawn)
             player.spigot().respawn();
-        if (player.hasMetadata("DEAD"))
+        if (player.hasMetadata("DEAD")) //If quitting within respawn time, remove respawn time
             hasRecentlyDied.remove(player);
         player.removeMetadata("DEAD", instance);
     }
 
-    //Instantly "respawn" players that take damage while death spectating (e.g. from void)
+    //Prevent spectators from taking damage (e.g. void)
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onPlayerTakeDamageWhileSpectating(EntityDamageEvent event)
     {
@@ -378,10 +380,7 @@ public class DeathListener implements Listener
         Player player = (Player)event.getEntity();
         if (player.getGameMode() == GameMode.SPECTATOR && player.hasMetadata("DEAD"))
         {
-            hasRecentlyDied.remove(player);
-            player.removeMetadata("DEAD", instance);
-            player.teleport(respawnLocation);
-            player.setGameMode(GameMode.ADVENTURE);
+            event.setCancelled(true);
         }
     }
 

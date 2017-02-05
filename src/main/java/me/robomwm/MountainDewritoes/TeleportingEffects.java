@@ -1,8 +1,8 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.BetterTPA.BetterTPA;
 import me.robomwm.BetterTPA.PostTPATeleportEvent;
 import me.robomwm.BetterTPA.PreTPATeleportEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -26,30 +26,43 @@ import java.util.Map;
  */
 public class TeleportingEffects implements Listener
 {
-    World spawn = Bukkit.getWorld("minigames");
-    World mall = Bukkit.getWorld("mall");
+    Location spawnLocation;
+    Location mallLocation;
     Map<Player, Location> preTeleportingPlayers = new HashMap<>();
     Map<Player, BukkitTask> taskThingy = new HashMap<>();
     MountainDewritoes instance;
+    BetterTPA betterTPA;
 
     TeleportingEffects(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
+        spawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
+        mallLocation = new Location(instance.getServer().getWorld("mall"), 2.488, 5, -7.305, 0f, 0f);
     }
 
-//    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-//    void playerWannaTeleport(PlayerCommandPreprocessEvent event)
-//    {
-//        Player player = event.getPlayer();
-//        String[] message = event.getMessage().split(" ");
-//        String command = message[0].toLowerCase();
-//        //I really wish EssentialsX provided an API/event for this. Am gonna make issue 4 dis now
-//        if ((message.length > 1 && command.equals("/warp"))
-//                || (command.equals("/spawn") || command.equals("/mall") || command.equals("/back")))
-//        {
-//            playTeleportEffect(player);
-//        }
-//    }
+    /**
+     * Idk where I should put this. Maybe a class named "command overriders"
+     * @param event
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    void onWantToTeleportToSpawnOrMall(PlayerCommandPreprocessEvent event)
+    {
+        Player player = event.getPlayer();
+        String[] message = event.getMessage().split(" ");
+        String command = message[0].toLowerCase();
+        if (command.equals("/warp") && message.length > 1)
+            command = message[1].toLowerCase();
+
+        boolean warmup = player.getWorld() == spawnLocation.getWorld() || player.getWorld() == mallLocation.getWorld();
+        event.setCancelled(true);
+        if (command.equals("spawn"))
+            betterTPA.teleportPlayer(player, "spawn", spawnLocation, warmup, null);
+        else if (command.equals("mall"))
+            betterTPA.teleportPlayer(player, "mall", mallLocation, warmup, null);
+        else
+            event.setCancelled(false);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onPlayerTPA(PreTPATeleportEvent event)
