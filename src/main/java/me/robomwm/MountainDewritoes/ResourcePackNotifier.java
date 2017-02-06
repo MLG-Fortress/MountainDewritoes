@@ -14,6 +14,6 @@ public class ResourcePackNotifier implements Listener
     void statusOfPack(PlayerResourcePackStatusEvent event)
     {
         if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED)
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "say " + event.getPlayer() + " denied da meme pack.");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "irc say samplebot #MLG " + event.getPlayer().getName() + " denied da meme pack.");
     }
 }
