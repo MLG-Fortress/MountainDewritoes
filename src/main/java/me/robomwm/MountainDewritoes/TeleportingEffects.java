@@ -53,10 +53,12 @@ public class TeleportingEffects implements Listener
         String command = message[0].toLowerCase();
         if (command.equals("/warp") && message.length > 1)
             command = message[1].toLowerCase();
+        else
+            command = command.substring(1, command.length() - 1);
 
         boolean warmup = player.getWorld() == spawnLocation.getWorld() || player.getWorld() == mallLocation.getWorld();
         event.setCancelled(true);
-        if (command.equals("spawn"))
+        if (command.equals("spawn") || command.equals("hub"))
             betterTPA.teleportPlayer(player, "spawn", spawnLocation, warmup, null);
         else if (command.equals("mall"))
             betterTPA.teleportPlayer(player, "mall", mallLocation, warmup, null);
