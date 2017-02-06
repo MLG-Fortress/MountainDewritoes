@@ -54,7 +54,7 @@ public class TeleportingEffects implements Listener
         if (command.equals("/warp") && message.length > 1)
             command = message[1].toLowerCase();
         else
-            command = command.substring(1, command.length() - 1);
+            command = command.substring(1, command.length());
 
         boolean warmup = player.getWorld() == spawnLocation.getWorld() || player.getWorld() == mallLocation.getWorld();
         event.setCancelled(true);
