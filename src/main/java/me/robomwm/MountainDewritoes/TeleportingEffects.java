@@ -37,7 +37,7 @@ public class TeleportingEffects implements Listener
     {
         instance = mountainDewritoes;
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
-        spawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
+        spawnLocation = new Location(instance.getServer().getWorld("minigames"), -389D, 5D, -124D, 180.344f, -18.881f);
         mallLocation = new Location(instance.getServer().getWorld("mall"), 2.488, 5, -7.305, 0f, 0f);
     }
 
