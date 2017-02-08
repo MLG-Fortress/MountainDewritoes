@@ -58,12 +58,20 @@ public class TeleportingEffects implements Listener
 
         boolean warmup = player.getWorld() == spawnLocation.getWorld() || player.getWorld() == mallLocation.getWorld();
         event.setCancelled(true);
-        if (command.equals("spawn") || command.equals("hub"))
-            betterTPA.teleportPlayer(player, "spawn", spawnLocation, warmup, null);
-        else if (command.equals("mall"))
-            betterTPA.teleportPlayer(player, "mall", mallLocation, warmup, null);
-        else
-            event.setCancelled(false);
+        switch (command)
+        {
+            case "spawn":
+            case "hub":
+            case "lobby":
+                betterTPA.teleportPlayer(player, "spawn", spawnLocation, warmup, null);
+                break;
+            case "mall":
+                betterTPA.teleportPlayer(player, "mall", mallLocation, warmup, null);
+                break;
+            default:
+                event.setCancelled(false);
+                break;
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
