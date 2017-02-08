@@ -261,8 +261,9 @@ public class DeathListener implements Listener
             player.spigot().respawn();
             return true;
         }
-        player.teleport((Location)player.getMetadata("DEAD").get(0).value());
+        Location locationToRespawn = (Location)player.getMetadata("DEAD").get(0).value();
         player.removeMetadata("DEAD", instance);
+        player.teleport(locationToRespawn);
         if (player.getGameMode() == GameMode.SPECTATOR)
             player.setGameMode(GameMode.ADVENTURE);
         player.setFlySpeed(0.2f);
