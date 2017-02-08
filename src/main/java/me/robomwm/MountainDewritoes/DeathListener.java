@@ -70,59 +70,6 @@ public class DeathListener implements Listener
         return ignoreWorlds.contains(world);
     }
 
-    /*
-     * Have death spectator camera point towards the killer
-     * To do this, we need to store who last damaged the victim
-     * That feeling when you forget the Entity object has getKiller()...
-     * @param event
-    Map<Player, Entity> victimsKiller = new HashMap<>();
-    Map<Player, BukkitTask> wenUr2Lazy2MakeAClass = new HashMap<>();
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void storeLastDamager(EntityDamageByEntityEvent event)
-    {
-        //Check if the thing did any damage at all
-        if (event.getDamage() <= 0D)
-            return;
-        Entity damager = event.getDamager();
-        //Check if victim is a player
-        if (event.getEntityType() != EntityType.PLAYER)
-            return;
-
-        //Get the attacker
-        Entity attacker = null;
-        if (damager instanceof LivingEntity)
-            attacker = damager;
-        else if (damager instanceof Projectile)
-        {
-            Projectile arrow = (Projectile)damager;
-            if (!(arrow.getShooter() instanceof LivingEntity))
-                return; //Dispenser
-            attacker = (Entity)arrow.getShooter();
-        }
-
-        //Don't care if attacker is not a LivingEntity or Projectile (we don't care about explosions, for example)
-        if (attacker == null)
-            return;
-
-        Player player = (Player)event.getEntity();
-        final Entity badGuy = attacker;
-        if (badGuy == player)
-            return;
-        victimsKiller.put(player, badGuy);
-        BukkitTask task = new BukkitRunnable()
-        {
-            public void run()
-            {
-                if (badGuy == victimsKiller.get(player))
-                    victimsKiller.remove(player);
-            }
-        }.runTaskLater(instance, 300L);
-        if (wenUr2Lazy2MakeAClass.containsKey(player))
-            wenUr2Lazy2MakeAClass.remove(player).cancel();
-        wenUr2Lazy2MakeAClass.put(player, task);
-    }
-     */
-
     @EventHandler
     void onPlayerSadness(PlayerDeathEvent event)
     {
@@ -208,7 +155,6 @@ public class DeathListener implements Listener
         {
             public void run()
             {
-                player.spigot().respawn();
                 if (delay < 1L)
                     player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
             }
@@ -236,6 +182,7 @@ public class DeathListener implements Listener
                 if (hasRecentlyDied.get(player) < 2)
                 {
                     instance.getLogger().info("Respawned player with death task: " + String.valueOf(respawnPlayer(player)));
+                    this.cancel();
                     return;
                 }
 
@@ -309,9 +256,15 @@ public class DeathListener implements Listener
     {
         if (hasRecentlyDied.remove(player) == null)
             return false;
+        if (player.isDead())
+        {
+            player.spigot().respawn();
+            return true;
+        }
         player.teleport((Location)player.getMetadata("DEAD").get(0).value());
         player.removeMetadata("DEAD", instance);
-        player.setGameMode(GameMode.ADVENTURE);
+        if (player.getGameMode() == GameMode.SPECTATOR)
+            player.setGameMode(GameMode.ADVENTURE);
         player.setFlySpeed(0.2f);
         return true;
     }
@@ -386,3 +339,56 @@ public class DeathListener implements Listener
 
     //TODO: handle chat (set permissions???)
 }
+
+/*
+     * Have death spectator camera point towards the killer
+     * To do this, we need to store who last damaged the victim
+     * That feeling when you forget the Entity object has getKiller()...
+     * @param event
+    Map<Player, Entity> victimsKiller = new HashMap<>();
+    Map<Player, BukkitTask> wenUr2Lazy2MakeAClass = new HashMap<>();
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    void storeLastDamager(EntityDamageByEntityEvent event)
+    {
+        //Check if the thing did any damage at all
+        if (event.getDamage() <= 0D)
+            return;
+        Entity damager = event.getDamager();
+        //Check if victim is a player
+        if (event.getEntityType() != EntityType.PLAYER)
+            return;
+
+        //Get the attacker
+        Entity attacker = null;
+        if (damager instanceof LivingEntity)
+            attacker = damager;
+        else if (damager instanceof Projectile)
+        {
+            Projectile arrow = (Projectile)damager;
+            if (!(arrow.getShooter() instanceof LivingEntity))
+                return; //Dispenser
+            attacker = (Entity)arrow.getShooter();
+        }
+
+        //Don't care if attacker is not a LivingEntity or Projectile (we don't care about explosions, for example)
+        if (attacker == null)
+            return;
+
+        Player player = (Player)event.getEntity();
+        final Entity badGuy = attacker;
+        if (badGuy == player)
+            return;
+        victimsKiller.put(player, badGuy);
+        BukkitTask task = new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (badGuy == victimsKiller.get(player))
+                    victimsKiller.remove(player);
+            }
+        }.runTaskLater(instance, 300L);
+        if (wenUr2Lazy2MakeAClass.containsKey(player))
+            wenUr2Lazy2MakeAClass.remove(player).cancel();
+        wenUr2Lazy2MakeAClass.put(player, task);
+    }
+     */
