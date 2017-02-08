@@ -309,7 +309,7 @@ public class DeathListener implements Listener
     {
         if (hasRecentlyDied.remove(player) == null)
             return false;
-        player.teleport((Location)player.getMetadata("DEAD").get(0));
+        player.teleport((Location)player.getMetadata("DEAD").get(0).value());
         player.removeMetadata("DEAD", instance);
         player.setGameMode(GameMode.ADVENTURE);
         player.setFlySpeed(0.2f);
