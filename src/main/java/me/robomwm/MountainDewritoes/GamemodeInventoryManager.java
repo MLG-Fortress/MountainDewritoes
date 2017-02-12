@@ -3,10 +3,13 @@ package me.robomwm.MountainDewritoes;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
 /**
  * Created by RoboMWM on 9/24/2016.
@@ -16,24 +19,62 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler
     void playerChangeWorld(PlayerChangedWorldEvent event)
     {
-        Player player = event.getPlayer();
-        if (player.isOp())
-            return;
-        if (player.getGameMode() == GameMode.CREATIVE)
-            player.getInventory().clear();
+        checkAndClearPlayerInventory(event.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     void playerOpenEnderChest(InventoryOpenEvent event)
     {
         Player player = (Player)event.getPlayer();
-        if (player.isOp())
-            return;
-        if (player.getGameMode() != GameMode.CREATIVE)
+        if (!checkPlayer(player))
             return;
         if (event.getInventory().getType() == InventoryType.ENDER_CHEST)
-        {
             event.setCancelled(true);
+        //Deny all inventory access if player is in creative in a public world
+        if (event.getInventory().getType() != InventoryType.CRAFTING && !(player.hasPermission("we.builder") || player.hasPermission("yesok")))
+            event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onChangeGamemode(PlayerGameModeChangeEvent event)
+    {
+        checkAndClearPlayerInventory(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    void onPlayerDropItem(PlayerDropItemEvent event)
+    {
+        if (checkPlayer(event.getPlayer()))
+            event.setCancelled(true);
+    }
+
+    /**
+     * Clears player's inventory only if they are in creative mode
+     * @param player
+     * @return whether the player's inventory was cleared
+     */
+    boolean checkAndClearPlayerInventory(Player player)
+    {
+        if (checkPlayer(player))
+        {
+            player.getInventory().clear();
+            return true;
         }
+        return false;
+    }
+
+    /**
+     * Checks if player is in creative or opped
+     * could be extended to permission checks or ignored worlds, hence the
+     * @param player
+     * @return true if player is in creative and doesn't have permissions to be exempt
+     */
+    boolean checkPlayer(Player player)
+    {
+        if (player.isOp())
+            return false;
+        if (player.getGameMode() == GameMode.CREATIVE)
+            return true;
+        return false;
     }
 }

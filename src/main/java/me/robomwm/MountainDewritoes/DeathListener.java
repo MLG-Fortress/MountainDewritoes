@@ -103,27 +103,14 @@ public class DeathListener implements Listener
             event.setNewLevel(player.getLevel() - 8);
 
         //Stop all playing sounds, if any.
+        //TODO: include mcjukebox??
         player.stopSound("");
 
-        //Do not execute Death spectating feature if player died to the void
-        if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.VOID)
-        {
-            player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            return;
-        }
-
-        /**
-         * Death spectating timer
-         * Keeps track of how long the player has been dead (counts down)
-         */
+        //Death spectating timer
+        //Keeps track of how long the player has been dead (counts down)
         hasRecentlyDied.put(player, 180);
 
-//        Entity killerNotFinal = null;
-//        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
-//            killerNotFinal = victimsKiller.remove(player);
-//        final Entity killer = killerNotFinal;
-
-        //I totally forgot that Entity#getLastDamageCause is a thing, lol
+        //Determine what entity killed this player (Entity#getKiller can only return a Player)
         Entity killerNotFinal = player.getKiller();
         if (player.getKiller() == null && player.getLastDamageCause() instanceof EntityDamageByEntityEvent)
         {
@@ -134,31 +121,19 @@ public class DeathListener implements Listener
                 if (arrow.getShooter() instanceof LivingEntity)
                     killerNotFinal = (Entity)arrow.getShooter();
             }
-            if (killerNotFinal == player)
-                killerNotFinal = null;
         }
+        if (killerNotFinal == player) //Though we don't care if they did it themselves
+            killerNotFinal = null;
 
-        final Entity killer = killerNotFinal;
+        final Entity killer = killerNotFinal; //For the runnable
+
+        //We're now always putting the player in death spectating mode immediately to simplify the experience and this somewhat-messy code.
+        player.spigot().respawn();
 
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,
         //it does trigger it for other players though, just not the player who died
+        player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
 
-        Long delayNotFinal = 0L;
-        if (killer == null)
-        {
-            player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            delayNotFinal = 200L;
-        }
-        final Long delay = delayNotFinal;
-
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                if (delay < 1L)
-                    player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            }
-        }.runTaskLater(instance, delay);
 
         /**
          * Death spectating
@@ -256,7 +231,7 @@ public class DeathListener implements Listener
     {
         if (hasRecentlyDied.remove(player) == null)
             return false;
-        if (player.isDead())
+        if (player.isDead()) //Redundant, all players are now immediately spectating their death
         {
             player.spigot().respawn();
             return true;
@@ -393,3 +368,8 @@ public class DeathListener implements Listener
         wenUr2Lazy2MakeAClass.put(player, task);
     }
      */
+//        if (victimsKiller.containsKey(player) && (victimsKiller.get(player).getWorld() == player.getWorld())) //Point at killer
+//            killerNotFinal = victimsKiller.remove(player);
+//        final Entity killer = killerNotFinal;
+
+//I totally forgot that Entity#getLastDamageCause is a thing, lol
