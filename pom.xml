@@ -6,7 +6,7 @@
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>17.7.5</version>
+    <version>17.8</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
