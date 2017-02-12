@@ -50,7 +50,7 @@ public class SimpleClansListener implements Listener
         String command = event.getMessage().toLowerCase();
         final Player player = event.getPlayer();
         //I'm 400,000% sure there's a better way to do this
-        if (command.startsWith("/clan create ") || command.startsWith("/clan resign") || command.startsWith("/accept") || command.startsWith("/clan disband") || command.startsWith("/nick "))
+        if (command.startsWith("/clan ") || command.startsWith("/accept") || command.startsWith("/f ") || command.startsWith("/nick "))
         {
             scheduler.scheduleSyncDelayedTask(instance, new Runnable()
             {
@@ -203,7 +203,8 @@ public class SimpleClansListener implements Listener
             }
             if (clan.getHomeLocation() == null)
             {
-                player.sendMessage(ChatColor.RED + "Your clan does not have a /sethome.");
+                player.sendMessage(ChatColor.RED + "Your clan did not /sethome.");
+                return;
             }
             betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
         }
