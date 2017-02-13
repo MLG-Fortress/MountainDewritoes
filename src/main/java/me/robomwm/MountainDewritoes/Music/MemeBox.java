@@ -24,6 +24,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,17 +50,36 @@ public class MemeBox implements Listener
         specialWorlds.add(instance.getServer().getWorld("mall"));
     }
 
-    public void playSound(String show, MusicThing song)
+    public void playSound(@Nullable World world, MusicThing song)
     {
-        ShowManager showManager = JukeboxAPI.getShowManager();
         Media media = new Media(ResourceType.MUSIC, song.getURL());
         media.setLooping(false);
-        if (show == null)
-            show = "default";
-        Media currentlyPlaying = showManager.getShow(show).getCurrentTrack();
-        instance.getLogger().info("currentlyPlaying is null: " + String.valueOf(currentlyPlaying == null));
-        showManager.getShow(show).play(media);
+        if (world == null)
+        {
+            for (Player player : instance.getServer().getOnlinePlayers())
+            {
+                if (specialWorlds.contains(player.getWorld()))
+                    continue;
+                //TODO: standard checks for certain situations
+                JukeboxAPI.play(player, media);
+            }
+        }
+        else
+        {
+            for (Player player : world.getPlayers())
+                JukeboxAPI.play(player, media);
+        }
     }
+
+//    public void playSound(String show, MusicThing song)
+//    {
+//        ShowManager showManager = JukeboxAPI.getShowManager();
+//        if (show == null)
+//            show = "default";
+//        Media currentlyPlaying = showManager.getShow(show).getCurrentTrack();
+//        instance.getLogger().info("currentlyPlaying is null: " + String.valueOf(currentlyPlaying == null));
+//        showManager.getShow(show).play(media);
+//    }
 
     public void switchPlayerShow(Player player, World fromWorld)
     {
@@ -171,17 +191,17 @@ public class MemeBox implements Listener
     {
         Player player = event.getPlayer();
         player.performCommand("jukebox");
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                if (!player.isOnline())
-                    return;
-                if (hasOpenedMemeBox(player))
-                    return;
-                tellPlayerToOpenMemeBox(player, false);
-            }
-        }.runTaskLater(instance, 400L);
+//        new BukkitRunnable()
+//        {
+//            public void run()
+//            {
+//                if (!player.isOnline())
+//                    return;
+//                if (hasOpenedMemeBox(player))
+//                    return;
+//                tellPlayerToOpenMemeBox(player, false);
+//            }
+//        }.runTaskLater(instance, 400L);
 
     }
 

@@ -131,7 +131,7 @@ public class AtmosphericManager implements Listener
         Player player = event.getPlayer();
         World world = player.getWorld();
         if (world == MALL)
-            memeBox.playSound("mall", musicManager.getMallSong());
+            memeBox.playSound(MALL, musicManager.getMallSong());
     }
 
     /** Play sounds globally based on certain keywords
