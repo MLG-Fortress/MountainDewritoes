@@ -6,21 +6,15 @@ import net.mcjukebox.plugin.bukkit.api.ResourceType;
 import net.mcjukebox.plugin.bukkit.api.models.Media;
 import net.mcjukebox.plugin.bukkit.events.ClientConnectEvent;
 import net.mcjukebox.plugin.bukkit.events.ClientDisconnectEvent;
-import net.mcjukebox.plugin.bukkit.managers.shows.Show;
 import net.mcjukebox.plugin.bukkit.managers.shows.ShowManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.CommandBlock;
 import org.bukkit.block.Jukebox;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -28,14 +22,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 11/5/2016.
@@ -47,6 +40,7 @@ public class MemeBox implements Listener
 {
     MountainDewritoes instance;
     Set<World> specialWorlds = new HashSet<>();
+    Map<String, Integer> connectedPlayers = new HashMap<>();
 
     public MemeBox(MountainDewritoes mountainDewritoes)
     {
@@ -59,6 +53,7 @@ public class MemeBox implements Listener
     {
         ShowManager showManager = JukeboxAPI.getShowManager();
         Media media = new Media(ResourceType.MUSIC, song.getURL());
+        media.setLooping(false);
         if (show == null)
             show = "default";
         Media currentlyPlaying = showManager.getShow(show).getCurrentTrack();
@@ -99,30 +94,46 @@ public class MemeBox implements Listener
     @EventHandler
     void memeBoxOpened(ClientConnectEvent event)
     {
-        Player player = instance.getServer().getPlayer(event.getUsername());
-        if (player == null)
-        {
-            instance.getLogger().warning("An offline player connected to the memebox??");
-            return;
-        }
-        player.setMetadata("MD_MEMEBOX", new FixedMetadataValue(instance, true));
+        String username = event.getUsername();
+        Integer connections = connectedPlayers.get(username);
+        if (connections == null)
+            connectedPlayers.put(username, 1);
+        else
+            connectedPlayers.put(username, ++connections);
+//        Player player = instance.getServer().getPlayer(event.getUsername());
+//        if (player == null)
+//        {
+//            instance.getLogger().warning("An offline player connected to the memebox??");
+//            return;
+//        }
+//        player.setMetadata("MD_MEMEBOX", new FixedMetadataValue(instance, true));
     }
 
     @EventHandler
     void memeBoxClosed(ClientDisconnectEvent event)
     {
-        Player player = instance.getServer().getPlayer(event.getUsername());
-        if (player == null)
-        {
-            instance.getLogger().warning("Maybe the player quit the server first?");
+        String username = event.getUsername();
+        Integer connections = connectedPlayers.get(username);
+        if (connections == null) //wat
             return;
-        }
-        player.removeMetadata("MD_MEMEBOX", instance);
+        else if (connections > 1)
+            connectedPlayers.put(username, --connections);
+        else
+            connectedPlayers.remove(username);
+
+//        Player player = instance.getServer().getPlayer(event.getUsername());
+//        if (player == null)
+//        {
+//            instance.getLogger().warning("Maybe the player quit the server first?");
+//            return;
+//        }
+//        player.removeMetadata("MD_MEMEBOX", instance);
     }
 
     public boolean hasOpenedMemeBox(Player player)
     {
-        return player.hasMetadata("MD_JUKEBOX");
+        return connectedPlayers.containsKey(player.getName());
+        //return player.hasMetadata("MD_JUKEBOX");
     }
 
     boolean sendListOfConnectedUsers(CommandSender sender, String message)
