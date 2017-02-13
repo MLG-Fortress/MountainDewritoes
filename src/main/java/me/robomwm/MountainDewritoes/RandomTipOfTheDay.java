@@ -42,7 +42,7 @@ public class RandomTipOfTheDay implements Listener
                 if (player.isOnline())
                 {
                     String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    instance.timedBar(player, 20, ChatColor.GOLD + tip);
+                    instance.timedActionBar(player, 20, ChatColor.GOLD + tip);
                 }
             }
         }.runTaskLater(instance, 1200L);

@@ -1,7 +1,8 @@
 package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
-import me.robomwm.MountainDewritoes.Sounds.AtmosphericManager;
+import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
+import me.robomwm.MountainDewritoes.Music.MemeBox;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -9,7 +10,6 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -18,11 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
@@ -46,14 +42,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     DamageIndicators damageIndicators;
-    AtmosphericManager atmosphericManager;
     String acceptableColors;
     Set<World> safeWorlds = new HashSet<>();
 
     public void onEnable()
     {
         damageIndicators = new DamageIndicators(this);
-        atmosphericManager = new AtmosphericManager(this);
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
         ClanManager clanManager = sc.getClanManager();
@@ -76,10 +70,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //pm.registerEvents(new Footsteps(), this);
         pm.registerEvents(new NoKnockback(this), this);
         pm.registerEvents(damageIndicators, this);
-        pm.registerEvents(new SleepManagement(this, atmosphericManager), this);
-        pm.registerEvents(atmosphericManager, this);
-        pm.registerEvents(new ResourcePackNotifier(), this);
-        //pm.registerEvents(new JukeboxManager(this), this);
+        pm.registerEvents(new SleepManagement(this), this);
+        pm.registerEvents(new ResourcePackNotifier(this), this);
+        if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
+            pm.registerEvents(new MemeBox(this), this);
         StringBuilder builder = new StringBuilder();
         Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
         for (String ok : colorThingy)
@@ -315,7 +309,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         event.setAffectedEntities(newEntities);
     }
 
-    public void timedBar(Player player, int seconds, String message)
+    public void timedActionBar(Player player, int seconds, String message)
     {
         if (message == null || player == null)
             return;

@@ -1,4 +1,4 @@
-package me.robomwm.MountainDewritoes.Sounds;
+package me.robomwm.MountainDewritoes.Music;
 
 /**
  * Created by RoboMWM on 11/26/2016.
@@ -6,11 +6,16 @@ package me.robomwm.MountainDewritoes.Sounds;
 class MusicThing
 {
     private String soundName;
+    private String URL;
     private long length; //Stored in ticks
-    public MusicThing(String name, int seconds)
+    public MusicThing(String URL, int seconds)
     {
-        this.soundName = name;
+        this.URL = URL;
         this.length = seconds * 20L; //autoconvert seconds to length
+    }
+    public String getURL()
+    {
+        return this.URL;
     }
     public String getSoundName()
     {

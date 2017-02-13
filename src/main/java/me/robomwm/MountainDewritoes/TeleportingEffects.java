@@ -90,11 +90,11 @@ public class TeleportingEffects implements Listener
         taskThingy.remove(event.getPlayer()).cancel();
         if (event.isCancelled())
             return;
-        location.getWorld().playEffect(location.add(0.0d, 0.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
+        location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: stop sound effect from pretpa
         //TODO: sound effect
         if (event.getTarget() != null)
-            instance.timedBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
+            instance.timedActionBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
     }
 
     void playTeleportEffect(Player player)
@@ -110,7 +110,7 @@ public class TeleportingEffects implements Listener
                 try
                 {
                     if (preTeleportingPlayers.get(player).distanceSquared(player.getLocation()) < 0.3D)
-                        world.playEffect(player.getLocation().add(0.0d, 0.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
+                        world.playEffect(player.getLocation().add(0.0d, 0.5d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
                     else
                     {
                         preTeleportingPlayers.remove(player);

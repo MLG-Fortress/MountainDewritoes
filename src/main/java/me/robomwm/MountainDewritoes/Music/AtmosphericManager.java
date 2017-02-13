@@ -1,28 +1,17 @@
-package me.robomwm.MountainDewritoes.Sounds;
+package me.robomwm.MountainDewritoes.Music;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.ChatColor;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Random;
-import java.util.TreeSet;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Pattern;
 
 /**
  * Created by RoboMWM on 10/8/2016.
@@ -34,13 +23,16 @@ public class AtmosphericManager implements Listener
     MountainDewritoes instance;
     World MALL;
     AtomicBoolean over10Minutes = new AtomicBoolean(true);
+    MusicManager musicManager = new MusicManager();
+    MemeBox memeBox;
     //Pattern hello = Pattern.compile("\\bhello\\b|\\bhi\\b|\\bhey\\b|\\bhai\\b");
     //Pattern bye = Pattern.compile("\\bsee you\\b|\\bc u\\b|\\bbye\\b");
-    MusicManager musicManager = new MusicManager();
-    public AtmosphericManager(MountainDewritoes mountainDewritoes)
+
+    public AtmosphericManager(MountainDewritoes mountainDewritoes, MemeBox memeBox)
     {
         instance = mountainDewritoes;
         MALL = instance.getServer().getWorld("mall");
+        this.memeBox = memeBox;
     }
 
     public void morningListener()
@@ -132,14 +124,14 @@ public class AtmosphericManager implements Listener
         playSound(sound, null, 0);
     }
 
-    /** Play world-specific "ambient" sounds, when player changes worlds, after a 10 second delay */
     @EventHandler(priority = EventPriority.HIGHEST)
     void playAmbientMusic(PlayerChangedWorldEvent event)
     {
+        memeBox.switchPlayerShow(event.getPlayer(), event.getFrom());
         Player player = event.getPlayer();
         World world = player.getWorld();
         if (world == MALL)
-            playSound(musicManager.getMallSong(), MALL, 10);
+            memeBox.playSound("mall", musicManager.getMallSong());
     }
 
     /** Play sounds globally based on certain keywords

@@ -1,4 +1,4 @@
-package me.robomwm.MountainDewritoes.Sounds;
+package me.robomwm.MountainDewritoes.Music;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,16 +34,17 @@ class MusicManager
         boss.add(put("bulletformymeme", 119));
         boss.add(put("freshsqueezedmemes100followerspecial", 60+18));
         boss.add(put("intune", 57));
-        mall.add(put("animallobby", 46));
-        mall.add(put("buysomething", 31));
-        mall.add(put("fleamarket", 127));
-        mall.add(put("fleamarket2", 132));
-        mall.add(put("letsshop", 58));
-        //mall.add(put("nintendogsong", 70));
-        mall.add(put("splatoonbooyahbaseshopping", 90));
-        mall.add(put("torielnospeakamericano", 120+33));
-        mall.add(put("wiishopchannel", 90));
-        mall.add(put("buysomethingwillya", 60+16));
+//        mall.add(put("animallobby", 46));
+//        mall.add(put("buysomething", 31));
+//        mall.add(put("fleamarket", 127));
+//        mall.add(put("fleamarket2", 132));
+//        mall.add(put("letsshop", 58));
+//        //mall.add(put("nintendogsong", 70));
+//        mall.add(put("splatoonbooyahbaseshopping", 90));
+//        mall.add(put("torielnospeakamericano", 120+33));
+//        mall.add(put("wiishopchannel", 90));
+//        mall.add(put("buysomethingwillya", 60+16));
+        mall.add(put("http://k003.kiwi6.com/hotlink/itnxb4yw2p/splatoon_booyah_base_shopping.mp3", 90));
         morning.add(put("badblood", 51));
         morning.add(put("crazyfrog", 43));
         morning.add(put("justdoit1", 128));

@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.MountainDewritoes.Sounds.AtmosphericManager;
+import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,60 +15,44 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class SleepManagement implements Listener
 {
     MountainDewritoes instance;
-    AtmosphericManager atmosphericManager;
+    World world;
     boolean playedMorning = false;
     boolean playedNight = false;
 
-    public SleepManagement(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
+    public SleepManagement(MountainDewritoes mountainDewritoes)
     {
         this.instance = mountainDewritoes;
-        this.atmosphericManager = atmosphericManager;
+        world = instance.getServer().getWorld("world");
         monitorTimeInWorld();
     }
 
     /**Sync time and whatnot, calls TimeDawnEvent and Dusk, etc.*/
     void monitorTimeInWorld()
     {
-        World world = instance.getServer().getWorld("world");
         World cityworld = instance.getServer().getWorld("cityworld");
         World mall = instance.getServer().getWorld("mall");
         World spawn = instance.getServer().getWorld("minigames");
-
-        cityworld.setTime(world.getTime()); //Initial sync
-        mall.setTime(world.getTime());
-        spawn.setTime(world.getTime());
         new BukkitRunnable()
         {
             public void run()
             {
-                Long worldTime = world.getTime();
-                if (cityworld.getTime() != worldTime)
-                    cityworld.setTime(worldTime); //ReSync
-                mall.setTime(worldTime); //Should always be in sync
-                spawn.setTime(worldTime);
-                if (world.getTime() > 23000)
-                    morningEventCall();
-                else if (worldTime > 13000 && worldTime < 14000)
-                    nightEventCall();
+                syncTime(cityworld);
+                syncTime(mall);
+                syncTime(spawn);
             }
-        }.runTaskTimer(instance, 200L, 200L);
+        }.runTaskTimer(instance, 1200L, 1200L);
     }
 
-    void morningEventCall()
+    void syncTime(World targetWorld) //Allows for worlds to not be loaded (recovering from backup or w/e) without the entire plugin breaking
     {
-        if (playedMorning) return;
-        atmosphericManager.morningListener();
-        playedMorning = true;
-        playedNight = false;
+        if (targetWorld == null)
+            return;
+        if (world.getTime() == targetWorld.getTime())
+            return;
+        targetWorld.setTime(world.getTime());
     }
 
-    void nightEventCall()
-    {
-        if (playedNight) return;
-        atmosphericManager.nightListener();
-        playedNight = true;
-        playedMorning = false;
-    }
+
 
     /**
      * Eject player out of bed after sleeping for 4 seconds (and send them into a dream)
@@ -88,3 +72,24 @@ public class SleepManagement implements Listener
         }.runTaskLater(instance, 80L);
     }
 }
+
+//if (world.getTime() > 23000)
+//        morningEventCall();
+//        else if (worldTime > 13000 && worldTime < 14000)
+//        nightEventCall();
+
+//    void morningEventCall()
+//    {
+//        if (playedMorning) return;
+//        atmosphericManager.morningListener();
+//        playedMorning = true;
+//        playedNight = false;
+//    }
+//
+//    void nightEventCall()
+//    {
+//        if (playedNight) return;
+//        atmosphericManager.nightListener();
+//        playedNight = true;
+//        playedMorning = false;
+//    }
