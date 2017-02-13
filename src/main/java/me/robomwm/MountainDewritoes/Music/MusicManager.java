@@ -45,6 +45,7 @@ class MusicManager
 //        mall.add(put("wiishopchannel", 90));
 //        mall.add(put("buysomethingwillya", 60+16));
         mall.add(put("http://k003.kiwi6.com/hotlink/itnxb4yw2p/splatoon_booyah_base_shopping.mp3", 90));
+        mall.add(put("http://k003.kiwi6.com/hotlink/a7o2hbqws8/fresh_squeezed_memes.mp3", 60+18));
         morning.add(put("badblood", 51));
         morning.add(put("crazyfrog", 43));
         morning.add(put("justdoit1", 128));

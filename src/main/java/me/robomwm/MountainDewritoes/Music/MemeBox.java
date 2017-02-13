@@ -177,7 +177,7 @@ public class MemeBox implements Listener
             {
                 if (!player.isOnline())
                     return;
-                if (player.hasMetadata("MD_JUKEBOX"))
+                if (hasOpenedMemeBox(player))
                     return;
                 tellPlayerToOpenMemeBox(player, false);
             }
