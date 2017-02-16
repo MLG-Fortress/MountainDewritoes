@@ -220,7 +220,7 @@ public class DeathListener implements Listener
         player.setFlySpeed(0.0f);
         event.setRespawnLocation(player.getLocation()); //TODO: Might return a "safe" location (i.e. not where they died)
         player.setViewDistance(3);
-        instance.getLogger().info("player.isdead: " + String.valueOf(player.isDead());
+        instance.getLogger().info("player.isdead: " + String.valueOf(player.isDead()));
     }
 
     /**
