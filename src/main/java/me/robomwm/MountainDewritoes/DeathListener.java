@@ -74,6 +74,7 @@ public class DeathListener implements Listener
     void onPlayerSadness(PlayerDeathEvent event)
     {
         final Player player = event.getEntity();
+        instance.getLogger().info("player.isdead: " + String.valueOf(player.isDead()));
 
         /**
          Only drop some items (randomly determined)
