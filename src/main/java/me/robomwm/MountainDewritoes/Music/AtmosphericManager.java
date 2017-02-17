@@ -3,6 +3,8 @@ package me.robomwm.MountainDewritoes.Music;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +13,10 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -22,9 +28,9 @@ public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
     World MALL;
-    AtomicBoolean over10Minutes = new AtomicBoolean(true);
     MusicManager musicManager = new MusicManager();
     MemeBox memeBox;
+    //AtomicBoolean over10Minutes = new AtomicBoolean(true);
     //Pattern hello = Pattern.compile("\\bhello\\b|\\bhi\\b|\\bhey\\b|\\bhai\\b");
     //Pattern bye = Pattern.compile("\\bsee you\\b|\\bc u\\b|\\bbye\\b");
 
@@ -35,104 +41,113 @@ public class AtmosphericManager implements Listener
         this.memeBox = memeBox;
     }
 
-    public void morningListener()
-    {
-        playSoundGlobal(musicManager.getMorningSong());
-    }
+//    public void morningListener()
+//    {
+//        playSoundGlobal(musicManager.getMorningSong());
+//    }
+//
+//    public void nightListener()
+//    {
+//        playSoundGlobal(musicManager.getNightSong());
+//    }
 
-    public void nightListener()
-    {
-        playSoundGlobal(musicManager.getNightSong());
-    }
 
     /**
-     * Has it been 10 minutes since we last (globally) played a song?
-     * Used for global chat trigger primarily
+     * Idk what I'll be using this for tbh.
      */
-    boolean hasItBeen10minutes(boolean reset)
+    @Deprecated
+    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean force)
     {
-        if (over10Minutes.get())
+        Set<Player> players = new HashSet<>();
+        for (Entity entity : player.getNearbyEntities(radius,radius,radius))
         {
-            if (reset)
-                new BukkitRunnable()
-                {
-                    public void run()
-                    {
-                        over10Minutes.set(true);
-                    }
-                }.runTaskLater(instance, 20L * 60L * 10L);
-            return true;
+            if (entity.getType() == EntityType.PLAYER)
+                players.add((Player)entity);
         }
+        playSound(song, 0, players, force);
+    }
+
+    public void playSound(MusicThing song, @Nullable World world, boolean force)
+    {
+        if (world == null)
+            playSound(song, 0, instance.getServer().getOnlinePlayers(), force);
         else
-            return false;
+            playSound(song, 0, world.getPlayers(), force);
     }
 
-    /**Music always stops when player changes worlds*/
-    @EventHandler
-    void changeWorldResetMetadata(PlayerChangedWorldEvent event)
+    public void stopMusic(Player player)
     {
-        event.getPlayer().removeMetadata("LISTENING", instance);
-    }
-
-    /**In case metadata doesn't get removed for w/e reason*/
-    @EventHandler
-    void onQuitResetMetadata(PlayerChangedWorldEvent event)
-    {
-        event.getPlayer().removeMetadata("LISTENING", instance);
+        player.removeMetadata("MD_LISTENING", instance);
+        memeBox.stopSound(player);
     }
 
     /**
      * Plays sound to players, unless they're already listening to something else
      * "Thread-safe"
-     * @param sound Sound to play
-     * @param world World to play sound in. Null if global
+     * @param song Sound to play
      * @param delay How long to wait in seconds before playing the sound
      */
-    void playSound(MusicThing sound, World world, int delay)
+    public void playSound(MusicThing song, int delay, Collection<? extends Player> players, boolean override)
     {
         Long time = System.currentTimeMillis(); //Used to determine if metadata should be removed
         new BukkitRunnable()
         {
             public void run()
             {
-                for (Player player : instance.getServer().getOnlinePlayers())
+                for (Player player : players)
                 {
-                    if (player.hasMetadata("LISTENING") || player.hasMetadata("DEAD") || player.isDead())
+                    //Skip player if they're dead
+                    if (player.hasMetadata("DEAD") || player.isDead())
                         continue;
-                    if (world != null && player.getWorld() != world)
+                    //Skip player if they're already listening to another song (unless we're overriding)
+                    if (!override && player.hasMetadata("MD_LISTENING"))
                         continue;
-                    player.setMetadata("LISTENING", new FixedMetadataValue(instance, time));
+                    player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, time));
+                    memeBox.playSound(player, song);
+
+                    //Schedule removal of metadata
                     new BukkitRunnable()
                     {
                         public void run()
                         {
-                            if (!player.hasMetadata("LISTENING"))
+                            //another event removed metadata earlier (worldchange)
+                            if (!player.hasMetadata("MD_LISTENING"))
                                 return;
-                            //Can happen if another event removed metadata earlier (worldchange) and player received new music
-                            if (player.getMetadata("LISTENING").equals(time))
-                                player.removeMetadata("LISTENING", instance);
+
+                            //player received new music
+                            if (player.getMetadata("MD_LISTENING").get(0).asLong() == time)
+                                player.removeMetadata("MD_LISTENING", instance);
                         }
-                    }.runTaskLater(instance, sound.getLength());
-                    player.playSound(player.getLocation(), sound.getSoundName(), SoundCategory.AMBIENT, 3000000f, 1.0f);
+                    }.runTaskLater(instance, song.getLength());
+                    //player.playSound(player.getLocation(), song.getSoundName(), SoundCategory.AMBIENT, 3000000f, 1.0f);
                 }
             }
         }.runTaskLater(instance, delay * 20L);
     }
 
-    void playSoundGlobal(MusicThing sound)
+    /**Music always stops when player changes worlds*/
+    @EventHandler
+    void changeWorldResetMetadata(PlayerChangedWorldEvent event)
     {
-        playSound(sound, null, 0);
+        stopMusic(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    void playAmbientMusic(PlayerChangedWorldEvent event)
+    /**In case metadata doesn't get removed for w/e reason*/
+    @EventHandler
+    void onQuitResetMetadataAndStopMusic(PlayerChangedWorldEvent event)
     {
-        memeBox.switchPlayerShow(event.getPlayer(), event.getFrom());
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        if (world == MALL)
-            memeBox.playSound(MALL, musicManager.getMallSong());
+        stopMusic(event.getPlayer());
     }
+
+//    @EventHandler(priority = EventPriority.HIGHEST)
+//    void playAmbientMusic(PlayerChangedWorldEvent event)
+//    {
+//        //memeBox.switchPlayerShow(event.getPlayer(), event.getFrom());
+//        Player player = event.getPlayer();
+//        World world = player.getWorld();
+//        if (world == MALL)
+//            memeBox.playSound(MALL, musicManager.getMallSong());
+//    }
 
     /** Play sounds globally based on certain keywords
      * Totally not even close to ready yet, I might even scrap this idea*/
@@ -160,6 +175,28 @@ public class AtmosphericManager implements Listener
 //                //TODO: etc.
 //            }
 //        }.runTaskAsynchronously(instance);
+//    }
+
+    /**
+     * Has it been 10 minutes since we last (globally) played a song?
+     * Used for global chat trigger primarily
+     */
+//    boolean hasItBeen10minutes(boolean reset)
+//    {
+//        if (over10Minutes.get())
+//        {
+//            if (reset)
+//                new BukkitRunnable()
+//                {
+//                    public void run()
+//                    {
+//                        over10Minutes.set(true);
+//                    }
+//                }.runTaskLater(instance, 20L * 60L * 10L);
+//            return true;
+//        }
+//        else
+//            return false;
 //    }
 
 

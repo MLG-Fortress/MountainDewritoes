@@ -31,7 +31,7 @@ public class ResourcePackNotifier implements Listener
                 public void run()
                 {
                     if (event.getPlayer().isOnline())
-                        event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our meme resource pack. If this was a mistake, please enable it by editing the server in your servers list.");
+                        event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our meme resource pack. Please enable it by editing the server in your servers list.");
                 }
             }.runTaskLater(instance, 600L);
         }

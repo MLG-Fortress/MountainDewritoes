@@ -7,6 +7,7 @@ import net.mcjukebox.plugin.bukkit.api.models.Media;
 import net.mcjukebox.plugin.bukkit.events.ClientConnectEvent;
 import net.mcjukebox.plugin.bukkit.events.ClientDisconnectEvent;
 import net.mcjukebox.plugin.bukkit.managers.shows.ShowManager;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -50,25 +51,16 @@ public class MemeBox implements Listener
         specialWorlds.add(instance.getServer().getWorld("mall"));
     }
 
-    public void playSound(@Nullable World world, MusicThing song)
+    public void playSound(Player player, MusicThing song)
     {
         Media media = new Media(ResourceType.MUSIC, song.getURL());
         media.setLooping(false);
-        if (world == null)
-        {
-            for (Player player : instance.getServer().getOnlinePlayers())
-            {
-                if (specialWorlds.contains(player.getWorld()))
-                    continue;
-                //TODO: standard checks for certain situations
-                JukeboxAPI.play(player, media);
-            }
-        }
-        else
-        {
-            for (Player player : world.getPlayers())
-                JukeboxAPI.play(player, media);
-        }
+        JukeboxAPI.play(player, media);
+    }
+
+    public void stopSound(Player player)
+    {
+        JukeboxAPI.stopMusic(player);
     }
 
 //    public void playSound(String show, MusicThing song)
@@ -81,25 +73,25 @@ public class MemeBox implements Listener
 //        showManager.getShow(show).play(media);
 //    }
 
-    public void switchPlayerShow(Player player, World fromWorld)
-    {
-        World targetWorld = player.getWorld();
-        ShowManager showManager = JukeboxAPI.getShowManager();
-
-        if (fromWorld != null)
-        {
-            //Remove player from previous show, if necessary
-            if (specialWorlds.contains(targetWorld) != specialWorlds.contains(fromWorld))
-                showManager.getShow(fromWorld.getName()).removeMember(player);
-            else //Otherwise, there's no need to change this player's show
-                return;
-        }
-
-        if (specialWorlds.contains(player.getWorld()))
-            showManager.getShow(player.getWorld().getName()).addMember(player, false);
-        else
-            showManager.getShow("normal").addMember(player, false);
-    }
+//    public void switchPlayerShow(Player player, World fromWorld)
+//    {
+//        World targetWorld = player.getWorld();
+//        ShowManager showManager = JukeboxAPI.getShowManager();
+//
+//        if (fromWorld != null)
+//        {
+//            //Remove player from previous show, if necessary
+//            if (specialWorlds.contains(targetWorld) != specialWorlds.contains(fromWorld))
+//                showManager.getShow(fromWorld.getName()).removeMember(player);
+//            else //Otherwise, there's no need to change this player's show
+//                return;
+//        }
+//
+//        if (specialWorlds.contains(player.getWorld()))
+//            showManager.getShow(player.getWorld().getName()).addMember(player, false);
+//        else
+//            showManager.getShow("normal").addMember(player, false);
+//    }
 
     public void addPlayerShow(String show, Player player)
     {
@@ -139,7 +131,12 @@ public class MemeBox implements Listener
         else if (connections > 1)
             connectedPlayers.put(username, --connections);
         else
+        {
             connectedPlayers.remove(username);
+            Player player = instance.getServer().getPlayer(event.getUsername());
+            if (player != null)
+                player.sendMessage(ChatColor.RED + "Ayyy, ur not supposed 2 close da memebox! Keep it open!");
+        }
 
 //        Player player = instance.getServer().getPlayer(event.getUsername());
 //        if (player == null)
@@ -190,18 +187,17 @@ public class MemeBox implements Listener
     void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
-        player.performCommand("jukebox");
-//        new BukkitRunnable()
-//        {
-//            public void run()
-//            {
-//                if (!player.isOnline())
-//                    return;
-//                if (hasOpenedMemeBox(player))
-//                    return;
-//                tellPlayerToOpenMemeBox(player, false);
-//            }
-//        }.runTaskLater(instance, 400L);
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (!player.isOnline())
+                    return;
+                if (hasOpenedMemeBox(player))
+                    return;
+                tellPlayerToOpenMemeBox(player, false);
+            }
+        }.runTaskLater(instance, 230L);
 
     }
 
