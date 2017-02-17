@@ -93,7 +93,8 @@ public class DeathListener implements Listener
         event.setRespawnLocation(respawnLocation);
 
         //Return items
-        if (deathItems.containsKey(player)) {
+        if (deathItems.containsKey(player))
+        {
             for (ItemStack drop : deathItems.get(player))
             {
                 player.getInventory().addItem(drop);
