@@ -10,7 +10,7 @@ import org.bukkit.event.HandlerList;
  *
  * @author RoboMWM
  */
-public class MonsterTargetEvent extends Event
+public class MonsterTargetPlayerEvent extends Event
 {    // Custom Event Requirements
     private static final HandlerList handlers = new HandlerList();
     public static HandlerList getHandlerList() {
@@ -24,7 +24,7 @@ public class MonsterTargetEvent extends Event
     Monster monster;
     Player player;
 
-    public MonsterTargetEvent(Monster monster, Player player)
+    public MonsterTargetPlayerEvent(Monster monster, Player player)
     {
         this.monster = monster;
         this.player = player;

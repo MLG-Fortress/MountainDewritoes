@@ -45,20 +45,27 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     DamageIndicators damageIndicators;
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
+    private NSA nsa;
 
     public boolean isSurvivalWorld(World world)
     {
         return survivalWorlds.contains(world);
     }
 
+    public NSA getNSA()
+    {
+        return nsa;
+    }
+
     public void onEnable()
     {
+        //Wow, lots-o-listeners
+
         damageIndicators = new DamageIndicators(this);
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
         ClanManager clanManager = sc.getClanManager();
         pm.registerEvents(this, this);
-        //Modifies PlayerListName and prefixes
         pm.registerEvents(new SimpleClansListener(this, clanManager), this);
         pm.registerEvents(new ChatListener(this, clanManager), this);
         pm.registerEvents(new LongFallBoots(), this);
@@ -73,13 +80,19 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new HitSound(this), this);
         pm.registerEvents(new SpawnWorldListener(this), this);
         pm.registerEvents(new GamemodeInventoryManager(), this);
-        //pm.registerEvents(new Footsteps(), this);
         pm.registerEvents(new NoKnockback(this), this);
         pm.registerEvents(damageIndicators, this);
         pm.registerEvents(new SleepManagement(this), this);
         pm.registerEvents(new ResourcePackNotifier(this), this);
+
+        //Plugin-dependent listeners
+
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
             pm.registerEvents(new MemeBox(this), this);
+
+        //Classes other plugins might want to use
+        nsa = new NSA(this);
+        pm.registerEvents(nsa, this);
 
         //Initialize commonly-used sets
 

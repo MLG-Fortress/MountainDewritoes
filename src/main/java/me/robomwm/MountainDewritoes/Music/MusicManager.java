@@ -28,9 +28,10 @@ class MusicManager
     {
         //TODO: create MusicThings and store them in demSongz
         //TODO: then obviously make copies for mall and whatnot so we can get a random song for a specific category
-        battle.add(put("andyougotmesayin", 35));
-        battle.add(put("SteelDeDeDrum", 60+36));
-        battle.add(put("fight", 60));
+//        battle.add(put("andyougotmesayin", 35));
+//        battle.add(put("SteelDeDeDrum", 60+36));
+//        battle.add(put("fight", 60));
+        battle.add(put("http://k003.kiwi6.com/hotlink/4p667bfkgx/robbierottenvisitsspiralmountain.mp3\n", 61));
         boss.add(put("bulletformymeme", 119));
         boss.add(put("freshsqueezedmemes100followerspecial", 60+18));
         boss.add(put("intune", 57));
@@ -110,5 +111,10 @@ class MusicManager
     public MusicThing getNightSong()
     {
         return randomizer(night);
+    }
+
+    public MusicThing getFightSong()
+    {
+        return randomizer(battle);
     }
 }

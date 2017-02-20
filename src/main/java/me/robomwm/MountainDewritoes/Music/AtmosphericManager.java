@@ -1,6 +1,8 @@
 package me.robomwm.MountainDewritoes.Music;
 
+import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -14,7 +16,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,29 +55,6 @@ public class AtmosphericManager implements Listener
 //        playSoundGlobal(musicManager.getNightSong());
 //    }
 
-
-    /**
-     * Idk what I'll be using this for tbh.
-     */
-    @Deprecated
-    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean force)
-    {
-        Set<Player> players = new HashSet<>();
-        for (Entity entity : player.getNearbyEntities(radius,radius,radius))
-        {
-            if (entity.getType() == EntityType.PLAYER)
-                players.add((Player)entity);
-        }
-        playSound(song, 0, players, force);
-    }
-
-    public void playSound(MusicThing song, @Nullable World world, boolean force)
-    {
-        if (world == null)
-            playSound(song, 0, instance.getServer().getOnlinePlayers(), force);
-        else
-            playSound(song, 0, world.getPlayers(), force);
-    }
 
     public void stopMusic(Player player)
     {
@@ -125,6 +106,32 @@ public class AtmosphericManager implements Listener
         }.runTaskLater(instance, delay * 20L);
     }
 
+    /**
+     * Idk what I'll be using this for tbh.
+     */
+    @Deprecated
+    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean force)
+    {
+        Set<Player> players = new HashSet<>();
+        for (Entity entity : player.getNearbyEntities(radius,radius,radius))
+        {
+            if (entity.getType() == EntityType.PLAYER)
+                players.add((Player)entity);
+        }
+        playSound(song, 0, players, force);
+    }
+    public void playSound(MusicThing song, @Nullable World world, boolean force)
+    {
+        if (world == null)
+            playSound(song, 0, instance.getServer().getOnlinePlayers(), force);
+        else
+            playSound(song, 0, world.getPlayers(), force);
+    }
+    public void playSound(MusicThing song, int delay, Player player, boolean force)
+    {
+        playSound(song, delay, Collections.singletonList(player), force);
+    }
+
     /**Music always stops when player changes worlds*/
     @EventHandler
     void changeWorldResetMetadata(PlayerChangedWorldEvent event)
@@ -137,6 +144,16 @@ public class AtmosphericManager implements Listener
     void onQuitResetMetadataAndStopMusic(PlayerChangedWorldEvent event)
     {
         stopMusic(event.getPlayer());
+    }
+
+    @EventHandler
+    void onMobTarget(MonsterTargetPlayerEvent event)
+    {
+        if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
+            return;
+        NSA nsa = instance.getNSA();
+        if (nsa.howManyTargetingPlayer(event.getPlayer()) > 3)
+            playSound(musicManager.getFightSong(), 0, event.getPlayer(), true);
     }
 
 //    @EventHandler(priority = EventPriority.HIGHEST)

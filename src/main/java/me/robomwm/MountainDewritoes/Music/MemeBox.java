@@ -34,9 +34,7 @@ import java.util.Set;
 
 /**
  * Created by RoboMWM on 11/5/2016.
- * Provides jukeboxes to play "additional tracks"
- * Does NOT use AtmosphericManager's metadata system
- * (i.e. retaining vanilla behavior)
+ * @author RoboMWM
  */
 public class MemeBox implements Listener
 {
@@ -63,46 +61,6 @@ public class MemeBox implements Listener
         JukeboxAPI.stopMusic(player);
     }
 
-//    public void playSound(String show, MusicThing song)
-//    {
-//        ShowManager showManager = JukeboxAPI.getShowManager();
-//        if (show == null)
-//            show = "default";
-//        Media currentlyPlaying = showManager.getShow(show).getCurrentTrack();
-//        instance.getLogger().info("currentlyPlaying is null: " + String.valueOf(currentlyPlaying == null));
-//        showManager.getShow(show).play(media);
-//    }
-
-//    public void switchPlayerShow(Player player, World fromWorld)
-//    {
-//        World targetWorld = player.getWorld();
-//        ShowManager showManager = JukeboxAPI.getShowManager();
-//
-//        if (fromWorld != null)
-//        {
-//            //Remove player from previous show, if necessary
-//            if (specialWorlds.contains(targetWorld) != specialWorlds.contains(fromWorld))
-//                showManager.getShow(fromWorld.getName()).removeMember(player);
-//            else //Otherwise, there's no need to change this player's show
-//                return;
-//        }
-//
-//        if (specialWorlds.contains(player.getWorld()))
-//            showManager.getShow(player.getWorld().getName()).addMember(player, false);
-//        else
-//            showManager.getShow("normal").addMember(player, false);
-//    }
-
-    public void addPlayerShow(String show, Player player)
-    {
-        JukeboxAPI.getShowManager().getShow(show).addMember(player, false);
-    }
-
-    public void removePlayerShow(String show, Player player)
-    {
-        JukeboxAPI.getShowManager().getShow(show).removeMember(player);
-    }
-
     @EventHandler
     void memeBoxOpened(ClientConnectEvent event)
     {
@@ -112,13 +70,6 @@ public class MemeBox implements Listener
             connectedPlayers.put(username, 1);
         else
             connectedPlayers.put(username, ++connections);
-//        Player player = instance.getServer().getPlayer(event.getUsername());
-//        if (player == null)
-//        {
-//            instance.getLogger().warning("An offline player connected to the memebox??");
-//            return;
-//        }
-//        player.setMetadata("MD_MEMEBOX", new FixedMetadataValue(instance, true));
     }
 
     @EventHandler
@@ -137,14 +88,6 @@ public class MemeBox implements Listener
             if (player != null)
                 player.sendMessage(ChatColor.RED + "Ayyy, ur not supposed 2 close da memebox! Keep it open!");
         }
-
-//        Player player = instance.getServer().getPlayer(event.getUsername());
-//        if (player == null)
-//        {
-//            instance.getLogger().warning("Maybe the player quit the server first?");
-//            return;
-//        }
-//        player.removeMetadata("MD_MEMEBOX", instance);
     }
 
     public boolean hasOpenedMemeBox(Player player)
@@ -282,4 +225,34 @@ public class MemeBox implements Listener
         block.getWorld().playSound(loc, songToPlay, 4.0f, 1.0f);
         block.getRelative(event.getBlockFace()).setType(Material.AIR);
     }
+
+//    public void playSound(String show, MusicThing song)
+//    {
+//        ShowManager showManager = JukeboxAPI.getShowManager();
+//        if (show == null)
+//            show = "default";
+//        Media currentlyPlaying = showManager.getShow(show).getCurrentTrack();
+//        instance.getLogger().info("currentlyPlaying is null: " + String.valueOf(currentlyPlaying == null));
+//        showManager.getShow(show).play(media);
+//    }
+
+//    public void switchPlayerShow(Player player, World fromWorld)
+//    {
+//        World targetWorld = player.getWorld();
+//        ShowManager showManager = JukeboxAPI.getShowManager();
+//
+//        if (fromWorld != null)
+//        {
+//            //Remove player from previous show, if necessary
+//            if (specialWorlds.contains(targetWorld) != specialWorlds.contains(fromWorld))
+//                showManager.getShow(fromWorld.getName()).removeMember(player);
+//            else //Otherwise, there's no need to change this player's show
+//                return;
+//        }
+//
+//        if (specialWorlds.contains(player.getWorld()))
+//            showManager.getShow(player.getWorld().getName()).addMember(player, false);
+//        else
+//            showManager.getShow("normal").addMember(player, false);
+//    }
 }

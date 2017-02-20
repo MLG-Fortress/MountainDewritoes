@@ -1,8 +1,6 @@
-package me.robomwm.MountainDewritoes.Music;
+package me.robomwm.MountainDewritoes;
 
-import me.robomwm.MountainDewritoes.Events.MonsterTargetEvent;
-import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.entity.EntityType;
+import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,13 +16,13 @@ import java.util.Set;
 /**
  * Created on 2/13/2017.
  * @author RoboMWM
- * Currently in Music package since that's where we're using it, but I'll probably move it out... s0000n
+ * Various trackers
  */
-public class TargetTracker implements Listener
+public class NSA implements Listener
 {
     MountainDewritoes instance;
 
-    TargetTracker(MountainDewritoes mountainDewritoes)
+    NSA(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
     }
@@ -32,17 +30,10 @@ public class TargetTracker implements Listener
     Map<Player, Set<Monster>> targetedPlayers = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void onPlayerTargeted(EntityTargetLivingEntityEvent event)
+    void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
-        if (event.getTarget() == null) //forgot/lost the target
-            return;
-        if (event.getTarget().getType() != EntityType.PLAYER)
-            return;
-        if (!(event.getEntity() instanceof Monster))
-            return;
-
-        Player player = (Player)event.getTarget();
-        Monster monster = (Monster)event.getEntity();
+        Player player = event.getPlayer();
+        Monster monster = event.getMonster();
 
         if (!targetedPlayers.containsKey(player))
         {
@@ -52,9 +43,6 @@ public class TargetTracker implements Listener
         }
         else
             targetedPlayers.get(player).add(monster);
-
-        //Call MonsterTargetEvent
-        instance.getServer().getPluginManager().callEvent(new MonsterTargetEvent(monster, player));
     }
 
     public boolean isPlayerTargeted(Player player)
