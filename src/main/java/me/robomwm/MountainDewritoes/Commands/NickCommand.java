@@ -59,17 +59,10 @@ public class NickCommand implements CommandExecutor
             }
             catch (Exception e)
             {
-                try
+                color = ChatColor.getByChar(args[0]);
+                if (color == null && args[0].length() > 1)
                 {
-                    color = ChatColor.getByChar(args[0]);
-                }
-                catch (Exception ex)
-                {
-                    try
-                    {
-                        color = ChatColor.getByChar(args[0].substring(1));
-                    }
-                    catch (Exception exc) {}
+                    color = ChatColor.getByChar(args[0].substring(1));
                 }
             }
             if (color == null || isBannedColor(color))
