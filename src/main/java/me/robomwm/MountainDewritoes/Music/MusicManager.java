@@ -31,7 +31,8 @@ class MusicManager
 //        battle.add(put("andyougotmesayin", 35));
 //        battle.add(put("SteelDeDeDrum", 60+36));
 //        battle.add(put("fight", 60));
-        battle.add(put("http://k003.kiwi6.com/hotlink/4p667bfkgx/robbierottenvisitsspiralmountain.mp3\n", 61));
+        battle.add(put("http://k003.kiwi6.com/hotlink/4p667bfkgx/robbierottenvisitsspiralmountain.mp3", 61));
+        battle.add(put("http://k003.kiwi6.com/hotlink/hgomo9zqa1/The_True_Battle_Is_Yet_To_Come_Original_Orchestral_Composition_.mp3", 60+49));
         boss.add(put("bulletformymeme", 119));
         boss.add(put("freshsqueezedmemes100followerspecial", 60+18));
         boss.add(put("intune", 57));

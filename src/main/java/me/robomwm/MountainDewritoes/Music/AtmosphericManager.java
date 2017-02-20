@@ -152,7 +152,7 @@ public class AtmosphericManager implements Listener
         if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
             return;
         NSA nsa = instance.getNSA();
-        if (nsa.howManyTargetingPlayer(event.getPlayer()) > 2)
+        if (nsa.howManyTargetingPlayer(event.getPlayer()) > 3)
             playSound(musicManager.getFightSong(), 0, event.getPlayer(), false);
     }
 

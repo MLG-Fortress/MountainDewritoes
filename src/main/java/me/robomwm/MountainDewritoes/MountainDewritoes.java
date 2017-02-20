@@ -94,7 +94,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         //Classes other plugins might want to use
         nsa = new NSA(this);
+        MemeBox memeBox = new MemeBox(this);
+
         pm.registerEvents(nsa, this);
+        pm.registerEvents(memeBox, this);
+        pm.registerEvents(new AtmosphericManager(this, memeBox), this);
 
         //Initialize commonly-used sets
 
