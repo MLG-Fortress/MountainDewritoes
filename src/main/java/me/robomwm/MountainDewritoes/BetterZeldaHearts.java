@@ -43,7 +43,7 @@ public class BetterZeldaHearts implements Listener
         if (!(event.getEntity() instanceof Monster))
             return;
         Monster entity = (Monster)event.getEntity();
-        if (entity.getKiller() == null || entity.getKiller().getType() != EntityType.PLAYER)
+        if (entity.getKiller() == null)
             return;
 
         //Should we spawn a heart (heals on pickup)
