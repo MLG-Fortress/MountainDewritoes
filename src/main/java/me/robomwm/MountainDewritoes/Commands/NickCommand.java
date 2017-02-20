@@ -27,7 +27,7 @@ public class NickCommand implements CommandExecutor
         int i = 0;
         for (String ok : colorThingy)
         {
-            builder.append(ChatColor.valueOf(ok));
+            builder.append(ChatColor.valueOf(ok.toUpperCase()));
             builder.append(ok);
             builder.append(", ");
             if (i++ > 3)
@@ -55,7 +55,7 @@ public class NickCommand implements CommandExecutor
             ChatColor color = null;
             try
             {
-                color = ChatColor.valueOf(args[0]);
+                color = ChatColor.valueOf(args[0].toUpperCase());
             }
             catch (Exception e)
             {
