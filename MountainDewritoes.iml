@@ -63,7 +63,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:VaultAPI:1.6" level="project" />
     <orderEntry type="library" name="Maven: com.github.MLG-Fortress:BetterTPA:3.4" level="project" />
     <orderEntry type="library" name="Maven: com.github.ProjectKorra:ProjectKorra:cbb3581a12" level="project" />
-    <orderEntry type="library" name="Maven: com.github.MLG-Fortress:TheThuum:0.6" level="project" />
+    <orderEntry type="library" name="Maven: com.github.MLG-Fortress:TheThuum:0.7" level="project" />
     <orderEntry type="library" name="Maven: com.github.oliverdunk:JukeboxAPI:v2.2" level="project" />
     <orderEntry type="library" name="Maven: org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT" level="project" />
   </component>

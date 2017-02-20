@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
+import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.Music.MemeBox;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
@@ -42,8 +43,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     DamageIndicators damageIndicators;
-    String acceptableColors;
-    Set<World> safeWorlds = new HashSet<>();
+    private Set<World> safeWorlds = new HashSet<>();
+    private Set<World> survivalWorlds = new HashSet<>();
+
+    public boolean isSurvivalWorld(World world)
+    {
+        return survivalWorlds.contains(world);
+    }
 
     public void onEnable()
     {
@@ -74,17 +80,19 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new ResourcePackNotifier(this), this);
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
             pm.registerEvents(new MemeBox(this), this);
-        StringBuilder builder = new StringBuilder();
-        Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
-        for (String ok : colorThingy)
-        {
-            builder.append(ChatColor.valueOf(ok.toUpperCase()));
-            builder.append(ok);
-            builder.append(", ");
-        }
-        acceptableColors = builder.toString().substring(0, builder.length() - 2);
+
+        //Initialize commonly-used sets
+
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("minigames"));
+        survivalWorlds.add(getServer().getWorld("world"));
+        survivalWorlds.add(getServer().getWorld("world_nether"));
+        survivalWorlds.add(getServer().getWorld("world_the_end"));
+        survivalWorlds.add(getServer().getWorld("cityworld"));
+
+        //Commands
+
+        getCommand("nick").setExecutor(new NickCommand());
     }
 
     public void onDisable()
@@ -142,88 +150,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 //Otherwise, another addUsingTitle had overrided our previous addUsingTitle invokation
             }
         }.runTaskLater(this, ticks);
-    }
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
-    {
-        Player player = (Player)sender;
-
-        if (args.length < 1)
-        {
-            player.sendMessage("/nick <color>");
-            player.sendMessage("colors: " + acceptableColors);
-            return true;
-        }
-
-        if (cmd.getName().equalsIgnoreCase("nick"))
-        {
-            ChatColor color = ChatColor.valueOf(args[0].toUpperCase());
-            if (color == null)
-                color = ChatColor.getByChar(args[0]);
-            if (color == null)
-            {
-                try
-                {
-                    color = ChatColor.getByChar(args[0].substring(1));
-                }
-                catch (Exception e){} //No I don't care
-            }
-            if (color == null || isBannedColor(color))
-            {
-                player.sendMessage("Valid colors: " + acceptableColors);
-                return true;
-            }
-            player.performCommand("enick " + convertColor(color) + player.getName());
-            return true;
-        }
-        return false;
-    }
-
-    boolean isBannedColor(ChatColor color)
-    {
-        if (color.isFormat())
-            return true;
-
-        switch (color)
-        {
-            case BLACK:
-            case DARK_GRAY:
-            case GRAY:
-            case WHITE:
-                return true;
-        }
-        return false;
-    }
-
-    String convertColor(ChatColor color)
-    {
-        switch (color)
-        {
-            case AQUA:
-                return "&b";
-            case BLUE:
-                return "&9";
-            case DARK_AQUA:
-                return "&3";
-            case DARK_BLUE:
-                return "&1";
-            case DARK_GREEN:
-                return "&2";
-            case DARK_PURPLE:
-                return "&5";
-            case DARK_RED:
-                return "&4";
-            case GOLD:
-                return "&6";
-            case GREEN:
-                return "&a";
-            case LIGHT_PURPLE:
-                return "&d";
-            case RED:
-                return "&c";
-            case YELLOW:
-                return "&e";
-        }
-        return null;
     }
 
     /**
@@ -293,11 +219,17 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }
     }
 
+    /**
+     * Don't allow shouts to push dropped items in the mall (primarily to preserve showcases)
+     * But also to prevent usage when "dead"
+     * @param event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     void onExplosionPushesItemsButNotViaATNTEntity(ShoutAreaOfEffectEvent event)
     {
-        if (!safeWorlds.contains(event.getAffectedEntities().get(0).getWorld()))
+        if (!safeWorlds.contains(event.getPlayer().getWorld()) && !event.getPlayer().hasMetadata("DEAD"))
             return;
+
         List<Entity> newEntities = new ArrayList<>();
         for (Entity nearbyEntity : event.getAffectedEntities())
         {
@@ -309,6 +241,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         event.setAffectedEntities(newEntities);
     }
 
+    /**
+     * Send an actionbar with a customizable duration
+     * @param player
+     * @param seconds
+     * @param message
+     */
     public void timedActionBar(Player player, int seconds, String message)
     {
         if (message == null || player == null)

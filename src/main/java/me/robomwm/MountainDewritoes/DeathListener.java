@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes;
 
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,10 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -27,17 +24,11 @@ public class DeathListener implements Listener
     MountainDewritoes instance;
     HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
     Location defaultRespawnLocation;
-    Set<World> ignoreWorlds = new HashSet<>();
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
         defaultRespawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
-        ignoreWorlds.add(instance.getServer().getWorld("dogepvp"));
-    }
 
-    boolean isIgnoredWorld(World world)
-    {
-        return ignoreWorlds.contains(world);
     }
 
     @EventHandler
@@ -46,7 +37,7 @@ public class DeathListener implements Listener
         final Player player = event.getEntity();
 
         //Only drop some items (randomly determined)
-        if (isIgnoredWorld(player.getWorld()))
+        if (instance.isSurvivalWorld(player.getWorld()))
         {
             List<ItemStack> drops = event.getDrops();
             Iterator<ItemStack> iterator = drops.iterator();
@@ -62,7 +53,7 @@ public class DeathListener implements Listener
             deathItems.put(player, dropsToReturn);
         }
 
-        //Only lose 8 XP (vs. all XP on death)
+        //Only lose 8 levels of XP (vs. all XP on death)
         if (player.getLevel() > 8)
             event.setNewLevel(player.getLevel() - 8);
 
@@ -84,12 +75,10 @@ public class DeathListener implements Listener
     void onPlayerRespawn(PlayerRespawnEvent event)
     {
         Player player = event.getPlayer();
-        //Determine final respawn location
-        Location respawnLocation = defaultRespawnLocation;
-        boolean ignoredWorld = isIgnoredWorld(player.getWorld());
-        if (ignoredWorld)
-            respawnLocation = player.getWorld().getSpawnLocation();
 
+        Location respawnLocation = defaultRespawnLocation;
+        if (!instance.isSurvivalWorld(player.getWorld()))
+            respawnLocation = player.getWorld().getSpawnLocation();
         event.setRespawnLocation(respawnLocation);
 
         //Return items
