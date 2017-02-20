@@ -26,7 +26,7 @@ public class ReverseOsmosis implements Listener
 {
     MountainDewritoes instance;
 
-    ReverseOsmosis(MountainDewritoes mountainDewritoes)
+    public ReverseOsmosis(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
     }

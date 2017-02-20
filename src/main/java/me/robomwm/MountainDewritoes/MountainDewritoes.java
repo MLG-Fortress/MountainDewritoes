@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
+import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.Music.MemeBox;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
@@ -84,6 +85,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(damageIndicators, this);
         pm.registerEvents(new SleepManagement(this), this);
         pm.registerEvents(new ResourcePackNotifier(this), this);
+        pm.registerEvents(new ReverseOsmosis(this), this);
 
         //Plugin-dependent listeners
 
@@ -193,7 +195,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     this.cancel();
                 }
             }
-        }.runTaskTimer(this, 200L, 100L);
+        }.runTaskTimer(this, 300L, 100L);
     }
 
     /**
