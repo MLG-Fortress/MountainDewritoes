@@ -216,7 +216,7 @@ public class AtmosphericManager implements Listener
         switch(disc)
         {
             case GOLD_RECORD:
-                songToPlay = musicManager.getMorningSong();
+                songToPlay = musicManager.getMallSong();
                 break;
             case GREEN_RECORD:
             case RECORD_3:
@@ -235,7 +235,19 @@ public class AtmosphericManager implements Listener
         if (songToPlay == null)
             return;
 
+        final MusicThing song = songToPlay;
+
         jukebox.setMetadata("MD_JUKEBOX", new FixedMetadataValue(instance, songToPlay));
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (song == jukebox.getMetadata("MD_JUKEBOX").get(0).value())
+                jukebox.removeMetadata("MD_JUKEBOX", instance);
+            }
+        }.runTaskLater(instance, song.getLength());
+        playSoundNearPlayer(song, player, 64, true);
     }
 
     /** Play sounds globally based on certain keywords

@@ -46,7 +46,6 @@ public class MemeBox implements Listener
     public MemeBox(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        instance.getServer().getPluginManager().registerEvents(new AtmosphericManager(instance, this), instance);
         specialWorlds.add(instance.getServer().getWorld("mall"));
     }
 
