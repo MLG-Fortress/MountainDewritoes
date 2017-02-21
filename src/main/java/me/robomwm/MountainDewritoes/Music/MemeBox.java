@@ -40,13 +40,11 @@ import java.util.Set;
 public class MemeBox implements Listener
 {
     MountainDewritoes instance;
-    Set<World> specialWorlds = new HashSet<>();
     Map<String, Integer> connectedPlayers = new HashMap<>();
 
     public MemeBox(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        specialWorlds.add(instance.getServer().getWorld("mall"));
     }
 
     public void playSound(Player player, MusicThing song)
