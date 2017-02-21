@@ -23,6 +23,7 @@ class MusicManager
     private List<MusicThing> pokemon = new ArrayList<>();
     private List<MusicThing> weather = new ArrayList<>();
     private List<MusicThing> running = new ArrayList<>();
+    private List<MusicThing> menu = new ArrayList<>();
 
     public MusicManager()
     {
@@ -33,6 +34,9 @@ class MusicManager
 //        battle.add(put("fight", 60));
         battle.add(put("http://k003.kiwi6.com/hotlink/4p667bfkgx/robbierottenvisitsspiralmountain.mp3", 61));
         battle.add(put("http://k003.kiwi6.com/hotlink/hgomo9zqa1/The_True_Battle_Is_Yet_To_Come_Original_Orchestral_Composition_.mp3", 60+49));
+        battle.add(put("http://k003.kiwi6.com/hotlink/ao38zrqlzw/battle_beep_beep_beep.mp3", 120+41));
+        battle.add(put("http://k003.kiwi6.com/hotlink/3msvwn9mix/battle_we_are_the_strongest.mp3", 120+41));
+        battle.add(put("http://k003.kiwi6.com/hotlink/5bm6q2001i/battle_The_Grand_Show.mp3", 120+34));
         boss.add(put("bulletformymeme", 119));
         boss.add(put("freshsqueezedmemes100followerspecial", 60+18));
         boss.add(put("intune", 57));
@@ -41,13 +45,17 @@ class MusicManager
 //        mall.add(put("fleamarket", 127));
 //        mall.add(put("fleamarket2", 132));
 //        mall.add(put("letsshop", 58));
-//        //mall.add(put("nintendogsong", 70));
+//        mall.add(put("nintendogsong", 70));
 //        mall.add(put("splatoonbooyahbaseshopping", 90));
 //        mall.add(put("torielnospeakamericano", 120+33));
 //        mall.add(put("wiishopchannel", 90));
 //        mall.add(put("buysomethingwillya", 60+16));
         mall.add(put("http://k003.kiwi6.com/hotlink/itnxb4yw2p/splatoon_booyah_base_shopping.mp3", 90));
-        mall.add(put("http://k003.kiwi6.com/hotlink/a7o2hbqws8/fresh_squeezed_memes.mp3", 60+18));
+        mall.add(put("http://k003.kiwi6.com/hotlink/7dffrye0i1/mall_sanicwave.mp3", 60+60+60+35));
+        mall.add(put("http://k003.kiwi6.com/hotlink/hr3e89idcx/mall_animal_lobby.mp3", 46));
+        mall.add(put("http://k003.kiwi6.com/hotlink/va0jj0xhuo/mall_flea_market_circulation.mp3", 120+7));
+        mall.add(put("http://k003.kiwi6.com/hotlink/b5fc4twixl/mall_lets_shop.mp3", 60));
+        mall.add(put("http://k003.kiwi6.com/hotlink/d8ej3ak8cd/mall_You_reposted_in_the_wrong_flea_market.mp3", 60+46));
         morning.add(put("badblood", 51));
         morning.add(put("crazyfrog", 43));
         morning.add(put("justdoit1", 128));

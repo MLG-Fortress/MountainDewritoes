@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Events;
 
+import org.bukkit.Material;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -24,16 +25,23 @@ public class JukeboxInteractEvent extends Event
 
     Player player;
     Jukebox jukebox;
+    Material disc;
 
-    public JukeboxInteractEvent(Player player, Jukebox block)
+    public JukeboxInteractEvent(Player player, Jukebox block, Material disc)
     {
         this.jukebox = block;
         this.player = player;
+        this.disc = disc;
     }
 
     public Jukebox getJukebox()
     {
         return jukebox;
+    }
+
+    public Material getDisc()
+    {
+        return disc;
     }
 
     public Player getPlayer()

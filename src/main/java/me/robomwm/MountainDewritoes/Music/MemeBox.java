@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Music;
 
+import me.robomwm.MountainDewritoes.Events.JukeboxInteractEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.mcjukebox.plugin.bukkit.api.JukeboxAPI;
 import net.mcjukebox.plugin.bukkit.api.ResourceType;
@@ -151,79 +152,6 @@ public class MemeBox implements Listener
         else
             player.sendMessage("Pls open da /memebox 4 a memetastic experience");
         player.performCommand("jukebox");
-    }
-
-    //@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void onPlayerInteractJukebox(PlayerInteractEvent event)
-    {
-        Player player = event.getPlayer();
-        Material disc = event.getMaterial();
-        Block block = event.getClickedBlock();
-
-        if (player.isSneaking())
-            return;
-        if (event.getClickedBlock().getType() != Material.JUKEBOX)
-            return;
-
-        if (!hasOpenedMemeBox(player))
-        {
-            tellPlayerToOpenMemeBox(player, true);
-        }
-
-        Jukebox jukebox = (Jukebox)event.getClickedBlock().getState();
-        List<MetadataValue> blockMetadata = block.getMetadata("SONG");
-
-        Location loc = block.getLocation();
-
-        //If there's already a disc in here, eject it and stop playing
-        if (jukebox.eject())
-        {
-            //Don't stop sounds if... we didn't start the sound...
-            if (!block.hasMetadata("SONG"))
-                return;
-
-            String songToStop =  blockMetadata.get(0).asString();
-            for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
-            {
-                if (onlinePlayer.getLocation().distanceSquared(loc) < 10000)
-                    player.stopSound(songToStop);
-            }
-            block.removeMetadata("SONG", instance);
-            return;
-        }
-
-        if (!disc.isRecord())
-            return;
-
-        //Otherwise, let's play a song, yay
-        String songToPlay = null;
-
-
-        switch(disc)
-        {
-            case GOLD_RECORD:
-                songToPlay = "custom-stuff";
-                break;
-            case GREEN_RECORD:
-            case RECORD_3:
-            case RECORD_4:
-            case RECORD_5:
-            case RECORD_6:
-            case RECORD_7:
-            case RECORD_8:
-            case RECORD_9:
-            case RECORD_10:
-            case RECORD_11:
-            case RECORD_12:
-                break;
-        }
-
-        if (songToPlay == null)
-            return;
-
-        block.setMetadata("SONG", new FixedMetadataValue(instance, songToPlay));
-        block.getWorld().playSound(loc, songToPlay, 4.0f, 1.0f);
-        block.getRelative(event.getBlockFace()).setType(Material.AIR);
     }
 
 //    public void playSound(String show, MusicThing song)

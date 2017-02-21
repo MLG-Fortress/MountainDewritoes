@@ -70,9 +70,9 @@ public class ReverseOsmosis implements Listener
         if (event.getClickedBlock().getType() != Material.JUKEBOX)
             return;
 
-        Jukebox jukebox = (Jukebox)event.getClickedBlock().getState();
+        Jukebox jukebox = (Jukebox)block.getState();
 
-        instance.getServer().getPluginManager().callEvent(new JukeboxInteractEvent(player, jukebox));
+        instance.getServer().getPluginManager().callEvent(new JukeboxInteractEvent(player, jukebox, disc));
     }
 
 

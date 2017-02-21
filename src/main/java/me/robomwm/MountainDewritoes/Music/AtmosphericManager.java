@@ -1,16 +1,21 @@
 package me.robomwm.MountainDewritoes.Music;
 
+import me.robomwm.MountainDewritoes.Events.JukeboxInteractEvent;
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
+import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,6 +37,7 @@ public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
     World MALL;
+    World SPAWN;
     MusicManager musicManager = new MusicManager();
     MemeBox memeBox;
     //AtomicBoolean over10Minutes = new AtomicBoolean(true);
@@ -42,6 +48,7 @@ public class AtmosphericManager implements Listener
     {
         instance = mountainDewritoes;
         MALL = instance.getServer().getWorld("mall");
+        SPAWN = instance.getServer().getWorld("minigames");
         this.memeBox = memeBox;
     }
 
@@ -60,6 +67,16 @@ public class AtmosphericManager implements Listener
     {
         player.removeMetadata("MD_LISTENING", instance);
         memeBox.stopSound(player);
+    }
+
+    public void stopMusic(Player player, double radius)
+    {
+        Set<Player> players = new HashSet<>();
+        for (Entity entity : player.getNearbyEntities(radius,radius,radius))
+        {
+            if (entity.getType() == EntityType.PLAYER)
+                stopMusic(player);
+        }
     }
 
     /**
@@ -106,10 +123,6 @@ public class AtmosphericManager implements Listener
         }.runTaskLater(instance, delay * 20L);
     }
 
-    /**
-     * Idk what I'll be using this for tbh.
-     */
-    @Deprecated
     public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean force)
     {
         Set<Player> players = new HashSet<>();
@@ -139,6 +152,13 @@ public class AtmosphericManager implements Listener
         stopMusic(event.getPlayer());
     }
 
+    /**Music always stops when player dies*/
+    @EventHandler
+    void onPlayerDeath(PlayerDeathEvent event)
+    {
+        stopMusic(event.getEntity());
+    }
+
     /**In case metadata doesn't get removed for w/e reason*/
     @EventHandler
     void onQuitResetMetadataAndStopMusic(PlayerChangedWorldEvent event)
@@ -156,15 +176,67 @@ public class AtmosphericManager implements Listener
             playSound(musicManager.getFightSong(), 0, event.getPlayer(), false);
     }
 
-//    @EventHandler(priority = EventPriority.HIGHEST)
-//    void playAmbientMusic(PlayerChangedWorldEvent event)
-//    {
-//        //memeBox.switchPlayerShow(event.getPlayer(), event.getFrom());
-//        Player player = event.getPlayer();
-//        World world = player.getWorld();
-//        if (world == MALL)
-//            memeBox.playSound(MALL, musicManager.getMallSong());
-//    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    void playAmbientMusic(PlayerChangedWorldEvent event)
+    {
+        //memeBox.switchPlayerShow(event.getPlayer(), event.getFrom());
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        if (world == MALL)
+            playSound(musicManager.getMallSong(), MALL, false);
+    }
+
+    @EventHandler
+    void onPlayerInteractJukebox(JukeboxInteractEvent event)
+    {
+        Player player = event.getPlayer();
+        Material disc = event.getDisc();
+        Jukebox jukebox = event.getJukebox();
+
+        //If there's already a disc in here, eject it and stop playing
+        if (jukebox.eject())
+        {
+            //Ignore if we didn't start the sound
+            if (!jukebox.hasMetadata("MD_JUKEBOX"))
+                return;
+
+            stopMusic(player, 64);
+
+            jukebox.removeMetadata("MD_JUKEBOX", instance);
+            return;
+        }
+
+        if (!disc.isRecord())
+            return;
+
+        //Otherwise, let's play a song, yay
+        MusicThing songToPlay = null;
+
+
+        switch(disc)
+        {
+            case GOLD_RECORD:
+                songToPlay = musicManager.getMorningSong();
+                break;
+            case GREEN_RECORD:
+            case RECORD_3:
+            case RECORD_4:
+            case RECORD_5:
+            case RECORD_6:
+            case RECORD_7:
+            case RECORD_8:
+            case RECORD_9:
+            case RECORD_10:
+            case RECORD_11:
+            case RECORD_12:
+                break;
+        }
+
+        if (songToPlay == null)
+            return;
+
+        jukebox.setMetadata("MD_JUKEBOX", new FixedMetadataValue(instance, songToPlay));
+    }
 
     /** Play sounds globally based on certain keywords
      * Totally not even close to ready yet, I might even scrap this idea*/
