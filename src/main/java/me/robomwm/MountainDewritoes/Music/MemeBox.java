@@ -137,16 +137,16 @@ public class MemeBox implements Listener
             {
                 if (!player.isOnline())
                     return;
-                if (hasOpenedMemeBox(player))
-                    return;
                 tellPlayerToOpenMemeBox(player, false);
             }
-        }.runTaskLater(instance, 230L);
+        }.runTaskLater(instance, 300L);
 
     }
 
     void tellPlayerToOpenMemeBox(Player player, boolean reason)
     {
+        if (hasOpenedMemeBox(player))
+            return;
         if (reason)
             player.sendMessage("Pls open da /memebox 2 hear dis moozik");
         else
