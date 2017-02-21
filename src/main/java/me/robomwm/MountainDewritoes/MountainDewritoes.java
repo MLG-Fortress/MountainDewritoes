@@ -90,15 +90,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Plugin-dependent listeners
 
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
-            pm.registerEvents(new MemeBox(this), this);
+        {
+            MemeBox memeBox = new MemeBox(this);
+            pm.registerEvents(memeBox, this);
+            pm.registerEvents(new AtmosphericManager(this, memeBox), this);
+        }
 
         //Classes other plugins might want to use
         nsa = new NSA(this);
-        MemeBox memeBox = new MemeBox(this);
-
         pm.registerEvents(nsa, this);
-        pm.registerEvents(memeBox, this);
-        pm.registerEvents(new AtmosphericManager(this, memeBox), this);
+
 
         //Initialize commonly-used sets
 
