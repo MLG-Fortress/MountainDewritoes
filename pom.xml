@@ -41,6 +41,34 @@
                 </includes>
             </resource>
         </resources>
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-shade-plugin</artifactId>-->
+                <!--<version>2.3</version>-->
+                <!--<configuration>-->
+                    <!--<artifactSet>-->
+                        <!--<includes>-->
+                            <!--<include>me.robomwm:usefulutil</include>-->
+                        <!--</includes>-->
+                    <!--</artifactSet>-->
+                    <!--<relocations>-->
+                        <!--<relocation>-->
+                            <!--<pattern>me.robomwm.usefulutil</pattern>-->
+                            <!--<shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>-->
+                        <!--</relocation>-->
+                    <!--</relocations>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>shade</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
     </build>
     <dependencies>
         <dependency>

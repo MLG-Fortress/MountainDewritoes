@@ -166,7 +166,7 @@ public class AtmosphericManager implements Listener
         stopMusic(event.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     void onMobTarget(MonsterTargetPlayerEvent event)
     {
         if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))

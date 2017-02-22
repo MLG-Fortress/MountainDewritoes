@@ -29,7 +29,7 @@ public class NSA implements Listener
 
     Map<Player, Set<Monster>> targetedPlayers = new HashMap<>();
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler
     void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();
@@ -62,7 +62,7 @@ public class NSA implements Listener
         Set<Monster> nonTargeters = new HashSet<>();
         for (Monster monster : targetedPlayers.get(player))
         {
-            if (monster.isDead() || monster.getTarget() != player)
+            if (!monster.isValid() || monster.isDead() || monster.getTarget() != player)
                 nonTargeters.add(monster);
         }
         targetedPlayers.get(player).removeAll(nonTargeters);

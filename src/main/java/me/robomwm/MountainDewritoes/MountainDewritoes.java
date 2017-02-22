@@ -86,6 +86,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new SleepManagement(this), this);
         pm.registerEvents(new ResourcePackNotifier(this), this);
         pm.registerEvents(new ReverseOsmosis(this), this);
+        pm.registerEvents(new CommandOverriders(this), this);
 
         //Plugin-dependent listeners
 
