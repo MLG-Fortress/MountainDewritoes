@@ -81,9 +81,9 @@ public class HitSound implements Listener
 
         if (!instance.isUsingTitle(attacker))
         {
-            if (event.getFinalDamage() < 10)
-                attacker.sendTitle(hitMarker);
-            else
+//            if (event.getFinalDamage() < 10)
+//                attacker.sendTitle(hitMarker);
+//            else
                 attacker.sendTitle(largeHitMarker);
         }
     }
