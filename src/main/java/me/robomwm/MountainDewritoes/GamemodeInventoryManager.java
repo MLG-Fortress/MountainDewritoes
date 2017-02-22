@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,22 +17,17 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
  */
 public class GamemodeInventoryManager implements Listener
 {
-    @EventHandler
-    void playerChangeWorld(PlayerChangedWorldEvent event)
-    {
-        checkAndClearPlayerInventory(event.getPlayer());
-    }
-
     @EventHandler(priority = EventPriority.LOWEST)
     void playerOpenEnderChest(InventoryOpenEvent event)
     {
         Player player = (Player)event.getPlayer();
         if (!checkPlayer(player))
             return;
+
         if (event.getInventory().getType() == InventoryType.ENDER_CHEST)
             event.setCancelled(true);
-        //Deny all inventory access if player is in creative in a public world
-        if (event.getInventory().getType() != InventoryType.CRAFTING && !(player.hasPermission("we.builder") || player.hasPermission("yesok")))
+        //Deny all inventory access
+        if (event.getInventory().getType() != InventoryType.CRAFTING && !player.hasPermission("yesok"))
             event.setCancelled(true);
     }
 
@@ -39,6 +35,10 @@ public class GamemodeInventoryManager implements Listener
     void onChangeGamemode(PlayerGameModeChangeEvent event)
     {
         checkAndClearPlayerInventory(event.getPlayer());
+        if (event.getNewGameMode() == GameMode.CREATIVE)
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " timed add we.builder 99999999");
+        else if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex reload");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

@@ -42,7 +42,6 @@ public class ShoppingMall implements Listener
         if (player.getWorld().equals(mallWorld))
         {
             player.setWalkSpeed(0.5f);
-            //TODO: play fitting music for mall
         }
     }
 
