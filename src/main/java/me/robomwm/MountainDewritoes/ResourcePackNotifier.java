@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -19,6 +20,25 @@ public class ResourcePackNotifier implements Listener
         this.instance = instance;
     }
 
+    @EventHandler
+    void onPlayerJoin(PlayerJoinEvent event)
+    {
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (!event.getPlayer().isOnline())
+                    this.cancel();
+                else if (!event.getPlayer().isOnGround())
+                    return;
+                else
+                {
+                    event.getPlayer().setResourcePack("https://github.com/MLG-Fortress/MLG-Pack-2.1/releases/download/alpha/MLG-Pack-2.1-alpha.zip");
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(instance, 100L, 100L);
+    }
     @EventHandler
     void statusOfPack(PlayerResourcePackStatusEvent event)
     {

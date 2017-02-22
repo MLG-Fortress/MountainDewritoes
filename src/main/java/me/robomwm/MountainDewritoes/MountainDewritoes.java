@@ -173,36 +173,37 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }.runTaskLater(this, ticks);
     }
 
-    /**
-     * Make chunk loading when teleporting between worlds seem faster
-     * We aren't doing this for every teleport since plugins might perform teleports in same chunk (e.g. PortalStick)
-     * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
-     * @param event
-     */
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerChangesWorldSetViewDistance(PlayerChangedWorldEvent event)
-    {
-        Player player = event.getPlayer();
-        World world = event.getPlayer().getWorld();
-        if (player.hasMetadata("DEAD"))
-            return;
-        player.setViewDistance(3);
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                //Don't execute if another task is scheduled
-                if (player.getWorld() != world || !player.isOnline())
-                    this.cancel();
-                //Wait for player to land before resetting view distance
-                else if (player.isOnGround())
-                {
-                    player.setViewDistance(8);
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(this, 300L, 100L);
-    }
+    //Removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
+//    /**
+//     * Make chunk loading when teleporting between worlds seem faster
+//     * We aren't doing this for every teleport since plugins might perform teleports in same chunk (e.g. PortalStick)
+//     * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
+//     * @param event
+//     */
+//    @EventHandler(priority = EventPriority.MONITOR)
+//    void onPlayerChangesWorldSetViewDistance(PlayerChangedWorldEvent event)
+//    {
+//        Player player = event.getPlayer();
+//        World world = event.getPlayer().getWorld();
+//        if (player.hasMetadata("DEAD"))
+//            return;
+//        player.setViewDistance(3);
+//        new BukkitRunnable()
+//        {
+//            public void run()
+//            {
+//                //Don't execute if another task is scheduled
+//                if (player.getWorld() != world || !player.isOnline())
+//                    this.cancel();
+//                //Wait for player to land before resetting view distance
+//                else if (player.isOnGround())
+//                {
+//                    player.setViewDistance(8);
+//                    this.cancel();
+//                }
+//            }
+//        }.runTaskTimer(this, 300L, 100L);
+//    }
 
     /**
      * Worldguard doesn't fully protect paintings and itemframes from being destroyed...
