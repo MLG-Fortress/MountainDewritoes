@@ -37,7 +37,7 @@ public class ResourcePackNotifier implements Listener
                     this.cancel();
                 }
             }
-        }.runTaskTimer(instance, 100L, 100L);
+        }.runTaskTimer(instance, 200L, 100L);
     }
     @EventHandler
     void statusOfPack(PlayerResourcePackStatusEvent event)

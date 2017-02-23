@@ -136,7 +136,7 @@ public class MemeBox implements Listener
                     return;
                 tellPlayerToOpenMemeBox(player, false);
             }
-        }.runTaskLater(instance, 300L);
+        }.runTaskLater(instance, 360L);
 
     }
 
