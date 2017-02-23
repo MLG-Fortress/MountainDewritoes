@@ -72,6 +72,7 @@ public class TeleportingEffects implements Listener
         taskThingy.remove(event.getPlayer()).cancel();
         if (event.isCancelled())
             return;
+
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)
