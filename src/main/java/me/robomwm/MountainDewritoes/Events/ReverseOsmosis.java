@@ -4,9 +4,13 @@ import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -42,16 +46,38 @@ public class ReverseOsmosis implements Listener
     {
         if (event.getTarget() == null) //forgot/lost the target
             return;
-        if (event.getTarget().getType() != EntityType.PLAYER)
+        if (event.getTarget().getType() != EntityType.PLAYER) //not targeting a player
             return;
-        if (!(event.getEntity() instanceof Monster))
+        if (!isMonster(event.getEntity())) //not a monster
             return;
 
         Player player = (Player)event.getTarget();
-        Monster monster = (Monster)event.getEntity();
+        Creature entity = (Creature)event.getEntity();
 
         //Call MonsterTargetPlayerEvent
-        instance.getServer().getPluginManager().callEvent(new MonsterTargetPlayerEvent(monster, player));
+        instance.getServer().getPluginManager().callEvent(new MonsterTargetPlayerEvent(entity, player));
+    }
+
+    private boolean isMonster(Entity entity)
+    {
+        if (!(entity instanceof Creature)) return false;
+        if (entity instanceof Monster) return true;
+
+
+        EntityType type = entity.getType();
+        switch(type)
+        {
+            //case GHAST: //Extends Flying, which extends LivingEntity. LivingEntity does not have getTarget()
+            case MAGMA_CUBE:
+            case SHULKER:
+            case POLAR_BEAR:
+                return true;
+            case RABBIT:
+                Rabbit rabbit = (Rabbit) entity;
+                if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) return true;
+        }
+
+        return false;
     }
 
     /**

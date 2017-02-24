@@ -45,7 +45,7 @@ public class DamageIndicators implements Listener
         return i;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     void onDisplayDamageIndicator(EntityDamageByEntityEvent event)
     {
         if (event.getFinalDamage() <= 0.05D)
@@ -67,11 +67,11 @@ public class DamageIndicators implements Listener
         displayIndicator(entity.getLocation(), event.getAmount() / 2D, false);
     }
 
-    public static Double r4nd0m(Double min, Double max) {
+    public static Double r4nd0m(double min, double max) {
         return ThreadLocalRandom.current().nextDouble(min, max);
     }
 
-    void displayIndicator(Location location, Double value, boolean isDamage)
+    void displayIndicator(final Location location, final double value, final boolean isDamage)
     {
         double x = r4nd0m(-0.3D, 0.3D);
         double z = r4nd0m(-0.3D, 0.3D);
@@ -98,6 +98,6 @@ public class DamageIndicators implements Listener
                 }
                 hologram.teleport(hologram.getLocation().add(0D, 1D, 0D));
             }
-        }.runTaskTimer(instance, 1L, 20L);
+        }.runTaskTimer(instance, 1L, ((long)value / 2) + 20L); //Increase display duration by a second per 40 hearts of damage.
     }
 }

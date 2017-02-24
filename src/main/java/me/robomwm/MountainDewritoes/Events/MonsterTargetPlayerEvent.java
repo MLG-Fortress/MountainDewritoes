@@ -1,5 +1,7 @@
 package me.robomwm.MountainDewritoes.Events;
 
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -21,18 +23,18 @@ public class MonsterTargetPlayerEvent extends Event
         return handlers;
     }
 
-    Monster monster;
+    Creature badEntity;
     Player player;
 
-    public MonsterTargetPlayerEvent(Monster monster, Player player)
+    public MonsterTargetPlayerEvent(Creature badEntity, Player player)
     {
-        this.monster = monster;
+        this.badEntity = badEntity;
         this.player = player;
     }
 
-    public Monster getMonster()
+    public Creature getBadEntity()
     {
-        return monster;
+        return badEntity;
     }
 
     public Player getPlayer()

@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * Created by RoboMWM on 9/24/2016.
@@ -35,10 +36,23 @@ public class GamemodeInventoryManager implements Listener
     void onChangeGamemode(PlayerGameModeChangeEvent event)
     {
         checkAndClearPlayerInventory(event.getPlayer());
-        if (event.getNewGameMode() == GameMode.CREATIVE)
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " timed add we.builder 99999999");
-        else if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
+        if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
+        {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " add we.builder");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex reload");
+        }
+        else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
+        {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex reload");
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    void onQuit(PlayerQuitEvent event)
+    {
+        if (checkAndClearPlayerInventory(event.getPlayer()))
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -71,10 +85,6 @@ public class GamemodeInventoryManager implements Listener
      */
     boolean checkPlayer(Player player)
     {
-        if (player.isOp())
-            return false;
-        if (player.getGameMode() == GameMode.CREATIVE)
-            return true;
-        return false;
+        return !player.isOp() && player.getGameMode() == GameMode.CREATIVE;
     }
 }

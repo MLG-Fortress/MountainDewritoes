@@ -1,6 +1,8 @@
 package me.robomwm.MountainDewritoes;
 
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,22 +29,22 @@ public class NSA implements Listener
         instance = mountainDewritoes;
     }
 
-    Map<Player, Set<Monster>> targetedPlayers = new HashMap<>();
+    Map<Player, Set<Creature>> targetedPlayers = new HashMap<>();
 
     @EventHandler
     void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();
-        Monster monster = event.getMonster();
+        Creature entity = event.getBadEntity();
 
         if (!targetedPlayers.containsKey(player))
         {
-            Set<Monster> targeters = new HashSet<>();
-            targeters.add(monster);
+            Set<Creature> targeters = new HashSet<>();
+            targeters.add(entity);
             targetedPlayers.put(player, targeters);
         }
         else
-            targetedPlayers.get(player).add(monster);
+            targetedPlayers.get(player).add(entity);
     }
 
     public boolean isPlayerTargeted(Player player)
@@ -59,11 +61,11 @@ public class NSA implements Listener
     {
         if (!targetedPlayers.containsKey(player))
             return 0;
-        Set<Monster> nonTargeters = new HashSet<>();
-        for (Monster monster : targetedPlayers.get(player))
+        Set<Creature> nonTargeters = new HashSet<>();
+        for (Creature entity : targetedPlayers.get(player))
         {
-            if (!monster.isValid() || monster.isDead() || monster.getTarget() != player)
-                nonTargeters.add(monster);
+            if (!entity.isValid() || entity.isDead() || entity.getTarget() != player)
+                nonTargeters.add(entity);
         }
         targetedPlayers.get(player).removeAll(nonTargeters);
         return targetedPlayers.get(player).size();
