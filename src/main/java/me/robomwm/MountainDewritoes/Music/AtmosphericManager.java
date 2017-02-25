@@ -238,13 +238,16 @@ public class AtmosphericManager implements Listener
         final MusicThing song = songToPlay;
 
         jukebox.setMetadata("MD_JUKEBOX", new FixedMetadataValue(instance, songToPlay));
+
+        //Schedule removal of metadata
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                if (song == jukebox.getMetadata("MD_JUKEBOX").get(0).value())
-                jukebox.removeMetadata("MD_JUKEBOX", instance);
+                if (jukebox.hasMetadata("MD_JUKEBOX"))
+                    if (song == jukebox.getMetadata("MD_JUKEBOX").get(0).value())
+                        jukebox.removeMetadata("MD_JUKEBOX", instance);
             }
         }.runTaskLater(instance, song.getLength());
         playSoundNearPlayer(song, player, 64, true);
