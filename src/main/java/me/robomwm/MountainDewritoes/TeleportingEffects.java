@@ -66,13 +66,13 @@ public class TeleportingEffects implements Listener
     void onPlayerTPACancel(PostTPATeleportEvent event)
     {
         //TODO: stop sound effect
+        instance.getLogger().info(String.valueOf(event.isCancelled()));
         Player player = event.getPlayer();
         Location location = player.getLocation();
         preTeleportingPlayers.remove(event.getPlayer());
         taskThingy.remove(event.getPlayer()).cancel();
         if (event.isCancelled())
             return;
-
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)
