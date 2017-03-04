@@ -47,6 +47,7 @@ public class AtmosphericManager implements Listener
         instance = mountainDewritoes;
         MALL = instance.getServer().getWorld("mall");
         this.memeBox = memeBox;
+        new AtmosphericMusic(mountainDewritoes, this);
     }
 
 //    public void morningListener()
