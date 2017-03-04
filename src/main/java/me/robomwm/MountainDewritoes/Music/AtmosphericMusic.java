@@ -23,11 +23,12 @@ public class AtmosphericMusic implements Listener
 {
     MountainDewritoes instance;
     AtmosphericManager atmosphericManager;
-    MusicManager musicManager = new MusicManager(instance);
+    MusicManager musicManager;
 
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
         instance = mountainDewritoes;
+         musicManager = new MusicManager(instance);
         this.atmosphericManager = atmosphericManager;
         instance.registerListener(this);
 
