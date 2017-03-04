@@ -34,10 +34,8 @@ class MusicManager
 
         for (String sectionName : musicSection.getKeys(false))
         {
-            List<MusicThing> songs = new ArrayList<>();
             ConfigurationSection section = musicSection.getConfigurationSection(sectionName);
-            put(section.getValues(false));
-            master.put(sectionName, songs);
+            master.put(sectionName, get(section.getValues(false)));
         }
 //        battle.add(put("http://k003.kiwi6.com/hotlink/4p667bfkgx/robbierottenvisitsspiralmountain.mp3", 61));
 //        battle.add(put("http://k003.kiwi6.com/hotlink/hgomo9zqa1/The_True_Battle_Is_Yet_To_Come_Original_Orchestral_Composition_.mp3", 60+49));
@@ -53,7 +51,7 @@ class MusicManager
 //        mall.add(put("http://k003.kiwi6.com/hotlink/d8ej3ak8cd/mall_You_reposted_in_the_wrong_flea_market.mp3", 60+46));
     }
 
-    private List<MusicThing> put(Map<String, Object> sectionMap)
+    private List<MusicThing> get(Map<String, Object> sectionMap)
     {
         List<MusicThing> wowAList = new ArrayList<>();
         for (String songName : sectionMap.keySet())
