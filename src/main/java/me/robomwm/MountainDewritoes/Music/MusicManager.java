@@ -22,11 +22,13 @@ class MusicManager
     public MusicManager(MountainDewritoes instance)
     {
         FileConfiguration config = instance.getConfig();
+        config.options().pathSeparator('|');
         ConfigurationSection musicSection = config.getConfigurationSection("Music");
         if (musicSection == null)
         {
             musicSection = config.createSection("Music");
-            musicSection.createSection("battle").set("http://localhost/beep/adfsfd_lkji.mp3", 20);
+            musicSection.createSection("battle").set("http://localhost/test/adfsfd_lkji.mp3", 20);
+            musicSection.createSection("mall").set("http://localhost/test/adfsfd_lkji.mp3", 20);
             instance.saveConfig();
         }
 
