@@ -6,7 +6,7 @@
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>20.4</version>
+    <version>21</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -41,34 +41,34 @@
                 </includes>
             </resource>
         </resources>
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-shade-plugin</artifactId>-->
-                <!--<version>2.3</version>-->
-                <!--<configuration>-->
-                    <!--<artifactSet>-->
-                        <!--<includes>-->
-                            <!--<include>me.robomwm:usefulutil</include>-->
-                        <!--</includes>-->
-                    <!--</artifactSet>-->
-                    <!--<relocations>-->
-                        <!--<relocation>-->
-                            <!--<pattern>me.robomwm.usefulutil</pattern>-->
-                            <!--<shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>-->
-                        <!--</relocation>-->
-                    <!--</relocations>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>shade</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>me.robomwm:usefulutil</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>me.robomwm.usefulutil</pattern>
+                            <shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
         <dependency>
@@ -133,6 +133,11 @@
             <groupId>com.github.oliverdunk</groupId>
             <artifactId>JukeboxAPI</artifactId>
             <version>v2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.RoboMWM</groupId>
+            <artifactId>UsefulUtil</artifactId>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
 

@@ -7,7 +7,6 @@ import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
@@ -48,7 +47,7 @@ public class ReverseOsmosis implements Listener
             return;
         if (event.getTarget().getType() != EntityType.PLAYER) //not targeting a player
             return;
-        if (!isMonster(event.getEntity())) //not a monster
+        if (!isLivingMonster(event.getEntity())) //not a monster
             return;
 
         Player player = (Player)event.getTarget();
@@ -58,7 +57,7 @@ public class ReverseOsmosis implements Listener
         instance.getServer().getPluginManager().callEvent(new MonsterTargetPlayerEvent(entity, player));
     }
 
-    private boolean isMonster(Entity entity)
+    private boolean isLivingMonster(Entity entity)
     {
         if (!(entity instanceof Creature)) return false;
         if (entity instanceof Monster) return true;
@@ -67,7 +66,7 @@ public class ReverseOsmosis implements Listener
         EntityType type = entity.getType();
         switch(type)
         {
-            //case GHAST: //Extends Flying, which extends LivingEntity. LivingEntity does not have getTarget()
+            //case GHAST: //Extends Flying, which extends LivingEntity. LivingEntity does not have getTarget(). Creatures do.
             case MAGMA_CUBE:
             case SHULKER:
             case POLAR_BEAR:
@@ -75,9 +74,9 @@ public class ReverseOsmosis implements Listener
             case RABBIT:
                 Rabbit rabbit = (Rabbit) entity;
                 if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) return true;
+            default:
+                return false;
         }
-
-        return false;
     }
 
     /**

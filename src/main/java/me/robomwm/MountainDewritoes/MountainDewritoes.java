@@ -58,6 +58,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         return nsa;
     }
 
+    public void registerListener(Listener listener)
+    {
+        getServer().getPluginManager().registerEvents(listener, this);
+    }
+
     public void onEnable()
     {
         //Wow, lots-o-listeners

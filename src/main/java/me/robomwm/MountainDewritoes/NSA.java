@@ -1,14 +1,21 @@
 package me.robomwm.MountainDewritoes;
 
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
+import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Flying;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.LazyMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,27 +36,29 @@ public class NSA implements Listener
         instance = mountainDewritoes;
     }
 
-    Map<Player, Set<Creature>> targetedPlayers = new HashMap<>();
+    static private final String mobTrackingMetadata = "MD_MOBTRACKING";
+    static private final String killStreak = "MD_KILLSTREAK";
 
-    @EventHandler
+    /* # of mobs targeting player tracker */
+
+    @SuppressWarnings("unchecked")
+    @EventHandler //Keeps track of monsters targeting this player
     void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();
         Creature entity = event.getBadEntity();
 
-        if (!targetedPlayers.containsKey(player))
+        if (!player.hasMetadata(mobTrackingMetadata))
         {
             Set<Creature> targeters = new HashSet<>();
             targeters.add(entity);
-            targetedPlayers.put(player, targeters);
+            player.setMetadata(mobTrackingMetadata, new FixedMetadataValue(instance, targeters));
         }
         else
-            targetedPlayers.get(player).add(entity);
-    }
-
-    public boolean isPlayerTargeted(Player player)
-    {
-        return howManyTargetingPlayer(player) > 0;
+        {
+            Set<Creature> targeters = (Set<Creature>)player.getMetadata(mobTrackingMetadata).get(0).value();
+            targeters.add(entity);
+        }
     }
 
     /**
@@ -57,17 +66,71 @@ public class NSA implements Listener
      * @param player
      * @return how many monsters are trying to attack this player
      */
+    @SuppressWarnings("unchecked")
     public int howManyTargetingPlayer(Player player)
     {
-        if (!targetedPlayers.containsKey(player))
+        if (!player.hasMetadata(mobTrackingMetadata))
             return 0;
+
+        Set<Creature> trackers = (Set<Creature>)player.getMetadata(mobTrackingMetadata).get(0).value();
         Set<Creature> nonTargeters = new HashSet<>();
-        for (Creature entity : targetedPlayers.get(player))
+
+        //Remove mobs no longer targeting this player
+        for (Creature entity : trackers)
         {
             if (!entity.isValid() || entity.isDead() || entity.getTarget() != player)
                 nonTargeters.add(entity);
         }
-        targetedPlayers.get(player).removeAll(nonTargeters);
-        return targetedPlayers.get(player).size();
+        trackers.removeAll(nonTargeters);
+
+        return trackers.size();
     }
+
+    /* kill streak tracker */
+
+    @EventHandler
+    void onEntityDeath(EntityDeathEvent event)
+    {
+        if (event.getEntity().getKiller() == null)
+            return;
+        if (event.getEntityType() != EntityType.PLAYER && !UsefulUtil.isMonster(event.getEntity()))
+            return;
+
+        Player player = event.getEntity().getKiller();
+        int points = 1;
+        if (event.getEntityType() == EntityType.PLAYER)
+            points = 3;
+
+        if (!player.hasMetadata(killStreak))
+        {
+            player.setMetadata(killStreak, new FixedMetadataValue(instance, points));
+        }
+        else
+        {
+            points += player.getMetadata(killStreak).get(0).asInt();
+            player.setMetadata(killStreak, new FixedMetadataValue(instance, points));
+        }
+
+        //Remove points after 2 minutes
+        final int finalPoints = points;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                int oldPoints = player.getMetadata(killStreak).get(0).asInt();
+                player.setMetadata(killStreak, new FixedMetadataValue(instance, oldPoints - finalPoints));
+            }
+        }.runTaskLater(instance, 2400L);
+    }
+
+    static public int getSpreePoints(Player player)
+    {
+        if (!player.hasMetadata(mobTrackingMetadata))
+            return 0;
+        else
+            return player.getMetadata(killStreak).get(0).asInt();
+    }
+
+
 }

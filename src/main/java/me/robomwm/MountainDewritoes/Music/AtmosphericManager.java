@@ -37,8 +37,6 @@ public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
     World MALL;
-    World SPAWN;
-    MusicManager musicManager = new MusicManager();
     MemeBox memeBox;
     //AtomicBoolean over10Minutes = new AtomicBoolean(true);
     //Pattern hello = Pattern.compile("\\bhello\\b|\\bhi\\b|\\bhey\\b|\\bhai\\b");
@@ -48,7 +46,6 @@ public class AtmosphericManager implements Listener
     {
         instance = mountainDewritoes;
         MALL = instance.getServer().getWorld("mall");
-        SPAWN = instance.getServer().getWorld("minigames");
         this.memeBox = memeBox;
     }
 
@@ -84,10 +81,11 @@ public class AtmosphericManager implements Listener
      * "Thread-safe"
      * @param song Sound to play
      * @param delay How long to wait in seconds before playing the sound
+     * @param players
+     * @param override Forces song to play. Used for jukeboxes and other situations where the same song must be heard by multiple players.
      */
     public void playSound(MusicThing song, int delay, Collection<? extends Player> players, boolean override)
     {
-        Long time = System.currentTimeMillis(); //Used to determine if metadata should be removed
         new BukkitRunnable()
         {
             public void run()
@@ -97,10 +95,14 @@ public class AtmosphericManager implements Listener
                     //Skip player if they're dead
                     if (player.hasMetadata("DEAD") || player.isDead())
                         continue;
-                    //Skip player if they're already listening to another song (unless we're overriding)
-                    if (!override && player.hasMetadata("MD_LISTENING"))
-                        continue;
-                    player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, time));
+                    //Skip player if already listening to music and override is not set or priority is not higher.
+                    if (player.hasMetadata("MD_LISTENING") && !override)
+                    {
+                        if (!song.hasHigherPriority((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
+                            continue;
+                    }
+
+                    player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, song));
                     memeBox.playSound(player, song);
 
                     //Schedule removal of metadata
@@ -108,12 +110,10 @@ public class AtmosphericManager implements Listener
                     {
                         public void run()
                         {
-                            //another event removed metadata earlier (worldchange)
                             if (!player.hasMetadata("MD_LISTENING"))
                                 return;
 
-                            //player received new music
-                            if (player.getMetadata("MD_LISTENING").get(0).asLong() == time)
+                            if (song.equals((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
                                 player.removeMetadata("MD_LISTENING", instance);
                         }
                     }.runTaskLater(instance, song.getLength());
@@ -123,7 +123,9 @@ public class AtmosphericManager implements Listener
         }.runTaskLater(instance, delay * 20L);
     }
 
-    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean force)
+    /* Helper methods */
+
+    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean override, boolean force)
     {
         Set<Player> players = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius,radius,radius))
@@ -131,178 +133,39 @@ public class AtmosphericManager implements Listener
             if (entity.getType() == EntityType.PLAYER)
                 players.add((Player)entity);
         }
-        playSound(song, 0, players, force);
+        playSound(song, 0, players, override);
     }
-    public void playSound(MusicThing song, @Nullable World world, boolean force)
+    public void playSound(MusicThing song, @Nullable World world, boolean override)
     {
         if (world == null)
-            playSound(song, 0, instance.getServer().getOnlinePlayers(), force);
+            playSound(song, 0, instance.getServer().getOnlinePlayers(), override);
         else
-            playSound(song, 0, world.getPlayers(), force);
+            playSound(song, 0, world.getPlayers(), override);
     }
-    public void playSound(MusicThing song, int delay, Player player, boolean force)
+    public void playSound(MusicThing song, int delay, Player player, boolean override)
     {
-        playSound(song, delay, Collections.singletonList(player), force);
+        playSound(song, delay, Collections.singletonList(player), override);
     }
 
-    /**Music always stops when player changes worlds*/
+    /*Music always stops when player changes worlds*/
     @EventHandler
-    void changeWorldResetMetadata(PlayerChangedWorldEvent event)
+    private void changeWorldResetMetadata(PlayerChangedWorldEvent event)
     {
         stopMusic(event.getPlayer());
     }
 
-    /**Music always stops when player dies*/
+    /*Music always stops when player dies*/
     @EventHandler
-    void onPlayerDeath(PlayerDeathEvent event)
+    private void onPlayerDeath(PlayerDeathEvent event)
     {
         stopMusic(event.getEntity());
     }
 
-    /**In case metadata doesn't get removed for w/e reason*/
+    /*In case metadata doesn't get removed for w/e reason*/
     @EventHandler
-    void onQuitResetMetadataAndStopMusic(PlayerChangedWorldEvent event)
+    private void onQuitResetMetadataAndStopMusic(PlayerChangedWorldEvent event)
     {
         stopMusic(event.getPlayer());
     }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    void onMobTarget(MonsterTargetPlayerEvent event)
-    {
-        if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
-            return;
-        NSA nsa = instance.getNSA();
-        if (nsa.howManyTargetingPlayer(event.getPlayer()) > 3)
-            playSound(musicManager.getFightSong(), 0, event.getPlayer(), false);
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    void playAmbientMusic(PlayerChangedWorldEvent event)
-    {
-        //memeBox.switchPlayerShow(event.getPlayer(), event.getFrom());
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        if (world == MALL)
-            playSound(musicManager.getMallSong(), MALL, false);
-    }
-
-    @EventHandler
-    void onPlayerInteractJukebox(JukeboxInteractEvent event)
-    {
-        Player player = event.getPlayer();
-        Material disc = event.getDisc();
-        Jukebox jukebox = event.getJukebox();
-
-        //If there's already a disc in here, eject it and stop playing
-        if (jukebox.eject())
-        {
-            //Ignore if we didn't start the sound
-            if (!jukebox.hasMetadata("MD_JUKEBOX"))
-                return;
-
-            stopMusic(player, 64);
-
-            jukebox.removeMetadata("MD_JUKEBOX", instance);
-            return;
-        }
-
-        if (!disc.isRecord())
-            return;
-
-        //Otherwise, let's play a song, yay
-        MusicThing songToPlay = null;
-
-
-        switch(disc)
-        {
-            case GOLD_RECORD:
-                songToPlay = musicManager.getMallSong();
-                break;
-            case GREEN_RECORD:
-            case RECORD_3:
-            case RECORD_4:
-            case RECORD_5:
-            case RECORD_6:
-            case RECORD_7:
-            case RECORD_8:
-            case RECORD_9:
-            case RECORD_10:
-            case RECORD_11:
-            case RECORD_12:
-                break;
-        }
-
-        if (songToPlay == null)
-            return;
-
-        final MusicThing song = songToPlay;
-
-        jukebox.setMetadata("MD_JUKEBOX", new FixedMetadataValue(instance, songToPlay));
-
-        //Schedule removal of metadata
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (jukebox.hasMetadata("MD_JUKEBOX"))
-                    if (song == jukebox.getMetadata("MD_JUKEBOX").get(0).value())
-                        jukebox.removeMetadata("MD_JUKEBOX", instance);
-            }
-        }.runTaskLater(instance, song.getLength());
-        playSoundNearPlayer(song, player, 64, true);
-    }
-
-    /** Play sounds globally based on certain keywords
-     * Totally not even close to ready yet, I might even scrap this idea*/
-    //@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-//    void onPlayerChatPlaySounds(AsyncPlayerChatEvent event)
-//    {
-//        //Don't care about muted/semi-muted chatters
-//        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size())
-//            return;
-//
-//        if (!hasItBeen10minutes(false))
-//            return;
-//
-//        String message = ChatColor.stripColor(event.getMessage().toLowerCase());
-//
-//        //No need to block the event to check this
-//        new BukkitRunnable()
-//        {
-//            public void run()
-//            {
-//                if (hello.matcher(message).matches())
-//                    playSoundGlobal("fortress.hello", 41);
-//                else if (bye.matcher(message).matches())
-//                    playSoundGlobal("fortress.bye", 35);
-//                //TODO: etc.
-//            }
-//        }.runTaskAsynchronously(instance);
-//    }
-
-    /**
-     * Has it been 10 minutes since we last (globally) played a song?
-     * Used for global chat trigger primarily
-     */
-//    boolean hasItBeen10minutes(boolean reset)
-//    {
-//        if (over10Minutes.get())
-//        {
-//            if (reset)
-//                new BukkitRunnable()
-//                {
-//                    public void run()
-//                    {
-//                        over10Minutes.set(true);
-//                    }
-//                }.runTaskLater(instance, 20L * 60L * 10L);
-//            return true;
-//        }
-//        else
-//            return false;
-//    }
-
-
 }
 
