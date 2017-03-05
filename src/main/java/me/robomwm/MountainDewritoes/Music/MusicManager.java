@@ -30,8 +30,9 @@ class MusicManager
             musicSection = config.createSection("Music");
             musicSection.createSection("battle").set("http://localhost/test/adfsfd_lkji.mp3", 20);
             musicSection.createSection("mall").set("http://localhost/test/adfsfd_lkji.mp3", 20);
-            instance.saveConfig();
         }
+
+        instance.saveConfig();
 
         for (String sectionName : musicSection.getKeys(false))
         {
