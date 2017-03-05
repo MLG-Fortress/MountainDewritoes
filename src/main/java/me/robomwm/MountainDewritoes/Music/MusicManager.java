@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes.Music;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -56,15 +57,8 @@ class MusicManager
         List<MusicThing> wowAList = new ArrayList<>();
         for (String songName : sectionMap.keySet())
         {
-            Object object = sectionMap.get(songName);
-            try
-            {
-                wowAList.add(new MusicThing(songName, (int)object));
-            }
-            catch (ClassCastException e)
-            {
-                e.printStackTrace();
-            }
+            Bukkit.getLogger().info(songName);
+            wowAList.add(new MusicThing(songName, (int)sectionMap.get(songName)));
         }
 
         return wowAList;
