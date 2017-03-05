@@ -24,6 +24,8 @@ class MusicManager
     {
         FileConfiguration config = instance.getConfig();
         config.options().pathSeparator('|');
+        instance.reloadConfig();
+        
         ConfigurationSection musicSection = config.getConfigurationSection("Music");
         if (musicSection == null)
         {
