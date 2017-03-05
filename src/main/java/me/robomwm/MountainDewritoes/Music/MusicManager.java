@@ -55,7 +55,18 @@ class MusicManager
     {
         List<MusicThing> wowAList = new ArrayList<>();
         for (String songName : sectionMap.keySet())
-            wowAList.add(new MusicThing(songName, (int)(sectionMap.get(songName))));
+        {
+            Object object = sectionMap.get(songName);
+            try
+            {
+                wowAList.add(new MusicThing(songName, (int)object));
+            }
+            catch (ClassCastException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
         return wowAList;
     }
 
