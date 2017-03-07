@@ -45,7 +45,7 @@ public class AtmosphericMusic implements Listener
             @Override
             public void run()
             {
-                atmosphericManager.playSound(musicManager.getSong("battle"), world, false); //TODO: testing, pls change
+                atmosphericManager.playSound(musicManager.getSong("mall"), world, false); //TODO: testing, pls change
             }
         }.runTaskTimer(instance, 300L, 600L);
     }
