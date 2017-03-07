@@ -10,6 +10,9 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -22,12 +25,16 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Created by RoboMWM on 2/13/2016.
@@ -40,6 +47,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     DamageIndicators damageIndicators;
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
+    private FileConfiguration newConfig;
 
     public boolean isSurvivalWorld(World world)
     {
@@ -51,14 +59,32 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
+    @Override
+    public FileConfiguration getConfig()
+    {
+        if(this.newConfig == null)
+            this.reloadConfig();
+        return this.newConfig;
+    }
+
+    @Override
+    public void reloadConfig()
+    {
+        newConfig = new YamlConfiguration();
+        newConfig.options().pathSeparator('|'); //Literally had to override these config-related members in JavaPlugin just to do this -_-
+        try
+        {
+            newConfig.load(new File(getDataFolder(), "config.yml"));
+        }
+        catch (FileNotFoundException ignored) {}
+        catch (IOException | InvalidConfigurationException var4)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Cannot load MountainDewritoes config.yml", var4);
+        }
+    }
+
     public void onEnable()
     {
-        getConfig().options().pathSeparator('*');
-        saveConfig();
-        //reloadConfig(); //ayyy Choco. Anyways, this is needed to reload the respective sections inside the FileConfiguration, according to the pathSeparator we specified
-        //Actually, I'm wrong, all reloadConfig did was make the current reference I had to the config no longer existent/no longer points to the one in JavaPlugin.
-        //So, apparently saveConfig() is the answer (gotta save them options I guess).
-
         //Wow, lots-o-listeners
         damageIndicators = new DamageIndicators(this);
         PluginManager pm = getServer().getPluginManager();
