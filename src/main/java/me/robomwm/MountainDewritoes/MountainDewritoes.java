@@ -54,7 +54,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public void onEnable()
     {
         getConfig().options().pathSeparator('*');
-        reloadConfig(); //ayyy Choco. Anyways, this is needed to reload the respective sections inside the FileConfiguration, according to the pathSeparator we specified
+        saveConfig();
+        //reloadConfig(); //ayyy Choco. Anyways, this is needed to reload the respective sections inside the FileConfiguration, according to the pathSeparator we specified
+        //Actually, I'm wrong, all reloadConfig did was make the current reference I had to the config no longer existent I think.
 
         //Wow, lots-o-listeners
         damageIndicators = new DamageIndicators(this);
