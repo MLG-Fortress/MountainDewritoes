@@ -57,7 +57,6 @@ public class DeathListener implements Listener
             event.setNewLevel(player.getLevel() - 8);
 
         //Stop all playing sounds, if any.
-        //TODO: include mcjukebox??
         player.stopSound("");
 
         //Believe it or not, the Minecraft client does not even trigger this sound on player death,

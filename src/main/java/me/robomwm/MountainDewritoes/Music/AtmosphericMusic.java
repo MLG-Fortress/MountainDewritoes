@@ -45,7 +45,7 @@ public class AtmosphericMusic implements Listener
             @Override
             public void run()
             {
-                atmosphericManager.playSound(musicManager.getSong("mall"), world, false); //TODO: testing, pls change
+                atmosphericManager.playSound(musicManager.getSong(world.getName()), world, false);
             }
         }.runTaskTimer(instance, 300L, 600L);
     }
@@ -113,7 +113,7 @@ public class AtmosphericMusic implements Listener
                         jukebox.removeMetadata("MD_JUKEBOX", instance);
             }
         }.runTaskLater(instance, song.getLength());
-        atmosphericManager.playSoundNearPlayer(song, player, 64, true, true);
+        atmosphericManager.playSoundNearPlayer(song, player, 64, true);
     }
 
     //Player likely in a battle with mobs

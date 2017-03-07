@@ -110,7 +110,7 @@ public class AtmosphericManager implements Listener
 
     /* Helper methods */
 
-    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean override, boolean force)
+    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean override)
     {
         Set<Player> players = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius,radius,radius))
@@ -118,6 +118,7 @@ public class AtmosphericManager implements Listener
             if (entity.getType() == EntityType.PLAYER)
                 players.add((Player)entity);
         }
+        players.add(player); //it seems Entity#getNearbyEntities does not include the entity in question. Haven't specifically tested though.
         playSound(song, 0, players, override);
     }
     public void playSound(MusicThing song, @Nullable World world, boolean override)

@@ -65,7 +65,6 @@ public class SimpleClansListener implements Listener
     //Get a randomized, consistent color code for player
     public String getColorCode(Player player)
     {
-        //TODO: Allow owner to choose unique to player or name
         //Get hash code of player's UUID
         int colorCode = player.getUniqueId().hashCode();
         //Ensure number is positive

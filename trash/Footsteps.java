@@ -32,10 +32,10 @@ public class Footsteps implements Listener
         if (player.isSneaking())
             return;
 
-        //TODO: world checks
+        //ignoredTODO: world checks
 
         final Material floorMaterial = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
-        //TODO: play according sound
+        //ignoredTODO: play according sound
         String soundToPlay = "fortress.stone.step";
         switch (floorMaterial)
         {

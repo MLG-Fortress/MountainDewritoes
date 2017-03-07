@@ -103,7 +103,7 @@ public class DeathListener implements Listener
             event.setNewLevel(player.getLevel() - 8);
 
         //Stop all playing sounds, if any.
-        //TODO: include mcjukebox??
+        //ignoredTODO: include mcjukebox??
         player.stopSound("");
 
         //Death spectating timer
@@ -218,7 +218,7 @@ public class DeathListener implements Listener
         player.setMetadata("DEAD", new FixedMetadataValue(instance, respawnLocation));
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlySpeed(0.0f);
-        event.setRespawnLocation(player.getLocation()); //TODO: Might return a "safe" location (i.e. not where they died)
+        event.setRespawnLocation(player.getLocation()); //ignoredTODO: Might return a "safe" location (i.e. not where they died)
         player.setViewDistance(3);
     }
 
@@ -313,7 +313,7 @@ public class DeathListener implements Listener
         }
     }
 
-    //TODO: handle chat (set permissions???)
+    //ignoredTODO: handle chat (set permissions???)
 }
 
 /*

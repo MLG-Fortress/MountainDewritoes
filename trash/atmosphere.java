@@ -26,7 +26,6 @@
 //                    playSoundGlobal("fortress.hello", 41);
 //                else if (bye.matcher(message).matches())
 //                    playSoundGlobal("fortress.bye", 35);
-//                //TODO: etc.
 //            }
 //        }.runTaskAsynchronously(instance);
 //    }
