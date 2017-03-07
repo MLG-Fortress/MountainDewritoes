@@ -56,11 +56,7 @@ class MusicManager
     {
         List<MusicThing> wowAList = new ArrayList<>();
         for (String songName : sectionMap.keySet())
-        {
-            Bukkit.getLogger().info(songName);
             wowAList.add(new MusicThing(songName, (int)sectionMap.get(songName)));
-        }
-
 
         return wowAList;
     }
