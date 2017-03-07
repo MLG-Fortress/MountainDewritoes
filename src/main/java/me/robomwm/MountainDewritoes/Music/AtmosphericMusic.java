@@ -45,7 +45,7 @@ public class AtmosphericMusic implements Listener
             @Override
             public void run()
             {
-                atmosphericManager.playSound(musicManager.getSong(world.getName()), world, false);
+                atmosphericManager.playSound(musicManager.getSong(world.getName()), world);
             }
         }.runTaskTimer(instance, 300L, 600L);
     }
@@ -113,7 +113,7 @@ public class AtmosphericMusic implements Listener
                         jukebox.removeMetadata("MD_JUKEBOX", instance);
             }
         }.runTaskLater(instance, song.getLength());
-        atmosphericManager.playSoundNearPlayer(song, player, 64, true);
+        atmosphericManager.playSoundNearPlayer(song.setPriority(999), player, 64);
     }
 
     //Player likely in a battle with mobs
@@ -123,7 +123,7 @@ public class AtmosphericMusic implements Listener
         if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
             return;
         if (NSA.howManyTargetingPlayer(event.getPlayer()) > 3)
-            atmosphericManager.playSound(musicManager.getSong("battle").setPriority(10), 0, event.getPlayer(), false);
+            atmosphericManager.playSound(musicManager.getSong("battle").setPriority(10), 0, event.getPlayer());
     }
 
     //Player on killing spree
@@ -135,6 +135,6 @@ public class AtmosphericMusic implements Listener
             return;
 
         if (NSA.getSpreePoints(killer) >= 20)
-            atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer, false);
+            atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer);
     }
 }

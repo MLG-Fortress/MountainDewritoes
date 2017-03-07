@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -67,9 +68,8 @@ public class AtmosphericManager implements Listener
      * @param song Sound to play
      * @param delay How long to wait in seconds before playing the sound
      * @param players
-     * @param override Forces song to play. Used for jukeboxes and other situations where the same song must be heard by multiple players.
      */
-    public void playSound(MusicThing song, int delay, Collection<? extends Player> players, boolean override)
+    public void playSound(MusicThing song, int delay, Collection<? extends Player> players)
     {
         new BukkitRunnable()
         {
@@ -80,9 +80,10 @@ public class AtmosphericManager implements Listener
                     //Skip player if they're dead
                     if (player.hasMetadata("DEAD") || player.isDead())
                         continue;
-                    //Skip player if already listening to music and override is not set or priority is not higher.
-                    if (player.hasMetadata("MD_LISTENING") && !override)
+                    //Skip player if already listening to music
+                    if (player.hasMetadata("MD_LISTENING"))
                     {
+                        //except if priority is higher.
                         if (!song.hasHigherPriority((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
                             continue;
                     }
@@ -110,7 +111,7 @@ public class AtmosphericManager implements Listener
 
     /* Helper methods */
 
-    public void playSoundNearPlayer(MusicThing song, Player player, double radius, boolean override)
+    public void playSoundNearPlayer(MusicThing song, Player player, double radius)
     {
         Set<Player> players = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius,radius,radius))
@@ -119,18 +120,18 @@ public class AtmosphericManager implements Listener
                 players.add((Player)entity);
         }
         players.add(player); //it seems Entity#getNearbyEntities does not include the entity in question. Haven't specifically tested though.
-        playSound(song, 0, players, override);
+        playSound(song, 0, players);
     }
-    public void playSound(MusicThing song, @Nullable World world, boolean override)
+    public void playSound(MusicThing song, @Nullable World world)
     {
         if (world == null)
-            playSound(song, 0, instance.getServer().getOnlinePlayers(), override);
+            playSound(song, 0, instance.getServer().getOnlinePlayers());
         else
-            playSound(song, 0, world.getPlayers(), override);
+            playSound(song, 0, world.getPlayers());
     }
-    public void playSound(MusicThing song, int delay, Player player, boolean override)
+    public void playSound(MusicThing song, int delay, Player player)
     {
-        playSound(song, delay, Collections.singletonList(player), override);
+        playSound(song, delay, Collections.singletonList(player));
     }
 
     /*Music always stops when player changes worlds*/
@@ -149,7 +150,7 @@ public class AtmosphericManager implements Listener
 
     /*In case metadata doesn't get removed for w/e reason*/
     @EventHandler
-    private void onQuitResetMetadataAndStopMusic(PlayerChangedWorldEvent event)
+    private void onQuitResetMetadataAndStopMusic(PlayerQuitEvent event)
     {
         stopMusic(event.getPlayer());
     }
