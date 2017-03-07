@@ -23,8 +23,6 @@ class MusicManager
     public MusicManager(MountainDewritoes instance)
     {
         FileConfiguration config = instance.getConfig();
-        config.options().pathSeparator('|');
-        instance.reloadConfig(); //ayyy Choco. Anyways, this is needed to reload the respective sections inside the FileConfiguration, according to the pathSeparator we specified
 
         ConfigurationSection musicSection = config.getConfigurationSection("Music");
         if (musicSection == null)
@@ -32,9 +30,7 @@ class MusicManager
             musicSection = config.createSection("Music");
             musicSection.createSection("battle").set("http://localhost/test/adfsfd_lkji.mp3", 20);
             musicSection.createSection("mall").set("http://localhost/test/adfsfd_lkji.mp3", 20);
-            instance.saveConfig();
             instance.getLogger().info("saved blank config");
-            instance.reloadConfig();
         }
 
         for (String sectionName : musicSection.getKeys(false))

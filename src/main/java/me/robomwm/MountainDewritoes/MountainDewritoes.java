@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by Robo on 2/13/2016.
+ * Created by RoboMWM on 2/13/2016.
  */
 public class MountainDewritoes extends JavaPlugin implements Listener
 {
@@ -40,16 +40,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     DamageIndicators damageIndicators;
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
-    private NSA nsa;
 
     public boolean isSurvivalWorld(World world)
     {
         return survivalWorlds.contains(world);
-    }
-
-    public NSA getNSA()
-    {
-        return nsa;
     }
 
     public void registerListener(Listener listener)
@@ -59,8 +53,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void onEnable()
     {
-        //Wow, lots-o-listeners
+        getConfig().options().pathSeparator('*');
+        reloadConfig(); //ayyy Choco. Anyways, this is needed to reload the respective sections inside the FileConfiguration, according to the pathSeparator we specified
 
+        //Wow, lots-o-listeners
         damageIndicators = new DamageIndicators(this);
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
@@ -90,14 +86,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Plugin-dependent listeners
 
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
-        {
             new AtmosphericManager(this);
-        }
 
-        //Classes other plugins might want to use
-        nsa = new NSA(this);
-        pm.registerEvents(nsa, this);
-
+        //Classes other classes might want to use
+        new NSA(this);
 
         //Initialize commonly-used sets
 
@@ -111,6 +103,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Commands
 
         getCommand("nick").setExecutor(new NickCommand());
+
+        saveConfig();
     }
 
     public void onDisable()

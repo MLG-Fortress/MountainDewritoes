@@ -35,6 +35,7 @@ public class NSA implements Listener
     NSA(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        instance.registerListener(this);
     }
 
     static private final String mobTrackingMetadata = "MD_MOBTRACKING";
@@ -76,7 +77,7 @@ public class NSA implements Listener
      * @return how many monsters are trying to attack this player
      */
     @SuppressWarnings("unchecked")
-    public int howManyTargetingPlayer(Player player)
+    static public int howManyTargetingPlayer(Player player)
     {
         if (!player.hasMetadata(mobTrackingMetadata))
             return 0;
