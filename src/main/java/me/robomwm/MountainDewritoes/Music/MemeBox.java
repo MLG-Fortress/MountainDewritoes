@@ -45,6 +45,7 @@ public class MemeBox implements Listener
     public MemeBox(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        instance.registerListener(this);
     }
 
     public void playSound(Player player, MusicThing song)

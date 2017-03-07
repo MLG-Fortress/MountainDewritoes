@@ -1,3 +1,8 @@
+
+//AtomicBoolean over10Minutes = new AtomicBoolean(true);
+//Pattern hello = Pattern.compile("\\bhello\\b|\\bhi\\b|\\bhey\\b|\\bhai\\b");
+//Pattern bye = Pattern.compile("\\bsee you\\b|\\bc u\\b|\\bbye\\b");
+
 /* Play sounds globally based on certain keywords
  * Totally not even close to ready yet, I might even scrap this idea*/
 //@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

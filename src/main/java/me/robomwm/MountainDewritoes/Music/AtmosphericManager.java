@@ -36,30 +36,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
-    World MALL;
     MemeBox memeBox;
-    //AtomicBoolean over10Minutes = new AtomicBoolean(true);
-    //Pattern hello = Pattern.compile("\\bhello\\b|\\bhi\\b|\\bhey\\b|\\bhai\\b");
-    //Pattern bye = Pattern.compile("\\bsee you\\b|\\bc u\\b|\\bbye\\b");
 
-    public AtmosphericManager(MountainDewritoes mountainDewritoes, MemeBox memeBox)
+    public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        MALL = instance.getServer().getWorld("mall");
-        this.memeBox = memeBox;
         new AtmosphericMusic(mountainDewritoes, this);
+        new MemeBox(mountainDewritoes);
+        instance.registerListener(this);
     }
-
-//    public void morningListener()
-//    {
-//        playSoundGlobal(musicManager.getMorningSong());
-//    }
-//
-//    public void nightListener()
-//    {
-//        playSoundGlobal(musicManager.getNightSong());
-//    }
-
 
     public void stopMusic(Player player)
     {
@@ -69,7 +54,6 @@ public class AtmosphericManager implements Listener
 
     public void stopMusic(Player player, double radius)
     {
-        Set<Player> players = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius,radius,radius))
         {
             if (entity.getType() == EntityType.PLAYER)

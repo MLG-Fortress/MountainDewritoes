@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -39,11 +40,19 @@ public class NSA implements Listener
     static private final String mobTrackingMetadata = "MD_MOBTRACKING";
     static private final String killStreak = "MD_KILLSTREAK";
 
+    @EventHandler
+    private void cleanupMetadataOnQuit(PlayerQuitEvent event) //You never know if memory leaks
+    {
+        Player player = event.getPlayer();
+        player.removeMetadata(mobTrackingMetadata, instance);
+        player.removeMetadata(killStreak, instance);
+    }
+
     /* # of mobs targeting player tracker */
 
     @SuppressWarnings("unchecked")
     @EventHandler //Keeps track of monsters targeting this player
-    void onPlayerTargeted(MonsterTargetPlayerEvent event)
+    private void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();
         Creature entity = event.getBadEntity();
@@ -89,7 +98,7 @@ public class NSA implements Listener
     /* kill streak tracker */
 
     @EventHandler
-    void onEntityDeath(EntityDeathEvent event)
+    private void onEntityDeath(EntityDeathEvent event)
     {
         if (event.getEntity().getKiller() == null)
             return;
@@ -99,7 +108,7 @@ public class NSA implements Listener
         Player player = event.getEntity().getKiller();
         int points = 1;
         if (event.getEntityType() == EntityType.PLAYER)
-            points = 3;
+            points = 5;
 
         if (!player.hasMetadata(killStreak))
         {

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -28,23 +29,25 @@ public class AtmosphericMusic implements Listener
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
         instance = mountainDewritoes;
-         musicManager = new MusicManager(instance);
+        musicManager = new MusicManager(instance);
         this.atmosphericManager = atmosphericManager;
         instance.registerListener(this);
 
-        World MALL = instance.getServer().getWorld("mall");
-        if (MALL == null)
-            return;
+        startAmbiance(instance.getServer().getWorld("mall"));
+    }
 
-        //Mall Ambience
+    private void startAmbiance(World world)
+    {
+        if (world == null)
+            return;
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                atmosphericManager.playSound(musicManager.getSong("battle"), MALL, false); //TODO: testing, pls change
+                atmosphericManager.playSound(musicManager.getSong("battle"), world, false); //TODO: testing, pls change
             }
-        }.runTaskTimer(instance, 200L, 600L);
+        }.runTaskTimer(instance, 300L, 600L);
     }
 
     @EventHandler
@@ -125,15 +128,14 @@ public class AtmosphericMusic implements Listener
     }
 
     //Player on killing spree
-//    @EventHandler
-//    void onEntityDeath(EntityDeathEvent event)
-//    {
-//        Player killer = event.getEntity().getKiller();
-//        if (killer == null)
-//            return;
-//
-//        if (NSA.getSpreePoints(killer) >= 10)
-//            atmosphericManager.playSound(musicManager.get);
-//
-//    }
+    @EventHandler
+    private void onEntityDeath(EntityDeathEvent event)
+    {
+        Player killer = event.getEntity().getKiller();
+        if (killer == null)
+            return;
+
+        if (NSA.getSpreePoints(killer) >= 20)
+            atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer, false);
+    }
 }

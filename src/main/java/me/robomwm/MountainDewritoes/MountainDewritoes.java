@@ -4,16 +4,12 @@ import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
-import me.robomwm.MountainDewritoes.Music.MemeBox;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -22,13 +18,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -97,9 +91,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
         {
-            MemeBox memeBox = new MemeBox(this);
-            pm.registerEvents(memeBox, this);
-            pm.registerEvents(new AtmosphericManager(this, memeBox), this);
+            new AtmosphericManager(this);
         }
 
         //Classes other plugins might want to use

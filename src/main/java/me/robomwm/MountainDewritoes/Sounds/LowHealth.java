@@ -79,13 +79,14 @@ public class LowHealth implements Listener
                     if (player.getHealth() > 8f)
                     {
                         alreadyLowHealth.remove(player);
-                        THAPI.fadeTint(player, 100, 1);
+                        //THAPI.fadeTint(player, 100, 1); Fade is too slow
+                        THAPI.removeTint(player);
                         //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
                         player.stopSound("fortress.lowhealth", SoundCategory.PLAYERS);
                         cancel(); //Player is not at critical health
                         return;
                     }
-                    //Has it been 18 seconds yet?
+                    //Has it been 18 seconds yet? (Soundbyte we play is 18 seconds long)
                     if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
