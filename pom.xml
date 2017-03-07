@@ -6,7 +6,7 @@
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>21.1</version>
+    <version>21.1.1</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -49,7 +49,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>me.robomwm:usefulutil</include>
+                            <include>com.github.RoboMWM:UsefulUtil</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -93,6 +93,7 @@
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>6.1.3-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>fr.mrsheepsheep</groupId>
@@ -118,26 +119,31 @@
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>BetterTPA</artifactId>
             <version>3.6</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.ProjectKorra</groupId>
             <artifactId>ProjectKorra</artifactId>
             <version>cbb3581a12</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>TheThuum</artifactId>
             <version>0.7</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.oliverdunk</groupId>
             <artifactId>JukeboxAPI</artifactId>
             <version>v2.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.RoboMWM</groupId>
             <artifactId>UsefulUtil</artifactId>
             <version>1.2.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

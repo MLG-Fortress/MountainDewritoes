@@ -24,17 +24,16 @@ class MusicManager
     {
         FileConfiguration config = instance.getConfig();
         config.options().pathSeparator('|');
-        instance.reloadConfig();
-        
+        instance.reloadConfig(); //ayyy Choco. Anyways, this is needed to reload the respective sections inside the FileConfiguration, according to the pathSeparator we specified
+
         ConfigurationSection musicSection = config.getConfigurationSection("Music");
         if (musicSection == null)
         {
             musicSection = config.createSection("Music");
             musicSection.createSection("battle").set("http://localhost/test/adfsfd_lkji.mp3", 20);
             musicSection.createSection("mall").set("http://localhost/test/adfsfd_lkji.mp3", 20);
+            instance.saveConfig();
         }
-
-        instance.saveConfig();
 
         for (String sectionName : musicSection.getKeys(false))
         {
@@ -59,10 +58,7 @@ class MusicManager
     {
         List<MusicThing> wowAList = new ArrayList<>();
         for (String songName : sectionMap.keySet())
-        {
-            Bukkit.getLogger().info(songName);
             wowAList.add(new MusicThing(songName, (int)sectionMap.get(songName)));
-        }
 
         return wowAList;
     }

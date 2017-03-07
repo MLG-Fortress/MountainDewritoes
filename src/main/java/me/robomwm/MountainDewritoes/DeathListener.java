@@ -28,7 +28,6 @@ public class DeathListener implements Listener
     {
         instance = yayNoMain;
         defaultRespawnLocation = new Location(instance.getServer().getWorld("minigames"), -404, 9, -157, 123.551f, 27.915f);
-
     }
 
     @EventHandler
