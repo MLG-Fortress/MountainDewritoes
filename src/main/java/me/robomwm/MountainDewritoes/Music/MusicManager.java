@@ -34,6 +34,7 @@ class MusicManager
             musicSection.createSection("mall").set("http://localhost/test/adfsfd_lkji.mp3", 20);
             instance.saveConfig();
             instance.getLogger().info("saved blank config");
+            instance.reloadConfig();
         }
 
         for (String sectionName : musicSection.getKeys(false))
