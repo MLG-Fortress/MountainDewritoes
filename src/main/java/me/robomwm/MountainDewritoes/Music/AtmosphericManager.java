@@ -41,8 +41,8 @@ public class AtmosphericManager implements Listener
     public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        memeBox = new MemeBox(mountainDewritoes);
         new AtmosphericMusic(mountainDewritoes, this);
-        new MemeBox(mountainDewritoes);
         instance.registerListener(this);
     }
 
