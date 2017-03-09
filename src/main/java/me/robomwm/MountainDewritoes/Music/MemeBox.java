@@ -95,7 +95,7 @@ public class MemeBox implements Listener
         //return player.hasMetadata("MD_JUKEBOX");
     }
 
-    boolean sendListOfConnectedUsers(CommandSender sender, String message)
+    private boolean sendListOfConnectedUsers(CommandSender sender, String message)
     {
         if (message.equalsIgnoreCase("/jukeboxlist") && sender.isOp())
         {
@@ -141,7 +141,7 @@ public class MemeBox implements Listener
 
     }
 
-    void tellPlayerToOpenMemeBox(Player player, boolean reason)
+    public void tellPlayerToOpenMemeBox(Player player, boolean reason)
     {
         if (hasOpenedMemeBox(player))
             return;

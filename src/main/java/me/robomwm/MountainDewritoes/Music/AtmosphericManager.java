@@ -121,6 +121,10 @@ public class AtmosphericManager implements Listener
         }
         players.add(player); //it seems Entity#getNearbyEntities does not include the entity in question. Haven't specifically tested though.
         playSound(song, 0, players);
+        for (Player player1 : players) //eeeeh
+        {
+            memeBox.tellPlayerToOpenMemeBox(player1, true);
+        }
     }
     public void playSound(MusicThing song, @Nullable World world)
     {

@@ -18,3 +18,4 @@ softdepend:
 commands:
   nick:
     aliases: [color]
+  warp: {}

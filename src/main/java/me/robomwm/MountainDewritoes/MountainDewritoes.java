@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
+import me.robomwm.MountainDewritoes.Commands.WarpCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
@@ -110,10 +111,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new SleepManagement(this), this);
         pm.registerEvents(new ResourcePackNotifier(this), this);
         pm.registerEvents(new ReverseOsmosis(this), this);
-        pm.registerEvents(new CommandOverriders(this), this);
 
         //Plugin-dependent listeners
-
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
             new AtmosphericManager(this);
 
@@ -121,7 +120,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new NSA(this);
 
         //Initialize commonly-used sets
-
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("minigames"));
         survivalWorlds.add(getServer().getWorld("world"));
@@ -130,8 +128,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("cityworld"));
 
         //Commands
-
         getCommand("nick").setExecutor(new NickCommand());
+        getCommand("warp").setExecutor(new WarpCommand(this));
 
         saveConfig();
     }
