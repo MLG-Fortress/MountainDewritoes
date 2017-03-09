@@ -1,15 +1,20 @@
 package me.robomwm.MountainDewritoes;
 
+import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import me.robomwm.BetterTPA.BetterTPA;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -20,13 +25,14 @@ import org.bukkit.scoreboard.Team;
  * Created by RoboMWM on 2/13/2016.
  * Adds prefix based on clan tag
  * "Handles" clan home teleportation
+ * Handles friendly-fire
  */
 public class SimpleClansListener implements Listener
 {
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
     ClanManager clanManager;
     BukkitScheduler scheduler = Bukkit.getScheduler();
-    public MountainDewritoes instance;
+    private MountainDewritoes instance;
     BetterTPA betterTPA;
 
     public SimpleClansListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
@@ -34,6 +40,7 @@ public class SimpleClansListener implements Listener
         this.clanManager = clanManager;
         instance = mountainDewritoes;
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "allow");
     }
 
     //Set colors and prefix onJoin
@@ -208,13 +215,50 @@ public class SimpleClansListener implements Listener
             betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
         }
     }
-//    static public boolean isInSameClan(Player player, Player target)
-//    {
-//        ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
-//        ClanPlayer clanTarget = clanManager.getClanPlayer(target);
-//        if (clanPlayer == null || clanTarget == null)
-//            return false;
-//        return clanPlayer.getClan() == clanTarget.getClan();
-//    }
+
+    //Projectiles can pass through allies
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onPlayerAboutToGetHit(ProjectileCollideEvent event)
+    {
+        if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
+            return;
+        if (event.getCollidedWith().getType() != EntityType.PLAYER)
+            return;
+        if ((event.getEntity().getShooter() instanceof Player))
+            return;
+
+        Player damagee = (Player)event.getCollidedWith();
+        Player damager = (Player)event.getEntity().getShooter();
+
+        if (isInSameClan(damagee, damager))
+            event.setCancelled(true);
+    }
+
+    //No friendly fire
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    void onPlayerDamage(EntityDamageByEntityEvent event)
+    {
+        if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
+            return;
+        if (event.getDamager().getType() != EntityType.PLAYER)
+            return;
+        if (event.getEntity().getType() != EntityType.PLAYER)
+            return;
+
+        Player damagee = (Player)event.getEntity();
+        Player damager = (Player)event.getDamager();
+
+        if (isInSameClan(damagee, damager))
+            event.setCancelled(true);
+    }
+
+    private boolean isInSameClan(Player player, Player target)
+    {
+        ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
+        ClanPlayer clanTarget = clanManager.getClanPlayer(target);
+        if (clanPlayer == null || clanTarget == null)
+            return false;
+        return clanPlayer.getClan() == clanTarget.getClan();
+    }
 
 }
