@@ -59,7 +59,10 @@ public class GamemodeInventoryManager implements Listener
     void onPlayerDropItem(PlayerDropItemEvent event)
     {
         if (checkPlayer(event.getPlayer()))
+        {
             event.setCancelled(true);
+            event.getPlayer().getInventory().setItemInMainHand(null);
+        }
     }
 
     /**
