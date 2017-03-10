@@ -23,6 +23,7 @@ public class ResourcePackNotifier implements Listener
     @EventHandler
     void onPlayerJoin(PlayerJoinEvent event)
     {
+        event.getPlayer().setViewDistance(3); //Reduce chunk loading time
         new BukkitRunnable()
         {
             public void run()
@@ -54,6 +55,10 @@ public class ResourcePackNotifier implements Listener
                         event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our meme resource pack. Please enable it by editing the server in your servers list.");
                 }
             }.runTaskLater(instance, 600L);
+        }
+        else if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED)
+        {
+            event.getPlayer().setViewDistance(8);
         }
     }
 }
