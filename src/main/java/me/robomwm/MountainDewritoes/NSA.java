@@ -4,27 +4,18 @@ import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Flying;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -45,7 +36,7 @@ public class NSA implements Listener
 
     static private final String mobTrackingMetadata = "MD_MOBTRACKING";
     static private final String killStreak = "MD_KILLSTREAK";
-    static private final String killPoints = "MD_KILLSTREAKPOINTS";
+    static private final String spreePoints = "MD_KILLSTREAKPOINTS";
 
     @EventHandler
     private void cleanupMetadataOnQuit(PlayerQuitEvent event) //You never know if memory leaks
@@ -123,11 +114,11 @@ public class NSA implements Listener
 
         if (!player.hasMetadata(killStreak))
             player.setMetadata(killStreak, new FixedMetadataValue(instance, new ArrayDeque<BukkitRunnable>()));
-        if (!player.hasMetadata(killPoints))
-            player.setMetadata(killStreak, new FixedMetadataValue(instance, 0));
+        if (!player.hasMetadata(spreePoints))
+            player.setMetadata(spreePoints, new FixedMetadataValue(instance, 0));
 
-        int currentPoints = player.getMetadata(killPoints).get(0).asInt();
-        player.setMetadata(killPoints, new FixedMetadataValue(instance, currentPoints + points));
+        int currentPoints = player.getMetadata(spreePoints).get(0).asInt();
+        player.setMetadata(spreePoints, new FixedMetadataValue(instance, currentPoints + points));
         runnables = (Queue<BukkitTask>)player.getMetadata(killStreak).get(0).value();
 
         //Remove point after 2 minutes
@@ -137,8 +128,8 @@ public class NSA implements Listener
             @Override
             public void run()
             {
-                int currentPoints = player.getMetadata(killPoints).get(0).asInt();
-                player.setMetadata(killPoints, new FixedMetadataValue(instance, currentPoints - finalpoints));
+                int currentPoints = player.getMetadata(spreePoints).get(0).asInt();
+                player.setMetadata(spreePoints, new FixedMetadataValue(instance, currentPoints - finalpoints));
             }
         }.runTaskLater(instance, 2400L));
     }
@@ -153,7 +144,7 @@ public class NSA implements Listener
                 task.cancel();
         }
         player.removeMetadata(killStreak, instance);
-        player.removeMetadata(killPoints, instance);
+        player.removeMetadata(spreePoints, instance);
     }
 
     //Clear spree points when killed
@@ -167,9 +158,9 @@ public class NSA implements Listener
     @SuppressWarnings("unchecked")
     static public int getSpreePoints(Player player)
     {
-        if (!player.hasMetadata(killPoints))
+        if (!player.hasMetadata(spreePoints))
             return 0;
-        return player.getMetadata(killPoints).get(0).asInt();
+        return player.getMetadata(spreePoints).get(0).asInt();
     }
 
 
