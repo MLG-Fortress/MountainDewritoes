@@ -39,12 +39,10 @@ public class GamemodeInventoryManager implements Listener
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " add we.builder");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex reload");
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex reload");
         }
     }
 

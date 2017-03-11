@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.BetterTPA.BetterTPA;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -59,6 +60,7 @@ public class WarpCommand implements CommandExecutor
                 break;
             case "jail":
                 betterTPA.teleportPlayer(player, "jail", jail, warmup, null);
+                break;
             default:
                 sendWarps(player);
         }
@@ -68,7 +70,7 @@ public class WarpCommand implements CommandExecutor
     private void sendWarps(Player player)
     {
         player.sendMessage("Warps:");
-        StringBuilder lazy = new StringBuilder();
+        StringBuilder lazy = new StringBuilder(ChatColor.GOLD.toString());
         lazy.append("spawn, ");
         lazy.append("mall, ");
         lazy.append("jail");

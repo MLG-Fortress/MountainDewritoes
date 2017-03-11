@@ -224,7 +224,7 @@ public class SimpleClansListener implements Listener
             return;
         if (event.getCollidedWith().getType() != EntityType.PLAYER)
             return;
-        if ((event.getEntity().getShooter() instanceof Player))
+        if (!(event.getEntity().getShooter() instanceof Player))
             return;
 
         Player damagee = (Player)event.getCollidedWith();
