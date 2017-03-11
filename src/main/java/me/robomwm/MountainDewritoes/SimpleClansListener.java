@@ -41,6 +41,7 @@ public class SimpleClansListener implements Listener
         instance = mountainDewritoes;
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "allow");
+        instance.registerListener(this);
     }
 
     //Set colors and prefix onJoin

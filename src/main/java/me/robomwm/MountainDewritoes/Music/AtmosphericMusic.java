@@ -123,7 +123,10 @@ public class AtmosphericMusic implements Listener
         if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
             return;
         if (NSA.howManyTargetingPlayer(event.getPlayer()) > 3)
+        {
             atmosphericManager.playSound(musicManager.getSong("battle").setPriority(10), 0, event.getPlayer());
+            instance.getLogger().info("Playing battle music to " + event.getPlayer().getName());
+        }
     }
 
     //Player on killing spree

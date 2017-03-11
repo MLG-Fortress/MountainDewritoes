@@ -8,30 +8,27 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 /**
  * Created by RoboMWM on 1/28/2017.
  */
 public class ResourcePackNotifier implements Listener
 {
     MountainDewritoes instance;
+    Set<UUID> ignoredUUIDs = new HashSet<>();
 
     ResourcePackNotifier(MountainDewritoes instance)
     {
         this.instance = instance;
+        ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
     }
 
     @EventHandler
     void onPlayerJoin(PlayerJoinEvent event)
     {
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                event.getPlayer().setViewDistance(3); //reduce chunk loading time
-            }
-        }.runTaskLater(instance, 20L);
-
         new BukkitRunnable()
         {
             public void run()
@@ -46,7 +43,7 @@ public class ResourcePackNotifier implements Listener
                     this.cancel();
                 }
             }
-        }.runTaskTimer(instance, 200L, 100L);
+        }.runTaskTimer(instance, 20L, 100L);
     }
     @EventHandler
     void statusOfPack(PlayerResourcePackStatusEvent event)
@@ -54,6 +51,9 @@ public class ResourcePackNotifier implements Listener
         if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED)
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "irc say samplebot #MLG " + event.getPlayer().getName() + " denied da meme pack.");
+
+            if (ignoredUUIDs.contains(event.getPlayer().getUniqueId()))
+                return;
 
             new BukkitRunnable()
             {
@@ -63,10 +63,6 @@ public class ResourcePackNotifier implements Listener
                         event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our meme resource pack. Please enable it by editing the server in your servers list.");
                 }
             }.runTaskLater(instance, 600L);
-        }
-        else if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED)
-        {
-            event.getPlayer().setViewDistance(8);
         }
     }
 }

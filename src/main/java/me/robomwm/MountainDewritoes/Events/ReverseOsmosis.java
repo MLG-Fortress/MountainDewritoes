@@ -32,6 +32,7 @@ public class ReverseOsmosis implements Listener
     public ReverseOsmosis(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        instance.registerListener(this);
     }
 
     Map<Player, Set<Monster>> targetedPlayers = new HashMap<>();
@@ -41,7 +42,7 @@ public class ReverseOsmosis implements Listener
      * @param event
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void onPlayerTargeted(EntityTargetLivingEntityEvent event)
+    private void onPlayerTargeted(EntityTargetLivingEntityEvent event)
     {
         if (event.getTarget() == null) //forgot/lost the target
             return;
@@ -59,8 +60,11 @@ public class ReverseOsmosis implements Listener
 
     private boolean isLivingMonster(Entity entity)
     {
-        if (!(entity instanceof Creature)) return false;
-        if (entity instanceof Monster) return true;
+        if (!(entity instanceof Creature))
+            return false;
+
+        if (entity instanceof Monster)
+            return true;
 
 
         EntityType type = entity.getType();

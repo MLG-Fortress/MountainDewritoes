@@ -92,7 +92,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
         ClanManager clanManager = sc.getClanManager();
         pm.registerEvents(this, this);
-        pm.registerEvents(new SimpleClansListener(this, clanManager), this);
         pm.registerEvents(new ChatListener(this, clanManager), this);
         pm.registerEvents(new LongFallBoots(), this);
         pm.registerEvents(new DeathListener(this), this);
@@ -110,7 +109,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(damageIndicators, this);
         pm.registerEvents(new SleepManagement(this), this);
         pm.registerEvents(new ResourcePackNotifier(this), this);
-        pm.registerEvents(new ReverseOsmosis(this), this);
+
+        new ReverseOsmosis(this);
+        new SimpleClansListener(this, clanManager);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
