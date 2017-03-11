@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -99,16 +100,18 @@ public class NSA implements Listener
     @SuppressWarnings("unchecked")
     private void onEntityDeath(EntityDeathEvent event)
     {
-        if (event.getEntity().getKiller() == null)
-            return;
         if (event.getEntityType() != EntityType.PLAYER && !UsefulUtil.isMonster(event.getEntity()))
             return;
+        Entity killerEntity = UsefulUtil.getKiller(event);
+        if (killerEntity == null || killerEntity.getType() != EntityType.PLAYER)
+            return;
+
+        Player player = (Player)killerEntity;
 
         int points = 1;
         if (event.getEntityType() == EntityType.PLAYER)
             points = 5;
 
-        Player player = event.getEntity().getKiller();
         Queue<BukkitTask> runnables;
 
 

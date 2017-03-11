@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.Sounds;
 
 import com.destroystokyo.paper.Title;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -47,35 +48,12 @@ public class HitSound implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onPlayerDamage(EntityDamageByEntityEvent event)
     {
-        handleEntityDamageEventCuzThxSpigot(event);
-    }
-
-    //Not necessary for what I'm doing
-//    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-//    void onPlayerIgniteWithArrow(EntityCombustByEntityEvent event)
-//    {
-//        EntityDamageByEntityEvent eventWrapper = new EntityDamageByEntityEvent(event.getCombuster(), event.getEntity(), EntityDamageEvent.DamageCause.FIRE_TICK, event.getDuration());
-//        handleEntityDamageEventCuzThxSpigot(eventWrapper);
-//    }
-
-    void handleEntityDamageEventCuzThxSpigot(EntityDamageByEntityEvent event)
-    {
-        Entity damager = event.getDamager();
+        Entity damager = UsefulUtil.getSourceAttacker(event, false);
         //Check if attacker is a player or if damage was caused due to a projectile
-        if (damager.getType() != EntityType.PLAYER && !(damager instanceof Projectile))
+        if (damager == null || damager.getType() != EntityType.PLAYER)
             return;
 
-        //Get the attacker
-        Player attacker;
-        if (damager instanceof Projectile)
-        {
-            Projectile projectile = (Projectile)damager;
-            if (!(projectile.getShooter() instanceof Player))
-                return; //Dispenser or Skelly
-            attacker = (Player)projectile.getShooter();
-        }
-        else
-            attacker = (Player)damager;
+        Player attacker = (Player)damager;
 
         attacker.playSound(attacker.getLocation(), Sound.UI_BUTTON_CLICK, 3000000f, 1f);
 
@@ -84,16 +62,18 @@ public class HitSound implements Listener
 //            if (event.getFinalDamage() < 10)
 //                attacker.sendTitle(hitMarker);
 //            else
-                attacker.sendTitle(largeHitMarker);
+            attacker.sendTitle(largeHitMarker);
         }
     }
 
     @EventHandler
     void onEntityDeath(EntityDeathEvent event)
     {
-        Player killer = event.getEntity().getKiller();
-        if (killer == null || killer.getType() != EntityType.PLAYER)
+        Entity killerEntity = UsefulUtil.getKiller(event);
+        if (killerEntity == null || killerEntity.getType() != EntityType.PLAYER)
             return;
+
+        Player killer = (Player)killerEntity;
 
         if (event.getEntityType() == EntityType.PLAYER)
             eliminationBuilder.subtitle("Eliminated " + ChatColor.RED + event.getEntity().getName());
