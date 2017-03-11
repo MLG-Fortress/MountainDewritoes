@@ -30,7 +30,7 @@ public class ResourcePackNotifier implements Listener
             {
                 event.getPlayer().setViewDistance(3); //reduce chunk loading time
             }
-        }.runTaskLater(instance, 1L);
+        }.runTaskLater(instance, 20L);
 
         new BukkitRunnable()
         {
