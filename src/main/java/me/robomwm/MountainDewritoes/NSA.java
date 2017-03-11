@@ -51,7 +51,7 @@ public class NSA implements Listener
     /* # of mobs targeting player tracker */
 
     @SuppressWarnings("unchecked")
-    @EventHandler(priority = EventPriority.LOWEST) //Keeps track of monsters targeting this player
+    @EventHandler(priority = EventPriority.MONITOR) //Keeps track of monsters targeting this player
     private void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();
