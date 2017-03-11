@@ -23,7 +23,15 @@ public class ResourcePackNotifier implements Listener
     @EventHandler
     void onPlayerJoin(PlayerJoinEvent event)
     {
-        event.getPlayer().setViewDistance(3); //Reduce chunk loading time
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                event.getPlayer().setViewDistance(3); //reduce chunk loading time
+            }
+        }.runTaskLater(instance, 1L);
+
         new BukkitRunnable()
         {
             public void run()

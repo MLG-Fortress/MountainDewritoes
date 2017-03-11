@@ -12,12 +12,18 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created by RoboMWM on 9/24/2016.
  */
 public class GamemodeInventoryManager implements Listener
 {
+    MountainDewritoes instance;
+    public GamemodeInventoryManager(MountainDewritoes mountainDewritoes)
+    {
+        this.instance = mountainDewritoes;
+    }
     @EventHandler(priority = EventPriority.LOWEST)
     void playerOpenEnderChest(InventoryOpenEvent event)
     {
@@ -39,11 +45,24 @@ public class GamemodeInventoryManager implements Listener
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " add we.builder");
+            reloadPermissions();
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
+            reloadPermissions();
         }
+    }
+
+    private void reloadPermissions() //Basically I should get another permission plugin
+    {
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "pex reload");
+            }
+        }.runTaskLater(instance, 1L);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
