@@ -70,14 +70,16 @@ public class ReverseOsmosis implements Listener
         EntityType type = entity.getType();
         switch(type)
         {
-            //case GHAST: //Extends Flying, which extends LivingEntity. LivingEntity does not have getTarget(). Creatures do.
-            case MAGMA_CUBE:
+            //case GHAST: //Not a creature, therefore does not have getTarget()
+            //case MAGMA_CUBE:
+            //case SLIME:
             case SHULKER:
             case POLAR_BEAR:
                 return true;
             case RABBIT:
                 Rabbit rabbit = (Rabbit) entity;
-                if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) return true;
+                if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY)
+                    return true;
             default:
                 return false;
         }

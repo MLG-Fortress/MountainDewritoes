@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -27,7 +28,7 @@ import java.util.Set;
  */
 public class NSA implements Listener
 {
-    MountainDewritoes instance;
+    private static MountainDewritoes instance;
 
     NSA(MountainDewritoes mountainDewritoes)
     {
@@ -50,7 +51,7 @@ public class NSA implements Listener
     /* # of mobs targeting player tracker */
 
     @SuppressWarnings("unchecked")
-    @EventHandler //Keeps track of monsters targeting this player
+    @EventHandler(priority = EventPriority.LOWEST) //Keeps track of monsters targeting this player
     private void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();
@@ -66,6 +67,7 @@ public class NSA implements Listener
         {
             Set<Creature> targeters = (Set<Creature>)player.getMetadata(mobTrackingMetadata).get(0).value();
             targeters.add(entity);
+            player.setMetadata(mobTrackingMetadata, new FixedMetadataValue(instance, targeters));
         }
     }
 
@@ -90,6 +92,7 @@ public class NSA implements Listener
                 nonTargeters.add(entity);
         }
         trackers.removeAll(nonTargeters);
+        player.setMetadata(mobTrackingMetadata, new FixedMetadataValue(instance, trackers));
 
         return trackers.size();
     }
