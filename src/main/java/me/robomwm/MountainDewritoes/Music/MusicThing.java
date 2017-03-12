@@ -58,6 +58,6 @@ class MusicThing
     }
     public boolean hasHigherPriority(MusicThing song)
     {
-        return song.getPriority() > this.priority;
+        return this.priority > song.getPriority();
     }
 }
