@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -9,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
@@ -16,8 +18,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
  *
  * @author RoboMWM
  */
-public class ReplacementSoundEffects
+public class ReplacementSoundEffects implements Listener
 {
+    public ReplacementSoundEffects(MountainDewritoes mountainDewritoes)
+    {
+        mountainDewritoes.registerListener(this);
+    }
+    
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onReceivingDamage(EntityDamageEvent event)
     {
