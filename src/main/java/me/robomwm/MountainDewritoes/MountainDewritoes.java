@@ -7,6 +7,7 @@ import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
+import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
@@ -112,6 +113,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         new ReverseOsmosis(this);
         new SimpleClansListener(this, clanManager);
+        new ReplacementSoundEffects(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null)

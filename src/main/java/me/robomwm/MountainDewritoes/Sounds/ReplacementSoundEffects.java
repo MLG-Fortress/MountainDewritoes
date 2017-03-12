@@ -24,7 +24,7 @@ public class ReplacementSoundEffects implements Listener
     {
         mountainDewritoes.registerListener(this);
     }
-    
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onReceivingDamage(EntityDamageEvent event)
     {
