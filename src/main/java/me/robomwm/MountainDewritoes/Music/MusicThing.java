@@ -18,6 +18,13 @@ class MusicThing
         this.startTime = System.currentTimeMillis();
     }
 
+    public MusicThing(String URL, long ticks)
+    {
+        this.URL = URL;
+        this.length = ticks;
+        this.startTime = System.currentTimeMillis();
+    }
+
     public MusicThing setPriority(int priority)
     {
         this.priority = priority;

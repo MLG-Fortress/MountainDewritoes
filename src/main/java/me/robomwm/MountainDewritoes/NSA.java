@@ -51,7 +51,7 @@ public class NSA implements Listener
     /* # of mobs targeting player tracker */
 
     @SuppressWarnings("unchecked")
-    @EventHandler(priority = EventPriority.MONITOR) //Keeps track of monsters targeting this player
+    @EventHandler(priority = EventPriority.MONITOR) //MUST BE ON MONITOR else any calls to "howmanyaretracking" will remove the newly-added mob, since it is not yet targeting the player at this point lol
     private void onPlayerTargeted(MonsterTargetPlayerEvent event)
     {
         Player player = event.getPlayer();

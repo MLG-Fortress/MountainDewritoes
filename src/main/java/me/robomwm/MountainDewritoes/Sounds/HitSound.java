@@ -49,8 +49,8 @@ public class HitSound implements Listener
     void onPlayerDamage(EntityDamageByEntityEvent event)
     {
         Entity damager = UsefulUtil.getSourceAttacker(event, false);
-        //Check if attacker is a player or if damage was caused due to a projectile
-        if (damager == null || damager.getType() != EntityType.PLAYER)
+        //Check if attacker is a player or if damage was caused due to a projectile or if self-damage
+        if (damager == null || damager.getType() != EntityType.PLAYER || damager == event.getEntity())
             return;
 
         Player attacker = (Player)damager;
