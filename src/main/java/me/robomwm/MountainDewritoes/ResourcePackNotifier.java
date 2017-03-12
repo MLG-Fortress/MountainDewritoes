@@ -18,17 +18,21 @@ import java.util.UUID;
 public class ResourcePackNotifier implements Listener
 {
     MountainDewritoes instance;
+    String pack;
     Set<UUID> ignoredUUIDs = new HashSet<>();
 
     ResourcePackNotifier(MountainDewritoes instance)
     {
         this.instance = instance;
         ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
+        pack = instance.getConfig().getString("pack");
     }
 
     @EventHandler
     void onPlayerJoin(PlayerJoinEvent event)
     {
+        if (pack == null || pack.isEmpty())
+            return;
         new BukkitRunnable()
         {
             public void run()
@@ -39,7 +43,7 @@ public class ResourcePackNotifier implements Listener
                     return;
                 else
                 {
-                    event.getPlayer().setResourcePack("https://github.com/MLG-Fortress/MLG-Pack-2.1/releases/download/alpha/MLG-Pack-2.1-alpha.zip");
+                    event.getPlayer().setResourcePack(pack);
                     this.cancel();
                 }
             }

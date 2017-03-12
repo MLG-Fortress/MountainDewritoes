@@ -10,8 +10,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,46 +46,11 @@ public class LongFallBoots implements Listener
 
 
     /**
-     * Play fall damage sound only if the player actually took fall damage
-     * (We only care about players, but this could be extended to all entities)
-     * (resource pack sets sound to silence for players)
-     */
-    Map<EntityDamageEvent, Double> originalDamageValue = new HashMap<>();
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    void onPlayerFallDamageGetOriginalFallDamageValue(EntityDamageEvent event)
-    {
-        if (event.getEntityType() != EntityType.PLAYER || event.getCause() != EntityDamageEvent.DamageCause.FALL)
-            return;
-        originalDamageValue.put(event, event.getDamage());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerFallDamagePlayFallSound(EntityDamageEvent event)
-    {
-        //Always remove, even if canceled
-        Double damage = originalDamageValue.remove(event);
-
-        if (damage == null)
-            return;
-        if (event.isCancelled())
-            return;
-
-        Location location = event.getEntity().getLocation();
-        World world = location.getWorld();
-
-        if (damage < 5.0D) //Fell less than 8 blocks
-            world.playSound(location, "fortress.small_fall", SoundCategory.PLAYERS, 1.0f, 1.0f);
-        else
-            world.playSound(location, "fortress.big_fall", SoundCategory.PLAYERS, 1.0f, 1.0f);
-    }
-
-    /** (Currently disabled)
-     * (Replaced with custom fastcraftplus recipe)
+     * TODO: "custom" recipe
      * When player clicks some iron boots
      * @param event
      */
-    /*@EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     void onPlayerSomehowAcquireSomeBoots(InventoryClickEvent event)
     {
         ItemStack item = event.getCurrentItem();
@@ -100,5 +70,5 @@ public class LongFallBoots implements Listener
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
     }
-    */
+
 }
