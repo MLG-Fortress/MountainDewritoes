@@ -48,7 +48,12 @@ public class ReplacementSoundEffects implements Listener
 
         //TODO: distance checks? (Only for hacked clients)
         for (Player p : player.getWorld().getPlayers())
+        {
+            if (p == player)
+                continue;
             p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.5f, pitch);
+        }
+
     }
 
 
