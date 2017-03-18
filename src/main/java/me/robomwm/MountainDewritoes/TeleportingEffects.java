@@ -1,18 +1,17 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.BetterTPA.BetterTPA;
 import me.robomwm.BetterTPA.PostTPATeleportEvent;
 import me.robomwm.BetterTPA.PreTPATeleportEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -58,20 +57,34 @@ public class TeleportingEffects implements Listener
         if (!event.isCancelled())
         {
             playTeleportEffect(event.getPlayer());
-            //TODO: play sound effect
+            long warmup = event.getWarmup();
+            if (warmup > 0L && warmup < 160L)
+                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter", SoundCategory.BLOCKS, 1.5f, 1.0f);
+            else if (warmup > 160L)
+                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter_long", SoundCategory.BLOCKS, 1.5f, 1.0f);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerTPACancel(PostTPATeleportEvent event)
     {
-        //TODO: stop sound effect
         Player player = event.getPlayer();
         Location location = player.getLocation();
         preTeleportingPlayers.remove(event.getPlayer());
         taskThingy.remove(event.getPlayer()).cancel();
         if (event.isCancelled())
+        {
+            //Stop transporter sound
+            for (Player p : location.getWorld().getPlayers())
+            {
+                if (location.distanceSquared(p.getLocation()) < 576D) //24 blocks
+                {
+                    p.stopSound("fortress.transporter", SoundCategory.BLOCKS);
+                    p.stopSound("fortress.transporter_long", SoundCategory.BLOCKS);
+                }
+            }
             return;
+        }
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)

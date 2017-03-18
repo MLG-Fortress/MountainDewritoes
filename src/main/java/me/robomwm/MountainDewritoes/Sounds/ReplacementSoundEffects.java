@@ -53,7 +53,6 @@ public class ReplacementSoundEffects implements Listener
                 continue;
             p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.5f, pitch);
         }
-
     }
 
 
