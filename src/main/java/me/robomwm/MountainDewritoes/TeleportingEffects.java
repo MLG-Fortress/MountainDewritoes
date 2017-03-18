@@ -72,6 +72,7 @@ public class TeleportingEffects implements Listener
         Location location = player.getLocation();
         preTeleportingPlayers.remove(event.getPlayer());
         taskThingy.remove(event.getPlayer()).cancel();
+
         if (event.isCancelled())
         {
             //Stop transporter sound
@@ -85,6 +86,8 @@ public class TeleportingEffects implements Listener
             }
             return;
         }
+
+        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter_finish", SoundCategory.BLOCKS, 2.0f, 1.0f);
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)
