@@ -23,6 +23,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -282,6 +283,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             }
         }
         event.setAffectedEntities(newEntities);
+    }
+
+    /**
+     * Reset things some plugins stupidly play around with >_>
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onWorldChange(PlayerChangedWorldEvent event)
+    {
+        Player player = event.getPlayer();
+        player.setHealthScaled(false);
     }
 
     /**
