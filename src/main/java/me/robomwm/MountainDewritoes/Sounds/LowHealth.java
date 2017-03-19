@@ -60,7 +60,7 @@ public class LowHealth implements Listener
         double health = player.getHealth() - event.getFinalDamage();
         if (health <= 8f && !alreadyLowHealth.containsKey(player))
         {
-            player.stopSound("", SoundCategory.PLAYERS);
+            player.stopSound("");
             player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
             //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
             player.playSound(player.getLocation(), "fortress.lowhealthgasp", SoundCategory.PLAYERS, 3000000f, 1.0f);
