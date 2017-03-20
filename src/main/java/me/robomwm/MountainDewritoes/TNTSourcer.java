@@ -23,11 +23,13 @@ import org.bukkit.metadata.Metadatable;
 public class TNTSourcer implements Listener
 {
     MountainDewritoes instance;
+    UsefulNMSUtil usefulNMSUtil;
 
     public TNTSourcer(MountainDewritoes mountainDewritoes)
     {
         this.instance = mountainDewritoes;
         instance.registerListener(this);
+        usefulNMSUtil = (UsefulNMSUtil)instance.getServer().getPluginManager().getPlugin("UsefulNMSUtil");
     }
 
     //Back in my day, punching TNT ignited TNT you youngens
@@ -41,7 +43,7 @@ public class TNTSourcer implements Listener
             tnt.setX(tnt.getX() + 0.5D);
             tnt.setY(tnt.getY() + 0.6D);
             tnt.setZ(tnt.getZ() + 0.5D);
-            UsefulNMSUtil.spawnSourcedTNTPrimed(tnt, event.getPlayer());
+            usefulNMSUtil.spawnSourcedTNTPrimed(tnt, event.getPlayer());
             //entity.setMetadata("SOURCE", new FixedMetadataValue(instance, event.getPlayer()));
             event.setCancelled(true);
             event.getBlock().setType(Material.AIR);
@@ -60,7 +62,7 @@ public class TNTSourcer implements Listener
         TNTPrimed tnt = (TNTPrimed)event.getEntity();
         if (tnt.hasMetadata("CS_pName"))
             player = instance.getServer().getPlayer(tnt.getMetadata("CS_pName").get(0).asString());
-        TNTPrimed betterTNT = UsefulNMSUtil.spawnSourcedTNTPrimed(tnt.getLocation(), player);
+        TNTPrimed betterTNT = usefulNMSUtil.spawnSourcedTNTPrimed(tnt.getLocation(), player);
 
         //Copy over metadata
         copyMetadata(tnt, betterTNT, "CS_Label");

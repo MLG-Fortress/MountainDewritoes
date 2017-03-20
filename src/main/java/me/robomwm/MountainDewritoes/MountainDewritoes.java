@@ -103,7 +103,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //pm.registerEvents(new SecondWind(this), this);
         pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
-        pm.registerEvents(new TeleportingEffects(this), this);
         pm.registerEvents(new HitSound(this), this);
         pm.registerEvents(new SpawnWorldListener(this), this);
         pm.registerEvents(new GamemodeInventoryManager(this), this);
@@ -115,11 +114,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ReverseOsmosis(this);
         new SimpleClansListener(this, clanManager);
         new ReplacementSoundEffects(this);
-        new TNTSourcer(this);
 
         //Plugin-dependent listeners
-        if (getServer().getPluginManager().getPlugin("MCJukebox") != null)
+        if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
             new AtmosphericManager(this);
+        if (getServer().getPluginManager().getPlugin("UsefulNMSUtil") != null && getServer().getPluginManager().getPlugin("UsefulNMSUtil").isEnabled())
+            new TNTSourcer(this);
+        if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
+            pm.registerEvents(new TeleportingEffects(this), this);
 
         //Classes other classes might want to use
         new NSA(this);
