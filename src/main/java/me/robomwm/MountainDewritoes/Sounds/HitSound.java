@@ -45,7 +45,7 @@ public class HitSound implements Listener
         eliminationBuilder.fadeOut(20);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onPlayerDamage(EntityDamageByEntityEvent event)
     {
         Entity damager = UsefulUtil.getSourceAttacker(event, false);

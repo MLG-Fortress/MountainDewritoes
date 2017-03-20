@@ -40,12 +40,18 @@ public class ReplacementSoundEffects implements Listener
         if (event.getFinalDamage() > 20D)
             pitch = 0.5f;
         else if (event.getFinalDamage() < 0.5D)
-            pitch = 1.5f;
+            pitch = 2f;
 
         Player player = (Player)event.getEntity();
         Location location = player.getLocation();
-        player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
 
+        //Play sound to player
+        if (pitch == 0.5f)
+            player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
+        else
+            player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
+
+        //Play sound to others
         //TODO: distance checks? (Only for hacked clients)
         for (Player p : player.getWorld().getPlayers())
         {
