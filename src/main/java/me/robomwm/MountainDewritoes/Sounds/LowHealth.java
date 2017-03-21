@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes.Sounds;
 import fr.mrsheepsheep.tinthealth.THAPI;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -68,6 +69,7 @@ public class LowHealth implements Listener
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
             {
+                long ticks = 0L;
                 public void run()
                 {
                     if (!alreadyLowHealth.containsKey(player))
@@ -86,12 +88,24 @@ public class LowHealth implements Listener
                         cancel(); //Player is not at critical health
                         return;
                     }
+                    //Breathing sounds
+                    if (ticks % 80 == 0)
+                    {
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 3000000f, 1.0f);
+                    }
+                    else if (ticks % 90 == 0)
+                    {
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 3000000f, 0.85f);
+                    }
+
+                    ticks += 2L;
                     //Has it been 18 seconds yet? (Soundbyte we play is 18 seconds long)
                     if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
                     THAPI.setTint(player, 100);
                     player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
+                    ticks = 0L;
                     //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
                 }
             }.runTaskTimer(instance, 100L, 2L);
