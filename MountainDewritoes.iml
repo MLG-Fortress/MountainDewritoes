@@ -67,6 +67,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.oliverdunk:JukeboxAPI:v2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.github.RoboMWM:UsefulUtil:1.10" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.RoboMWM:UsefulNMSUtil:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.RoboMWM:UsefulNMSUtil:1.1" level="project" />
   </component>
 </module>

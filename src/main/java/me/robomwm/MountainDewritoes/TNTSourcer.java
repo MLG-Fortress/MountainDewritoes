@@ -55,7 +55,7 @@ public class TNTSourcer implements Listener
     {
         if (event.getEntityType() != EntityType.PRIMED_TNT)
             return;
-        if (!event.getEntity().hasMetadata("CS_Label"))
+        if (!event.getEntity().hasMetadata("CS_Label") || event.getEntity().hasMetadata("MD_CS_Converted"))
             return;
 
         Player player = null;
@@ -78,6 +78,9 @@ public class TNTSourcer implements Listener
         betterTNT.setYield(tnt.getYield());
         betterTNT.setIsIncendiary(tnt.isIncendiary());
         betterTNT.setFuseTicks(tnt.getFuseTicks());
+
+        //Add our own metadata so we don't think this is the original CS primed tnt, lol
+        betterTNT.setMetadata("MD_CS_Converted", new FixedMetadataValue(instance, true));
 
         //Cancel and remove original
         event.setCancelled(true);
