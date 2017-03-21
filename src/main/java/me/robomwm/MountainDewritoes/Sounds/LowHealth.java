@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes.Sounds;
 
 import fr.mrsheepsheep.tinthealth.THAPI;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
@@ -11,15 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.Time;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -129,7 +124,7 @@ public class LowHealth implements Listener
                     }
                     else
                     {
-                        player.playSound(player.getLocation().subtract(0D, 300D, 0D), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, 0.85f);
+                        player.playSound(player.getLocation().subtract(0D, 300D, 0D), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, (float)ThreadLocalRandom.current().nextDouble(0.80D, 0.90D));
                         breathin = true;
                         ticks = 0;
                         nextTick = ThreadLocalRandom.current().nextInt(60, 130);
