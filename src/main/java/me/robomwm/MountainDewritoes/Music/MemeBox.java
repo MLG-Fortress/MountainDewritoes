@@ -135,21 +135,23 @@ public class MemeBox implements Listener
             {
                 if (!player.isOnline())
                     return;
-                tellPlayerToOpenMemeBox(player, false);
+                if (tellPlayerToOpenMemeBox(player, false))
+                    this.cancel();
             }
-        }.runTaskLater(instance, 360L);
+        }.runTaskTimer(instance, 1200L, 4800L);
 
     }
 
-    public void tellPlayerToOpenMemeBox(Player player, boolean reason)
+    public boolean tellPlayerToOpenMemeBox(Player player, boolean reason)
     {
         if (hasOpenedMemeBox(player))
-            return;
+            return true;
         if (reason)
             player.sendMessage("Pls open da /memebox 2 hear dis moozik");
         else
-            player.sendMessage("Pls open da /memebox 4 a memetastic experience");
+            player.sendMessage("Dont 4get 2 open da /memebox 4 a memetastic moosik experience while u play here!!1");
         player.performCommand("jukebox");
+        return false;
     }
 
 //    public void playSound(String show, MusicThing song)

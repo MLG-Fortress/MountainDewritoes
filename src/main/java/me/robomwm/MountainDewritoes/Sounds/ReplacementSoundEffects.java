@@ -57,7 +57,7 @@ public class ReplacementSoundEffects implements Listener
         {
             if (p == player)
                 continue;
-            p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.5f, pitch);
+            p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.0f, pitch);
         }
     }
 
@@ -79,6 +79,6 @@ public class ReplacementSoundEffects implements Listener
         World world = location.getWorld();
 
         if (event.getEntityType() == EntityType.PLAYER)
-            world.playSound(location, "fortress.falldamage", SoundCategory.PLAYERS, 1.5f, 1.0f);
+            world.playSound(location, "fortress.falldamage", SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 }

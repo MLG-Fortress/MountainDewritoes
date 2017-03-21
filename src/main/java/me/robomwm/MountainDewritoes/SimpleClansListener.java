@@ -40,7 +40,7 @@ public class SimpleClansListener implements Listener
         this.clanManager = clanManager;
         instance = mountainDewritoes;
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
-        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "allow");
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "clan globalff allow");
         instance.registerListener(this);
     }
 

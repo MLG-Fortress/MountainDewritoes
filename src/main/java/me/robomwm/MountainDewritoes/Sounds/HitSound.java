@@ -57,7 +57,7 @@ public class HitSound implements Listener
 
         attacker.playSound(attacker.getLocation(), Sound.UI_BUTTON_CLICK, 3000000f, 1f);
 
-        if (!instance.isUsingTitle(attacker))
+        if (!instance.isUsingTitle(attacker) && !attacker.hasMetadata("DEAD"))
         {
 //            if (event.getFinalDamage() < 10)
 //                attacker.sendTitle(hitMarker);
