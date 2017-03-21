@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.sql.Time;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 8/30/2016.
@@ -69,7 +70,6 @@ public class LowHealth implements Listener
             alreadyLowHealth.put(player, System.currentTimeMillis());
             new BukkitRunnable()
             {
-                long ticks = 0L;
                 public void run()
                 {
                     if (!alreadyLowHealth.containsKey(player))
@@ -88,27 +88,41 @@ public class LowHealth implements Listener
                         cancel(); //Player is not at critical health
                         return;
                     }
-                    //Breathing sounds
-                    if (ticks % 80 == 0)
-                    {
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 3000000f, 1.0f);
-                    }
-                    else if (ticks % 90 == 0)
-                    {
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 3000000f, 0.85f);
-                    }
 
-                    ticks += 2L;
+
+
                     //Has it been 18 seconds yet? (Soundbyte we play is 18 seconds long)
                     if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
                         return;
                     alreadyLowHealth.put(player, System.currentTimeMillis());
                     THAPI.setTint(player, 100);
                     player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
-                    ticks = 0L;
                     //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
                 }
             }.runTaskTimer(instance, 100L, 2L);
+
+            new BukkitRunnable()
+            {
+                boolean breathin = true;
+                @Override
+                public void run()
+                {
+                    if (!alreadyLowHealth.containsKey(player))
+                        return;
+
+                    if (breathin)
+                    {
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 0.5f, 1.0f);
+                        breathin = false;
+                        this.runTaskLater(instance, ThreadLocalRandom.current().nextLong(20L, 40L));
+                    }
+                    else
+                    {
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 0.5f, 0.85f);
+                        this.runTaskLater(instance, ThreadLocalRandom.current().nextLong(60L, 130L));
+                    }
+                }
+            }.runTaskLater(instance, 140L);
         }
     }
     @EventHandler(ignoreCancelled = true)
