@@ -120,7 +120,7 @@ public class LowHealth implements Listener
                         player.playSound(player.getLocation().subtract(0, 300D, 0), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, 1.0f);
                         breathin = false;
                         ticks = 0;
-                        nextTick = ThreadLocalRandom.current().nextInt(30, 50);
+                        nextTick = ThreadLocalRandom.current().nextInt(25, 45);
                     }
                     else
                     {
