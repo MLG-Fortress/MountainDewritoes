@@ -103,29 +103,39 @@ public class LowHealth implements Listener
 
             new BukkitRunnable()
             {
+                int ticks = 0;
+                int nextTick = 1;
                 boolean breathin = true;
                 @Override
                 public void run()
                 {
                     if (!alreadyLowHealth.containsKey(player))
+                    {
+                        cancel();
+                        return;
+                    }
+
+                    ticks++;
+
+                    if (ticks != nextTick)
                         return;
 
                     if (breathin)
                     {
                         player.playSound(player.getLocation().subtract(0, 300D, 0), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, 1.0f);
                         breathin = false;
-                        cancel();
-                        this.runTaskLater(instance, ThreadLocalRandom.current().nextLong(20L, 40L));
+                        ticks = 0;
+                        nextTick = ThreadLocalRandom.current().nextInt(20, 40);
                     }
                     else
                     {
                         player.playSound(player.getLocation().subtract(0D, 300D, 0D), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, 0.85f);
                         breathin = true;
-                        cancel();
-                        this.runTaskLater(instance, ThreadLocalRandom.current().nextLong(60L, 130L));
+                        ticks = 0;
+                        nextTick = ThreadLocalRandom.current().nextInt(60, 130);
                     }
                 }
-            }.runTaskLater(instance, 140L);
+            }.runTaskTimer(instance, 140L, 1L);
         }
     }
     @EventHandler(ignoreCancelled = true)
