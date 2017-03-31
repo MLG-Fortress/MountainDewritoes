@@ -67,7 +67,7 @@ public class NoKnockback implements Listener
         ignoreDamageEventForThisTick(event.getSource());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //We aren't modifying this event, only responding to it
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST) //We aren't modifying this event, only responding to it
     void onEntityGetsHurt(EntityDamageByEntityEvent event)
     {
         if (!(event.getEntity() instanceof LivingEntity))
@@ -94,8 +94,6 @@ public class NoKnockback implements Listener
                 ignoreDamageEventForThisTick(damager);
                 return;
         }
-
-        target.setNoDamageTicks(1);
 
         //"Special" case for players (Cancel PlayerVelocityEvent instead to avoid momentary "slowdown" when getting hit).
         if (target.getType() == EntityType.PLAYER)

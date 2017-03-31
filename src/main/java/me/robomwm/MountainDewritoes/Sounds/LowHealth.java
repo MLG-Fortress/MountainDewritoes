@@ -54,8 +54,9 @@ public class LowHealth implements Listener
 //        if (player.getFoodLevel() >= 20 && player.getSaturation() > 0)
 //            return; //ignore rapid health regeneration
 
-        double health = player.getHealth() - event.getFinalDamage();
-        if (health <= 8f && !alreadyLowHealth.containsKey(player))
+        final double health = player.getHealth() - event.getFinalDamage();
+        final float lowHealthValue = 4f;
+        if (health <= lowHealthValue && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
             player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
@@ -73,7 +74,7 @@ public class LowHealth implements Listener
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
-                    if (player.getHealth() > 8f)
+                    if (player.getHealth() > lowHealthValue)
                     {
                         alreadyLowHealth.remove(player);
                         //THAPI.fadeTint(player, 100, 1); Fade is too slow
