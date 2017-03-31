@@ -61,6 +61,7 @@ workspace.xml
 tasks.xml
 .idea/libraries
 .idea/copyright
+.idea/kotlinc.xml
 out/
 target/
 *.MF
