@@ -125,6 +125,7 @@ public class MemeBox implements Listener
             event.setCancelled(true);
     }
 
+    //TODO: the old player object may still update the isOnline boolean, causing a player to get multiple /memebox reminders (only command/link only) (don't care enough to create a system to fix though)
     @EventHandler
     void onPlayerJoin(PlayerJoinEvent event)
     {
@@ -134,7 +135,11 @@ public class MemeBox implements Listener
             public void run()
             {
                 if (!player.isOnline())
+                {
+                    this.cancel();
                     return;
+                }
+
                 if (tellPlayerToOpenMemeBox(player, false))
                     this.cancel();
             }
