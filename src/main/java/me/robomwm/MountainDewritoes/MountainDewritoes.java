@@ -114,6 +114,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ReverseOsmosis(this);
         new SimpleClansListener(this, clanManager);
         new ReplacementSoundEffects(this);
+        new RevisedNoDamageImmunity(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
