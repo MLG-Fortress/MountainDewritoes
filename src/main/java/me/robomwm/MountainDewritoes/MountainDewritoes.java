@@ -100,7 +100,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new BetterZeldaHearts(), this);
         pm.registerEvents(new RandomStructurePaster(this), this);
         pm.registerEvents(new RandomTipOfTheDay(this), this);
-        //pm.registerEvents(new SecondWind(this), this);
         pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
         pm.registerEvents(new HitSound(this), this);
