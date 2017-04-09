@@ -26,7 +26,7 @@ public class WarpCommand implements CommandExecutor
     {
         instance = mountainDewritoes;
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
-        spawnLocation = new Location(instance.getServer().getWorld("minigames"), -389D, 5D, -124D, 180.344f, -18.881f);
+        spawnLocation = new Location(instance.getServer().getWorld("spawn"), -389D, 5D, -124D, 180.344f, -18.881f);
         mallLocation = new Location(instance.getServer().getWorld("mall"), 2.488, 5, -7.305, 0f, 0f);
         jail = new Location(instance.getServer().getWorld("minigames"), -523D, 58.5D, -36D, 88.951f, 26.7f);
     }

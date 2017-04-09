@@ -217,6 +217,37 @@ public class SimpleClansListener implements Listener
         }
     }
 
+    /**
+     * Player can join a clan if they're clan-less
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onWantToJoinAClan(PlayerCommandPreprocessEvent event)
+    {
+        String message = event.getMessage().toLowerCase();
+        Player player = event.getPlayer();
+
+        if (message.startsWith("/clan join"))
+        {
+            event.getPlayer().
+            event.setCancelled(true);
+            String[] args = message.split(" ");
+            if (args.length < 3)
+
+            Clan clan = clanManager.getClanByPlayerUniqueId(event.getPlayer().getUniqueId());
+            if (clan == null)
+            {
+                player.sendMessage(ChatColor.RED + "You are not in a /clan");
+                return;
+            }
+            if (clan.getHomeLocation() == null)
+            {
+                player.sendMessage(ChatColor.RED + "Your clan did not /sethome.");
+                return;
+            }
+            betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
+        }
+    }
+
     //Projectiles can pass through allies
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onPlayerAboutToGetHit(ProjectileCollideEvent event)

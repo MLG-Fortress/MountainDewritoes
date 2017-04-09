@@ -59,9 +59,9 @@ public class TeleportingEffects implements Listener
             playTeleportEffect(event.getPlayer());
             long warmup = event.getWarmup();
             if (warmup > 0L && warmup < 160L)
-                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter", SoundCategory.BLOCKS, 1.5f, 1.0f);
+                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter", SoundCategory.BLOCKS, 1.0f, 1.0f);
             else if (warmup > 160L)
-                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter_long", SoundCategory.BLOCKS, 1.5f, 1.0f);
+                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter_long", SoundCategory.BLOCKS, 1.0f, 1.0f);
         }
     }
 
@@ -87,7 +87,7 @@ public class TeleportingEffects implements Listener
             return;
         }
 
-        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter_finish", SoundCategory.BLOCKS, 2.0f, 1.0f);
+        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.transporter_finish", SoundCategory.BLOCKS, 1.5f, 1.0f);
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)
