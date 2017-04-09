@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
@@ -101,7 +102,7 @@ public class BetterZeldaHearts implements Listener
         if (!lore.get(0).equals("Permanently increases") || !lore.get(1).startsWith("your max health"))
             return;
         Player player = event.getPlayer();
-        if (player.getMaxHealth() >= 180D)
+        if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= 74D)
         {
             player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 37 swegcaps!");
             event.setCancelled(true);
@@ -109,7 +110,8 @@ public class BetterZeldaHearts implements Listener
         }
         else
         {
-            player.setMaxHealth(player.getMaxHealth() + 2D);
+            AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            maxHealth.setBaseValue(maxHealth.getBaseValue() + 2D);
             player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
             event.setItem(null);
         }
@@ -122,10 +124,8 @@ public class BetterZeldaHearts implements Listener
     void onNewJoin(PlayerJoinEvent event)
     {
         if (!event.getPlayer().hasPlayedBefore())
-        {
-            event.getPlayer().setMaxHealth(26D);
-            event.getPlayer().setMaximumAir(1200);
-        }
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(26D);
+        event.getPlayer().setMaximumAir(1200);
     }
 
     /**
@@ -144,7 +144,7 @@ public class BetterZeldaHearts implements Listener
         if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"))
         {
             event.setCancelled(true);
-            if (event.getPlayer().getHealth() == event.getPlayer().getMaxHealth())
+            if (event.getPlayer().getHealth() == event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
                 return;
             event.getPlayer().addPotionEffect(PotionEffectType.HEAL.createEffect(1, 2));
             clearBadEffects(event.getPlayer());
