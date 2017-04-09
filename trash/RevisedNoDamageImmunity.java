@@ -71,7 +71,7 @@ public class RevisedNoDamageImmunity implements Listener
      */
     private boolean addBlockDamagedEntity(LivingEntity entity, double damage)
     {
-        //New damage is not greater than old damage; player should not be damaged.
+        //Don't damage player if new damage is less or equal to old damage
         if (blockDamagedEntities.containsKey(entity) && damage <= blockDamagedEntities.get(entity))
             return false;
 
