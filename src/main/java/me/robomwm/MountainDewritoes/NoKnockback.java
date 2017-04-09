@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.projectkorra.projectkorra.event.AbilityDamageEntityEvent;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -112,13 +113,14 @@ public class NoKnockback implements Listener
         //Is there a reasonable way to set velocity after the MC server processes the damage event besides waiting for the next tick?
         else
         {
-            new BukkitRunnable()
-            {
-                public void run()
-                {
-                    target.setVelocity(new Vector(0, 0, 0));
-                }
-            }.runTask(instance);
+            target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999D);
+//            new BukkitRunnable()
+//            {
+//                public void run()
+//                {
+//                    target.setVelocity(new Vector(0, 0, 0));
+//                }
+//            }.runTask(instance);
         }
     }
 

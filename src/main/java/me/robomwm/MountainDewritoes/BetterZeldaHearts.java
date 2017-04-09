@@ -104,12 +104,14 @@ public class BetterZeldaHearts implements Listener
         if (player.getMaxHealth() >= 180D)
         {
             player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 37 swegcaps!");
+            event.setCancelled(true);
             return;
         }
         else
         {
             player.setMaxHealth(player.getMaxHealth() + 2D);
             player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
+            event.setItem(null);
         }
     }
 
@@ -119,8 +121,11 @@ public class BetterZeldaHearts implements Listener
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
-        event.getPlayer().setMaxHealth(26D);
-        event.getPlayer().setMaximumAir(1200);
+        if (!event.getPlayer().hasPlayedBefore())
+        {
+            event.getPlayer().setMaxHealth(26D);
+            event.getPlayer().setMaximumAir(1200);
+        }
     }
 
     /**
