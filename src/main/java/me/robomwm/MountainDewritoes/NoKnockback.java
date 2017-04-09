@@ -45,7 +45,6 @@ public class NoKnockback implements Listener
     {
         if (event.getEntity() instanceof LivingEntity)
             event.getEntity().setMetadata("MD_DONT_RESISTKB", new FixedMetadataValue(instance, true));
-        instance.getServer().broadcastMessage("debug: " + String.valueOf(event.getDamage()));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST) //We aren't modifying this event, only responding to it
