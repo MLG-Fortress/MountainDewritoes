@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
@@ -14,6 +15,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -63,7 +65,7 @@ public class BetterZeldaHearts implements Listener
 
         //Otherwise, check if we should spawn a health canister
         //Now a fixed value to encourage using health canisters
-        else if (random.nextInt(100) == 1)
+        else if (random.nextInt(10) == 1)
         {
             //Prepare a new health canister
             ItemStack healthCanister = new ItemStack(Material.POTION);
@@ -72,7 +74,8 @@ public class BetterZeldaHearts implements Listener
             potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
             List<String> lore = new ArrayList<>();
             lore.add("Permanently increases");
-            lore.add("your max health.");
+            lore.add("your max health");
+            lore.add("(until you die).");
             potionMeta.setLore(lore);
             healthCanister.setItemMeta(potionMeta);
             event.getDrops().add(healthCanister);
@@ -93,14 +96,14 @@ public class BetterZeldaHearts implements Listener
             return;
         if (!potionMeta.hasLore())
             return;
-        //Why aren't we checking the name? Because it's likely we'll change it... soooon
+
         List<String> lore = potionMeta.getLore();
-        if (!lore.get(0).equals("Permanently increases") || !lore.get(1).equals("your max health."))
+        if (!lore.get(0).equals("Permanently increases") || !lore.get(1).startsWith("your max health"))
             return;
         Player player = event.getPlayer();
         if (player.getMaxHealth() >= 180D)
         {
-            player.sendMessage(ChatColor.RED + "You have reached the maximum health of 90 hearts!");
+            player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 37 swegcaps!");
             return;
         }
         else
@@ -116,8 +119,7 @@ public class BetterZeldaHearts implements Listener
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
-        if (event.getPlayer().getMaxHealth() < 50D)
-            event.getPlayer().setMaxHealth(50D);
+        event.getPlayer().setMaxHealth(26D);
         event.getPlayer().setMaximumAir(1200);
     }
 
@@ -151,5 +153,11 @@ public class BetterZeldaHearts implements Listener
         player.setFireTicks(0); //Extinguish
         player.removePotionEffect(PotionEffectType.POISON);
         player.removePotionEffect(PotionEffectType.WITHER);
+    }
+
+    @EventHandler
+    void resetHealthOnRespawn(PlayerRespawnEvent event)
+    {
+        event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(26D);
     }
 }
