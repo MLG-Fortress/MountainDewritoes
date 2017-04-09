@@ -223,28 +223,30 @@ public class SimpleClansListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onWantToJoinAClan(PlayerCommandPreprocessEvent event)
     {
+        String invalid = "/join <clan tag> - joins a clan.";
         String message = event.getMessage().toLowerCase();
         Player player = event.getPlayer();
 
         if (message.startsWith("/clan join"))
         {
-            event.getPlayer().
+            Clan playerclan = clanManager.getClanByPlayerUniqueId(player.getUniqueId());
+            if (playerclan != null)
+                return;
+
             event.setCancelled(true);
             String[] args = message.split(" ");
-            if (args.length < 3)
 
-            Clan clan = clanManager.getClanByPlayerUniqueId(event.getPlayer().getUniqueId());
-            if (clan == null)
+            if (args.length < 3)
             {
-                player.sendMessage(ChatColor.RED + "You are not in a /clan");
+                player.sendMessage(invalid);
                 return;
             }
-            if (clan.getHomeLocation() == null)
+
+            Clan clan = clanManager.getClan(args[3]);
+            if (clan != null)
             {
-                player.sendMessage(ChatColor.RED + "Your clan did not /sethome.");
-                return;
+                clan.addPlayerToClan(clanManager.getClanPlayer(player));
             }
-            betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
         }
     }
 
