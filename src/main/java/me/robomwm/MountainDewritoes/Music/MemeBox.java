@@ -125,36 +125,12 @@ public class MemeBox implements Listener
             event.setCancelled(true);
     }
 
-    //TODO: the old player object may still update the isOnline boolean, causing a player to get multiple /memebox reminders (only command/link only) (don't care enough to create a system to fix though)
-    @EventHandler
-    void onPlayerJoin(PlayerJoinEvent event)
-    {
-        Player player = event.getPlayer();
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                if (!player.isOnline())
-                {
-                    this.cancel();
-                    return;
-                }
-
-                if (tellPlayerToOpenMemeBox(player, false))
-                    this.cancel();
-            }
-        }.runTaskTimer(instance, 1200L, 4800L);
-
-    }
-
     public boolean tellPlayerToOpenMemeBox(Player player, boolean reason)
     {
         if (hasOpenedMemeBox(player))
             return true;
         if (reason)
             player.sendMessage("Pls open da /memebox 2 hear dis moozik");
-        else
-            player.sendMessage("Dont 4get 2 open da /memebox 4 a memetastic moosik experience while u play here!!1");
         player.performCommand("jukebox");
         return false;
     }
