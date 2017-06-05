@@ -113,7 +113,7 @@ public class AtmosphericMusic implements Listener
                         jukebox.removeMetadata("MD_JUKEBOX", instance);
             }
         }.runTaskLater(instance, song.getLength());
-        atmosphericManager.playSoundNearPlayer(song.setPriority(999), player, 64);
+        atmosphericManager.playMusicNearPlayer(song.setPriority(999), player, 64);
     }
 
     //Player likely in a battle with mobs

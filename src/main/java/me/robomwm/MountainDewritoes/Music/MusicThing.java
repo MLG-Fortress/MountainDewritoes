@@ -13,7 +13,15 @@ class MusicThing
 
     public MusicThing(String URL, int seconds)
     {
-        this.URL = URL;
+        this(URL, seconds, false);
+    }
+
+    public MusicThing(String URLorName, int seconds, boolean isName)
+    {
+        if (isName)
+            this.soundName = URLorName;
+        else
+            this.URL = URLorName;
         this.length = seconds * 20L; //autoconvert seconds to length
         this.startTime = System.currentTimeMillis();
     }

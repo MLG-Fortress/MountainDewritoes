@@ -38,11 +38,13 @@ public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
     MemeBox memeBox;
+    MemePack memePack;
 
     public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
         memeBox = new MemeBox(mountainDewritoes);
+        memePack = new MemePack();
         new AtmosphericMusic(mountainDewritoes, this);
         instance.registerListener(this);
     }
@@ -51,6 +53,7 @@ public class AtmosphericManager implements Listener
     {
         player.removeMetadata("MD_LISTENING", instance);
         memeBox.stopSound(player);
+        memePack.stopSound(player);
     }
 
     public void stopMusic(Player player, double radius)
@@ -84,12 +87,19 @@ public class AtmosphericManager implements Listener
                     if (player.hasMetadata("MD_LISTENING"))
                     {
                         //except if priority is higher.
-                        if (!song.hasHigherPriority((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
+                        if (song.hasHigherPriority((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
+                            stopMusic(player);
+                        else
                             continue;
                     }
 
                     player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, song));
-                    memeBox.playSound(player, song);
+
+                    //Is this playing via the /memebox or the MLG pack?
+                    if (song.getSoundName() != null)
+                        memePack.playSound(player, song);
+                    else
+                        memeBox.playSound(player, song);
 
                     //Schedule removal of metadata
                     new BukkitRunnable()
@@ -111,7 +121,27 @@ public class AtmosphericManager implements Listener
 
     /* Helper methods */
 
-    public void playSoundNearPlayer(MusicThing song, Player player, double radius)
+    /**
+     * Globally play a sound to all players in a world or the entire server
+     * @param song
+     * @param world
+     */
+    public void playSound(MusicThing song, @Nullable World world)
+    {
+        if (world == null)
+            playSound(song, 0, instance.getServer().getOnlinePlayers());
+        else
+            playSound(song, 0, world.getPlayers());
+    }
+
+    /**
+     * Plays a song via the /memebox to users within a set radius
+     * Generally will be used for jukeboxes
+     * @param song
+     * @param player
+     * @param radius
+     */
+    public void playMusicNearPlayer(MusicThing song, Player player, double radius)
     {
         Set<Player> players = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius,radius,radius))
@@ -126,13 +156,25 @@ public class AtmosphericManager implements Listener
             memeBox.tellPlayerToOpenMemeBox(player1, true);
         }
     }
-    public void playSound(MusicThing song, @Nullable World world)
+
+    /**
+     * Plays a sound near a player via in-game sounds
+     * Potentially for sound effects.
+     * @param song
+     * @param player
+     * @param radius
+     */
+    public void playSoundNearPlayer(MusicThing song, Player player, float radius)
     {
-        if (world == null)
-            playSound(song, 0, instance.getServer().getOnlinePlayers());
-        else
-            playSound(song, 0, world.getPlayers());
+        memePack.playSound(player, song, radius);
     }
+
+    /**
+     * Play a sound to a specific player
+     * @param song
+     * @param delay
+     * @param player
+     */
     public void playSound(MusicThing song, int delay, Player player)
     {
         playSound(song, delay, Collections.singletonList(player));
