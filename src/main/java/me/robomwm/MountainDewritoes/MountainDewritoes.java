@@ -117,8 +117,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
             new AtmosphericManager(this);
-        if (getServer().getPluginManager().getPlugin("UsefulNMSUtil") != null && getServer().getPluginManager().getPlugin("UsefulNMSUtil").isEnabled())
-            new TNTSourcer(this);
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
             pm.registerEvents(new TeleportingEffects(this), this);
 

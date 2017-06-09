@@ -74,7 +74,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -144,12 +144,6 @@
             <artifactId>UsefulUtil</artifactId>
             <version>1.11</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.RoboMWM</groupId>
-            <artifactId>UsefulNMSUtil</artifactId>
-            <version>1.1</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
