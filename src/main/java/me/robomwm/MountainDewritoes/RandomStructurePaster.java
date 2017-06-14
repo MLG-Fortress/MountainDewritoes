@@ -4,12 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/26/2016.
@@ -19,9 +21,7 @@ import java.util.Random;
  */
 public class RandomStructurePaster implements Listener
 {
-    World world = Bukkit.getWorld("world");
     List<String> schematics = new ArrayList<>();
-    Random random;
     MountainDewritoes instance;
     RandomStructurePaster(MountainDewritoes blah)
     {
@@ -29,26 +29,33 @@ public class RandomStructurePaster implements Listener
         //schematics.add("Monsta-Lazy");
         //schematics.add("nikita_cheetah_village");
         //schematics.add("nikita_cheetah_beach");
-        random = new Random();
         instance = blah;
     }
 
     //@EventHandler(ignoreCancelled = true)
-    void onChunkGen(ChunkPopulateEvent event) //only new chunks call this, yes?
+    void onChunkGen(ChunkLoadEvent event) //only new chunks call this, yes?
     {
-        if (!event.getWorld().equals(world))
+        if (!event.isNewChunk())
+            return;
+        if (!instance.isSurvivalWorld(event.getWorld()))
             return;
 
-        if (random.nextInt(1000) != 1)
+        if (r4nd0m(0, 1000) != 1)
             return;
 
-        Location location = event.getChunk().getBlock(7,64,7).getLocation();
+        Location location = event.getChunk().getBlock(r4nd0m(0, 15),64,r4nd0m(0, 15)).getLocation();
+        location.setY(event.getWorld().getHighestBlockYAt(location));
+
         new BukkitRunnable()
         {
             public void run()
             {
-                Schematic.paste(schematics.get(random.nextInt(schematics.size())), location);
+                Schematic.paste(schematics.get(r4nd0m(0, schematics.size() - 1)), location);
             }
-        }.runTaskLater(instance, 20L);
+        }.runTaskLater(instance, 200L);
+    }
+
+    public int r4nd0m(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 }
