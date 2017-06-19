@@ -46,7 +46,7 @@ public class GamemodeInventoryManager implements Listener
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
-            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp we.builder");
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
         }
     }
 
@@ -54,7 +54,7 @@ public class GamemodeInventoryManager implements Listener
     void onQuit(PlayerQuitEvent event)
     {
         if (checkAndClearPlayerInventory(event.getPlayer()))
-            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp we.builder");
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
