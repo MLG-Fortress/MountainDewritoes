@@ -44,32 +44,19 @@ public class GamemodeInventoryManager implements Listener
         checkAndClearPlayerInventory(event.getPlayer());
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " add we.builder");
-            reloadPermissions();
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + event.getPlayer().getName() + " permission set we.builder");
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
-            reloadPermissions();
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + event.getPlayer().getName() + " permission unset we.builder");
         }
-    }
-
-    private void reloadPermissions() //Basically I should get another permission plugin
-    {
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "pex reload");
-            }
-        }.runTaskLater(instance, 1L);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onQuit(PlayerQuitEvent event)
     {
         if (checkAndClearPlayerInventory(event.getPlayer()))
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + event.getPlayer().getName() + " permission unset we.builder");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
