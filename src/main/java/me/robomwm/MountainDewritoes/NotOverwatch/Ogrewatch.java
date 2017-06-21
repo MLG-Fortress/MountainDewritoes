@@ -49,19 +49,25 @@ public class Ogrewatch implements Listener
     private void changeHeewo(Player player, Heewos heewo)
     {
         Heewos previousHeewo = dummies.remove(player);
-        if (heewo == null || previousHeewo == null)
+        if (heewo == null)
             return;
 
-        switch (previousHeewo)
+        if (previousHeewo != null)
         {
-            case LOOSEEOH:
-                player.setAllowFlight(false);
+            switch (previousHeewo)
+            {
+                case LOOSEEOH:
+                    player.setAllowFlight(false);
+                    break;
+            }
         }
 
         switch (heewo)
         {
             case LOOSEEOH:
                 player.setAllowFlight(true);
+                player.sendMessage("u r now looceeoh");
+                break;
         }
         dummies.put(player, heewo);
     }
