@@ -36,18 +36,19 @@ public class Looseeoh implements Listener
 
         event.setCancelled(true);
         Vector velocity = player.getVelocity();
-        Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
+        //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
+        Block block = player.getLocation().getBlock();
 
         //Near an adjacent, solid block?
-//        if (block.getRelative(BlockFace.NORTH).getType().isTransparent()
-//            && block.getRelative(BlockFace.SOUTH).getType().isTransparent()
-//            && block.getRelative(BlockFace.EAST).getType().isTransparent()
-//            && block.getRelative(BlockFace.WEST).getType().isTransparent())
-//            return;
+        if (block.getRelative(BlockFace.NORTH).getType().isTransparent()
+                && block.getRelative(BlockFace.SOUTH).getType().isTransparent()
+                && block.getRelative(BlockFace.EAST).getType().isTransparent()
+                && block.getRelative(BlockFace.WEST).getType().isTransparent())
+            return;
 
         //Can only ride on solid blocks
-        if (block.getType().isTransparent())
-            return;
+//        if (block.getType().isTransparent())
+//            return;
 
         player.sendMessage("wallriding");
 
