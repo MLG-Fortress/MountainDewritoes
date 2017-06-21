@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -38,22 +39,24 @@ public class Ogrewatch implements Listener
     void onWeaponChangeHeewo(PlayerItemHeldEvent event)
     {
         Player player = event.getPlayer();
-        if (player.getInventory().getItem(event.getNewSlot()).getType() == Material.FEATHER)
-            changeHeewo(player, Heewos.LOOSEEOH);
-        else
+        ItemStack itemStack = player.getInventory().getItem(event.getNewSlot());
+        if (itemStack == null || itemStack.getType() != Material.FEATHER)
             changeHeewo(player, null);
+        else
+            changeHeewo(player, Heewos.LOOSEEOH);
     }
 
     private void changeHeewo(Player player, Heewos heewo)
     {
-        switch (dummies.remove(player))
+        Heewos previousHeewo = dummies.remove(player);
+        if (heewo == null || previousHeewo == null)
+            return;
+
+        switch (previousHeewo)
         {
             case LOOSEEOH:
                 player.setAllowFlight(false);
         }
-
-        if (heewo == null)
-            return;
 
         switch (heewo)
         {
