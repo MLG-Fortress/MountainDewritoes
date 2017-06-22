@@ -101,12 +101,18 @@ public class TeleportingEffects implements Listener
         final Location location = player.getLocation();
         BukkitTask task = new BukkitRunnable()
         {
+            int times = 120;
             public void run()
             {
                 world.playEffect(location, Effect.ENDER_SIGNAL, 0, 10);
                 world.playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
                 world.playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
                 location.add(0.0d, -2.0d, 0.0d);
+                if (times-- < 0)
+                {
+                    instance.getLogger().warning("Had to time out effect. " + player.getName() + " at " + location.toString());
+                    cancel();
+                }
             }
         }.runTaskTimer(instance, 10L, 10L);
         taskThingy.put(player, task);

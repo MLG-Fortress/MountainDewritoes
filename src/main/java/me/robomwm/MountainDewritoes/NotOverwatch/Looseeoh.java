@@ -79,7 +79,7 @@ public class Looseeoh implements Listener
 
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())
                     cancel();
-                    
+
                     //Near an adjacent, solid block?
                 if (block1.getRelative(BlockFace.NORTH).getType().isTransparent()
                     && block1.getRelative(BlockFace.SOUTH).getType().isTransparent()
