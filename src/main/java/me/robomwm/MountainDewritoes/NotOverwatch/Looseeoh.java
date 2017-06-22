@@ -56,12 +56,16 @@ public class Looseeoh implements Listener
 
         Vector ridingVector = velocity;
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
+        {
             velocity.setZ(0);
+            velocity.setX(1);
+        }
         else
+        {
             velocity.setX(0);
-
-        velocity.setY(0.01);
-        velocity.normalize();
+            velocity.setZ(1);
+        }
+        velocity.setY(0.0001);
 
 
         new BukkitRunnable()
@@ -71,11 +75,14 @@ public class Looseeoh implements Listener
             {
                 player.setVelocity(ridingVector);
 
+                Block block1 = player.getLocation().getBlock();
                 //Near an adjacent, solid block?
-            if (block.getRelative(BlockFace.NORTH).getType().isTransparent()
-                && block.getRelative(BlockFace.SOUTH).getType().isTransparent()
-                && block.getRelative(BlockFace.EAST).getType().isTransparent()
-                && block.getRelative(BlockFace.WEST).getType().isTransparent())
+            if (block1.getRelative(BlockFace.NORTH).getType().isTransparent()
+                && block1.getRelative(BlockFace.SOUTH).getType().isTransparent()
+                && block1.getRelative(BlockFace.EAST).getType().isTransparent()
+                && block1.getRelative(BlockFace.WEST).getType().isTransparent())
+                cancel();
+            if (!player.isOnline() || player.isOnGround())
                 cancel();
             }
         }.runTaskTimer(instance, 0L, 2L);
