@@ -65,7 +65,7 @@ public class Looseeoh implements Listener
             velocity.setX(0);
             velocity.setZ(1);
         }
-        velocity.setY(0.0001);
+        velocity.setY(0.01);
 
 
         new BukkitRunnable()
