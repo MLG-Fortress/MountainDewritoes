@@ -58,12 +58,10 @@ public class Looseeoh implements Listener
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
             velocity.setZ(0);
-            velocity.setX(1);
         }
         else
         {
             velocity.setX(0);
-            velocity.setZ(1);
         }
         velocity.setY(0.01);
 
