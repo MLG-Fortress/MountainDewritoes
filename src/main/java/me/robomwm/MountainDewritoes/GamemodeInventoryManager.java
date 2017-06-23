@@ -42,7 +42,7 @@ public class GamemodeInventoryManager implements Listener
         checkAndClearPlayerInventory(event.getPlayer());
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
-            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent addtemp 1h webuilder");
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent addtemp webuilder 1h");
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {

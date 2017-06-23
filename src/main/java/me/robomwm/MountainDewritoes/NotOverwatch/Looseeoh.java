@@ -87,6 +87,6 @@ public class Looseeoh implements Listener
                     && block1.getRelative(BlockFace.WEST).getType().isTransparent())
                     cancel();
             }
-        }.runTaskTimer(instance, 0L, 2L);
+        }.runTaskTimer(instance, 0L, 1L);
     }
 }
