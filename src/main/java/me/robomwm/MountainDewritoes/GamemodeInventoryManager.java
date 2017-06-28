@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,11 +7,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created by RoboMWM on 9/24/2016.
@@ -33,7 +30,8 @@ public class GamemodeInventoryManager implements Listener
 
         if (event.getInventory().getType() == InventoryType.ENDER_CHEST)
             event.setCancelled(true);
-        //Deny all inventory access
+
+        //Deny all inventory access (except if they have the "yesok" permission)
         if (event.getInventory().getType() != InventoryType.CRAFTING && !player.hasPermission("yesok"))
             event.setCancelled(true);
     }
@@ -44,32 +42,19 @@ public class GamemodeInventoryManager implements Listener
         checkAndClearPlayerInventory(event.getPlayer());
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " add we.builder");
-            reloadPermissions();
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent addtemp webuilder 1h");
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
-            reloadPermissions();
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
         }
-    }
-
-    private void reloadPermissions() //Basically I should get another permission plugin
-    {
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "pex reload");
-            }
-        }.runTaskLater(instance, 1L);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onQuit(PlayerQuitEvent event)
     {
         if (checkAndClearPlayerInventory(event.getPlayer()))
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + event.getPlayer().getName() + " remove we.builder");
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

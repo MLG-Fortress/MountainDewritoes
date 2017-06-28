@@ -5,6 +5,7 @@ import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
+import me.robomwm.MountainDewritoes.NotOverwatch.Ogrewatch;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
@@ -112,12 +113,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ReverseOsmosis(this);
         new SimpleClansListener(this, clanManager);
         new ReplacementSoundEffects(this);
+        new Ogrewatch(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
             new AtmosphericManager(this);
-        if (getServer().getPluginManager().getPlugin("UsefulNMSUtil") != null && getServer().getPluginManager().getPlugin("UsefulNMSUtil").isEnabled())
-            new TNTSourcer(this);
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
             pm.registerEvents(new TeleportingEffects(this), this);
 

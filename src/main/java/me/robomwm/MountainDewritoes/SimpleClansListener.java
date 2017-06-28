@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -42,6 +43,15 @@ public class SimpleClansListener implements Listener
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "clan globalff allow");
         instance.registerListener(this);
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (Player player : instance.getServer().getOnlinePlayers())
+                    setClanPrefix(player);
+            }
+        }.runTaskTimer(instance, 6000L, 1200L);
     }
 
     //Set colors and prefix onJoin
@@ -51,24 +61,24 @@ public class SimpleClansListener implements Listener
         setClanPrefix(event.getPlayer());
     }
 
-    //Set colors and prefix if player changes clans
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerCommand(PlayerCommandPreprocessEvent event)
-    {
-        String command = event.getMessage().toLowerCase();
-        final Player player = event.getPlayer();
-        //I'm 400,000% sure there's a better way to do this
-        if (command.startsWith("/clan ") || command.startsWith("/accept") || command.startsWith("/f ") || command.startsWith("/nick "))
-        {
-            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
-            {
-                public void run()
-                {
-                    setClanPrefix(player);
-                }
-            }, 10L);
-        }
-    }
+    //Set colors and prefix if player changes clans //Now covered by the periodic check task
+//    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+//    public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+//    {
+//        String command = event.getMessage().toLowerCase();
+//        final Player player = event.getPlayer();
+//        //I'm 400,000% sure there's a better way to do this
+//        if (command.startsWith("/clan ") || command.startsWith("/accept") || command.startsWith("/f ") || command.startsWith("/nick "))
+//        {
+//            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+//            {
+//                public void run()
+//                {
+//                    setClanPrefix(player);
+//                }
+//            }, 10L);
+//        }
+//    }
 
     //Get a randomized, consistent color code for player
     public String getColorCode(Player player)

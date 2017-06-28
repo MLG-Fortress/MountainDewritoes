@@ -13,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -117,9 +119,7 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-    /**
-     * Set new player's health to 13 hearts
-     */
+    //Set new player's health to 13 hearts
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
@@ -128,29 +128,65 @@ public class BetterZeldaHearts implements Listener
         event.getPlayer().setMaximumAir(1200);
     }
 
+    //Don't allow mobs to pick this up
+    @EventHandler(ignoreCancelled = true)
+    void onNonPlayerPickup(EntityPickupItemEvent event)
+    {
+        if (event.getEntityType() == EntityType.PLAYER) //TODO: is this event fired for players?
+            return;
+        if (isHealthHeart(event.getItem().getItemStack()))
+        {
+            event.getItem().setCanMobPickup(false);
+            event.setCancelled(true);
+        }
+    }
+
     /**
      * Player collecting healthHeart
      * You think up a better internal name for that
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true)
     void onHealthHeartPickup(PlayerPickupItemEvent event)
     {
-
-        if (event.getItem().getItemStack().getType() != Material.INK_SACK)
-            return;
-        ItemStack item = event.getItem().getItemStack();
-        if (!item.hasItemMeta())
-            return;
-        if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"))
+        if (isHealthHeart(event.getItem().getItemStack()))
         {
             event.setCancelled(true);
-            if (event.getPlayer().getHealth() == event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
+            if (!healPlayer(event.getPlayer())) //Do nothing if player is already at full health
                 return;
-            event.getPlayer().addPotionEffect(PotionEffectType.HEAL.createEffect(1, 2));
-            clearBadEffects(event.getPlayer());
-            event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.healthheart", 3000000f, 1f);
+            event.setFlyAtPlayer(true);
             event.getItem().remove();
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    void onHealthHeartAttemptedPickup(PlayerAttemptPickupItemEvent event)
+    {
+        //Check if player's inventory is full (since this event fires before PlayerPickupItemEvent)
+        if (event.getPlayer().getInventory().firstEmpty() != -1)
+            return;
+
+        //Copy paste above basically :c
+        if (isHealthHeart(event.getItem().getItemStack()))
+        {
+            if (!healPlayer(event.getPlayer())) //Do nothing if player is already at full health
+                return;
+            event.getItem().remove();
+        }
+    }
+
+    boolean isHealthHeart(ItemStack item)
+    {
+        return item.getType() == Material.INK_SACK && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"));
+    }
+
+    boolean healPlayer(Player player)
+    {
+        if (player.getHealth() == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
+            return false;
+        player.addPotionEffect(PotionEffectType.HEAL.createEffect(1, 2));
+        clearBadEffects(player);
+        player.playSound(player.getLocation(), "fortress.healthheart", 3000000f, 1f);
+        return true;
     }
 
     void clearBadEffects(Player player)

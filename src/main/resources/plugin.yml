@@ -15,7 +15,6 @@ softdepend:
 - HolographicDisplays
 - BetterTPA
 - MCJukebox
-- UsefulNMSUtil
 commands:
   nick:
     aliases: [color]
