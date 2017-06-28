@@ -8,6 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -116,8 +119,27 @@ public class JoinMessages implements Listener
 
     //Use the latest version!
     @EventHandler
-    void onUsingOlderClient()
+    void onUsingOlderClient(PlayerJoinEvent event)
     {
-       
+        Player player = event.getPlayer();
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!player.isOnline())
+                    return;
+                try
+                {
+                    if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
+                    {
+                        player.sendMessage(ChatColor.RED + "Warning: You are using an outdated version of Minecraft. Some features on this server might not work correctly. For the best and intended MLG experience, please use " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
+                    }
+                }
+                catch (Exception ignored){}
+            }
+        }.runTaskLater(instance, 900L); //15 seconds after joining
+
     }
 }
