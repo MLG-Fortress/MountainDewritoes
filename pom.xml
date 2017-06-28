@@ -146,10 +146,11 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.RoboMWM</groupId>
-            <artifactId>UsefulNMSUtil</artifactId>
-            <version>1.1</version>
-            <scope>provided</scope>
+            <groupId>com.github.ProtocolSupport</groupId>
+            <artifactId>ProtocolSupport</artifactId>
+            <version>4.26.dev</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/ProtocolSupport.jar</systemPath>
         </dependency>
     </dependencies>
 

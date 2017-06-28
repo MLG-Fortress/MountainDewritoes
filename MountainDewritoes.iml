@@ -67,6 +67,14 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.oliverdunk:JukeboxAPI:v2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.github.RoboMWM:UsefulUtil:1.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.RoboMWM:UsefulNMSUtil:1.1" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.github.ProtocolSupport:ProtocolSupport:4.26.dev">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/ProtocolSupport.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

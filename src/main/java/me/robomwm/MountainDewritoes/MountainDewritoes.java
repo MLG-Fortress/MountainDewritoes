@@ -98,8 +98,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new LongFallBoots(), this);
         pm.registerEvents(new DeathListener(this), this);
         pm.registerEvents(new BetterZeldaHearts(), this);
-        pm.registerEvents(new RandomStructurePaster(this), this);
-        pm.registerEvents(new RandomTipOfTheDay(this), this);
+        new RandomStructurePaster(this);
+        new JoinMessages(this);
         pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
         pm.registerEvents(new HitSound(this), this);
@@ -108,7 +108,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new NoKnockback(this), this);
         pm.registerEvents(damageIndicators, this);
         pm.registerEvents(new SleepManagement(this), this);
-        pm.registerEvents(new ResourcePackNotifier(this), this);
 
         new ReverseOsmosis(this);
         new SimpleClansListener(this, clanManager);

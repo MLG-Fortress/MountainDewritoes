@@ -31,6 +31,7 @@ public class RandomStructurePaster implements Listener
         //schematics.add("nikita_cheetah_beach");
         random = new Random();
         instance = blah;
+        instance.registerListener(this);
     }
 
     //@EventHandler(ignoreCancelled = true)
