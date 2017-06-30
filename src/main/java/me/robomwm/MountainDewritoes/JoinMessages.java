@@ -134,10 +134,14 @@ public class JoinMessages implements Listener
                 {
                     if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
                     {
-                        player.sendMessage(ChatColor.RED + "Warning: You are using an outdated version of Minecraft. Some features on this server might not work correctly. For the best and intended MLG experience, please use " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
+                        player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "You are using an outdated version of Minecraft - Some features on this server might not appear to work correctly for you." + ChatColor.YELLOW + "\nFor the best and intended MLG experience, please update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
                     }
                 }
-                catch (Exception ignored){}
+                catch (Exception e)
+                {
+                    instance.getLogger().info("Probably need to update ProtocolSupport dependency (or it isn't loaded atm.)");
+                    instance.getLogger().warning(e.getMessage());
+                }
             }
         }.runTaskLater(instance, 900L); //15 seconds after joining
 

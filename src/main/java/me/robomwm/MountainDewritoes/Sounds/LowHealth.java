@@ -147,7 +147,8 @@ public class LowHealth implements Listener
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            instance.getLogger().info("You probably need to update TintHealth.");
+            instance.getLogger().warning(e.getMessage());
         }
     }
 
