@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
+import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
@@ -135,6 +136,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Commands
         getCommand("nick").setExecutor(new NickCommand());
         getCommand("warp").setExecutor(new WarpCommand(this));
+        getCommand("restart").setExecutor(new StaffRestartCommand(this));
 
         saveConfig();
     }
@@ -143,6 +145,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         getLogger().info("Cleaning up any active damage indicator holograms...");
         getLogger().info(String.valueOf(damageIndicators.cleanupDamageIndicators()) + " holograms removed.");
+        //TODO: delete instantiated worlds (i.e. those not in MV)
     }
 
     /**
