@@ -19,3 +19,5 @@ commands:
   nick:
     aliases: [color]
   warp: {}
+  restart:
+    aliases: [stop]
