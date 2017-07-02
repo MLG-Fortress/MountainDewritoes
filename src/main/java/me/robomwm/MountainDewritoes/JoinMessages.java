@@ -38,6 +38,7 @@ public class JoinMessages implements Listener
 
     JoinMessages(MountainDewritoes blah)
     {
+        blah.getServer().getPluginManager().registerEvents(this, blah);
         instance = blah;
 
         //Tip of the day
