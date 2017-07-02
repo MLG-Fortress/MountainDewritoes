@@ -28,6 +28,9 @@ public class ReplacementSoundEffects implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onReceivingDamage(EntityDamageEvent event)
     {
+        if (event.getDamage() == 0D)
+            return;
+
         if (event.getEntityType() != EntityType.PLAYER)
             return;
         switch (event.getCause())
@@ -45,12 +48,6 @@ public class ReplacementSoundEffects implements Listener
         Player player = (Player)event.getEntity();
         Location location = player.getLocation();
 
-        //Play sound to player
-        if (pitch == 0.5f)
-            player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
-        else
-            player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
-
         //Play sound to others
         //TODO: distance checks? (Only for hacked clients)
         for (Player p : player.getWorld().getPlayers())
@@ -59,6 +56,12 @@ public class ReplacementSoundEffects implements Listener
                 continue;
             p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.0f, pitch);
         }
+
+        //Play sound to player
+        if (pitch == 0.5f)
+            player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
+        else
+            player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
     }
 
 
