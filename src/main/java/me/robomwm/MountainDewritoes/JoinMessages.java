@@ -50,6 +50,7 @@ public class JoinMessages implements Listener
         randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
         randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
         randomTips.add("Need a crate key? Win one via an /ad or see if there's any at the /mall");
+        randomTips.add("Try an AbsorptionShield in the chest at spawn!");
 
         //Resource pack notifier
         ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
@@ -72,7 +73,7 @@ public class JoinMessages implements Listener
                     instance.timedActionBar(player, 20, ChatColor.GOLD + tip);
                 }
             }
-        }.runTaskLater(instance, 1200L);
+        }.runTaskLater(instance, 2400L);
     }
 
     //resource pack
@@ -114,7 +115,7 @@ public class JoinMessages implements Listener
                     if (event.getPlayer().isOnline())
                         event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our meme resource pack. Please enable it by editing the server in your servers list.");
                 }
-            }.runTaskLater(instance, 600L);
+            }.runTaskLater(instance, 1200L);
         }
     }
 
