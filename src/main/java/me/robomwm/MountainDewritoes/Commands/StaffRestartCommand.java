@@ -75,7 +75,7 @@ public class StaffRestartCommand implements CommandExecutor
             }
         }
 
-        String playerName = player.getName(); //Might not be necessary since we're running in sync but w/e
+        String playerName = player.getDisplayName(); //Might not be necessary since we're running in sync but w/e
 
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
