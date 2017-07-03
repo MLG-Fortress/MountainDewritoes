@@ -25,7 +25,27 @@ public class StaffRestartCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!(sender instanceof Player))
-            return false;
+        {
+            String reason = "";
+            if (args.length > 0)
+                reason = String.join(" ", args);
+
+            for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
+            {
+                onlinePlayer.kickPlayer("Serbur restartin: " + reason);
+            }
+
+            instance.getServer().savePlayers(); //Probably dumb since I'm kickin 'em anyways
+
+            //In case some dum plugin freezes the serbur onDisable...
+            for (World world : instance.getServer().getWorlds())
+            {
+                world.save();
+            }
+
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "minecraft:stop");
+            return true;
+        }
 
         Player player = (Player)sender;
 
