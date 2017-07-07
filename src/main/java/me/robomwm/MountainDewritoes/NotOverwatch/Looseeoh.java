@@ -27,9 +27,11 @@ public class Looseeoh implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     void wallRide(PlayerToggleSneakEvent event)
     {
+        if (!event.isSneaking())
+            return;
         Player player = event.getPlayer();
         if (!ogrewatch.isLucio(player))
             return;
@@ -56,6 +58,11 @@ public class Looseeoh implements Listener
         //TODO: check if already wallriding?
 
         Vector ridingVector = velocity;
+        //If player is not sprinting, they won't have any velocity in x or z direction
+        //In this case, we'll just use the direction vector
+        if (ridingVector.getX() == ridingVector.getZ())
+            ridingVector = player.getLocation().getDirection();
+
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
             velocity.setZ(0);
@@ -64,7 +71,9 @@ public class Looseeoh implements Listener
         {
             velocity.setX(0);
         }
-        velocity.setY(0.01);
+        velocity.setY(0.02);
+
+        final Vector finalVector = ridingVector;
 
 
         new BukkitRunnable()
@@ -73,20 +82,20 @@ public class Looseeoh implements Listener
             public void run()
             {
                 //Increase absolute value of x or z component slowly towards 1...
-                if (ridingVector.getX() > 0 && ridingVector.getX() < 1)
-                    ridingVector.setX(ridingVector.getX() + 0.05);
-                else if (ridingVector.getX() < 0 && ridingVector.getX() > -1)
-                    ridingVector.setX(ridingVector.getX() - 0.05);
-                else if (ridingVector.getZ() > 0 && ridingVector.getZ() < 1)
-                    ridingVector.setZ(ridingVector.getZ() + 0.05);
-                else if (ridingVector.getZ() < 0 && ridingVector.getZ() > -1)
-                    ridingVector.setZ(ridingVector.getZ() - 0.05);
+                if (finalVector.getX() > 0 && finalVector.getX() < 1)
+                    finalVector.setX(finalVector.getX() + 0.05);
+                else if (finalVector.getX() < 0 && finalVector.getX() > -1)
+                    finalVector.setX(finalVector.getX() - 0.05);
+                else if (finalVector.getZ() > 0 && finalVector.getZ() < 1)
+                    finalVector.setZ(finalVector.getZ() + 0.05);
+                else if (finalVector.getZ() < 0 && finalVector.getZ() > -1)
+                    finalVector.setZ(finalVector.getZ() - 0.05);
 
-                player.setVelocity(ridingVector);
+                player.setVelocity(finalVector);
 
                 Block block1 = player.getLocation().getBlock();
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround())
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking())
                 {
                     cancel();
                     return;

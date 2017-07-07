@@ -49,7 +49,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     //Set<Player> usedEC = new HashSet<>();
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
-    DamageIndicators damageIndicators;
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
     private FileConfiguration newConfig;
@@ -91,7 +90,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public void onEnable()
     {
         //Wow, lots-o-listeners
-        damageIndicators = new DamageIndicators(this);
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
         ClanManager clanManager = sc.getClanManager();
@@ -108,7 +106,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new SpawnWorldListener(this), this);
         pm.registerEvents(new GamemodeInventoryManager(this), this);
         pm.registerEvents(new NoKnockback(this), this);
-        pm.registerEvents(damageIndicators, this);
         pm.registerEvents(new SleepManagement(this), this);
 
         new ReverseOsmosis(this);
@@ -143,8 +140,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void onDisable()
     {
-        getLogger().info("Cleaning up any active damage indicator holograms...");
-        getLogger().info(String.valueOf(damageIndicators.cleanupDamageIndicators()) + " holograms removed.");
         //TODO: delete instantiated worlds (i.e. those not in MV)
     }
 
