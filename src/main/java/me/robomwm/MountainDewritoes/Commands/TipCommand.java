@@ -63,6 +63,7 @@ public class TipCommand implements CommandExecutor
         randomTips.add("Lern 2 bend da meincraft world wit /help bending");
         randomTips.add("Don't keel dee endermins");
         randomTips.add("Find loot quick mobs r hard");
+        randomTips.add("Git sum cool stoof wit slamphun!! Lern how in da " + ChatColor.GOLD + "/sf guide");
 
         betaTips.add("Try an AbsorptionShield in the chest at spawn!");
         betaTips.add("Wallride like loo-see-oh frum ogrewatch. Hold a feather, jump and hold sneak near a wall");
