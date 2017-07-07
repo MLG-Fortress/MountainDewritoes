@@ -55,7 +55,7 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         final double health = player.getHealth() - event.getFinalDamage();
-        final float lowHealthValue = 4f;
+        final float lowHealthValue = 20f;
         if (health <= lowHealthValue && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
@@ -148,7 +148,7 @@ public class LowHealth implements Listener
         catch (Exception e)
         {
             instance.getLogger().info("You probably need to update TintHealth.");
-            instance.getLogger().warning(e.getMessage());
+            //instance.getLogger().warning(e.getMessage());
         }
     }
 
