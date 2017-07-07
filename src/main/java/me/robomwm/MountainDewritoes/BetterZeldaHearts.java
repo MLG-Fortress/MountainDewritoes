@@ -104,9 +104,9 @@ public class BetterZeldaHearts implements Listener
         if (!lore.get(0).equals("Permanently increases") || !lore.get(1).startsWith("your max health"))
             return;
         Player player = event.getPlayer();
-        if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= 74D)
+        if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= 180D)
         {
-            player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 37 swegcaps!");
+            player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 90 swegcaps!");
             event.setCancelled(true);
             return;
         }
@@ -119,12 +119,12 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-    //Set new player's health to 13 hearts
+    //Set new player's health to 30 hearts
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
         if (!event.getPlayer().hasPlayedBefore())
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(26D);
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D);
         event.getPlayer().setMaximumAir(1200);
     }
 
@@ -196,9 +196,16 @@ public class BetterZeldaHearts implements Listener
         player.removePotionEffect(PotionEffectType.WITHER);
     }
 
+    //Player loses 1/8 of extra health
     @EventHandler
     void resetHealthOnRespawn(PlayerRespawnEvent event)
     {
-        event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(26D);
+        if (event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < 60D)
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D);
+        else
+        {
+            double extraHearts = 60D - event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D + (extraHearts - (extraHearts/8)));
+        }
     }
 }

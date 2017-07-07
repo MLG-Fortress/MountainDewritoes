@@ -5,7 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -28,13 +28,14 @@ public class Looseeoh implements Listener
     }
 
     @EventHandler
-    void wallRide(PlayerToggleFlightEvent event)
+    void wallRide(PlayerToggleSneakEvent event)
     {
         Player player = event.getPlayer();
         if (!ogrewatch.isLucio(player))
             return;
+        if (player.isOnGround())
+            return;
 
-        event.setCancelled(true);
         Vector velocity = player.getVelocity();
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
         Block block = player.getLocation().getBlock();
@@ -93,6 +94,8 @@ public class Looseeoh implements Listener
                     && block1.getRelative(BlockFace.SOUTH).getType().isTransparent()
                     && block1.getRelative(BlockFace.EAST).getType().isTransparent()
                     && block1.getRelative(BlockFace.WEST).getType().isTransparent())
+                    cancel();
+                if (player.isOnGround() || !player.isSneaking())
                     cancel();
             }
         }.runTaskTimer(instance, 0L, 1L);
