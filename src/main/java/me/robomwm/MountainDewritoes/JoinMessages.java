@@ -30,8 +30,8 @@ public class JoinMessages implements Listener
 {
     MountainDewritoes instance;
 
-    List<String> randomTips = new ArrayList<>();
-    Random random = new Random();
+    //List<String> randomTips = new ArrayList<>();
+    //Random random = new Random();
 
     String pack;
     Set<UUID> ignoredUUIDs = new HashSet<>();
@@ -42,21 +42,19 @@ public class JoinMessages implements Listener
         instance = blah;
 
         //Tip of the day
-        randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
-        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.BOLD + ChatColor.AQUA + "ALL fall damage!");
-        randomTips.add("We could always use more staff, feel free to /apply");
-        randomTips.add("Bored? Talk 2 U_W0T_B0T by mentioning it in chat!");
-        randomTips.add("Got any suggestions for the MLG pack? Just state your opinions in chat!");
-        randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
-        randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
-        randomTips.add("Need a crate key? Win one via an /ad or see if there's any at the /mall");
-        randomTips.add("Try an AbsorptionShield in the chest at spawn!");
+//        randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
+//        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.BOLD + ChatColor.AQUA + "ALL fall damage!");
+//        randomTips.add("We could always use more staff, feel free to /apply");
+//        randomTips.add("Bored? Talk 2 U_W0T_B0T by mentioning it in chat!");
+//        randomTips.add("Got any suggestions for the MLG pack? Just state your opinions in chat!");
+//        randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
+//        randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
+//        randomTips.add("Need a crate key? Win one via an /ad or see if there's any at the /mall");
+//        randomTips.add("Try an AbsorptionShield in the chest at spawn!");
 
         //Resource pack notifier
         ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
         pack = instance.getConfig().getString("pack");
-
-        //client version
     }
     //Tips
     @EventHandler
@@ -69,8 +67,9 @@ public class JoinMessages implements Listener
             {
                 if (player.isOnline())
                 {
-                    String tip = randomTips.get(random.nextInt(randomTips.size()));
-                    instance.timedActionBar(player, 20, ChatColor.GOLD + tip);
+                    //String tip = randomTips.get(random.nextInt(randomTips.size()));
+                    //instance.timedActionBar(player, 20, ChatColor.GOLD + tip);
+                    player.performCommand("tip join");
                 }
             }
         }.runTaskLater(instance, 2400L);

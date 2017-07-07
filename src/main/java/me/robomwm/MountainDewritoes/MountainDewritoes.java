@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
+import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
@@ -134,6 +135,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("nick").setExecutor(new NickCommand());
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
+        getCommand("tip").setExecutor(new TipCommand(this));
 
         saveConfig();
     }

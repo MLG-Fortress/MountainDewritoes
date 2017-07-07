@@ -21,3 +21,5 @@ commands:
   warp: {}
   restart:
     aliases: [stop]
+  tip:
+    aliases: [getatip, betafish, beta]
