@@ -33,6 +33,7 @@ public class TipCommand implements CommandExecutor
 
     public TipCommand(JavaPlugin plugin)
     {
+        instance = plugin;
         storageFile = new File(plugin.getDataFolder(), "storage.data");
         if (!storageFile.exists())
         {
