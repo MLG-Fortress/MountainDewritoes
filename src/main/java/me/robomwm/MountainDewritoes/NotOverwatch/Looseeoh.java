@@ -71,6 +71,16 @@ public class Looseeoh implements Listener
             @Override
             public void run()
             {
+                //Increase absolute value of x or z component slowly towards 1...
+                if (ridingVector.getX() > 0 && ridingVector.getX() < 1)
+                    ridingVector.setX(ridingVector.getX() + 0.05);
+                else if (ridingVector.getX() < 0 && ridingVector.getX() > -1)
+                    ridingVector.setX(ridingVector.getX() - 0.05);
+                else if (ridingVector.getZ() > 0 && ridingVector.getZ() < 1)
+                    ridingVector.setZ(ridingVector.getZ() + 0.05);
+                else if (ridingVector.getZ() < 0 && ridingVector.getZ() > -1)
+                    ridingVector.setZ(ridingVector.getZ() - 0.05);
+
                 player.setVelocity(ridingVector);
 
                 Block block1 = player.getLocation().getBlock();
