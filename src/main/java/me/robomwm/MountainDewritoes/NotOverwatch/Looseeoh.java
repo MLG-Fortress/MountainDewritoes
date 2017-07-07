@@ -93,14 +93,14 @@ public class Looseeoh implements Listener
 
                 player.setVelocity(finalVector);
 
-                Block block1 = player.getLocation().getBlock();
-
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking()
                         || player.getVelocity().getZ() == player.getVelocity().getX())
                 {
                     cancel();
                     return;
                 }
+
+                Block block1 = player.getLocation().getBlock();
 
                     //Near an adjacent, solid block?
                 if (block1.getRelative(BlockFace.NORTH).getType().isTransparent()
