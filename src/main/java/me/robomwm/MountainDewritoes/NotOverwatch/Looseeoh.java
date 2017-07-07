@@ -86,16 +86,17 @@ public class Looseeoh implements Listener
 
                 Block block1 = player.getLocation().getBlock();
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround())
+                {
                     cancel();
+                    return;
+                }
 
                     //Near an adjacent, solid block?
                 if (block1.getRelative(BlockFace.NORTH).getType().isTransparent()
                     && block1.getRelative(BlockFace.SOUTH).getType().isTransparent()
                     && block1.getRelative(BlockFace.EAST).getType().isTransparent()
                     && block1.getRelative(BlockFace.WEST).getType().isTransparent())
-                    cancel();
-                if (player.isOnGround() || !player.isSneaking())
                     cancel();
             }
         }.runTaskTimer(instance, 0L, 1L);
