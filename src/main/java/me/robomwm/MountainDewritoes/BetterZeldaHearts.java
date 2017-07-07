@@ -181,19 +181,17 @@ public class BetterZeldaHearts implements Listener
 
     boolean healPlayer(Player player)
     {
-        if (player.getHealth() == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())
+        if (player.getHealth() == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()
+                && player.getFireTicks() == 0
+                && player.getPotionEffect(PotionEffectType.POISON) != null
+                && player.getPotionEffect(PotionEffectType.WITHER) != null)
             return false;
         player.addPotionEffect(PotionEffectType.HEAL.createEffect(1, 2));
-        clearBadEffects(player);
-        player.playSound(player.getLocation(), "fortress.healthheart", 3000000f, 1f);
-        return true;
-    }
-
-    void clearBadEffects(Player player)
-    {
         player.setFireTicks(0); //Extinguish
         player.removePotionEffect(PotionEffectType.POISON);
         player.removePotionEffect(PotionEffectType.WITHER);
+        player.playSound(player.getLocation(), "fortress.healthheart", 3000000f, 1f);
+        return true;
     }
 
     //Player loses 1/8 of extra health
@@ -204,7 +202,7 @@ public class BetterZeldaHearts implements Listener
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D);
         else
         {
-            double extraHearts = 60D - event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+            double extraHearts = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60D;
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D + (extraHearts - (extraHearts/8)));
         }
     }
