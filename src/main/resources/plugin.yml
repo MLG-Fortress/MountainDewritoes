@@ -22,4 +22,4 @@ commands:
   restart:
     aliases: [stop]
   tip:
-    aliases: [getatip, betafish, beta]
+    aliases: [getatip, betafish, beta, tips]
