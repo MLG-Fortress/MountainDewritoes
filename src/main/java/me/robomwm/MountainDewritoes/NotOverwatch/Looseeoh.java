@@ -37,7 +37,7 @@ public class Looseeoh implements Listener
             return;
         if (player.isOnGround())
             return;
-        
+
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
         Block block = player.getLocation().getBlock();
 
