@@ -120,7 +120,7 @@ public class SimpleClansListener implements Listener
     //Now kinda useless, and not delayed.
     public void setDisplayName(final Player player1, final String colorCode)
     {
-        if (!player1.hasPlayedBefore() && player1.getDisplayName().startsWith(player1.getName()))
+        if (!player1.hasPlayedBefore() || !ChatColor.stripColor(player1.getDisplayName()).contains(player1.getName()))
         {
             scheduler.scheduleSyncDelayedTask(instance, new Runnable()
             {
