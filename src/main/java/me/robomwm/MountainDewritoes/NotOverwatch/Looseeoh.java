@@ -37,8 +37,7 @@ public class Looseeoh implements Listener
             return;
         if (player.isOnGround())
             return;
-
-        Vector velocity = player.getVelocity();
+        
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
         Block block = player.getLocation().getBlock();
 
@@ -57,7 +56,7 @@ public class Looseeoh implements Listener
 
         //TODO: check if already wallriding?
 
-        Vector ridingVector = velocity;
+        Vector ridingVector = player.getVelocity();;
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
@@ -65,13 +64,13 @@ public class Looseeoh implements Listener
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
-            velocity.setZ(0);
+            ridingVector.setZ(0);
         }
         else
         {
-            velocity.setX(0);
+            ridingVector.setX(0);
         }
-        velocity.setY(0.02);
+        ridingVector.setY(0.02);
 
         final Vector finalVector = ridingVector;
 
@@ -93,7 +92,7 @@ public class Looseeoh implements Listener
 
                 player.setVelocity(finalVector);
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking()
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround()
                         || player.getVelocity().getZ() == player.getVelocity().getX())
                 {
                     cancel();
