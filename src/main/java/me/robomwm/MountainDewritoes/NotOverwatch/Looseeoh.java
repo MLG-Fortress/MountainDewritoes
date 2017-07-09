@@ -1,11 +1,13 @@
 package me.robomwm.MountainDewritoes.NotOverwatch;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -36,6 +38,8 @@ public class Looseeoh implements Listener
         if (!ogrewatch.isLucio(player))
             return;
         if (player.isOnGround())
+            return;
+        if (player.hasMetadata("MD_WALLRIDING"))
             return;
 
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
@@ -70,16 +74,20 @@ public class Looseeoh implements Listener
         {
             ridingVector.setX(0);
         }
-        ridingVector.setY(0.02);
+        ridingVector.setY(0.04); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
 
         final Vector finalVector = ridingVector;
+
+        player.setMetadata("MD_WALLRIDING", new FixedMetadataValue(instance, true));
 
 
         new BukkitRunnable()
         {
+            Location lastLocation = player.getLocation().add(0, 2, 0);
             @Override
             public void run()
             {
+                Location currentLocation = player.getLocation();
                 //Increase absolute value of x or z component slowly towards 1...
                 if (finalVector.getX() > 0 && finalVector.getX() < 1)
                     finalVector.setX(finalVector.getX() + 0.05);
@@ -93,9 +101,10 @@ public class Looseeoh implements Listener
                 player.setVelocity(finalVector);
 
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround()
-                        || player.getVelocity().getZ() == player.getVelocity().getX())
+                        || player.getLocation().distanceSquared(lastLocation) < 0.5) //TODO: can lag break this check? (Do we care? Maybe we don't want a laggy player stuck wallriding either)
                 {
                     cancel();
+                    player.removeMetadata("MD_WALLRIDING", instance);
                     return;
                 }
 
@@ -106,7 +115,12 @@ public class Looseeoh implements Listener
                     && block1.getRelative(BlockFace.SOUTH).getType().isTransparent()
                     && block1.getRelative(BlockFace.EAST).getType().isTransparent()
                     && block1.getRelative(BlockFace.WEST).getType().isTransparent())
+                {
                     cancel();
+                    player.removeMetadata("MD_WALLRIDING", instance);
+                }
+
+                lastLocation = player.getLocation();
             }
         }.runTaskTimer(instance, 0L, 1L);
     }
