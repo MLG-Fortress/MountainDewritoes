@@ -58,6 +58,9 @@ public class SimpleClansListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
+        final String colorCode = getColorCode(event.getPlayer());
+        //Set colored display name
+        setDisplayName(event.getPlayer(), colorCode);
         setClanPrefix(event.getPlayer());
     }
 
@@ -153,18 +156,8 @@ public class SimpleClansListener implements Listener
     {
         final String colorCode = getColorCode(player);
 
-        //Set colored display name
-        setDisplayName(player, colorCode);
-
         ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
         if (clanPlayer == null)
-        {
-            //Yes, a nullcheck is needed
-            setListName(player, "");
-            return;
-        }
-        Clan clan = clanPlayer.getClan();
-        if (clan == null)
         {
             //If not part of a clan, set colored name and do no more
             setListName(player, "");

@@ -83,11 +83,9 @@ public class Looseeoh implements Listener
 
         new BukkitRunnable()
         {
-            Location lastLocation = player.getLocation().add(0, 2, 0);
             @Override
             public void run()
             {
-                Location currentLocation = player.getLocation();
                 //Increase absolute value of x or z component slowly towards 1...
                 if (finalVector.getX() > 0 && finalVector.getX() < 1)
                     finalVector.setX(finalVector.getX() + 0.05);
@@ -100,8 +98,7 @@ public class Looseeoh implements Listener
 
                 player.setVelocity(finalVector);
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround()
-                        || player.getLocation().distanceSquared(lastLocation) < 0.5) //TODO: can lag break this check? (Do we care? Maybe we don't want a laggy player stuck wallriding either)
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround())
                 {
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);
@@ -126,8 +123,6 @@ public class Looseeoh implements Listener
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);
                 }
-
-                lastLocation = player.getLocation();
             }
         }.runTaskTimer(instance, 0L, 1L);
     }
