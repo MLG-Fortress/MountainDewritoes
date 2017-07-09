@@ -164,7 +164,7 @@ public class SimpleClansListener implements Listener
             return;
         }
 
-        final String tag = ("\u00A77" + clan.getColorTag());
+        final String tag = ("\u00A77" + clanPlayer.getClan().getColorTag());
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
