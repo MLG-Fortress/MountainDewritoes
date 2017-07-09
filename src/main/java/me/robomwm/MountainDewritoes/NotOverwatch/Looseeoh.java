@@ -45,16 +45,15 @@ public class Looseeoh implements Listener
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
         Block block = player.getLocation().getBlock();
 
-        //Near an adjacent, solid block?
-        if (block.getRelative(BlockFace.NORTH).getType().isTransparent()
-                && block.getRelative(BlockFace.SOUTH).getType().isTransparent()
-                && block.getRelative(BlockFace.EAST).getType().isTransparent()
-                && block.getRelative(BlockFace.WEST).getType().isTransparent())
+        if (block.isLiquid())
             return;
 
-        //Can only ride on solid blocks
-//        if (block.getType().isTransparent())
-//            return;
+        //Near an adjacent, solid block?
+        if (!block.getRelative(BlockFace.NORTH).getType().isSolid()
+                && !block.getRelative(BlockFace.SOUTH).getType().isSolid()
+                && !block.getRelative(BlockFace.EAST).getType().isSolid()
+                && !block.getRelative(BlockFace.WEST).getType().isSolid())
+            return;
 
         player.sendMessage("wallriding");
 
@@ -64,7 +63,8 @@ public class Looseeoh implements Listener
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-            ridingVector = player.getLocation().getDirection();
+            ridingVector = player.getLocation().getDirection().normalize();
+
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
@@ -110,11 +110,18 @@ public class Looseeoh implements Listener
 
                 Block block1 = player.getLocation().getBlock();
 
+                if (block1.isLiquid())
+                {
+                    cancel();
+                    player.removeMetadata("MD_WALLRIDING", instance);
+                    return;
+                }
+
                     //Near an adjacent, solid block?
-                if (block1.getRelative(BlockFace.NORTH).getType().isTransparent()
-                    && block1.getRelative(BlockFace.SOUTH).getType().isTransparent()
-                    && block1.getRelative(BlockFace.EAST).getType().isTransparent()
-                    && block1.getRelative(BlockFace.WEST).getType().isTransparent())
+                if (!block1.getRelative(BlockFace.NORTH).getType().isSolid()
+                    && !block1.getRelative(BlockFace.SOUTH).getType().isSolid()
+                    && !block1.getRelative(BlockFace.EAST).getType().isSolid()
+                    && !block1.getRelative(BlockFace.WEST).getType().isSolid())
                 {
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);
