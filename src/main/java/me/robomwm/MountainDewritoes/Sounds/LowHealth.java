@@ -119,14 +119,14 @@ public class LowHealth implements Listener
 
                     if (breathin)
                     {
-                        player.playSound(player.getLocation().subtract(0, 300D, 0), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 22f, 1.0f);
+                        player.playSound(player.getLocation().subtract(0, 300D, 0), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, 1.0f);
                         breathin = false;
                         ticks = 0;
                         nextTick = ThreadLocalRandom.current().nextInt(20, 40);
                     }
                     else
                     {
-                        player.playSound(player.getLocation().subtract(0D, 300D, 0D), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 22f, (float)ThreadLocalRandom.current().nextDouble(0.83D, 0.87D));
+                        player.playSound(player.getLocation().subtract(0D, 300D, 0D), Sound.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 23f, (float)ThreadLocalRandom.current().nextDouble(0.83D, 0.87D));
                         breathin = true;
                         ticks = 0;
                         nextTick = ThreadLocalRandom.current().nextInt(70, 130);
