@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,16 +31,16 @@ public class Looseeoh implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
-    void wallRide(PlayerToggleSneakEvent event)
+    void wallRide(PlayerMoveEvent event)
     {
-        if (!event.isSneaking())
-            return;
         Player player = event.getPlayer();
         if (!ogrewatch.isLucio(player))
             return;
-        if (player.isOnGround())
-            return;
         if (player.hasMetadata("MD_WALLRIDING"))
+            return;
+        if (player.isSneaking())
+            return;
+        if (player.isOnGround())
             return;
 
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
@@ -59,11 +60,11 @@ public class Looseeoh implements Listener
 
         //TODO: check if already wallriding?
 
-        Vector ridingVector = player.getVelocity();;
+        Vector ridingVector = player.getVelocity();
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-            ridingVector = player.getLocation().getDirection().normalize();
+            ridingVector = player.getLocation().getDirection().normalize().multiply(0.1);
 
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
@@ -98,7 +99,7 @@ public class Looseeoh implements Listener
 
                 player.setVelocity(finalVector);
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround())
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())
                 {
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);
@@ -106,8 +107,9 @@ public class Looseeoh implements Listener
                 }
 
                 Block block1 = player.getLocation().getBlock();
+                Block nextBlock = player.getLocation().add(finalVector.normalize()).getBlock();
 
-                if (block1.isLiquid())
+                if (block1.isLiquid() || nextBlock.getType().isSolid())
                 {
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);

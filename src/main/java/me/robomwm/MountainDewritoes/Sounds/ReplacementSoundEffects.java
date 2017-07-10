@@ -13,6 +13,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Created on 3/11/2017.
  *
@@ -28,9 +30,6 @@ public class ReplacementSoundEffects implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onReceivingDamage(EntityDamageEvent event)
     {
-        if (event.getDamage() == 0D)
-            return;
-
         if (event.getEntityType() != EntityType.PLAYER)
             return;
         switch (event.getCause())
@@ -39,11 +38,9 @@ public class ReplacementSoundEffects implements Listener
                 return; //TODO: drowning
         }
 
-        float pitch = 1.0f;
-        if (event.getFinalDamage() > 20D)
+        float pitch = r4nd0m(0.8f, 1.2f);
+        if (event.getFinalDamage() > 20D) //TODO: critical?
             pitch = 0.5f;
-        else if (event.getFinalDamage() < 0.5D)
-            pitch = 2f;
 
         Player player = (Player)event.getEntity();
         Location location = player.getLocation();
@@ -62,6 +59,10 @@ public class ReplacementSoundEffects implements Listener
             player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
         else
             player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
+    }
+
+    public float r4nd0m(float min, float max) {
+        return (float) ThreadLocalRandom.current().nextDouble(min, max + 1.0D);
     }
 
 
