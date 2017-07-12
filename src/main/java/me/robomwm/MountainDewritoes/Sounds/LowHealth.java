@@ -145,7 +145,7 @@ public class LowHealth implements Listener
             else
                 THAPI.removeTint(player);
         }
-        catch (Exception e)
+        catch (Exception | Error e)
         {
             instance.getLogger().info("You probably need to update TintHealth.");
             //instance.getLogger().warning(e.getMessage());
