@@ -74,7 +74,7 @@ public class BetterNoDamageTicks implements Listener
         if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))
             return;
 
-        List<MetadataValue> metadata = event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY);
+        List<MetadataValue> metadata = new ArrayList<>(event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY));
 
         //Clear existing metadata (e.g. always cleans up metadata - may move to a scheduled task if CPU performance is an issue)
         event.getEntity().removeMetadata(DAMAGE_IMMUNITY_KEY, instance);
@@ -96,7 +96,7 @@ public class BetterNoDamageTicks implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void setImmunity(EntityDamageEvent event) //TODO: ignore fakeentitydamageevent from mcmmo?
     {
-        long ticksToExpire = 0L;
+        long ticksToExpire;
 
         switch (event.getCause())
         {
