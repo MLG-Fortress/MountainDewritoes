@@ -125,7 +125,7 @@ public class BetterZeldaHearts implements Listener
     {
         if (!event.getPlayer().hasPlayedBefore())
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D);
-        event.getPlayer().setMaximumAir(1200);
+        event.getPlayer().setMaximumAir(600);
     }
 
     //Don't allow mobs to pick this up

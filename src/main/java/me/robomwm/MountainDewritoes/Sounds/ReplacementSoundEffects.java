@@ -35,7 +35,8 @@ public class ReplacementSoundEffects implements Listener
         switch (event.getCause())
         {
             case FALL:
-                return; //TODO: drowning
+            case DROWNING:
+                return;
         }
 
         float pitch = r4nd0m(0.8f, 1.2f);
