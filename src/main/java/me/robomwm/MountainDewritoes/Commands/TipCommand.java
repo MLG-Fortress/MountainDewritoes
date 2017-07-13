@@ -132,7 +132,7 @@ public class TipCommand implements CommandExecutor
         for (String tip : shuffledTips)
         {
             if (!seenTips.contains(tip))
-                return getRandomColor() + "" + ChatColor.BOLD + "\u2503/TIP\u2503 " + getRandomColor() + tip; //┃
+                return getRandomColor() + "" + ChatColor.BOLD + "/TIP: " + getRandomColor() + tip; //┃\u2503
         }
 
         return getRandomColor() + "" + ChatColor.BOLD + "{TIP} " + getRandomColor() + shuffledTips.get(0);
@@ -151,7 +151,6 @@ public class TipCommand implements CommandExecutor
         color.add(ChatColor.DARK_PURPLE);
         color.add(ChatColor.LIGHT_PURPLE);
         color.add(ChatColor.DARK_AQUA);
-        color.add(ChatColor.DARK_BLUE);
         color.add(ChatColor.DARK_GREEN);
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));
     }

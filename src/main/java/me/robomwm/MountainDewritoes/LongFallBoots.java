@@ -25,6 +25,16 @@ import java.util.Map;
  */
 public class LongFallBoots implements Listener
 {
+    //Also cancel minute falling damage
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    private void onHardlyAnyFalling(EntityDamageEvent event)
+    {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
+            return;
+        if (event.getDamage() < 5.0)
+            event.setCancelled(true);
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     void onPlayerFallDamageWearingLongFallBoots(EntityDamageEvent event)
     {
@@ -65,8 +75,7 @@ public class LongFallBoots implements Listener
         List<String> lore = new ArrayList<String>();
         lore.add("You know what?");
         lore.add("Go ahead and jump.");
-        lore.add("You've got braces");
-        lore.add("on your legs.");
+        lore.add("You've got braces on your legs.");
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
     }
