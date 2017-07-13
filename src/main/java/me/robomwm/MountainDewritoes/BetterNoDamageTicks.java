@@ -117,7 +117,7 @@ public class BetterNoDamageTicks implements Listener
             //TODO: drowning, wither, poison
         }
 
-        event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new DamageImmunityData(event.getCause(), event.getFinalDamage(), ticksToExpire)));
+        event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new DamageImmunityData(event.getCause(), event.getFinalDamage(), currentTick + ticksToExpire)));
     }
 }
 
