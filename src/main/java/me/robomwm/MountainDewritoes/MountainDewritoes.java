@@ -113,6 +113,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SimpleClansListener(this, clanManager);
         new ReplacementSoundEffects(this);
         new Ogrewatch(this);
+        new BetterNoDamageTicks(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
