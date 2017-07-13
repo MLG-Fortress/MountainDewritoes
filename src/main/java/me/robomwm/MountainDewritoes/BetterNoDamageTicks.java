@@ -74,23 +74,24 @@ public class BetterNoDamageTicks implements Listener
         if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))
             return;
 
-        List<MetadataValue> metadata = new ArrayList<>(event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY));
+        List<DamageImmunityData> damageImmunityDataMetadata = (List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value();
+        List<DamageImmunityData> newDamageImmunityDataMetadata = new ArrayList<>(damageImmunityDataMetadata);
 
         //Clear existing metadata (e.g. always cleans up metadata - may move to a scheduled task if CPU performance is an issue)
         event.getEntity().removeMetadata(DAMAGE_IMMUNITY_KEY, instance);
 
-        for (MetadataValue value : metadata)
+        for (DamageImmunityData damageImmunityData : damageImmunityDataMetadata)
         {
-            DamageImmunityData damageImmunityData = (DamageImmunityData)value.value();
-            if (damageImmunityData.getTickToExpire() > currentTick)
-            {
-                //re-add non-stale immunitydata
-                event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, value);
-
-                if (damageImmunityData.getCause() == event.getCause() && damageImmunityData.getDamage() >= event.getFinalDamage())
-                    event.setCancelled(true);
-            }
+            if (damageImmunityData.getTickToExpire() > currentTick && damageImmunityData.getCause() == event.getCause() && event.getFinalDamage() <= damageImmunityData.getDamage())
+                event.setCancelled(true);
+            else if (damageImmunityData.getTickToExpire() <= currentTick)
+                newDamageImmunityDataMetadata.remove(damageImmunityData);
         }
+
+        if (newDamageImmunityDataMetadata.isEmpty())
+            return;
+
+        event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, newDamageImmunityDataMetadata));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -102,7 +103,7 @@ public class BetterNoDamageTicks implements Listener
         {
             case FIRE:
             case FIRE_TICK:
-            case CONTACT:
+            case LAVA:
             case CRAMMING:
             case HOT_FLOOR:
             case SUFFOCATION:
@@ -110,6 +111,7 @@ public class BetterNoDamageTicks implements Listener
                 break;
             case ENTITY_ATTACK:
             case FALLING_BLOCK:
+            case CONTACT:
                 ticksToExpire = 10L;
                 break;
             default:
@@ -117,7 +119,12 @@ public class BetterNoDamageTicks implements Listener
             //TODO: drowning, wither, poison
         }
 
-        event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new DamageImmunityData(event.getCause(), event.getFinalDamage(), currentTick + ticksToExpire)));
+        DamageImmunityData damageImmunityData = new DamageImmunityData(event.getCause(), event.getFinalDamage(), currentTick + ticksToExpire);
+
+        if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))
+            event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, damageImmunityData));
+        else
+            ((List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value()).add(damageImmunityData);
     }
 }
 
