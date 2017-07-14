@@ -221,6 +221,28 @@ public class SimpleClansListener implements Listener
     }
 
     /**
+     * Extra clan commands
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    private void clanHelpOrWe(PlayerCommandPreprocessEvent event)
+    {
+        String message = event.getMessage().toLowerCase();
+        Player player = event.getPlayer();
+
+        if (message.equals("/clan") || message.equals("/f"))
+        {
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    player.performCommand("/help clan");
+                }
+            }.runTaskLater(instance, 1L);
+        }
+    }
+
+    /**
      * Player can join a clan if they're clan-less
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
