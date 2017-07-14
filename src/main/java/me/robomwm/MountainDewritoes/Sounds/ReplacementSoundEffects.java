@@ -39,7 +39,7 @@ public class ReplacementSoundEffects implements Listener
                 return;
         }
 
-        float pitch = r4nd0m(0.8f, 1.2f);
+        float pitch = r4nd0m(0.9f, 1.1f);
         if (event.getFinalDamage() > 20D) //TODO: critical?
             pitch = 0.5f;
 
