@@ -122,9 +122,8 @@ public class BetterNoDamageTicks implements Listener
         DamageImmunityData damageImmunityData = new DamageImmunityData(event.getCause(), event.getFinalDamage(), currentTick + ticksToExpire);
 
         if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))
-            event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new ArrayList<>().add(damageImmunityData)));
-        else
-            ((List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value()).add(damageImmunityData);
+            event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new ArrayList<DamageImmunityData>()));
+        ((List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value()).add(damageImmunityData);
     }
 }
 
