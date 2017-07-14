@@ -31,8 +31,10 @@ public class Looseeoh implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
-    void wallRide(PlayerMoveEvent event)
+    void wallRide(PlayerToggleSneakEvent event)
     {
+        if (!event.isSneaking())
+            return;
         Player player = event.getPlayer();
         if (!ogrewatch.isLucio(player))
             return;
@@ -49,7 +51,7 @@ public class Looseeoh implements Listener
         if (block.isLiquid())
             return;
 
-        //Near an adjacent, solid block?
+        //Near an adjacent, solid block? //TODO: we have to fix this. This is stupid.
         if (!block.getRelative(BlockFace.NORTH).getType().isSolid()
                 && !block.getRelative(BlockFace.SOUTH).getType().isSolid()
                 && !block.getRelative(BlockFace.EAST).getType().isSolid()
@@ -64,7 +66,7 @@ public class Looseeoh implements Listener
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-            ridingVector = player.getLocation().getDirection().normalize().multiply(0.1);
+            ridingVector = player.getLocation().getDirection().multiply(0.01);
 
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
@@ -99,7 +101,7 @@ public class Looseeoh implements Listener
 
                 player.setVelocity(finalVector);
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking())
                 {
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);
