@@ -244,6 +244,7 @@ public class SimpleClansListener implements Listener
 
     /**
      * Player can join a clan if they're clan-less
+     * TODO: Don't allow a player to rejoin a clan they were kicked from for w/e reason
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onWantToJoinAClan(PlayerCommandPreprocessEvent event)
@@ -272,6 +273,12 @@ public class SimpleClansListener implements Listener
             {
                 clan.addPlayerToClan(clanManager.getClanPlayer(player));
             }
+            else
+            {
+                player.sendMessage("Invalid clan tag. See " + ChatColor.GOLD + "/clan list");
+                player.performCommand("clan list");
+            }
+
         }
     }
 
