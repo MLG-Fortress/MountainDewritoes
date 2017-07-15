@@ -38,7 +38,7 @@ public class FineSine implements Listener
     @EventHandler(ignoreCancelled = true)
     private void onClickFineSine(PlayerInteractEvent event)
     {
-        if (event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.SIGN)
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.WALL_SIGN)
             return;
         Sign sine = (Sign)event.getClickedBlock().getState();
         if (!sine.getLine(0).equals(FINE_SINE_LABEL))
