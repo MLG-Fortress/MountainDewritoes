@@ -66,7 +66,7 @@ public class Looseeoh implements Listener
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-            ridingVector = player.getLocation().getDirection().multiply(0.0001);
+            ridingVector = player.getLocation().getDirection().multiply(0.00000001);
 
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
@@ -99,8 +99,6 @@ public class Looseeoh implements Listener
                 else if (finalVector.getZ() < 0 && finalVector.getZ() > -1)
                     finalVector.setZ(finalVector.getZ() - 0.05);
 
-                player.setVelocity(finalVector);
-
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking())
                 {
                     cancel();
@@ -126,7 +124,12 @@ public class Looseeoh implements Listener
                 {
                     cancel();
                     player.removeMetadata("MD_WALLRIDING", instance);
+                    return;
                 }
+
+                player.setVelocity(finalVector);
+                player.sendActionBar(finalVector.toString());
+
             }
         }.runTaskTimer(instance, 0L, 1L);
     }
