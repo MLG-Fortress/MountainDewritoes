@@ -58,6 +58,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         return survivalWorlds.contains(world);
     }
+    public boolean isSafeWorld(World world)
+    {
+        return safeWorlds.contains(world);
+    }
 
     public void registerListener(Listener listener)
     {
@@ -115,6 +119,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new Ogrewatch(this);
         new BetterNoDamageTicks(this);
         new FineSine(this);
+        new PrisonIsAConfusingGamemode(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
