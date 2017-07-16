@@ -140,11 +140,12 @@ public class PrisonIsAConfusingGamemode implements Listener
         if (!event.getPlayer().hasPermission("mlgstaff"))
             return;
         String[] message = event.getMessage().toLowerCase().split(" ");
-        if (message.length < 2 || !message[0].equals("createprisonticket"))
+        if (message.length < 2 || !message[0].equals("/createprisonticket"))
             return;
         if (event.getPlayer().getInventory().getItemInMainHand() == null)
             return;
         event.getPlayer().getInventory().setItemInMainHand(createTicket(event.getPlayer().getInventory().getItemInMainHand(), message[1]));
+        event.setCancelled(true);
     }
 
     private ItemStack createTicket(ItemStack itemStack, String mine)
