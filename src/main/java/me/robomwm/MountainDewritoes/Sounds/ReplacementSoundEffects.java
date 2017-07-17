@@ -56,7 +56,7 @@ public class ReplacementSoundEffects implements Listener
         }
 
         //Play sound to player
-        if (pitch == 0.5f)
+        if (pitch == 0.5f && event.getDamage() > 0)
             player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
         else
             player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);

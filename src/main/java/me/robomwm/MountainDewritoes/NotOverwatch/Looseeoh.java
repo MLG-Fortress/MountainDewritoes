@@ -66,7 +66,11 @@ public class Looseeoh implements Listener
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-            ridingVector = player.getLocation().getDirection().multiply(0.00000001);
+        {
+            player.sendMessage(player.getLocation().getDirection().toString());
+            ridingVector = player.getLocation().getDirection().multiply(0.000000001D);
+        }
+
 
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
@@ -77,7 +81,7 @@ public class Looseeoh implements Listener
         {
             ridingVector.setX(0);
         }
-        ridingVector.setY(0.04); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
+        ridingVector.setY(0.03); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
 
         final Vector finalVector = ridingVector;
 
@@ -91,13 +95,13 @@ public class Looseeoh implements Listener
             {
                 //Increase absolute value of x or z component slowly towards 1...
                 if (finalVector.getX() > 0 && finalVector.getX() < 1)
-                    finalVector.setX(finalVector.getX() + 0.05);
+                    finalVector.setX(finalVector.getX() + 0.01);
                 else if (finalVector.getX() < 0 && finalVector.getX() > -1)
-                    finalVector.setX(finalVector.getX() - 0.05);
+                    finalVector.setX(finalVector.getX() - 0.01);
                 else if (finalVector.getZ() > 0 && finalVector.getZ() < 1)
-                    finalVector.setZ(finalVector.getZ() + 0.05);
+                    finalVector.setZ(finalVector.getZ() + 0.01);
                 else if (finalVector.getZ() < 0 && finalVector.getZ() > -1)
-                    finalVector.setZ(finalVector.getZ() - 0.05);
+                    finalVector.setZ(finalVector.getZ() - 0.01);
 
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking())
                 {
