@@ -268,7 +268,7 @@ public class SimpleClansListener implements Listener
                 return;
             }
 
-            Clan clan = clanManager.getClan(args[3]);
+            Clan clan = clanManager.getClan(args[2]);
             if (clan != null)
             {
                 clan.addPlayerToClan(clanManager.getClanPlayer(player));
