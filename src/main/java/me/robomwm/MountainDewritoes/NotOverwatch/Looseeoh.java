@@ -80,7 +80,7 @@ public class Looseeoh implements Listener
             ridingVector.setX(0);
         }
 
-        ridingVector.setY(0.02D); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
+        ridingVector.setY(0.04D); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
 
         final Vector finalVector = ridingVector;
 
@@ -110,7 +110,9 @@ public class Looseeoh implements Listener
                 }
 
                 Block block1 = player.getLocation().getBlock();
-                Block nextBlock = player.getLocation().add(finalVector.normalize()).getBlock();
+                Vector copy = new Vector();
+                copy.add(finalVector).normalize();
+                Block nextBlock = player.getLocation().add(copy).getBlock();
 
                 if (block1.isLiquid() || nextBlock.getType().isSolid())
                 {
