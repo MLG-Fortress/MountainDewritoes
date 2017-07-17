@@ -67,11 +67,9 @@ public class Looseeoh implements Listener
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
         {
-            player.sendMessage(player.getLocation().getDirection().toString());
-            ridingVector = player.getLocation().getDirection().multiply(0.000000001D);
+            ridingVector = player.getLocation().getDirection().multiply(0.01D);
+            player.sendMessage(ridingVector.toString());
         }
-
-
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
@@ -81,7 +79,8 @@ public class Looseeoh implements Listener
         {
             ridingVector.setX(0);
         }
-        ridingVector.setY(0.03); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
+
+        ridingVector.setY(0.02D); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
 
         final Vector finalVector = ridingVector;
 
