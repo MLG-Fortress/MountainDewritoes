@@ -249,7 +249,7 @@ public class SimpleClansListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onWantToJoinAClan(PlayerCommandPreprocessEvent event)
     {
-        String invalid = "/join <clan tag> - joins a clan.";
+        String invalid = "/clan join <clan tag> - joins a clan.";
         String message = event.getMessage().toLowerCase();
         Player player = event.getPlayer();
 
