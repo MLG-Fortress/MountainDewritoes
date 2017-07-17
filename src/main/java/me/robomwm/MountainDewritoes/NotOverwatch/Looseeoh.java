@@ -66,10 +66,7 @@ public class Looseeoh implements Listener
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-        {
-            ridingVector = player.getLocation().getDirection().multiply(0.01D);
-            player.sendMessage(ridingVector.toString());
-        }
+            ridingVector = player.getLocation().getDirection().multiply(0.1D);
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
@@ -83,6 +80,7 @@ public class Looseeoh implements Listener
         ridingVector.setY(0.04D); //0.02 works for ideal conditions (no lag at all). Might try to "dynamically set" based on ping value.
 
         final Vector finalVector = ridingVector;
+        player.sendMessage(ridingVector.toString());
 
         player.setMetadata("MD_WALLRIDING", new FixedMetadataValue(instance, true));
 
@@ -94,13 +92,13 @@ public class Looseeoh implements Listener
             {
                 //Increase absolute value of x or z component slowly towards 1...
                 if (finalVector.getX() > 0 && finalVector.getX() < 1)
-                    finalVector.setX(finalVector.getX() + 0.01);
+                    finalVector.setX(finalVector.getX() + 0.05);
                 else if (finalVector.getX() < 0 && finalVector.getX() > -1)
-                    finalVector.setX(finalVector.getX() - 0.01);
+                    finalVector.setX(finalVector.getX() - 0.05);
                 else if (finalVector.getZ() > 0 && finalVector.getZ() < 1)
-                    finalVector.setZ(finalVector.getZ() + 0.01);
+                    finalVector.setZ(finalVector.getZ() + 0.05);
                 else if (finalVector.getZ() < 0 && finalVector.getZ() > -1)
-                    finalVector.setZ(finalVector.getZ() - 0.01);
+                    finalVector.setZ(finalVector.getZ() - 0.05);
 
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking())
                 {
