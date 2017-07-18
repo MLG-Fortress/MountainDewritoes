@@ -63,7 +63,7 @@ public class ReplacementSoundEffects implements Listener
     }
 
     public float r4nd0m(float min, float max) {
-        return (float) ThreadLocalRandom.current().nextDouble(min, max + 1.0D);
+        return (float) ThreadLocalRandom.current().nextDouble(min, max);
     }
 
 
