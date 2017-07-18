@@ -31,22 +31,6 @@ public class Looseeoh implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
-    private void onFailedWallRideAttempt(PlayerMoveEvent event)
-    {
-        if (!event.getPlayer().hasMetadata("MD_WALLRIDE_LASTLOCATION"))
-            return;
-        Player player = event.getPlayer();
-        Location location = (Location)player.getMetadata("MD_WALLRIDE_LASTLOCATION").get(0).value();
-        if (location.distanceSquared(player.getLocation()) > 1)
-        {
-            player.teleport(location);
-            player.setVelocity((Vector)player.getMetadata("MD_WALLRIDE_LASTVELOCITY").get(0).value());
-        }
-        player.removeMetadata("MD_WALLRIDE_LASTLOCATION", instance);
-        player.removeMetadata("MD_WALLRIDE_LASTVELOCITY", instance);
-    }
-
     @EventHandler(ignoreCancelled = true)
     void wallRide(PlayerToggleFlightEvent event)
     {
@@ -55,9 +39,21 @@ public class Looseeoh implements Listener
             return;
         if (!startWallRiding(player))
         {
-            player.setMetadata("MD_WALLRIDE_LASTLOCATION", new FixedMetadataValue(instance, player.getLocation()));
-            player.setMetadata("MD_WALLRIDE_LASTVELOCITY", new FixedMetadataValue(instance, player.getVelocity()));
-            player.setVelocity(player.getVelocity());
+            Location lastLocation = player.getLocation();
+            Vector lastVelocity = player.getVelocity();
+            player.setVelocity(lastVelocity);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (lastLocation.distanceSquared(player.getLocation()) > 1)
+                    {
+                        player.teleport(lastLocation);
+                        player.setVelocity(lastVelocity);
+                    }
+                }
+            }.runTaskLater(instance, 1L);
         }
         event.setCancelled(true);
     }
