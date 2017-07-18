@@ -49,8 +49,6 @@ public class Ogrewatch implements Listener
     private void changeHeewo(Player player, Heewos heewo)
     {
         Heewos previousHeewo = dummies.remove(player);
-        if (heewo == null)
-            return;
 
         if (previousHeewo != null)
         {
@@ -61,6 +59,9 @@ public class Ogrewatch implements Listener
                     break;
             }
         }
+
+        if (heewo == null)
+            return;
 
         switch (heewo)
         {
