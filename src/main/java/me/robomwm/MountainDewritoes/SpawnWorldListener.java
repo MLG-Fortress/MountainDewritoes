@@ -29,9 +29,6 @@ public class SpawnWorldListener implements Listener
         Player player = event.getPlayer();
         if (player.getWorld() != spawn)
             return;
-        if (player.hasPermission("i.am.jailed")) //ignore jailed players
-            return;
-
         new BukkitRunnable()
         {
             public void run()

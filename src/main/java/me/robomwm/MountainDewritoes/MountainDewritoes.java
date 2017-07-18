@@ -52,6 +52,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     Map<Player, Integer> usingTitlePlayers = new HashMap<>();
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
+    private Set<World> knownWorlds = new HashSet<>(); //Set of worlds we know players can teleport to for purposes other than minigames
     private FileConfiguration newConfig;
 
     public boolean isSurvivalWorld(World world)
@@ -61,6 +62,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public boolean isSafeWorld(World world)
     {
         return safeWorlds.contains(world);
+    }
+    public boolean isKnownWorld(World world)
+    {
+        return knownWorlds.contains(world);
     }
 
     public void registerListener(Listener listener)
@@ -137,6 +142,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
         survivalWorlds.add(getServer().getWorld("cityworld"));
+        knownWorlds.add(getServer().getWorld("world"));
+        knownWorlds.add(getServer().getWorld("world_nether"));
+        knownWorlds.add(getServer().getWorld("world_the_end"));
+        knownWorlds.add(getServer().getWorld("cityworld"));
+        knownWorlds.add(getServer().getWorld("cityworld_nether"));
+        knownWorlds.add(getServer().getWorld("spawn"));
+        knownWorlds.add(getServer().getWorld("mall"));
+        knownWorlds.add(getServer().getWorld("prison"));
 
         //Commands
         getCommand("nick").setExecutor(new NickCommand());

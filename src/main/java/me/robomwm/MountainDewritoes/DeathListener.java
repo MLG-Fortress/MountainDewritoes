@@ -75,7 +75,7 @@ public class DeathListener implements Listener
         Player player = event.getPlayer();
 
         Location respawnLocation = defaultRespawnLocation;
-        if (!instance.isSurvivalWorld(player.getWorld()))
+        if (!instance.isKnownWorld(player.getWorld()))
             respawnLocation = player.getWorld().getSpawnLocation();
         event.setRespawnLocation(respawnLocation);
 

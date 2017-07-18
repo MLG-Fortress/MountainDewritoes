@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,37 +31,60 @@ public class Looseeoh implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(ignoreCancelled = true)
-    void wallRide(PlayerToggleSneakEvent event)
+    @EventHandler
+    private void onFailedWallRideAttempt(PlayerMoveEvent event)
     {
-        if (!event.isSneaking())
+        if (!event.getPlayer().hasMetadata("MD_WALLRIDE_LASTLOCATION"))
             return;
+        Player player = event.getPlayer();
+        Location location = (Location)player.getMetadata("MD_WALLRIDE_LASTLOCATION").get(0).value();
+        if (location.distanceSquared(player.getLocation()) > 1)
+        {
+            player.teleport(location);
+            player.setVelocity((Vector)player.getMetadata("MD_WALLRIDE_LASTVELOCITY").get(0).value());
+        }
+        player.removeMetadata("MD_WALLRIDE_LASTLOCATION", instance);
+        player.removeMetadata("MD_WALLRIDE_LASTVELOCITY", instance);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    void wallRide(PlayerToggleFlightEvent event)
+    {
         Player player = event.getPlayer();
         if (!ogrewatch.isLucio(player))
             return;
+        if (!startWallRiding(player))
+        {
+            player.setMetadata("MD_WALLRIDE_LASTLOCATION", new FixedMetadataValue(instance, player.getLocation()));
+            player.setMetadata("MD_WALLRIDE_LASTVELOCITY", new FixedMetadataValue(instance, player.getVelocity()));
+            player.setVelocity(player.getVelocity());
+        }
+        event.setCancelled(true);
+    }
+
+    private boolean startWallRiding(Player player)
+    {
         if (player.hasMetadata("MD_WALLRIDING"))
-            return;
+            return false;
         if (player.isSneaking())
-            return;
+            return false;
         if (player.isOnGround())
-            return;
+            return false;
 
         //Block block = velocity.add(velocity).toLocation(player.getWorld()).getBlock();
         Block block = player.getLocation().getBlock();
 
         if (block.isLiquid())
-            return;
+            return false;
 
         //Near an adjacent, solid block? //TODO: we have to fix this. This is stupid.
         if (!block.getRelative(BlockFace.NORTH).getType().isSolid()
                 && !block.getRelative(BlockFace.SOUTH).getType().isSolid()
                 && !block.getRelative(BlockFace.EAST).getType().isSolid()
                 && !block.getRelative(BlockFace.WEST).getType().isSolid())
-            return;
+            return false;
 
         player.sendMessage("wallriding");
-
-        //TODO: check if already wallriding?
 
         Vector ridingVector = player.getVelocity();
         //If player is not sprinting, they won't have any velocity in x or z direction
@@ -83,6 +107,7 @@ public class Looseeoh implements Listener
         player.sendMessage(ridingVector.toString());
 
         player.setMetadata("MD_WALLRIDING", new FixedMetadataValue(instance, true));
+        player.setAllowFlight(false);
 
 
         new BukkitRunnable()
@@ -100,9 +125,9 @@ public class Looseeoh implements Listener
                 else if (finalVector.getZ() < 0 && finalVector.getZ() > -1)
                     finalVector.setZ(finalVector.getZ() - 0.05);
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || !player.isSneaking())
+                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())
                 {
-                    cancel();
+                    cancelTask();
                     player.removeMetadata("MD_WALLRIDING", instance);
                     return;
                 }
@@ -114,26 +139,33 @@ public class Looseeoh implements Listener
 
                 if (block1.isLiquid() || nextBlock.getType().isSolid())
                 {
-                    cancel();
+                    cancelTask();
                     player.removeMetadata("MD_WALLRIDING", instance);
                     return;
                 }
 
-                    //Near an adjacent, solid block?
+                //Near an adjacent, solid block?
                 if (!block1.getRelative(BlockFace.NORTH).getType().isSolid()
-                    && !block1.getRelative(BlockFace.SOUTH).getType().isSolid()
-                    && !block1.getRelative(BlockFace.EAST).getType().isSolid()
-                    && !block1.getRelative(BlockFace.WEST).getType().isSolid())
+                        && !block1.getRelative(BlockFace.SOUTH).getType().isSolid()
+                        && !block1.getRelative(BlockFace.EAST).getType().isSolid()
+                        && !block1.getRelative(BlockFace.WEST).getType().isSolid())
                 {
-                    cancel();
-                    player.removeMetadata("MD_WALLRIDING", instance);
+                    cancelTask();
                     return;
                 }
 
                 player.setVelocity(finalVector);
                 player.sendActionBar(finalVector.toString());
+            }
 
+            private void cancelTask()
+            {
+                cancel();
+                player.removeMetadata("MD_WALLRIDING", instance);
+                if (ogrewatch.isLucio(player))
+                    player.setAllowFlight(true);
             }
         }.runTaskTimer(instance, 0L, 1L);
+        return true;
     }
 }

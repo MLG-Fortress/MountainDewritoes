@@ -57,7 +57,7 @@ public class Ogrewatch implements Listener
             switch (previousHeewo)
             {
                 case LOOSEEOH:
-                    //player.setAllowFlight(false);
+                    player.setAllowFlight(false);
                     break;
             }
         }
@@ -65,7 +65,7 @@ public class Ogrewatch implements Listener
         switch (heewo)
         {
             case LOOSEEOH:
-                //player.setAllowFlight(true);
+                player.setAllowFlight(true);
                 player.sendMessage("u r now looceeoh");
                 break;
         }
