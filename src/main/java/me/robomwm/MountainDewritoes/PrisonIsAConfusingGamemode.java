@@ -74,6 +74,7 @@ public class PrisonIsAConfusingGamemode implements Listener
             case GOLD_ORE:
             case GOLD_BLOCK:
             case REDSTONE_ORE:
+            case GLOWING_REDSTONE_ORE:
             case REDSTONE_BLOCK:
             case DIAMOND_ORE:
             case DIAMOND_BLOCK:
