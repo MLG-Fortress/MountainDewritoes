@@ -55,8 +55,10 @@ public class ReplacementSoundEffects implements Listener
             p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.0f, pitch);
         }
 
+        if (event.getDamage() <= 0)
+            return;
         //Play sound to player
-        if (pitch == 0.5f && event.getDamage() > 0)
+        if (pitch == 0.5f)
             player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
         else
             player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
