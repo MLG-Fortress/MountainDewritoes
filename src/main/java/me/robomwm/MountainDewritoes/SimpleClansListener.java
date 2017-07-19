@@ -236,7 +236,7 @@ public class SimpleClansListener implements Listener
                 @Override
                 public void run()
                 {
-                    player.performCommand("/help clan");
+                    player.performCommand("help clan");
                 }
             }.runTaskLater(instance, 1L);
         }
