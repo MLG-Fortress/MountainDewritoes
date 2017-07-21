@@ -275,7 +275,7 @@ public class SimpleClansListener implements Listener
             }
             else
             {
-                player.sendMessage("Invalid clan tag. See " + ChatColor.GOLD + "/clan list");
+                player.sendMessage(ChatColor.RED + "Invalid clan tag. The clan tag is the letters inside the brackets. Here's the " + ChatColor.GOLD + "/clan list:");
                 player.performCommand("clan list");
             }
 

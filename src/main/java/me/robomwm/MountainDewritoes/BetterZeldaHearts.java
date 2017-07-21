@@ -132,7 +132,7 @@ public class BetterZeldaHearts implements Listener
     @EventHandler(ignoreCancelled = true)
     void onNonPlayerPickup(EntityPickupItemEvent event)
     {
-        if (event.getEntityType() == EntityType.PLAYER) //TODO: is this event fired for players?
+        if (event.getEntityType() == EntityType.PLAYER) //TODO: is this event fired for players? Afaik, the answer is no...
             return;
         if (isHealthHeart(event.getItem().getItemStack()))
         {
@@ -141,29 +141,30 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-    /**
-     * Player collecting healthHeart
-     * You think up a better internal name for that
-     */
-    @EventHandler(ignoreCancelled = true)
-    void onHealthHeartPickup(PlayerPickupItemEvent event)
-    {
-        if (isHealthHeart(event.getItem().getItemStack()))
-        {
-            event.setCancelled(true);
-            if (!healPlayer(event.getPlayer())) //Do nothing if player is already at full health
-                return;
-            event.setFlyAtPlayer(true);
-            event.getItem().remove();
-        }
-    }
+//    /**
+//     * Player collecting healthHeart
+//     * You think up a better internal name for that
+//     */
+//    @EventHandler(ignoreCancelled = true)
+//    void onHealthHeartPickup(PlayerPickupItemEvent event)
+//    {
+//        if (isHealthHeart(event.getItem().getItemStack()))
+//        {
+//            event.setCancelled(true);
+//            if (!healPlayer(event.getPlayer())) //Do nothing if player is already at full health
+//                return;
+//            event.setFlyAtPlayer(true);
+//            event.getItem().remove();
+//        }
+//    }
 
     @EventHandler(ignoreCancelled = true)
     void onHealthHeartAttemptedPickup(PlayerAttemptPickupItemEvent event)
     {
+        //It still doesn't fly at the player anyways. Either it's because we deleted the item, or the event is canceled. Not sure which, but idc right now.
         //Check if player's inventory is full (since this event fires before PlayerPickupItemEvent)
-        if (event.getPlayer().getInventory().firstEmpty() != -1)
-            return;
+//        if (event.getPlayer().getInventory().firstEmpty() != -1)
+//            return;
 
         //Copy paste above basically :c
         if (isHealthHeart(event.getItem().getItemStack()))
