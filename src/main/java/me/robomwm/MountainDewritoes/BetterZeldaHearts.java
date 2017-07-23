@@ -141,22 +141,20 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-//    /**
-//     * Player collecting healthHeart
-//     * You think up a better internal name for that
-//     */
-//    @EventHandler(ignoreCancelled = true)
-//    void onHealthHeartPickup(PlayerPickupItemEvent event)
-//    {
-//        if (isHealthHeart(event.getItem().getItemStack()))
-//        {
-//            event.setCancelled(true);
-//            if (!healPlayer(event.getPlayer())) //Do nothing if player is already at full health
-//                return;
-//            event.setFlyAtPlayer(true);
-//            event.getItem().remove();
-//        }
-//    }
+    /**
+     * Player collecting healthHeart
+     * You think up a better internal name for that
+     * And yes, this is still necessary even with the second listener below, because the second one is fired during the preparation to fire this event so yea
+     */
+    @EventHandler(ignoreCancelled = true)
+    void onHealthHeartPickup(PlayerPickupItemEvent event)
+    {
+        if (isHealthHeart(event.getItem().getItemStack()))
+        {
+            event.setCancelled(true);
+            event.setFlyAtPlayer(true);
+        }
+    }
 
     @EventHandler(ignoreCancelled = true)
     void onHealthHeartAttemptedPickup(PlayerAttemptPickupItemEvent event)
