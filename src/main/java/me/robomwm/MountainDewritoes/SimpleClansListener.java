@@ -164,7 +164,7 @@ public class SimpleClansListener implements Listener
             return;
         }
 
-        final String tag = ("\u00A77" + clanPlayer.getClan().getColorTag());
+        final String tag = (clanPlayer.getClan().getColorTag());
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
@@ -188,7 +188,8 @@ public class SimpleClansListener implements Listener
 //                else
 //                    color = String.valueOf(charName[1]);
 
-                team.setPrefix(tag + " \u00A7f");
+                team.setPrefix(tag + " ");
+                team.setColor(ChatColor.getByChar(tag.substring(1)));
             }
         }, 40L); //Ensure healthbar made the team
     }
