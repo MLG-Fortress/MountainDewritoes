@@ -40,8 +40,6 @@ public class ReplacementSoundEffects implements Listener
         }
 
         float pitch = r4nd0m(0.9f, 1.1f);
-        if (event.getFinalDamage() > 20D) //TODO: critical?
-            pitch = 0.5f;
 
         Player player = (Player)event.getEntity();
         Location location = player.getLocation();
@@ -59,8 +57,8 @@ public class ReplacementSoundEffects implements Listener
             return;
 
         //Play sound to player
-        if (pitch == 0.5f)
-            player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, 1.0f);
+        if (player.getHealth() < 20D)
+            player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, pitch);
         else
             player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
     }

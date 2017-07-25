@@ -138,7 +138,7 @@ public class JoinMessages implements Listener
                         player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "You are using an outdated version of Minecraft - Some features on this server might not appear to work correctly for you." + ChatColor.YELLOW + "\nFor the best and intended MLG experience, please update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
                     }
                 }
-                catch (Exception e)
+                catch (Throwable e)
                 {
                     instance.getLogger().info("Probably need to update ProtocolSupport dependency (or it isn't loaded atm.)");
                     instance.getLogger().warning(e.getMessage());
