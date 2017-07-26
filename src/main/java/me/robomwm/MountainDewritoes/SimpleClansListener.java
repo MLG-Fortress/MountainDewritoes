@@ -129,6 +129,7 @@ public class SimpleClansListener implements Listener
             {
                 public void run()
                 {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "enick " + player1.getName() + " off");
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "enick " + player1.getName() + " &" + colorCode + player1.getName());
                 }
             });
