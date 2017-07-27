@@ -274,6 +274,7 @@ public class SimpleClansListener implements Listener
             if (clan != null)
             {
                 clan.addPlayerToClan(clanManager.getCreateClanPlayer(player.getUniqueId()));
+                instance.getServer().broadcastMessage(player.getDisplayName() + " joined " + clan.getName());
             }
             else
             {

@@ -25,11 +25,13 @@ public class AtmosphericMusic implements Listener
     MountainDewritoes instance;
     AtmosphericManager atmosphericManager;
     MusicManager musicManager;
+    MusicPackManager musicPackManager;
 
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
         instance = mountainDewritoes;
         musicManager = new MusicManager(instance);
+        musicPackManager = new MusicPackManager(instance);
         this.atmosphericManager = atmosphericManager;
         instance.registerListener(this);
 
@@ -45,7 +47,7 @@ public class AtmosphericMusic implements Listener
             @Override
             public void run()
             {
-                atmosphericManager.playSound(musicManager.getSong(world.getName()), world);
+                atmosphericManager.playSound(musicPackManager.getSong(world.getName()), world);
             }
         }.runTaskTimer(instance, 300L, 600L);
     }

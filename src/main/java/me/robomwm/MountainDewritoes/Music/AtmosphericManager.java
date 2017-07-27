@@ -113,7 +113,6 @@ public class AtmosphericManager implements Listener
                                 player.removeMetadata("MD_LISTENING", instance);
                         }
                     }.runTaskLater(instance, song.getLength());
-                    //player.playSound(player.getLocation(), song.getSoundName(), SoundCategory.AMBIENT, 3000000f, 1.0f);
                 }
             }
         }.runTaskLater(instance, delay * 20L);

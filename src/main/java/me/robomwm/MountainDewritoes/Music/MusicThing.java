@@ -16,7 +16,7 @@ class MusicThing
         this(URL, seconds, false);
     }
 
-    public MusicThing(String URLorName, int seconds, boolean isName)
+    public MusicThing(String URLorName, long seconds, boolean isName)
     {
         if (isName)
             this.soundName = URLorName;
