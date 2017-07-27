@@ -3,7 +3,7 @@ package me.robomwm.MountainDewritoes.Music;
 /**
  * Created by RoboMWM on 11/26/2016.
  */
-class MusicThing
+public class MusicThing
 {
     private String soundName;
     private String URL;

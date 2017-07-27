@@ -112,13 +112,13 @@ public class Looseeoh implements Listener
             public void run()
             {
                 //Increase absolute value of x or z component slowly towards 1...
-                if (finalVector.getX() > 0 && finalVector.getX() < 0.5)
+                if (finalVector.getX() > 0 && finalVector.getX() < 0.7)
                     finalVector.setX(finalVector.getX() + 0.02);
-                else if (finalVector.getX() < 0 && finalVector.getX() > -0.5)
+                else if (finalVector.getX() < 0 && finalVector.getX() > -0.7)
                     finalVector.setX(finalVector.getX() - 0.02);
-                else if (finalVector.getZ() > 0 && finalVector.getZ() < 0.5)
+                else if (finalVector.getZ() > 0 && finalVector.getZ() < 0.7)
                     finalVector.setZ(finalVector.getZ() + 0.02);
-                else if (finalVector.getZ() < 0 && finalVector.getZ() > -0.5)
+                else if (finalVector.getZ() < 0 && finalVector.getZ() > -0.7)
                     finalVector.setZ(finalVector.getZ() - 0.02);
 
                 if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())

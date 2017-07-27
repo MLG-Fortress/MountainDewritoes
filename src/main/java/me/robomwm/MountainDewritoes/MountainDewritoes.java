@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
+import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
@@ -156,6 +157,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
         getCommand("tip").setExecutor(new TipCommand(this));
+        getCommand("mdebug").setExecutor(new DebugCommand());
 
         saveConfig();
     }
