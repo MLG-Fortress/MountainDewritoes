@@ -24,7 +24,7 @@ public class DebugCommand implements CommandExecutor
             return false;
         if (args[0].equalsIgnoreCase("music"))
         {
-            Player target = Bukkit.getServer().getPlayerExact(args[2]);
+            Player target = Bukkit.getServer().getPlayerExact(args[1]);
             if (target == null)
                 return false;
             if (!target.hasMetadata("MD_LISTENING"))
