@@ -72,7 +72,7 @@ public class AtmosphericManager implements Listener
      * @param delay How long to wait in seconds before playing the sound
      * @param players
      */
-    public void playSound(MusicThing song, int delay, Collection<? extends Player> players)
+    public void playSound(final MusicThing song, int delay, Collection<? extends Player> players)
     {
         new BukkitRunnable()
         {
@@ -109,7 +109,7 @@ public class AtmosphericManager implements Listener
                             if (!player.hasMetadata("MD_LISTENING"))
                                 return;
 
-                            if (song.equals((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
+                            if (song == (player.getMetadata("MD_LISTENING").get(0).value()))
                                 player.removeMetadata("MD_LISTENING", instance);
                         }
                     }.runTaskLater(instance, song.getLength());

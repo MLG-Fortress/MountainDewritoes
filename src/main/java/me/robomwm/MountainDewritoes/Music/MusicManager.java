@@ -57,7 +57,6 @@ class MusicManager
 
     public MusicThing getSong(String category)
     {
-        MusicThing song = randomizer(master.get(category));
-        return new MusicThing(song.getURL(), song.getLength());
+        return new MusicThing(randomizer(master.get(category)));
     }
 }

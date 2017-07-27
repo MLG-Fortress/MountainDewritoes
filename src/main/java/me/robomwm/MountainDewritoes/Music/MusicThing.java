@@ -26,10 +26,12 @@ public class MusicThing
         this.startTime = System.currentTimeMillis();
     }
 
-    public MusicThing(String URL, long ticks)
+    public MusicThing(MusicThing song)
     {
-        this.URL = URL;
-        this.length = ticks;
+        this.soundName = song.soundName;
+        this.URL = song.URL;
+        this.length = song.length;
+
         this.startTime = System.currentTimeMillis();
     }
 

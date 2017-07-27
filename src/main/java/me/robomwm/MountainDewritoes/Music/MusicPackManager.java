@@ -60,7 +60,6 @@ class MusicPackManager
 
     public MusicThing getSong(String category)
     {
-        MusicThing song = randomizer(master.get(category));
-        return new MusicThing(song.getSoundName(), song.getLength(), true);
+        return new MusicThing(randomizer(master.get(category)));
     }
 }
