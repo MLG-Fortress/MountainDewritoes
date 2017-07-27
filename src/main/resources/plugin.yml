@@ -19,6 +19,7 @@ commands:
   nick:
     aliases: [color]
   warp: {}
+  mdebug: {}
   restart:
     aliases: [stop]
   tip:
