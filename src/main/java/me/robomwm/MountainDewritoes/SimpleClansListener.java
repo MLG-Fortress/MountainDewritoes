@@ -31,7 +31,7 @@ import org.bukkit.scoreboard.Team;
 public class SimpleClansListener implements Listener
 {
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
-    ClanManager clanManager;
+    public static ClanManager clanManager; //yes, I am lazy
     BukkitScheduler scheduler = Bukkit.getScheduler();
     private MountainDewritoes instance;
     BetterTPA betterTPA;

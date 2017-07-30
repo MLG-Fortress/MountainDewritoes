@@ -86,7 +86,7 @@ public class Looseeoh implements Listener
         //If player is not sprinting, they won't have any velocity in x or z direction
         //In this case, we'll just use the direction vector
         if (ridingVector.getX() == ridingVector.getZ())
-            ridingVector = player.getLocation().getDirection().multiply(0.1D);
+            ridingVector = player.getLocation().getDirection().multiply(0.2D);
 
         if (Math.abs(ridingVector.getX()) > Math.abs(ridingVector.getZ()))
         {
