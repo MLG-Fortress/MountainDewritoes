@@ -132,8 +132,9 @@ public class Looseeoh implements Listener
                 Vector copy = new Vector();
                 copy.add(finalVector).normalize();
                 Block nextBlock = player.getLocation().add(copy).getBlock();
+                Block nextBlockEyeLevel = player.getEyeLocation().add(copy).getBlock();
 
-                if (block1.isLiquid() || nextBlock.getType().isSolid())
+                if (block1.isLiquid() || nextBlock.getType().isSolid() || nextBlockEyeLevel.getType().isSolid())
                 {
                     cancelTask();
                     player.removeMetadata("MD_WALLRIDING", instance);
@@ -161,6 +162,7 @@ public class Looseeoh implements Listener
                 if (ogrewatch.isLucio(player))
                     player.setAllowFlight(true);
             }
+
         }.runTaskTimer(instance, 0L, 1L);
         return true;
     }
