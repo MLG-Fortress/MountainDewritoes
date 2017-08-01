@@ -21,10 +21,10 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("banjokazooiepausethemechiptunecover", 60+16);
-        add("friendlyshoptheme", 128);
+        add("animallobbyextended", 60+52);
+        add("kahootlobbymusic", 120+6);
+        add("friendlyshoptheme", 60+38); //changing duration
         add("jenka1", 120+49);
-        add("memedrops", 120+120+4);
         add("pokemoncenterpianosolol", 180+3);
         add("pokemoncenterthemeorchestrated", 119);
         add("roboplanetpause", 180+41);

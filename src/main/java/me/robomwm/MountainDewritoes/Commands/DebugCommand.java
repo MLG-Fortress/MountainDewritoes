@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
