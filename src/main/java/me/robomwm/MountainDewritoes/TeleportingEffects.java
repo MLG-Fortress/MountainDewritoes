@@ -71,7 +71,8 @@ public class TeleportingEffects implements Listener
         Player player = event.getPlayer();
         Location location = player.getLocation();
         preTeleportingPlayers.remove(event.getPlayer());
-        taskThingy.remove(event.getPlayer()).cancel();
+        if (taskThingy.containsKey(event.getPlayer()))
+            taskThingy.remove(event.getPlayer()).cancel();
 
         if (event.isCancelled())
         {

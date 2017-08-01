@@ -28,15 +28,23 @@ public class DebugCommand implements CommandExecutor
     {
         if (!sender.isOp())
             return false;
+
+        //1 arg//
         if (args.length < 1)
             return false;
+
+        //2 args//
         if (args.length < 2)
             return false;
+
+        //2nd arg as player//
+        Player target = Bukkit.getServer().getPlayerExact(args[1]);
+        if (target == null)
+            return false;
+
         if (args[0].equalsIgnoreCase("music"))
         {
-            Player target = Bukkit.getServer().getPlayerExact(args[1]);
-            if (target == null)
-                return false;
+
             if (!target.hasMetadata("MD_LISTENING"))
             {
                 sender.sendMessage("none");
