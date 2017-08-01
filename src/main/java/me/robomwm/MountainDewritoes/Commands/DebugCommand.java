@@ -60,9 +60,6 @@ public class DebugCommand implements CommandExecutor
         }
         if (args[0].equalsIgnoreCase("clankick"))
         {
-            Player target = Bukkit.getServer().getPlayerExact(args[1]);
-            if (target == null)
-                return false;
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
         }
