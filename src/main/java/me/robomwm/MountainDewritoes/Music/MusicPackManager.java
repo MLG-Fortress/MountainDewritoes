@@ -34,6 +34,7 @@ class MusicPackManager
         add("wiishopchiptune", 120+7);
         add("wiishopthemejazzcover", 120+120+18);
         add("wiishopthing", 120+17);
+        add("yeoldetemmieshop", 120+10);
     }
 
     private void add(String soundName, long durationInSeconds)
