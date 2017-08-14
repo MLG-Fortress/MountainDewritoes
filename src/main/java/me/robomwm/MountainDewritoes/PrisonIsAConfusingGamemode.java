@@ -64,37 +64,45 @@ public class PrisonIsAConfusingGamemode implements Listener
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
 
-        if (event.getBlock().getLocation().getBlockY() > 19)
+        int y = event.getBlock().getLocation().getBlockY();
+
+        if (y > 18 || y < 4)
         {
             event.setCancelled(true);
             return;
         }
 
-        switch (event.getBlock().getType())
-        {
-            case STONE:
-            case COBBLESTONE:
-            case COAL_ORE:
-            case COAL_BLOCK:
-            case IRON_ORE:
-            case IRON_BLOCK:
-            case GOLD_ORE:
-            case GOLD_BLOCK:
-            case REDSTONE_ORE:
-            case GLOWING_REDSTONE_ORE:
-            case REDSTONE_BLOCK:
-            case DIAMOND_ORE:
-            case DIAMOND_BLOCK:
-            case EMERALD_ORE:
-            case EMERALD_BLOCK:
-            case CLAY:
-            case SANDSTONE:
-            case RED_SANDSTONE:
-            case SMOOTH_BRICK:
-            case SOUL_SAND:
-            case BRICK:
-                return;
-        }
+
+        //Too many, lol
+
+//        switch (event.getBlock().getType())
+//        {
+//            case STONE:
+//            case COBBLESTONE:
+//            case MOSSY_COBBLESTONE:
+//            case COAL_ORE:
+//            case COAL_BLOCK:
+//            case IRON_ORE:
+//            case IRON_BLOCK:
+//            case GOLD_ORE:
+//            case GOLD_BLOCK:
+//            case REDSTONE_ORE:
+//            case GLOWING_REDSTONE_ORE:
+//            case REDSTONE_BLOCK:
+//            case DIAMOND_ORE:
+//            case DIAMOND_BLOCK:
+//            case EMERALD_ORE:
+//            case EMERALD_BLOCK:
+//            case CLAY:
+//            case SANDSTONE:
+//            case RED_SANDSTONE:
+//            case SMOOTH_BRICK:
+//            case SOUL_SAND:
+//            case BRICK:
+//            case ENDER_STONE:
+//            case END_BRICKS:
+//                return;
+//        }
 
         event.setCancelled(true);
     }
