@@ -92,7 +92,7 @@ public class VoiceCommand implements CommandExecutor
         for (Player target : player.getWorld().getPlayers())
         {
             if (location.distanceSquared(target.getLocation()) < distance * distance)
-                instance.timedActionBar(player, 0, message);
+                instance.timedActionBar(target, 0, message);
         }
     }
 }
