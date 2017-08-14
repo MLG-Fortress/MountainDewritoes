@@ -81,6 +81,8 @@ public class PrisonIsAConfusingGamemode implements Listener
             case EMERALD_ORE:
             case EMERALD_BLOCK:
             case CLAY:
+            case SANDSTONE:
+            case RED_SANDSTONE:
                 return;
         }
         event.setCancelled(true);
