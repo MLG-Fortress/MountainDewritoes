@@ -24,3 +24,5 @@ commands:
     aliases: [stop]
   tip:
     aliases: [getatip, betafish, beta, tips]
+  voice:
+    aliases: [v]

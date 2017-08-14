@@ -5,6 +5,7 @@ import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
+import me.robomwm.MountainDewritoes.Commands.VoiceCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
@@ -158,6 +159,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
         getCommand("tip").setExecutor(new TipCommand(this));
         getCommand("mdebug").setExecutor(new DebugCommand());
+        getCommand("v").setExecutor(new VoiceCommand(this));
 
         saveConfig();
     }
@@ -326,6 +328,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
      */
     public void timedActionBar(Player player, int seconds, String message)
     {
+        if (seconds <= 0)
+        {
+            player.sendActionBar(message);
+            return;
+        }
+
         if (message == null || player == null)
             return;
         new BukkitRunnable()

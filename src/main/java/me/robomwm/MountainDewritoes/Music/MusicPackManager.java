@@ -21,7 +21,7 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("animallobbyextended", 60+16);
+        add("animallobbyextended", 60+52);
         add("friendlyshoptheme", 128);
         add("animallobbyextended", 60+52);
         add("kahootlobbymusic", 120+6);
