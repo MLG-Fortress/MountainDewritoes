@@ -58,7 +58,7 @@ public class ReplacementSoundEffects implements Listener
 
         //Play sound to player
         if (player.getHealth() < 20D)
-            player.playSound(location, "fortress.classichurt", SoundCategory.PLAYERS, 3000000f, pitch);
+            player.playSound(location, "fortress.classic_hurt", SoundCategory.PLAYERS, 3000000f, pitch);
         else
             player.playSound(location, Sound.ENTITY_GENERIC_HURT, SoundCategory.PLAYERS, 3000000f, pitch);
     }
