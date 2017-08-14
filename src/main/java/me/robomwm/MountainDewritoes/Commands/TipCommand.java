@@ -26,31 +26,31 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TipCommand implements CommandExecutor
 {
     JavaPlugin instance;
-    YamlConfiguration storage;
+    //YamlConfiguration storage;
     List<String> randomTips = new ArrayList<>();
     List<String> betaTips = new ArrayList<>();
-    File storageFile;
+    //File storageFile;
 
     public TipCommand(JavaPlugin plugin)
     {
         instance = plugin;
-        storageFile = new File(plugin.getDataFolder(), "storage.data");
-        if (!storageFile.exists())
-        {
-            try
-            {
-                storageFile.createNewFile();
-                storage = YamlConfiguration.loadConfiguration(storageFile);
-            }
-            catch (IOException e)
-            {
-                plugin.getLogger().severe("Could not create storage.data.");
-                storage = new YamlConfiguration();
-                e.printStackTrace();
-            }
-        }
-        else
-            storage = YamlConfiguration.loadConfiguration(storageFile);
+//        storageFile = new File(plugin.getDataFolder(), "storage.data");
+//        if (!storageFile.exists())
+//        {
+//            try
+//            {
+//                storageFile.createNewFile();
+//                storage = YamlConfiguration.loadConfiguration(storageFile);
+//            }
+//            catch (IOException e)
+//            {
+//                plugin.getLogger().severe("Could not create storage.data.");
+//                storage = new YamlConfiguration();
+//                e.printStackTrace();
+//            }
+//        }
+//        else
+//            storage = YamlConfiguration.loadConfiguration(storageFile);
 
 
         randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
@@ -80,18 +80,18 @@ public class TipCommand implements CommandExecutor
             @Override
             public void run()
             {
-                boolean store = true;
+                //boolean store = true;
                 String tip;
 
                 if (label.toLowerCase().contains("beta") || (args.length > 0 && args[0].toLowerCase().contains("beta")))
                 {
                     tip = getTip(player, betaTips);
-                    store = false;
+                    //store = false;
                 }
                 else if (args.length > 0 && args[0].toLowerCase().equals("join"))
                 {
                     tip = getTip(player, randomTips);
-                    store = false;
+                    //store = false;
                 }
                 else
                     tip = getTip(player, randomTips);
@@ -99,22 +99,22 @@ public class TipCommand implements CommandExecutor
                 player.sendMessage(formatTip(tip));
 
                 //TODO: thread safe to modify YamlConfiguration object?
-                if (store)
-                {
-                    new BukkitRunnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            List<String> seenTips = new ArrayList<>();
-                            if (storage.getStringList(player.getUniqueId().toString()) != null)
-                                seenTips = storage.getStringList(player.getUniqueId().toString());
-                            seenTips.add(tip);
-                            storage.set(player.getUniqueId().toString(), seenTips);
-                            saveStorage();
-                        }
-                    }.runTaskLater(instance, 0L);
-                }
+//                if (store)
+//                {
+//                    new BukkitRunnable()
+//                    {
+//                        @Override
+//                        public void run()
+//                        {
+//                            List<String> seenTips = new ArrayList<>();
+//                            if (storage.getStringList(player.getUniqueId().toString()) != null)
+//                                seenTips = storage.getStringList(player.getUniqueId().toString());
+//                            seenTips.add(tip);
+//                            storage.set(player.getUniqueId().toString(), seenTips);
+//                            saveStorage();
+//                        }
+//                    }.runTaskLater(instance, 0L);
+//                }
             }
         }.runTaskAsynchronously(instance);
 
@@ -132,12 +132,12 @@ public class TipCommand implements CommandExecutor
         List<String> shuffledTips = new ArrayList<>(tips);
         Collections.shuffle(shuffledTips);
         List<String> seenTips = new ArrayList<>();
-        if (storage.getStringList(player.getUniqueId().toString()) != null)
-            seenTips = storage.getStringList(player.getUniqueId().toString());
+        //if (storage.getStringList(player.getUniqueId().toString()) != null)
+            //seenTips = storage.getStringList(player.getUniqueId().toString());
 
         for (String tip : shuffledTips)
         {
-            if (!seenTips.contains(tip))
+            //if (!seenTips.contains(tip))
                 return tip;
         }
 
@@ -161,18 +161,18 @@ public class TipCommand implements CommandExecutor
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));
     }
 
-    private void saveStorage()
-    {
-        if (storage != null)
-        {
-            try
-            {
-                storage.save(storageFile);
-            }
-            catch (IOException e) //really
-            {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void saveStorage()
+//    {
+//        if (storage != null)
+//        {
+//            try
+//            {
+//                storage.save(storageFile);
+//            }
+//            catch (IOException e) //really
+//            {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

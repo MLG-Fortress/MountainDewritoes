@@ -55,10 +55,10 @@ public class VoiceCommand implements CommandExecutor
         switch (voiceCommand)
         {
             case "hello":
-                broadcastMessageNearby(player, 16, "hello", 0);
+                broadcastMessageNearby(player, 16, "hello");
                 break;
             case "overhere":
-                broadcastMessageNearby(player, 32, "over here", 3);
+                broadcastMessageNearby(player, 32, "over here");
                 flashPlayer(player);
                 volume = 2f;
                 break;
@@ -85,7 +85,7 @@ public class VoiceCommand implements CommandExecutor
 
     }
 
-    private void broadcastMessageNearby(Player player, int distance, String message, int length)
+    private void broadcastMessageNearby(Player player, int distance, String message)
     {
         message = player.getDisplayName() + ChatColor.AQUA + " says " + message + "!";
         Location location = player.getLocation();

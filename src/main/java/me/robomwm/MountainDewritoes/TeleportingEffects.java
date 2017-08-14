@@ -49,7 +49,7 @@ public class TeleportingEffects implements Listener
             }
             else if (target.getGameMode() == GameMode.CREATIVE || target.getGameMode() == GameMode.SPECTATOR)
             {
-                event.setReason(target.getName() + " is not able to be teleported to at this time.");
+                event.setReason(target.getDisplayName() + " is not able to be teleported to at this time.");
                 event.setCancelled(true);
             }
         }
