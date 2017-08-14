@@ -104,7 +104,7 @@ public class PrisonIsAConfusingGamemode implements Listener
 //                return;
 //        }
 
-        event.setCancelled(true);
+//        event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
