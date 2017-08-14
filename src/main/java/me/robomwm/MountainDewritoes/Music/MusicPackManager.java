@@ -21,7 +21,7 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("banjokazooiepausethemechiptunecover", 60+16);
+        add("animallobbyextended", 60+16);
         add("friendlyshoptheme", 128);
         add("jenka1", 120+49);
         add("memedrops", 120+120+4);
