@@ -159,7 +159,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
         getCommand("tip").setExecutor(new TipCommand(this));
         getCommand("mdebug").setExecutor(new DebugCommand());
-        getCommand("v").setExecutor(new VoiceCommand(this));
+        getCommand("voice").setExecutor(new VoiceCommand(this));
 
         saveConfig();
     }
