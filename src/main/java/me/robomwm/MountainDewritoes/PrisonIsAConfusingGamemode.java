@@ -63,6 +63,13 @@ public class PrisonIsAConfusingGamemode implements Listener
             return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
+
+        if (event.getBlock().getLocation().getBlockY() > 19)
+        {
+            event.setCancelled(true);
+            return;
+        }
+
         switch (event.getBlock().getType())
         {
             case STONE:
@@ -83,8 +90,12 @@ public class PrisonIsAConfusingGamemode implements Listener
             case CLAY:
             case SANDSTONE:
             case RED_SANDSTONE:
+            case SMOOTH_BRICK:
+            case SOUL_SAND:
+            case BRICK:
                 return;
         }
+
         event.setCancelled(true);
     }
 
