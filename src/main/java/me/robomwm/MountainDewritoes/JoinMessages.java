@@ -34,7 +34,6 @@ public class JoinMessages implements Listener
     //Random random = new Random();
 
     String pack;
-    String blank; //testing
     Set<UUID> ignoredUUIDs = new HashSet<>();
 
     JoinMessages(MountainDewritoes blah)
@@ -56,7 +55,6 @@ public class JoinMessages implements Listener
         //Resource pack notifier
         ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
         pack = instance.getConfig().getString("pack");
-        blank = instance.getConfig().getString("blank");
     }
     //Tips
     @EventHandler
@@ -91,11 +89,6 @@ public class JoinMessages implements Listener
                     this.cancel();
                 else if (!event.getPlayer().isOnGround())
                     return;
-                else if (event.getPlayer().getName().equals("RoboMWM"))
-                {
-                    event.getPlayer().setResourcePack(blank);
-                    this.cancel();
-                }
                 else
                 {
                     event.getPlayer().setResourcePack(pack);

@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -28,15 +27,23 @@ public class DebugCommand implements CommandExecutor
     {
         if (!sender.isOp())
             return false;
+
+        //1 arg//
         if (args.length < 1)
             return false;
+
+        //2 args//
         if (args.length < 2)
             return false;
+
+        //2nd arg as player//
+        Player target = Bukkit.getServer().getPlayerExact(args[1]);
+        if (target == null)
+            return false;
+
         if (args[0].equalsIgnoreCase("music"))
         {
-            Player target = Bukkit.getServer().getPlayerExact(args[1]);
-            if (target == null)
-                return false;
+
             if (!target.hasMetadata("MD_LISTENING"))
             {
                 sender.sendMessage("none");
@@ -52,9 +59,6 @@ public class DebugCommand implements CommandExecutor
         }
         if (args[0].equalsIgnoreCase("clankick"))
         {
-            Player target = Bukkit.getServer().getPlayerExact(args[1]);
-            if (target == null)
-                return false;
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
         }
