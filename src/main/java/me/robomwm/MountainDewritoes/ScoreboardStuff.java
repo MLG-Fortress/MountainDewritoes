@@ -51,6 +51,7 @@ public class ScoreboardStuff implements Listener
                     int difference = balance - oldBalance;
                     if (difference != 0)
                     {
+                        sbManager.unregister(player);
                         sbManager.createScoreboard(player);
 
                         if (difference > 0)
