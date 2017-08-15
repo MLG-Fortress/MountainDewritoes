@@ -61,7 +61,7 @@ public class ScoreboardStuff implements Listener
                     }
                 }
             }
-        }.runTaskTimer(plugin, 300L, 200L);
+        }.runTaskTimer(plugin, 100L, 100L);
     }
 
     private void onQuit(PlayerQuitEvent event)
