@@ -17,6 +17,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -34,6 +35,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,6 +65,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private Set<World> knownWorlds = new HashSet<>(); //Set of worlds we know players can teleport to for purposes other than minigames
     private FileConfiguration newConfig;
     private Economy economy;
+    private boolean serverDoneLoading = false;
 
     public boolean isSurvivalWorld(World world)
     {
@@ -175,8 +178,15 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         knownWorlds.add(getServer().getWorld("mall"));
         knownWorlds.add(getServer().getWorld("prison"));
 
-        //Repeating Utility Task thingies
+        //Utilities
         new ScoreboardStuff(this, economy);
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                serverDoneLoading = true;
+            }
+        }.runTask(this);
 
         //Commands
         getCommand("nick").setExecutor(new NickCommand());
@@ -343,6 +353,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         Player player = event.getPlayer();
         player.setHealthScaled(false);
+    }
+
+    /**
+     * Don't let serverlistplus send messages when server isn't done loading up yet
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onServerPing(ServerListPingEvent event)
+    {
+        if (!serverDoneLoading)
+            event.setMotd(ChatColor.RED + "ayyyyy we r laodin de_memes just w8 a foow sekondz b4 konnekting thx!!");
     }
 
     /**
