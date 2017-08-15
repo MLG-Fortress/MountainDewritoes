@@ -16,6 +16,7 @@ import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,6 +30,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -311,14 +314,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         event.setAffectedEntities(newEntities);
     }
 
-    @EventHandler(ignoreCancelled = true)
-    private void enchantingIsNo(EnchantItemEvent event)
-    {
-        if (event.getExpLevelCost() > 0)
-            event.setCancelled(true);
-        event.getEnchanter().closeInventory();
-    }
-
     /**
      * Reset things some plugins stupidly play around with >_>
      */
@@ -327,6 +322,32 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         Player player = event.getPlayer();
         player.setHealthScaled(false);
+    }
+
+    /**
+     * Deny use of enchantment table. Make anything else require no levels to "enchant."
+     */
+    @EventHandler(ignoreCancelled = true)
+    private void enchantingIsNo(EnchantItemEvent event)
+    {
+        if (event.getExpLevelCost() <= 0)
+            return;
+
+        if (event.getEnchantBlock().getType() == Material.ENCHANTMENT_TABLE)
+        {
+            event.setCancelled(true);
+            event.getEnchanter().closeInventory();
+            return;
+        }
+
+        event.setExpLevelCost(0);
+    }
+    @EventHandler(ignoreCancelled = true)
+    private void enchantingIsNo(InventoryOpenEvent event)
+    {
+        if (event.getInventory().getType() != InventoryType.ENCHANTING)
+            return;
+        event.setCancelled(true);
     }
 
     /**
