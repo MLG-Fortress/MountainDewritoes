@@ -47,16 +47,16 @@ public class ScoreboardStuff implements Listener
                         if (difference > 0)
                         {
                             sbManager.createScoreboard(player);
-                            sbManager.update(player, ChatColor.GREEN + "Gained +", difference);
-                            sbManager.update(player, ChatColor.AQUA + "Balance", newBalance);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 40L);
+                            sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
+                            sbManager.update(player, ChatColor.GREEN + "+", difference);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 80L);
                         }
                         else if (difference < 0)
                         {
                             sbManager.createScoreboard(player);
-                            sbManager.update(player, ChatColor.RED + "Lost -", difference);
-                            sbManager.update(player, ChatColor.AQUA + "Balance", newBalance);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 40L);
+
+                            sbManager.update(player, ChatColor.RED + "-", difference);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 80L);
                         }
                     }
                 }
