@@ -131,6 +131,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new BetterNoDamageTicks(this);
         new FineSine(this);
         new PrisonIsAConfusingGamemode(this);
+        new LevelingProgression(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
@@ -322,32 +323,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         Player player = event.getPlayer();
         player.setHealthScaled(false);
-    }
-
-    /**
-     * Deny use of enchantment table. Make anything else require no levels to "enchant."
-     */
-    @EventHandler(ignoreCancelled = true)
-    private void enchantingIsNo(EnchantItemEvent event)
-    {
-        if (event.getExpLevelCost() <= 0)
-            return;
-
-        if (event.getEnchantBlock().getType() == Material.ENCHANTMENT_TABLE)
-        {
-            event.setCancelled(true);
-            event.getEnchanter().closeInventory();
-            return;
-        }
-
-        event.setExpLevelCost(0);
-    }
-    @EventHandler(ignoreCancelled = true)
-    private void enchantingIsNo(InventoryOpenEvent event)
-    {
-        if (event.getInventory().getType() != InventoryType.ENCHANTING)
-            return;
-        event.setCancelled(true);
     }
 
     /**
