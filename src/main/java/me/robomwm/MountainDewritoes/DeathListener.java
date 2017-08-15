@@ -53,8 +53,10 @@ public class DeathListener implements Listener
         }
 
         //Only lose 8 levels of XP (vs. all XP on death)
-        if (player.getLevel() > 8)
-            event.setNewLevel(player.getLevel() - 8);
+        //if (player.getLevel() > 8)
+        //    event.setNewLevel(player.getLevel() - 8);
+
+        event.setKeepLevel(true);
 
         //Stop all playing sounds, if any.
         player.stopSound("");

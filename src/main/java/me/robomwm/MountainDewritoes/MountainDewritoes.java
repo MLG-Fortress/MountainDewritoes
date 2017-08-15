@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -308,6 +309,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             }
         }
         event.setAffectedEntities(newEntities);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void enchantingIsNo(EnchantItemEvent event)
+    {
+        if (event.getExpLevelCost() > 0)
+            event.setCancelled(true);
+        event.getEnchanter().closeInventory();
     }
 
     /**
