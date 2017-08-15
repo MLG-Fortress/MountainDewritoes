@@ -55,17 +55,17 @@ public class ScoreboardStuff implements Listener
 
                         if (difference > 0)
                         {
-                            sbManager.update(player, "Credit:  " + ChatColor.GREEN  + economy.format(difference), 1);
+                            sbManager.update(player, "Credit: + " + ChatColor.GREEN  + economy.format(difference), 1);
                             player.playSound(player.getLocation(), "fortress.credit", SoundCategory.PLAYERS, 300000f, 1.0f);
                         }
                         else if (difference < 0)
                         {
-                            sbManager.update(player, "Debit:  " + ChatColor.RED + economy.format(difference), 1);
+                            sbManager.update(player, "Debit: - " + ChatColor.RED + economy.format(-difference), 1);
                             player.playSound(player.getLocation(), "fortress.debit", SoundCategory.PLAYERS, 300000f, 1.0f);
                         }
 
 
-                        sbManager.update(player, "Balance: " + economy.format(balance), 0);
+                        sbManager.update(player, "Balance:  " + economy.format(balance), 0);
                         scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         oldBalances.put(player, economy.getBalance(player));
                     }
