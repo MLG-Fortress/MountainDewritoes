@@ -49,14 +49,14 @@ public class ScoreboardStuff implements Listener
                             sbManager.createScoreboard(player);
                             sbManager.update(player, ChatColor.GREEN + "Gained +", difference);
                             sbManager.update(player, ChatColor.AQUA + "Balance", newBalance);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 2L);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 40L);
                         }
                         else if (difference < 0)
                         {
                             sbManager.createScoreboard(player);
                             sbManager.update(player, ChatColor.RED + "Lost -", difference);
                             sbManager.update(player, ChatColor.AQUA + "Balance", newBalance);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 2L);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 40L);
                         }
                     }
                 }
