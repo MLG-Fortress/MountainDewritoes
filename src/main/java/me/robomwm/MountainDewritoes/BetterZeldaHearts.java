@@ -1,12 +1,16 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.usefulutil.UsefulUtil;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,13 +26,17 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/25/2016.
@@ -37,6 +45,14 @@ import java.util.Random;
  */
 public class BetterZeldaHearts implements Listener
 {
+    Economy economy;
+
+    public BetterZeldaHearts(JavaPlugin plugin, Economy economy)
+    {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.economy = economy;
+    }
+
     Random random = new Random();
     /**
      * Chance of a "heart canister" dropping upon killing a hostile mob
@@ -45,9 +61,9 @@ public class BetterZeldaHearts implements Listener
     @EventHandler(priority = EventPriority.LOW)
     void onEntityDeath(EntityDeathEvent event)
     {
-        if (!(event.getEntity() instanceof Monster))
+        if (!UsefulUtil.isMonster(event.getEntity()))
             return;
-        Monster entity = (Monster)event.getEntity();
+        LivingEntity entity = event.getEntity();
         if (entity.getKiller() == null)
             return;
 
@@ -82,6 +98,25 @@ public class BetterZeldaHearts implements Listener
             potionMeta.setLore(lore);
             healthCanister.setItemMeta(potionMeta);
             event.getDrops().add(healthCanister);
+        }
+
+        /*Mob money*/
+
+        if (economy == null)
+            return;
+
+        int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        int moneyToDrop = ThreadLocalRandom.current().nextInt(maxHealth, maxHealth * maxHealth);
+        moneyToDrop *= Math.log(entity.getTicksLived() * entity.getTicksLived());
+
+        if (moneyToDrop > 0)
+        {
+            ItemStack money = new ItemStack(Material.GOLD_INGOT);
+            ItemMeta moneyMeta = money.getItemMeta();
+            moneyMeta.setDisplayName(ChatColor.GOLD + economy.format(moneyToDrop));
+            moneyMeta.setLore(Collections.singletonList(String.valueOf(moneyToDrop)));
+            money.setItemMeta(moneyMeta);
+            event.getDrops().add(money);
         }
     }
 
@@ -132,9 +167,7 @@ public class BetterZeldaHearts implements Listener
     @EventHandler(ignoreCancelled = true)
     void onNonPlayerPickup(EntityPickupItemEvent event)
     {
-        if (event.getEntityType() == EntityType.PLAYER) //TODO: is this event fired for players? Afaik, the answer is no...
-            return;
-        if (isHealthHeart(event.getItem().getItemStack()))
+        if (isHealthHeart(event.getItem().getItemStack()) || isMobMoney(event.getItem().getItemStack()))
         {
             event.getItem().setCanMobPickup(false);
             event.setCancelled(true);
@@ -144,18 +177,7 @@ public class BetterZeldaHearts implements Listener
     /**
      * Player collecting healthHeart
      * You think up a better internal name for that
-     * And yes, this is still necessary even with the second listener below, because the second one is fired during the preparation to fire this event so yea
      */
-    @EventHandler(ignoreCancelled = true)
-    void onHealthHeartPickup(PlayerPickupItemEvent event)
-    {
-        if (isHealthHeart(event.getItem().getItemStack()))
-        {
-            event.setCancelled(true);
-            event.setFlyAtPlayer(true);
-        }
-    }
-
     @EventHandler(ignoreCancelled = true)
     void onHealthHeartAttemptedPickup(PlayerAttemptPickupItemEvent event)
     {
@@ -164,11 +186,20 @@ public class BetterZeldaHearts implements Listener
 //        if (event.getPlayer().getInventory().firstEmpty() != -1)
 //            return;
 
-        //Copy paste above basically :c
-        if (isHealthHeart(event.getItem().getItemStack()))
+        ItemStack itemStack = event.getItem().getItemStack();
+
+        if (isHealthHeart(itemStack))
         {
             if (!healPlayer(event.getPlayer())) //Do nothing if player is already at full health
                 return;
+            event.getItem().remove();
+        }
+
+        else if (isMobMoney(itemStack))
+        {
+            double money = Double.valueOf(itemStack.getItemMeta().getLore().get(0));
+            economy.depositPlayer(event.getPlayer(), money);
+            event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.mobmoney", SoundCategory.PLAYERS, 3000000f, 1.0f);
             event.getItem().remove();
         }
     }
@@ -176,6 +207,10 @@ public class BetterZeldaHearts implements Listener
     boolean isHealthHeart(ItemStack item)
     {
         return item.getType() == Material.INK_SACK && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"));
+    }
+    boolean isMobMoney(ItemStack item)
+    {
+        return item.getType() == Material.GOLD_INGOT && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith(economy.format(0).substring(0,1)));
     }
 
     boolean healPlayer(Player player)

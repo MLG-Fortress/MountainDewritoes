@@ -13,6 +13,7 @@ import me.robomwm.MountainDewritoes.NotOverwatch.Ogrewatch;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
+import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
@@ -34,6 +35,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -60,6 +62,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private Set<World> survivalWorlds = new HashSet<>();
     private Set<World> knownWorlds = new HashSet<>(); //Set of worlds we know players can teleport to for purposes other than minigames
     private FileConfiguration newConfig;
+    private Economy economy;
 
     public boolean isSurvivalWorld(World world)
     {
@@ -103,8 +106,22 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }
     }
 
+    private boolean setupEconomy(JavaPlugin plugin)
+    {
+        if (plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        economy = rsp.getProvider();
+        return economy != null;
+    }
+
     public void onEnable()
     {
+        setupEconomy(this);
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
@@ -113,7 +130,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new ChatListener(this, clanManager), this);
         pm.registerEvents(new LongFallBoots(), this);
         pm.registerEvents(new DeathListener(this), this);
-        pm.registerEvents(new BetterZeldaHearts(), this);
+        new BetterZeldaHearts(this, economy);
         new RandomStructurePaster(this);
         new JoinMessages(this);
         pm.registerEvents(new ShoppingMall(this), this);
@@ -157,6 +174,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         knownWorlds.add(getServer().getWorld("spawn"));
         knownWorlds.add(getServer().getWorld("mall"));
         knownWorlds.add(getServer().getWorld("prison"));
+
+        //Repeating Utility Task thingies
+        new ScoreboardStuff(this, economy);
 
         //Commands
         getCommand("nick").setExecutor(new NickCommand());
