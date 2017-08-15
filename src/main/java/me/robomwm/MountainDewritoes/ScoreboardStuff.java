@@ -37,7 +37,12 @@ public class ScoreboardStuff implements Listener
             {
                 for (Player player : plugin.getServer().getOnlinePlayers())
                 {
-                    oldBalances.put(player, economy.getBalance(player));
+                    if (!oldBalances.containsKey(player))
+                    {
+                        oldBalances.put(player, economy.getBalance(player));
+                        continue;
+                    }
+                    
                     int oldBalance = oldBalances.get(player).intValue();
                     int newBalance = (int)economy.getBalance(player);
                     int difference = newBalance - oldBalance;
@@ -57,6 +62,7 @@ public class ScoreboardStuff implements Listener
                             sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
                             scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         }
+                        oldBalances.put(player, economy.getBalance(player));
                     }
                 }
             }
