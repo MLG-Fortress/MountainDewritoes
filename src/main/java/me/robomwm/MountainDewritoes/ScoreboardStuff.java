@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class ScoreboardStuff implements Listener
 {
     private Map<Player, Double> oldBalances = new HashMap<>();
+    private Map<Player, BukkitTask> removalTasks = new HashMap<>();
     public ScoreboardStuff(JavaPlugin plugin, Economy economy)
     {
         ScoreboardStats scoreboardStats = (ScoreboardStats)plugin.getServer().getPluginManager().getPlugin("ScoreboardStats");
@@ -48,25 +50,20 @@ public class ScoreboardStuff implements Listener
                     int difference = balance - oldBalance;
                     if (difference != 0)
                     {
+                        sbManager.createScoreboard(player);
+
                         if (difference > 0)
-                        {
-                            sbManager.createScoreboard(player);
-                            sbManager.update(player, "Credit " + ChatColor.GREEN + "+" + economy.format(difference), 1);
-                            sbManager.update(player, "Balance:   " + economy.format(balance), 0);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
-                        }
+                            sbManager.update(player, "Credit:  " + ChatColor.GREEN + "+" + economy.format(difference), 1);
                         else if (difference < 0)
-                        {
-                            sbManager.createScoreboard(player);
-                            sbManager.update(player, "Debit " + ChatColor.RED + "-" + economy.format(difference), 1);
-                            sbManager.update(player, "Balance:   " + economy.format(balance), 0);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
-                        }
+                            sbManager.update(player, "Debit:   " + ChatColor.RED + economy.format(difference), 1);
+
+                        sbManager.update(player, "Balance: " + economy.format(balance), 0);
+                        scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         oldBalances.put(player, economy.getBalance(player));
                     }
                 }
             }
-        }.runTaskTimer(plugin, 1L, 100L);
+        }.runTaskTimer(plugin, 1L, 10L);
     }
 
     private void onQuit(PlayerQuitEvent event)
@@ -76,7 +73,10 @@ public class ScoreboardStuff implements Listener
 
     private void scheduleScoreboardRemoval(SbManager sbManager, Player player, JavaPlugin plugin, long delay)
     {
-        new BukkitRunnable()
+        if (removalTasks.containsKey(player))
+            removalTasks.get(player).cancel();
+
+        BukkitTask task = new BukkitRunnable()
         {
             @Override
             public void run()
@@ -84,5 +84,7 @@ public class ScoreboardStuff implements Listener
                 sbManager.unregister(player);
             }
         }.runTaskLater(plugin, delay);
+
+        removalTasks.put(player, task);
     }
 }
