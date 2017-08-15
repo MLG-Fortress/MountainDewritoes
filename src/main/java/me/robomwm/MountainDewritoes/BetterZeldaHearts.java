@@ -213,7 +213,7 @@ public class BetterZeldaHearts implements Listener
     }
     boolean isMobMoney(ItemStack item)
     {
-        return item.getType() == Material.GOLD_INGOT && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith(economy.format(0).substring(0,1)));
+        return item.getType() == Material.GOLD_INGOT && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith(ChatColor.YELLOW + economy.format(0).substring(0,1)));
     }
 
     boolean healPlayer(Player player)
