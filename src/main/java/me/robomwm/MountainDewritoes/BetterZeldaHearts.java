@@ -218,10 +218,10 @@ public class BetterZeldaHearts implements Listener
 
     boolean healPlayer(Player player)
     {
-        if (player.getHealth() == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()
-                && player.getFireTicks() == 0
-                && player.getPotionEffect(PotionEffectType.POISON) != null
-                && player.getPotionEffect(PotionEffectType.WITHER) != null)
+        if (player.getHealth() >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
+                && player.getFireTicks() <= 0
+                && player.getPotionEffect(PotionEffectType.POISON) == null
+                && player.getPotionEffect(PotionEffectType.WITHER) == null)
             return false;
         player.addPotionEffect(PotionEffectType.HEAL.createEffect(1, 2));
         player.setFireTicks(0); //Extinguish
