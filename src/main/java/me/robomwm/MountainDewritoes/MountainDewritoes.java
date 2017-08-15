@@ -85,6 +85,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
+    //Class instances used in onDisable
+    BetterNoDamageTicks betterNoDamageTicks;
+
     @Override
     public FileConfiguration getConfig()
     {
@@ -148,7 +151,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SimpleClansListener(this, clanManager);
         new ReplacementSoundEffects(this);
         new Ogrewatch(this);
-        new BetterNoDamageTicks(this);
+        betterNoDamageTicks = new BetterNoDamageTicks(this);
         new FineSine(this);
         new PrisonIsAConfusingGamemode(this);
         new LevelingProgression(this);
@@ -202,6 +205,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public void onDisable()
     {
         //TODO: delete instantiated worlds (i.e. those not in MV)
+        betterNoDamageTicks.onDisable();
     }
 
     /**

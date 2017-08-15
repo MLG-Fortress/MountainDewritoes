@@ -16,7 +16,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created on 7/13/2017.
@@ -30,6 +32,7 @@ public class BetterNoDamageTicks implements Listener
     long currentTick = 0L;
     private JavaPlugin instance;
     private final String DAMAGE_IMMUNITY_KEY = "MD_DamageImmunity";
+    private Set<Entity> entitiesToClear = new HashSet<>();
 
     public BetterNoDamageTicks(JavaPlugin plugin)
     {
@@ -42,6 +45,15 @@ public class BetterNoDamageTicks implements Listener
                 currentTick++;
             }
         }.runTaskTimer(plugin, 1L, 1L);
+    }
+
+    public void onDisable()
+    {
+        for (Entity entity : entitiesToClear)
+        {
+            entity.removeMetadata(DAMAGE_IMMUNITY_KEY, instance);
+        }
+        entitiesToClear.clear();
     }
 
     @EventHandler
@@ -60,12 +72,14 @@ public class BetterNoDamageTicks implements Listener
     private void onEntityDeath(EntityDeathEvent event)
     {
         event.getEntity().removeMetadata(DAMAGE_IMMUNITY_KEY, instance);
+        entitiesToClear.remove(event.getEntity());
     }
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event)
     {
         event.getPlayer().removeMetadata(DAMAGE_IMMUNITY_KEY, instance);
+        entitiesToClear.remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -113,6 +127,7 @@ public class BetterNoDamageTicks implements Listener
         if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))
             event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new ArrayList<DamageImmunityData>()));
         ((List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value()).add(new DamageImmunityData(event.getCause(), event.getFinalDamage(), currentTick + ticksToExpire));
+        entitiesToClear.add(event.getEntity());
     }
 }
 
