@@ -111,7 +111,7 @@ public class BetterZeldaHearts implements Listener
             {
                 ItemStack money = new ItemStack(Material.GOLD_INGOT);
                 ItemMeta moneyMeta = money.getItemMeta();
-                moneyMeta.setDisplayName(ChatColor.GOLD + economy.format(moneyToDrop));
+                moneyMeta.setDisplayName(ChatColor.YELLOW + economy.format(moneyToDrop));
                 moneyMeta.setLore(Collections.singletonList(String.valueOf(moneyToDrop)));
                 money.setItemMeta(moneyMeta);
                 Item moneyItem = location.getWorld().dropItem(location, money);
