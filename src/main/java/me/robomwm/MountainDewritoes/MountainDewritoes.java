@@ -142,7 +142,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new SpawnWorldListener(this), this);
         pm.registerEvents(new GamemodeInventoryManager(this), this);
         pm.registerEvents(new NoKnockback(this), this);
-        pm.registerEvents(new SleepManagement(this), this);
+        new SleepManagement(this);
 
         new ReverseOsmosis(this);
         new SimpleClansListener(this, clanManager);
@@ -165,11 +165,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Initialize commonly-used sets
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("spawn"));
-        survivalWorlds.add(getServer().getWorld("world"));
+        survivalWorlds.add(getServer().getWorld("WORLD"));
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
         survivalWorlds.add(getServer().getWorld("cityworld"));
-        knownWorlds.add(getServer().getWorld("world"));
+        knownWorlds.add(getServer().getWorld("WORLD"));
         knownWorlds.add(getServer().getWorld("world_nether"));
         knownWorlds.add(getServer().getWorld("world_the_end"));
         knownWorlds.add(getServer().getWorld("cityworld"));
@@ -266,7 +266,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //    void onPlayerChangesWorldSetViewDistance(PlayerChangedWorldEvent event)
 //    {
 //        Player player = event.getPlayer();
-//        World world = event.getPlayer().getWorld();
+//        World WORLD = event.getPlayer().getWorld();
 //        if (player.hasMetadata("DEAD"))
 //            return;
 //        player.setViewDistance(3);
@@ -275,7 +275,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //            public void run()
 //            {
 //                //Don't execute if another task is scheduled
-//                if (player.getWorld() != world || !player.isOnline())
+//                if (player.getWorld() != WORLD || !player.isOnline())
 //                    this.cancel();
 //                //Wait for player to land before resetting view distance
 //                else if (player.isOnGround())

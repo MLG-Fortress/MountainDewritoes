@@ -174,7 +174,7 @@ public class PrisonIsAConfusingGamemode implements Listener
     {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GREEN + "Admittance to mine " + mine);
-        lore.add(ChatColor.GREEN + "in the prison world");
+        lore.add(ChatColor.GREEN + "in the prison WORLD");
         lore.add(ChatColor.GRAY + "Use it at " + ChatColor.GOLD + "/warp prison");
         itemStack.getItemMeta().setLore(lore);
         itemStack.getItemMeta().setDisplayName("Prison mine ticket (mine " + mine + ")");
