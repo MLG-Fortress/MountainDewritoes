@@ -42,31 +42,31 @@ public class ScoreboardStuff implements Listener
                         oldBalances.put(player, economy.getBalance(player));
                         continue;
                     }
-                    
+
                     int oldBalance = oldBalances.get(player).intValue();
-                    int newBalance = (int)economy.getBalance(player);
-                    int difference = newBalance - oldBalance;
+                    int balance = (int)economy.getBalance(player);
+                    int difference = balance - oldBalance;
                     if (difference != 0)
                     {
                         if (difference > 0)
                         {
                             sbManager.createScoreboard(player);
-                            sbManager.update(player, ChatColor.GREEN + "+", difference);
-                            sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
+                            sbManager.update(player, ChatColor.GREEN + "+", 1);
+                            sbManager.update(player, ChatColor.AQUA + "Balance: " + economy.format(balance), 0);
                             scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         }
                         else if (difference < 0)
                         {
                             sbManager.createScoreboard(player);
-                            sbManager.update(player, ChatColor.RED + "-", difference);
-                            sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
+                            sbManager.update(player, ChatColor.RED + "-" + economy.format(balance), 1);
+                            sbManager.update(player, ChatColor.AQUA + "Balance: " + economy.format(balance), 0);
                             scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         }
                         oldBalances.put(player, economy.getBalance(player));
                     }
                 }
             }
-        }.runTaskTimer(plugin, 100L, 100L);
+        }.runTaskTimer(plugin, 1L, 100L);
     }
 
     private void onQuit(PlayerQuitEvent event)
