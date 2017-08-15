@@ -23,7 +23,6 @@ import java.util.Map;
  */
 public class ScoreboardStuff implements Listener
 {
-    private JavaPlugin instance;
     private Map<Player, Double> oldBalances = new HashMap<>();
     public ScoreboardStuff(JavaPlugin plugin, Economy economy)
     {
@@ -50,14 +49,14 @@ public class ScoreboardStuff implements Listener
                             sbManager.createScoreboard(player);
                             sbManager.update(player, ChatColor.GREEN + "Gained +", difference);
                             sbManager.update(player, ChatColor.AQUA + "Balance", newBalance);
-                            scheduleScoreboardRemoval(sbManager, player, 2L);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 2L);
                         }
                         else if (difference < 0)
                         {
                             sbManager.createScoreboard(player);
                             sbManager.update(player, ChatColor.RED + "Lost -", difference);
                             sbManager.update(player, ChatColor.AQUA + "Balance", newBalance);
-                            scheduleScoreboardRemoval(sbManager, player, 2L);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 2L);
                         }
                     }
                 }
@@ -70,7 +69,7 @@ public class ScoreboardStuff implements Listener
         oldBalances.remove(event.getPlayer());
     }
 
-    private void scheduleScoreboardRemoval(SbManager sbManager, Player player, long delay)
+    private void scheduleScoreboardRemoval(SbManager sbManager, Player player, JavaPlugin plugin, long delay)
     {
         new BukkitRunnable()
         {
@@ -79,6 +78,6 @@ public class ScoreboardStuff implements Listener
             {
                 sbManager.unregister(player);
             }
-        }.runTaskLater(instance, delay);
+        }.runTaskLater(plugin, delay);
     }
 }

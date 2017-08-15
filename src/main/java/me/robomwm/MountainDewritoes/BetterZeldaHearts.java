@@ -66,11 +66,11 @@ public class BetterZeldaHearts implements Listener
         LivingEntity entity = event.getEntity();
         if (entity.getKiller() == null)
             return;
+        Location location = event.getEntity().getLocation();
 
         //Should we spawn a heart (heals on pickup)
         if (random.nextInt(3) == 1)
         {
-            Location location = event.getEntity().getLocation();
             ItemStack heart = new ItemStack(Material.INK_SACK);
             heart.setDurability((short)1);
             ItemMeta heartMeta = heart.getItemMeta();
@@ -101,23 +101,26 @@ public class BetterZeldaHearts implements Listener
         }
 
         /*Mob money*/
-
-        if (economy == null)
-            return;
-
-        int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        int moneyToDrop = ThreadLocalRandom.current().nextInt(maxHealth, maxHealth * maxHealth);
-        moneyToDrop *= Math.log(entity.getTicksLived() * entity.getTicksLived());
-
-        if (moneyToDrop > 0)
+        if (economy != null && random.nextInt(3) == 1)
         {
-            ItemStack money = new ItemStack(Material.GOLD_INGOT);
-            ItemMeta moneyMeta = money.getItemMeta();
-            moneyMeta.setDisplayName(ChatColor.GOLD + economy.format(moneyToDrop));
-            moneyMeta.setLore(Collections.singletonList(String.valueOf(moneyToDrop)));
-            money.setItemMeta(moneyMeta);
-            event.getDrops().add(money);
+            int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            int moneyToDrop = ThreadLocalRandom.current().nextInt(maxHealth, maxHealth * maxHealth);
+            moneyToDrop *= Math.log(entity.getTicksLived() * entity.getTicksLived());
+
+            if (moneyToDrop > 0)
+            {
+                ItemStack money = new ItemStack(Material.GOLD_INGOT);
+                ItemMeta moneyMeta = money.getItemMeta();
+                moneyMeta.setDisplayName(ChatColor.GOLD + economy.format(moneyToDrop));
+                moneyMeta.setLore(Collections.singletonList(String.valueOf(moneyToDrop)));
+                money.setItemMeta(moneyMeta);
+                Item moneyItem = location.getWorld().dropItem(location, money);
+                moneyItem.setCustomName(moneyMeta.getDisplayName());
+                moneyItem.setCustomNameVisible(true);
+                moneyItem.setPickupDelay(10);
+            }
         }
+
     }
 
     /**
