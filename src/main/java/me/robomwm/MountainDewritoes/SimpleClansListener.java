@@ -123,17 +123,16 @@ public class SimpleClansListener implements Listener
     //Now kinda useless, and not delayed.
     public void setDisplayName(final Player player1, final String colorCode)
     {
-        if (!player1.hasPlayedBefore() || !ChatColor.stripColor(player1.getDisplayName()).contains(player1.getName()))
+        new BukkitRunnable()
         {
-            scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+            @Override
+            public void run()
             {
-                public void run()
-                {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "enick " + player1.getName() + " off");
+                if (!player1.hasPlayedBefore() || !ChatColor.stripColor(player1.getDisplayName()).contains(player1.getName()))
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "enick " + player1.getName() + " &" + colorCode + player1.getName());
-                }
-            });
-        }
+            }
+        }.runTaskLater(instance, 5L);
+
         //[16:34:22] RoboMWM: Does EssX constantly set or change the displayName? I'm able to change the displayName (I use it to setPlayerListName) but chat messages revert the color to white
         //[16:50:46] RoboMWM: Alright, so either I hook into Essentials and grab the nickname from there or implement my own sort of /nick
 
