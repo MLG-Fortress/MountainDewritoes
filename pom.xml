@@ -145,6 +145,11 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/ProtocolSupport.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.github.games647</groupId>
+            <artifactId>ScoreboardStats</artifactId>
+            <version>0.10</version>
+        </dependency>
     </dependencies>
 
 </project>
