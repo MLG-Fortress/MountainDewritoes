@@ -104,7 +104,7 @@ public class BetterZeldaHearts implements Listener
         if (economy != null && random.nextInt(3) == 1)
         {
             int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            int moneyToDrop = ThreadLocalRandom.current().nextInt(maxHealth, maxHealth * maxHealth);
+            int moneyToDrop = maxHealth;
             moneyToDrop *= Math.log(entity.getTicksLived() * entity.getTicksLived());
 
             if (moneyToDrop > 0)
