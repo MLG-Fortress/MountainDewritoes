@@ -37,8 +37,7 @@ public class ScoreboardStuff implements Listener
             {
                 for (Player player : plugin.getServer().getOnlinePlayers())
                 {
-                    if (!oldBalances.containsKey(player))
-                        oldBalances.put(player, economy.getBalance(player));
+                    oldBalances.put(player, economy.getBalance(player));
                     int oldBalance = oldBalances.get(player).intValue();
                     int newBalance = (int)economy.getBalance(player);
                     int difference = newBalance - oldBalance;
@@ -47,16 +46,16 @@ public class ScoreboardStuff implements Listener
                         if (difference > 0)
                         {
                             sbManager.createScoreboard(player);
-                            sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
                             sbManager.update(player, ChatColor.GREEN + "+", difference);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 80L);
+                            sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         }
                         else if (difference < 0)
                         {
                             sbManager.createScoreboard(player);
-
                             sbManager.update(player, ChatColor.RED + "-", difference);
-                            scheduleScoreboardRemoval(sbManager, player, plugin, 80L);
+                            sbManager.update(player, ChatColor.AQUA + economy.format(0).substring(0,1), newBalance);
+                            scheduleScoreboardRemoval(sbManager, player, plugin, 100L);
                         }
                     }
                 }
