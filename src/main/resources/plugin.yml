@@ -28,3 +28,4 @@ commands:
     aliases: [getatip, betafish, beta, tips]
   voice:
     aliases: [v]
+  shrug: {}
