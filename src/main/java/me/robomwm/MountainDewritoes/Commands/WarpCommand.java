@@ -31,7 +31,7 @@ public class WarpCommand implements CommandExecutor
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
         addWarp("spawn", "spawn", -389D, 5D, -124D, 180.344f, -18.881f);
         addWarp("mall", "mall", 2.488, 5, -7.305, 0f, 0f);
-        addWarp("prison", "prison", -967, 14, 1298, 0f, -8f);
+        addWarp("prison", "prison", -970, 62, 1591, 270f, 6f);
         addWarp("jail", "minigames", -523D, 58.5D, -36D, 88.951f, 26.7f);
     }
 
