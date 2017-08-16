@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import me.robomwm.usefulutil.UsefulUtil;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -160,7 +162,10 @@ public class BetterZeldaHearts implements Listener
             AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
             maxHealth.setBaseValue(maxHealth.getValue() + 2D);
             player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
-            player.setHealth(maxHealth.getValue()); //Fully heal player
+            EntityRegainHealthEvent healthEvent = new EntityRegainHealthEvent(player, maxHealth.getValue() - player.getHealth(), EntityRegainHealthEvent.RegainReason.CUSTOM);
+            Bukkit.getPluginManager().callEvent(healthEvent);
+            if (!healthEvent.isCancelled())
+                player.setHealth(maxHealth.getValue()); //Fully heal player
             event.setItem(null);
         }
     }
