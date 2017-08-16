@@ -205,7 +205,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("tip").setExecutor(new TipCommand(this));
         getCommand("mdebug").setExecutor(new DebugCommand());
         getCommand("voice").setExecutor(new VoiceCommand(this));
-        
+
         EmoticonCommands emoticonCommands = new EmoticonCommands();
         getCommand("shrug").setExecutor(emoticonCommands);
 
