@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -99,16 +100,23 @@ public class BetterZeldaHearts implements Listener
             healthCanister.setItemMeta(potionMeta);
             event.getDrops().add(healthCanister);
         }
+    }
 
+    //yes
+    @EventHandler
+    private void onPlayerKilled(PlayerDeathEvent event)
+    {
+        Player player = event.getEntity();
+        Location location = player.getLocation();
         /*Mob money*/
-        if (economy != null && random.nextInt(3) == 1)
+        if (economy != null)
         {
-            int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            int moneyToDrop = maxHealth;
-            moneyToDrop *= Math.log(entity.getTicksLived() * entity.getTicksLived());
+            double moneyToDrop = Math.round(economy.getBalance(player) * 0.07);
 
             if (moneyToDrop > 0)
             {
+                economy.withdrawPlayer(player, moneyToDrop);
+                player.sendMessage(ChatColor.RED + "Death tax: " + economy.format(moneyToDrop));
                 ItemStack money = new ItemStack(Material.GOLD_INGOT);
                 ItemMeta moneyMeta = money.getItemMeta();
                 moneyMeta.setDisplayName(ChatColor.YELLOW + economy.format(moneyToDrop));
@@ -120,7 +128,6 @@ public class BetterZeldaHearts implements Listener
                 moneyItem.setPickupDelay(10);
             }
         }
-
     }
 
     /**
