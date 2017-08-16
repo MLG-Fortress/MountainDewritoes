@@ -368,7 +368,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     /**
      * Don't let serverlistplus send messages when server isn't done loading up yet
      */
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     private void onServerPing(ServerListPingEvent event)
     {
         if (!serverDoneLoading)
