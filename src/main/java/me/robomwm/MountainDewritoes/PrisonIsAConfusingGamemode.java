@@ -6,11 +6,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +58,30 @@ public class PrisonIsAConfusingGamemode implements Listener
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
         event.setCancelled(true);
+    }
+
+    //Prevent itemframes from being destroyed
+    @EventHandler(ignoreCancelled = true)
+    private void onEntityFrameDestroy(HangingBreakEvent event)
+    {
+        if (event.getEntity().getWorld() != prisonWorld)
+            return;
+        if (event.getCause() != HangingBreakEvent.RemoveCause.ENTITY)
+            event.setCancelled(true);
+    }
+    @EventHandler(ignoreCancelled = true)
+    private void onEntityFrameDestroy(HangingBreakByEntityEvent event)
+    {
+        if (event.getEntity().getWorld() != prisonWorld)
+            return;
+        if (event.getRemover().getType() != EntityType.PLAYER)
+        {
+            event.setCancelled(true);
+            return;
+        }
+        Player player = (Player)event.getRemover();
+        if (player.getGameMode() != GameMode.CREATIVE)
+            event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
