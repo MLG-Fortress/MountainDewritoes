@@ -167,7 +167,7 @@ public class AtmosphericMusic implements Listener
         if (NSA.getSpreePoints(killer) >= 20)
             atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer);
     }
-	@EventHandler
+	@EventHandler //Player breaks diamond ore
     private void BlockBreakEvent(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
