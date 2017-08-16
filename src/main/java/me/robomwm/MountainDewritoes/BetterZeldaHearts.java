@@ -158,8 +158,9 @@ public class BetterZeldaHearts implements Listener
         else
         {
             AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
-            maxHealth.setBaseValue(maxHealth.getBaseValue() + 2D);
+            maxHealth.setBaseValue(maxHealth.getValue() + 2D);
             player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
+            player.setHealth(maxHealth.getValue()); //Fully heal player
             event.setItem(null);
         }
     }
