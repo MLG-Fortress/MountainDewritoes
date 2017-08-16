@@ -14,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.block.Block;
 
 import java.util.List;
 import java.util.Set;
@@ -164,5 +166,18 @@ public class AtmosphericMusic implements Listener
 
         if (NSA.getSpreePoints(killer) >= 20)
             atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer);
+    }
+	@EventHandler
+    private void BlockBreakEvent(BlockBreakEvent event)
+    {
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        if (block.getTypeId() == 56)
+        {
+        	if((Math.random() * 1000) >= 1) //0.1% chance of playing
+        	{
+            atmosphericManager.playSound(musicManager.getSong("minediamonds").setPriority(50), 0, player);
+        	}
+        }
     }
 }
