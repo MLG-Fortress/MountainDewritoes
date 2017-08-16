@@ -1,11 +1,15 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Commands.SetExpFix;
+import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,9 +50,20 @@ public class LevelingProgression implements Listener
             return;
         event.setCancelled(true);
     }
+
     @EventHandler(ignoreCancelled = true)
-    private void levelUp(PlayerLevelChangeEvent event)
+    private void levelChangeEvent(PlayerExpChangeEvent event)
     {
-        event.getPlayer().sendActionBar("leveled up(?) (this is a test message)");
+        //TODO: track exp (so players don't lose any)
+        if (event.getSource() == null)
+            return;
+        Player player = event.getPlayer();
+
+        int nextLevel = SetExpFix.getExpUntilNextLevel(player);
+
+        if (event.getAmount() >= nextLevel)
+        {
+            player.sendActionBar("You leveled up(?) to level " + player.getLevel() + 1);
+        }
     }
 }
