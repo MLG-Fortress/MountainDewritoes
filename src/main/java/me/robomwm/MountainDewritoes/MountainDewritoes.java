@@ -71,6 +71,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         return survivalWorlds.contains(world);
     }
+
+    public Set<World> getSurvivalWorlds()
+    {
+        return new HashSet<>(survivalWorlds);
+    }
+
     public boolean isSafeWorld(World world)
     {
         return safeWorlds.contains(world);

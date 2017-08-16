@@ -15,6 +15,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created on 3/3/2017.
  *
@@ -36,6 +39,7 @@ public class AtmosphericMusic implements Listener
         instance.registerListener(this);
 
         startAmbiance(instance.getServer().getWorld("mall"));
+        //normalAmbiance(instance.getSurvivalWorlds());
     }
 
     private void startAmbiance(World world)
@@ -50,6 +54,28 @@ public class AtmosphericMusic implements Listener
                 atmosphericManager.playSound(musicPackManager.getSong(world.getName()), world);
             }
         }.runTaskTimer(instance, 300L, 600L);
+    }
+
+    private void normalAmbiance(Set<World> worlds)
+    {
+        new BukkitRunnable()
+        {
+            private String timeOfDay;
+            @Override
+            public void run()
+            {
+                long time = instance.getServer().getWorld("world").getTime();
+                if (time > 13000 && time < 23000)
+                    timeOfDay = "night";
+                else
+                    timeOfDay = "day";
+
+                for (World world : worlds)
+                {
+                    atmosphericManager.playSound(musicPackManager.getSong(timeOfDay), world);
+                }
+            }
+        }.runTaskTimer(instance, 1200L, 2400L);
     }
 
     @EventHandler
