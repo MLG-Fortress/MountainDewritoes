@@ -48,10 +48,12 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BetterZeldaHearts implements Listener
 {
+    MountainDewritoes instance;
     Economy economy;
 
-    public BetterZeldaHearts(JavaPlugin plugin, Economy economy)
+    public BetterZeldaHearts(MountainDewritoes plugin, Economy economy)
     {
+        this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.economy = economy;
     }
@@ -110,6 +112,8 @@ public class BetterZeldaHearts implements Listener
     {
         Player player = event.getEntity();
         Location location = player.getLocation();
+        if (!instance.isSurvivalWorld(location.getWorld()) && !instance.isSafeWorld(location.getWorld()))
+            
         /*Mob money*/
         if (economy != null)
         {
