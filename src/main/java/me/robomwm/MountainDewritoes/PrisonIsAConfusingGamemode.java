@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -80,6 +81,22 @@ public class PrisonIsAConfusingGamemode implements Listener
             return;
         }
         Player player = (Player)event.getRemover();
+        if (player.getGameMode() != GameMode.CREATIVE)
+            event.setCancelled(true);
+    }
+    @EventHandler(ignoreCancelled = true)
+    private void onEntityInsideFrameDestroy(EntityDamageByEntityEvent event)
+    {
+        if (event.getEntity().getWorld() != prisonWorld)
+            return;
+        if (event.getEntityType() != EntityType.ITEM_FRAME)
+            return;
+        if (event.getDamager().getType() != EntityType.PLAYER)
+        {
+            event.setCancelled(true);
+            return;
+        }
+        Player player = (Player)event.getDamager();
         if (player.getGameMode() != GameMode.CREATIVE)
             event.setCancelled(true);
     }
