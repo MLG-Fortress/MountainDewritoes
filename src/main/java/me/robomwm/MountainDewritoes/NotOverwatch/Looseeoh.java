@@ -35,7 +35,7 @@ public class Looseeoh implements Listener
     void wallRide(PlayerToggleFlightEvent event)
     {
         Player player = event.getPlayer();
-        if (!ogrewatch.isLucio(player))
+        if (!ogrewatch.isHeewo(player, Heewos.LOOSEEOH))
             return;
         if (!startWallRiding(player))
         {
@@ -121,7 +121,7 @@ public class Looseeoh implements Listener
                 else if (finalVector.getZ() < 0 && finalVector.getZ() > -0.7)
                     finalVector.setZ(finalVector.getZ() - 0.02);
 
-                if (!player.isOnline() || !ogrewatch.isLucio(player) || player.isOnGround() || player.isSneaking())
+                if (!player.isOnline() || !ogrewatch.isHeewo(player, Heewos.LOOSEEOH) || player.isOnGround() || player.isSneaking())
                 {
                     cancelTask();
                     player.removeMetadata("MD_WALLRIDING", instance);
@@ -159,7 +159,7 @@ public class Looseeoh implements Listener
             {
                 cancel();
                 player.removeMetadata("MD_WALLRIDING", instance);
-                if (ogrewatch.isLucio(player))
+                if (ogrewatch.isHeewo(player, Heewos.LOOSEEOH))
                     player.setAllowFlight(true);
             }
 
