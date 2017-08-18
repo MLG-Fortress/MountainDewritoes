@@ -19,6 +19,7 @@ import org.bukkit.block.Block;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 3/3/2017.
@@ -172,11 +173,11 @@ public class AtmosphericMusic implements Listener
     {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        if (block.getTypeId() == 56)
+        if (block.getType() == Material.DIAMOND_ORE)
         {
-        	if((Math.random() * 1000) >= 1) //0.1% chance of playing
+        	if(ThreadLocalRandom.current().nextInt() == 1) //0.1% chance of playing
         	{
-            atmosphericManager.playSound(musicManager.getSong("minediamonds").setPriority(50), 0, player);
+            atmosphericManager.playSound(musicPackManager.getSong("minediamonds").setPriority(50), 0, player);
         	}
         }
     }
