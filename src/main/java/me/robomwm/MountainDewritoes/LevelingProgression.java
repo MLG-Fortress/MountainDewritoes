@@ -9,8 +9,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -41,6 +43,8 @@ public class LevelingProgression implements Listener
             return;
         }
 
+        //Never gets here since this is only called for enchantment tables at the moment
+
         event.setExpLevelCost(0);
     }
     @EventHandler(ignoreCancelled = true)
@@ -49,6 +53,13 @@ public class LevelingProgression implements Listener
         if (event.getInventory().getType() != InventoryType.ENCHANTING)
             return;
         event.setCancelled(true);
+    }
+    @EventHandler
+    private void anvil(PrepareAnvilEvent event)
+    {
+        AnvilInventory anvilInventory = event.getInventory();
+        //int initialCost = anvilInventory.getRepairCost();
+        anvilInventory.setRepairCost(0);
     }
 
     @EventHandler(ignoreCancelled = true)
