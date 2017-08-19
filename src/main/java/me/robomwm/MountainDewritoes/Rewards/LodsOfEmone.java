@@ -37,7 +37,7 @@ public class LodsOfEmone
                 player.removePotionEffect(PotionEffectType.POISON);
                 player.removePotionEffect(PotionEffectType.WITHER);
                 //Give moniez
-                instance.getEconomy().depositPlayer(player, level * 7)
+                instance.getEconomy().depositPlayer(player, Math.log(level * Math.exp(1000)));
 
         }
     }
