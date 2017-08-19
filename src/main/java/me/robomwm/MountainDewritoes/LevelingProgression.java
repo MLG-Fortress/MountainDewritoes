@@ -20,12 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class LevelingProgression implements Listener
 {
-	Economy economy;
+	Economy eco;
 	
     public LevelingProgression(JavaPlugin plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-		this.economy = economy;
+		this.eco = economy;
     }
 
     /**
@@ -67,7 +67,7 @@ public class LevelingProgression implements Listener
 		else if(lvl >= 17 && lvl <= 31) xp = 5 * lvl - 38;
 		else if(lvl >= 32) xp = 9 * lvl - 158; 
 
-        if (player.getExp() + Double.parseDouble(args[0]) >= xp) //change how it checks for lvl up cos it triggersed when the player dont have the xp to lvl up
+        if (player.getExp() + event.getAmount() >= xp) //change how it checks for lvl up cos it triggersed when the player dont have the xp to lvl up
         {
 			double money = 0;
 			//the amount of money is rewarded is based on how much xp it takes to lvl up and level the player is on
