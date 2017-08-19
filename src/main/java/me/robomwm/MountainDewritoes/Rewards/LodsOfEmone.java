@@ -19,6 +19,7 @@ public class LodsOfEmone
     public LodsOfEmone(MountainDewritoes plugin)
     {
         instance = plugin;
+        new LevelingProgression(plugin, this);
     }
 
     public void rewardPlayer(Player player, int level, RewardType rewardType)
