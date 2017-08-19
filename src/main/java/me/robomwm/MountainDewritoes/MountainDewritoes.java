@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import com.destroystokyo.paper.Title;
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
@@ -12,6 +13,7 @@ import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.NotOverwatch.Ogrewatch;
 import me.robomwm.MountainDewritoes.Rewards.LevelingProgression;
+import me.robomwm.MountainDewritoes.Rewards.LodsOfEmone;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
@@ -57,13 +59,18 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 {
     //Set<Player> usedEC = new HashSet<>();
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
-    Map<Player, Integer> usingTitlePlayers = new HashMap<>();
+    private long currentTick = 0L; //"Server time in ticks"
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
     private Set<World> knownWorlds = new HashSet<>(); //Set of worlds we know players can teleport to for purposes other than minigames
     private FileConfiguration newConfig;
     private Economy economy;
     private boolean serverDoneLoading = false;
+
+    public long getCurrentTick()
+    {
+        return currentTick;
+    }
 
     public boolean isSurvivalWorld(World world)
     {
@@ -90,7 +97,18 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     }
 
     //Class instances used in onDisable
-    BetterNoDamageTicks betterNoDamageTicks;
+    private BetterNoDamageTicks betterNoDamageTicks;
+    private TitleManager titleManager;
+
+    public TitleManager getTitleManager()
+    {
+        return titleManager;
+    }
+
+    public Economy getEconomy()
+    {
+        return economy;
+    }
 
     @Override
     public FileConfiguration getConfig()
@@ -158,7 +176,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         betterNoDamageTicks = new BetterNoDamageTicks(this);
         new FineSine(this);
         new PrisonIsAConfusingGamemode(this);
-        new LevelingProgression(this);
+        new LodsOfEmone(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
@@ -194,6 +212,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 serverDoneLoading = true;
             }
         }.runTask(this);
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                currentTick++;
+            }
+        }.runTaskTimer(this, 1L, 1L);
+        titleManager = new TitleManager(this);
 
         //Commands
         getCommand("nick").setExecutor(new NickCommand());
@@ -237,34 +263,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        event.setCancelled(true);
 //        usedEC.add(player);
 //    }
-
-    /**
-     * Probably belongs in its own "TitleManager" class.
-     * Only thing that uses this is the hitmarkers, so they don't override any currently-displayed message
-     */
-    public boolean isUsingTitle(Player player)
-    {
-        return usingTitlePlayers.containsKey(player);
-    }
-    public void addUsingTitle(Player player, int ticks)
-    {
-        int index = 0;
-        if (isUsingTitle(player))
-            index += usingTitlePlayers.get(player);
-        final int finalIndex = index;
-        usingTitlePlayers.put(player, index);
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                if (!isUsingTitle(player))
-                    return;
-                if (usingTitlePlayers.get(player) == finalIndex)
-                    usingTitlePlayers.remove(player);
-                //Otherwise, another addUsingTitle had overrided our previous addUsingTitle invokation
-            }
-        }.runTaskLater(this, ticks);
-    }
 
     //Removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
 //    /**

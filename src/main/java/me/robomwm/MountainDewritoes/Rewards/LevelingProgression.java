@@ -22,9 +22,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class LevelingProgression implements Listener
 {
-    public LevelingProgression(JavaPlugin plugin)
+    LodsOfEmone lodsOfEmone;
+
+    public LevelingProgression(JavaPlugin plugin, LodsOfEmone lodsOfEmone)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.lodsOfEmone = lodsOfEmone;
     }
 
     /**

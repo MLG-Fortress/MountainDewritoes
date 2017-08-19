@@ -29,22 +29,14 @@ import java.util.Set;
  */
 public class BetterNoDamageTicks implements Listener
 {
-    long currentTick = 0L;
-    private JavaPlugin instance;
+    private MountainDewritoes instance;
     private final String DAMAGE_IMMUNITY_KEY = "MD_DamageImmunity";
     private Set<Entity> entitiesToClear = new HashSet<>();
 
-    public BetterNoDamageTicks(JavaPlugin plugin)
+    public BetterNoDamageTicks(MountainDewritoes plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                currentTick++;
-            }
-        }.runTaskTimer(plugin, 1L, 1L);
     }
 
     public void onDisable()
@@ -92,9 +84,9 @@ public class BetterNoDamageTicks implements Listener
 
         for (DamageImmunityData damageImmunityData : new ArrayList<>(damageImmunityDataMetadata))
         {
-            if (damageImmunityData.getTickToExpire() > currentTick && damageImmunityData.getCause() == event.getCause() && event.getFinalDamage() <= damageImmunityData.getDamage())
+            if (damageImmunityData.getTickToExpire() > instance.getCurrentTick() && damageImmunityData.getCause() == event.getCause() && event.getFinalDamage() <= damageImmunityData.getDamage())
                 event.setCancelled(true);
-            else if (damageImmunityData.getTickToExpire() <= currentTick)
+            else if (damageImmunityData.getTickToExpire() <= instance.getCurrentTick())
                 damageImmunityDataMetadata.remove(damageImmunityData);
         }
     }
@@ -126,7 +118,7 @@ public class BetterNoDamageTicks implements Listener
 
         if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))
             event.getEntity().setMetadata(DAMAGE_IMMUNITY_KEY, new FixedMetadataValue(instance, new ArrayList<DamageImmunityData>()));
-        ((List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value()).add(new DamageImmunityData(event.getCause(), event.getFinalDamage(), currentTick + ticksToExpire));
+        ((List<DamageImmunityData>)event.getEntity().getMetadata(DAMAGE_IMMUNITY_KEY).get(0).value()).add(new DamageImmunityData(event.getCause(), event.getFinalDamage(), instance.getCurrentTick() + ticksToExpire));
         entitiesToClear.add(event.getEntity());
     }
 }

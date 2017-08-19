@@ -57,7 +57,7 @@ public class HitSound implements Listener
 
         attacker.playSound(attacker.getLocation(), Sound.UI_BUTTON_CLICK, 3000000f, 1f);
 
-        if (!instance.isUsingTitle(attacker) && !attacker.hasMetadata("DEAD"))
+        if (!instance.getTitleManager().isUsingTitle(attacker) && !attacker.hasMetadata("DEAD"))
         {
 //            if (event.getFinalDamage() < 10)
 //                attacker.sendTitle(hitMarker);
@@ -87,8 +87,7 @@ public class HitSound implements Listener
             public void run()
             {
                 killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
-                killer.sendTitle(title);
-                instance.addUsingTitle(killer, title.getFadeIn() + title.getStay());
+                instance.getTitleManager().addUsingTitle(killer, 0, title);
             }
         }.runTaskLater(instance, 3L);
 
