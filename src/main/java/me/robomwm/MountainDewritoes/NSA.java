@@ -1,7 +1,9 @@
 package me.robomwm.MountainDewritoes;
 
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
+import me.robomwm.MountainDewritoes.Events.TransactionEvent;
 import me.robomwm.usefulutil.UsefulUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -17,7 +19,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -29,6 +35,8 @@ import java.util.Set;
 public class NSA implements Listener
 {
     private static MountainDewritoes instance;
+
+    private static Map<Player, List<String>> transactions = new HashMap<>();
 
     NSA(MountainDewritoes mountainDewritoes)
     {
@@ -167,6 +175,42 @@ public class NSA implements Listener
         if (!player.hasMetadata(spreePoints))
             return 0;
         return player.getMetadata(spreePoints).get(0).asInt();
+    }
+
+    public static String getTransactions(Player player)
+    {
+        if (!transactions.containsKey(player))
+            return "No transactions occurred recently.";
+        StringBuilder listOfTransactions = new StringBuilder();
+
+        //Only store and display last 10 transactions
+        while (transactions.get(player).size() > 10)
+        {
+            transactions.get(player).remove(0);
+        }
+
+        for (String transaction : transactions.get(player))
+        {
+            listOfTransactions.append(transaction);
+            listOfTransactions.append("\n");
+        }
+        return listOfTransactions.toString();
+    }
+
+    @EventHandler
+    private void onTransaction(TransactionEvent event)
+    {
+        addTransaction(event.getPlayer(), event.getAmount());
+    }
+
+    private static void addTransaction(Player player, double change)
+    {
+        if (!transactions.containsKey(player))
+            transactions.put(player, new ArrayList<>());
+        String prefix = ChatColor.GREEN + "+";
+        if (change < 0)
+            prefix = ChatColor.RED.toString();
+        transactions.get(player).add(prefix + instance.getEconomy().format(change) + " " + UsefulUtil.formatTime() + " ago.");
     }
 
 

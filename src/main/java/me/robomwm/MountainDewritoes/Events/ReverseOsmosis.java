@@ -1,7 +1,10 @@
 package me.robomwm.MountainDewritoes.Events;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Creature;
@@ -15,6 +18,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +34,45 @@ public class ReverseOsmosis implements Listener
 {
     MountainDewritoes instance;
 
-    public ReverseOsmosis(MountainDewritoes mountainDewritoes)
+    private Map<Player, Double> oldBalances = new HashMap<>();
+
+    public ReverseOsmosis(MountainDewritoes plugin)
     {
-        instance = mountainDewritoes;
+        instance = plugin;
         instance.registerListener(this);
+
+        //Tracks changes to player's balance
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (Player player : plugin.getServer().getOnlinePlayers())
+                {
+                    if (!oldBalances.containsKey(player))
+                    {
+                        oldBalances.put(player, plugin.getEconomy().getBalance(player));
+                        continue;
+                    }
+
+                    double oldBalance = oldBalances.get(player);
+                    double balance = plugin.getEconomy().getBalance(player);
+                    double difference = balance - oldBalance;
+                    if (difference != 0)
+                    {
+                        plugin.getServer().getPluginManager().callEvent(new TransactionEvent(player, difference, plugin.getEconomy()));
+                        oldBalances.put(player, balance);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin, 1L, 10L);
     }
 
-    Map<Player, Set<Monster>> targetedPlayers = new HashMap<>();
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event)
+    {
+        oldBalances.remove(event.getPlayer());
+    }
 
     /**
      * @see MonsterTargetPlayerEvent
