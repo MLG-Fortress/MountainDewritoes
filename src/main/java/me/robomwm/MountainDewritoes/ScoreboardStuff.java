@@ -39,7 +39,7 @@ public class ScoreboardStuff implements Listener
     private Map<Player, BukkitTask> removalTasks = new HashMap<>();
     private SbManager sbManager;
 
-    public ScoreboardStuff(JavaPlugin plugin, Economy economy)
+    public ScoreboardStuff(JavaPlugin plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
