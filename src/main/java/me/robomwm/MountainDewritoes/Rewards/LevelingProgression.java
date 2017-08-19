@@ -1,4 +1,4 @@
-package me.robomwm.MountainDewritoes;
+package me.robomwm.MountainDewritoes.Rewards;
 
 import me.robomwm.MountainDewritoes.Commands.SetExpFix;
 import me.robomwm.usefulutil.UsefulUtil;
