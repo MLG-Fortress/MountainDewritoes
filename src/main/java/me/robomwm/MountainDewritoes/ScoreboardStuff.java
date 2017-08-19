@@ -61,7 +61,7 @@ public class ScoreboardStuff implements Listener
                         continue;
                     }
 
-                    int oldBalance = oldBalances.get(player).intValue();
+                    double oldBalance = oldBalances.get(player);
                     double balance = economy.getBalance(player);
                     double difference = balance - oldBalance;
                     if (difference != 0)
