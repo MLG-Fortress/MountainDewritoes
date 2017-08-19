@@ -38,6 +38,9 @@ public class LodsOfEmone
                 player.removePotionEffect(PotionEffectType.WITHER);
                 //Give moniez
                 instance.getEconomy().depositPlayer(player, Math.log(level * Math.exp(1000)));
+                //Give key
+                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "newkey 1 " + player.getName());
+                //TODO: sound
 
         }
     }

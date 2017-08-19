@@ -73,11 +73,12 @@ public class LevelingProgression implements Listener
             return;
         Player player = event.getPlayer();
 
-        int nextLevel = SetExpFix.getExpUntilNextLevel(player);
+        int nextLevelExp = SetExpFix.getExpUntilNextLevel(player);
 
-        if (event.getAmount() >= nextLevel)
+        if (event.getAmount() >= nextLevelExp)
         {
-            player.sendActionBar("You leveled up(?) to level " + player.getLevel() + 1);
+            int nextLevel = player.getLevel() + 1;
+            lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP);
         }
     }
 }
