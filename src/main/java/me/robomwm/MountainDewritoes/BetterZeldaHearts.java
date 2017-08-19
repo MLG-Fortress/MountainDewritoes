@@ -113,7 +113,7 @@ public class BetterZeldaHearts implements Listener
         Player player = event.getEntity();
         Location location = player.getLocation();
         if (!instance.isSurvivalWorld(location.getWorld()) && !instance.isSafeWorld(location.getWorld()))
-            
+
         /*Mob money*/
         if (economy != null)
         {
