@@ -73,19 +73,19 @@ public class LevelingProgression implements Listener
             return;
         Player player = event.getPlayer();
 
-        if (event.getAmount() < player.getExpToLevel())
-            return;
-
         int nextLevel = player.getLevel() + 1;
-        int nextLevelExp = player.getExpToLevel();
-        int expAmount = event.getAmount();
+        int nextLevelExp = SetExpFix.getExpUntilNextLevel(player); //Remaining experience required to level up
+        int expAmount = event.getAmount(); //Current amount of exp from the orb
+
+        if (event.getAmount() < nextLevelExp)
+            return;
 
         //If the xp amount is enough to level up,
         while (expAmount >= nextLevelExp)
         {
             lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP); //Reward player for leveling up
-            expAmount -= nextLevelExp; //Subtract amount of xp used to level up
-            nextLevelExp += SetExpFix.getExpAtLevel(++nextLevel); //Calculate the xp needed to level up again
+            expAmount -= nextLevelExp; //Subtract amount of xp remaining from the orb (we "spent" it on leveling up)
+            nextLevelExp += SetExpFix.getExpAtLevel(++nextLevel); //Calculate the xp needed to level up to the next level (that's a lot of levels)
         }
     }
 }
