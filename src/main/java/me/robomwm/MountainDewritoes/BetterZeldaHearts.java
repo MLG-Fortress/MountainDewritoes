@@ -104,6 +104,21 @@ public class BetterZeldaHearts implements Listener
             healthCanister.setItemMeta(potionMeta);
             event.getDrops().add(healthCanister);
         }
+
+        /*Mob Money*/
+        /*Mob money*/
+
+        if (economy == null)
+            return;
+
+        int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        int moneyToDrop = ThreadLocalRandom.current().nextInt(maxHealth, maxHealth * maxHealth);
+        moneyToDrop *= Math.log(entity.getTicksLived() * entity.getTicksLived());
+
+        if (moneyToDrop > 0)
+        {
+            dropMobMoney(location, moneyToDrop);
+        }
     }
 
     //yes
@@ -123,17 +138,22 @@ public class BetterZeldaHearts implements Listener
             {
                 economy.withdrawPlayer(player, moneyToDrop);
                 player.sendMessage(ChatColor.RED + "Death tax: " + economy.format(moneyToDrop));
-                ItemStack money = new ItemStack(Material.GOLD_INGOT);
-                ItemMeta moneyMeta = money.getItemMeta();
-                moneyMeta.setDisplayName(ChatColor.YELLOW + economy.format(moneyToDrop));
-                moneyMeta.setLore(Collections.singletonList(String.valueOf(moneyToDrop)));
-                money.setItemMeta(moneyMeta);
-                Item moneyItem = location.getWorld().dropItem(location, money);
-                moneyItem.setCustomName(moneyMeta.getDisplayName());
-                moneyItem.setCustomNameVisible(true);
-                moneyItem.setPickupDelay(10);
+                dropMobMoney(location, moneyToDrop);
             }
         }
+    }
+
+    private void dropMobMoney(Location location, double amount)
+    {
+        ItemStack money = new ItemStack(Material.GOLD_INGOT);
+        ItemMeta moneyMeta = money.getItemMeta();
+        moneyMeta.setDisplayName(ChatColor.YELLOW + economy.format(amount));
+        moneyMeta.setLore(Collections.singletonList(String.valueOf(amount)));
+        money.setItemMeta(moneyMeta);
+        Item moneyItem = location.getWorld().dropItem(location, money);
+        moneyItem.setCustomName(moneyMeta.getDisplayName());
+        moneyItem.setCustomNameVisible(true);
+        moneyItem.setPickupDelay(10);
     }
 
     /**
