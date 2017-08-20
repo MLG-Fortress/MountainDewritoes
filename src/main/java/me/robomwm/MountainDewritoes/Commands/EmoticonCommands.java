@@ -21,7 +21,7 @@ public class EmoticonCommands implements CommandExecutor
 
         if (cmd.getName().equalsIgnoreCase("shrug"))
         {
-            player.chat(String.join("", args) + " ¯\\_(ツ)_/¯");
+            player.chat(String.join("", args) + " \u00AF\\_(\u30C4)_/\u00AF"); //¯\_(ツ)_/¯
         }
 
         return true;
