@@ -22,6 +22,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -36,7 +37,7 @@ public class NSA implements Listener
 {
     private static MountainDewritoes instance;
 
-    private static Map<Player, List<String>> transactions = new HashMap<>();
+    private static Map<Player, List<Transaction>> transactions = new HashMap<>();
 
     NSA(MountainDewritoes mountainDewritoes)
     {
@@ -189,9 +190,13 @@ public class NSA implements Listener
             transactions.get(player).remove(0);
         }
 
-        for (String transaction : transactions.get(player))
+        for (Transaction transaction : transactions.get(player))
         {
-            listOfTransactions.append(transaction);
+            String prefix = ChatColor.GREEN + "+";
+            if (transaction.getAmount() < 0)
+                prefix = ChatColor.RED.toString();
+            listOfTransactions.append(prefix + instance.getEconomy().format(transaction.getAmount())
+                    + " " + ChatColor.GRAY + UsefulUtil.formatTime(UsefulUtil.getEpoch() - transaction.getSeconds()));
             listOfTransactions.append("\n");
         }
         return listOfTransactions.toString();
@@ -207,11 +212,28 @@ public class NSA implements Listener
     {
         if (!transactions.containsKey(player))
             transactions.put(player, new ArrayList<>());
-        String prefix = ChatColor.GREEN + "+";
-        if (change < 0)
-            prefix = ChatColor.RED.toString();
-        transactions.get(player).add(prefix + instance.getEconomy().format(change) + " " + ChatColor.GRAY + UsefulUtil.formatTime() + " ago.");
+        transactions.get(player).add(new Transaction(change));
+    }
+}
+
+class Transaction
+{
+    private long time;
+    private double amount;
+
+    Transaction(double amount)
+    {
+        this.time = System.currentTimeMillis();
+        this.amount = amount;
     }
 
+    public double getAmount()
+    {
+        return amount;
+    }
 
+    public long getSeconds()
+    {
+        return time / 1000;
+    }
 }
