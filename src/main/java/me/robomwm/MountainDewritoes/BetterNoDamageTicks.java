@@ -104,7 +104,7 @@ public class BetterNoDamageTicks implements Listener
             case CRAMMING:
             case HOT_FLOOR:
             case SUFFOCATION:
-                ticksToExpire = 4L;
+                ticksToExpire = 8L;
                 break;
             case ENTITY_ATTACK:
             case FALLING_BLOCK:

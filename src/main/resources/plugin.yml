@@ -16,7 +16,7 @@ softdepend:
 - BetterTPA
 - MCJukebox
 loadbefore:
-- ServerListPlus
+- AbsorptionShields
 commands:
   nick:
     aliases: [color]
