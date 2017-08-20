@@ -65,7 +65,7 @@ public class ReverseOsmosis implements Listener
                     }
                 }
             }
-        }.runTaskTimer(plugin, 1L, 10L);
+        }.runTaskTimer(plugin, 1L, 20L);
     }
 
     @EventHandler
