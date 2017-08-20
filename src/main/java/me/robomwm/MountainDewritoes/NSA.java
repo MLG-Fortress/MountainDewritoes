@@ -180,8 +180,8 @@ public class NSA implements Listener
     public static String getTransactions(Player player)
     {
         if (!transactions.containsKey(player))
-            return "No transactions occurred recently.";
-        StringBuilder listOfTransactions = new StringBuilder();
+            return ChatColor.GRAY + "No transactions occurred recently.";
+        StringBuilder listOfTransactions = new StringBuilder("Recent transactions:\n");
 
         //Only store and display last 10 transactions
         while (transactions.get(player).size() > 10)
@@ -210,7 +210,7 @@ public class NSA implements Listener
         String prefix = ChatColor.GREEN + "+";
         if (change < 0)
             prefix = ChatColor.RED.toString();
-        transactions.get(player).add(prefix + instance.getEconomy().format(change) + " " + UsefulUtil.formatTime() + " ago.");
+        transactions.get(player).add(prefix + instance.getEconomy().format(change) + " " + ChatColor.GRAY + UsefulUtil.formatTime() + " ago.");
     }
 
 
