@@ -204,7 +204,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         knownWorlds.add(getServer().getWorld("prison"));
 
         //Utilities
-        new ScoreboardStuff(this, economy);
+        new ScoreboardStuff(this);
         new BukkitRunnable()
         {
             public void run()
