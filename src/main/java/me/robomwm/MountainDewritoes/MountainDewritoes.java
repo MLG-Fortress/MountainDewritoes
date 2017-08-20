@@ -51,6 +51,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
@@ -403,5 +404,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     this.cancel();
             }
         }.runTaskTimer(this, 0L, 10L);
+    }
+
+    /**
+     * Convenience method
+     * @param min
+     * @param max
+     * @return
+     */
+    public int r4nd0m(int min, int max)
+    {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 }
