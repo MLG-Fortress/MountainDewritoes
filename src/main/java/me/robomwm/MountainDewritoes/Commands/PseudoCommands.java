@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created on 8/19/2017.
@@ -13,6 +14,11 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
  */
 public class PseudoCommands implements Listener
 {
+    public PseudoCommands(JavaPlugin plugin)
+    {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
     @EventHandler
     private void processor(PlayerCommandPreprocessEvent event)
     {

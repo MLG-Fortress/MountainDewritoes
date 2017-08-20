@@ -178,7 +178,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new FineSine(this);
         new PrisonIsAConfusingGamemode(this);
         new LodsOfEmone(this);
-        new PseudoCommands();
+        new PseudoCommands(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
