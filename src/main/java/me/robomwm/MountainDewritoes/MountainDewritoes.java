@@ -5,6 +5,7 @@ import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
+import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import me.robomwm.MountainDewritoes.Commands.VoiceCommand;
@@ -177,6 +178,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new FineSine(this);
         new PrisonIsAConfusingGamemode(this);
         new LodsOfEmone(this);
+        new PseudoCommands();
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
