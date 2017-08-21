@@ -232,7 +232,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("mdebug").setExecutor(new DebugCommand());
         getCommand("voice").setExecutor(new VoiceCommand(this));
 
-        EmoticonCommands emoticonCommands = new EmoticonCommands();
+        EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
 
         saveConfig();

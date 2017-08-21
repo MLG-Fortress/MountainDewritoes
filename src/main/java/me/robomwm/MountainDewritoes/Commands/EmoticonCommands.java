@@ -4,6 +4,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created on 8/16/2017.
@@ -12,6 +14,13 @@ import org.bukkit.entity.Player;
  */
 public class EmoticonCommands implements CommandExecutor
 {
+    JavaPlugin instance;
+
+    public EmoticonCommands(JavaPlugin plugin)
+    {
+        instance = plugin;
+    }
+
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!(sender instanceof Player))
@@ -20,9 +29,22 @@ public class EmoticonCommands implements CommandExecutor
 
         if (cmd.getName().equalsIgnoreCase("shrug"))
         {
-            player.chat(String.join("", args) + " \u00AF\\_(\u30C4)_/\u00AF"); //¯\_(ツ)_/¯
+            player.chat(String.join(" ", args) + " \u00AF\\_(\u30C4)_/\u00AF"); //¯\_(ツ)_/¯
         }
 
         return true;
     }
+
+    public void chat(Player player, String message)
+    {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                player.chat(message);
+            }
+        }.runTaskAsynchronously(instance);
+    }
+
 }
