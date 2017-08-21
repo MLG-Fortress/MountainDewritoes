@@ -69,6 +69,7 @@ public class SetExpFix {
 
     //This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
     //Without this people would be able to use exp and then still sell it.
+    @Deprecated
     public static int getTotalExperience(final Player player) {
         int exp = (int) Math.round(getExpAtLevel(player) * player.getExp());
         int currentLevel = player.getLevel();
@@ -83,6 +84,7 @@ public class SetExpFix {
         return exp;
     }
 
+    @Deprecated
     public static int getExpUntilNextLevel(final Player player) {
         int exp = (int) Math.round(getExpAtLevel(player) * player.getExp());
         int nextLevel = player.getLevel();

@@ -34,7 +34,7 @@ public class LodsOfEmone
             case XP_LEVELUP:
                 title.title(ChatColor.YELLOW + "                LEVEL UP!");
                 title.subtitle(ChatColor.WHITE + "                  lv" + level);
-                message.append(ChatColor.AQUA + "Reached level " + level + "!" + ChatColor.DARK_AQUA + "U g0t:\n");
+                message.append(ChatColor.AQUA + ChatColor.BOLD.toString() + "Reached level " + level + "!" + ChatColor.DARK_AQUA + " U g0t:\n");
                 //Heal player
                 player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                 player.removePotionEffect(PotionEffectType.POISON);
