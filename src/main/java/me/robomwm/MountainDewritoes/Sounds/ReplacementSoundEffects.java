@@ -35,6 +35,8 @@ public class ReplacementSoundEffects implements Listener
         switch (event.getCause())
         {
             case FALL:
+                //TODO: handle these
+            case FIRE_TICK:
             case DROWNING:
                 return;
         }
