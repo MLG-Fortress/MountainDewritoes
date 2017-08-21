@@ -57,6 +57,7 @@ public class DeathListener implements Listener
         //    event.setNewLevel(player.getLevel() - 8);
 
         event.setKeepLevel(true);
+        event.setDroppedExp(0);
 
         //Stop all playing sounds, if any.
         player.stopSound("");
