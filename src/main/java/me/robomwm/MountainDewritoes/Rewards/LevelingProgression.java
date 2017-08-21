@@ -74,7 +74,7 @@ public class LevelingProgression implements Listener
         Player player = event.getPlayer();
 
         int nextLevel = player.getLevel() + 1;
-        int nextLevelExp = SetExpFix.getExpUntilNextLevel(player); //Remaining experience required to level up
+        int nextLevelExp = SetExpFix.getExpAtLevel(nextLevel) - (int)player.getExp(); //Remaining experience required to level up
         int expAmount = event.getAmount(); //Current amount of exp from the orb
 
         if (event.getAmount() < nextLevelExp)
