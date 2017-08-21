@@ -65,10 +65,16 @@ public class TipCommand implements CommandExecutor
         randomTips.add("Don't keel dee endermins");
         randomTips.add("Find loot quick mobs r hard");
         randomTips.add("Git sum cool stoof wit slamphun!! Lern how in da " + ChatColor.GOLD + "/sf guide");
+        add("Build and fly a Minecraft-sized airship! &6/help autocraft");
 
         betaTips.add("Try an AbsorptionShield in the chest at spawn!");
         betaTips.add("Wallride like loo-see-oh frum ogrewatch. Hold a feather, jump and hold sneak near a wall");
         betaTips.add("Test the portal gun - just craft a wood shovel");
+    }
+
+    public boolean add(String tip)
+    {
+        return randomTips.add(ChatColor.translateAlternateColorCodes('&', tip));
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
