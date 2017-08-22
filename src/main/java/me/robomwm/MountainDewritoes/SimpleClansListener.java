@@ -198,27 +198,20 @@ public class SimpleClansListener implements Listener
      * Teleports player to clan home via our warmup methods and whatnot
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    void onWantToGoToClanHome(PlayerCommandPreprocessEvent event)
+    public void teleportHome(Player player)
     {
-        String message = event.getMessage().toLowerCase();
-        Player player = event.getPlayer();
-
-        if (message.equals("/clan home") || message.equals("/home"))
+        Clan clan = clanManager.getClanByPlayerUniqueId(player.getUniqueId());
+        if (clan == null)
         {
-            event.setCancelled(true);
-            Clan clan = clanManager.getClanByPlayerUniqueId(event.getPlayer().getUniqueId());
-            if (clan == null)
-            {
-                player.sendMessage(ChatColor.RED + "You are not in a /clan");
-                return;
-            }
-            if (clan.getHomeLocation() == null)
-            {
-                player.sendMessage(ChatColor.RED + "Your clan did not /sethome.");
-                return;
-            }
-            betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
+            player.sendMessage(ChatColor.RED + "You are not in a /clan");
+            return;
         }
+        if (clan.getHomeLocation() == null)
+        {
+            player.sendMessage(ChatColor.RED + "Your clan did not /sethome.");
+            return;
+        }
+        betterTPA.teleportPlayer(player, "da " + clan.getName() + " homebase", clan.getHomeLocation(), true, null);
     }
 
     /**

@@ -1,11 +1,11 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created on 8/19/2017.
@@ -14,9 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class PseudoCommands implements Listener
 {
-    public PseudoCommands(JavaPlugin plugin)
+    MountainDewritoes instance;
+    public PseudoCommands(MountainDewritoes plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        instance = plugin;
     }
 
     @EventHandler
@@ -35,13 +37,28 @@ public class PseudoCommands implements Listener
             case "bal":
             case "balance":
             case "money":
-                event.setCancelled(!balanceHandler(player, command, args));
+                event.setCancelled(balanceHandler(player, command, args));
+            case "home":
+            case "f":
+            case "clan":
+                event.setCancelled(homeHandler(player, command, args));
         }
     }
 
     private boolean balanceHandler(Player player, String command, String[] args)
     {
         player.sendMessage(NSA.getTransactions(player));
+        return false;
+    }
+
+    private boolean homeHandler(Player player, String command, String[] args)
+    {
+        if (command.equalsIgnoreCase("clan") || command.equalsIgnoreCase("f"))
+        {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("home"))
+                return false;
+        }
+        instance.getSimpleClansListener().teleportHome(player);
         return true;
     }
 }

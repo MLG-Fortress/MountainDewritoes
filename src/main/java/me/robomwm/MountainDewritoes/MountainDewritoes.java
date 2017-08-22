@@ -98,13 +98,19 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
-    //Class instances used in onDisable
+    //Class instances used in onDisable/other classes
     private BetterNoDamageTicks betterNoDamageTicks;
     private TitleManager titleManager;
+    private SimpleClansListener simpleClansListener;
 
     public TitleManager getTitleManager()
     {
         return titleManager;
+    }
+
+    public SimpleClansListener getSimpleClansListener()
+    {
+        return simpleClansListener;
     }
 
     public Economy getEconomy()
@@ -172,7 +178,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SleepManagement(this);
 
         new ReverseOsmosis(this);
-        new SimpleClansListener(this, clanManager);
+        simpleClansListener = new SimpleClansListener(this, clanManager);
         new ReplacementSoundEffects(this);
         new Ogrewatch(this);
         betterNoDamageTicks = new BetterNoDamageTicks(this);
