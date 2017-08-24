@@ -38,10 +38,12 @@ public class PseudoCommands implements Listener
             case "balance":
             case "money":
                 event.setCancelled(balanceHandler(player, command, args));
+                break;
             case "home":
             case "f":
             case "clan":
                 event.setCancelled(homeHandler(player, command, args));
+                break;
         }
     }
 
