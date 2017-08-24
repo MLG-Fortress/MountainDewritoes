@@ -197,7 +197,6 @@ public class SimpleClansListener implements Listener
     /**
      * Teleports player to clan home via our warmup methods and whatnot
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void teleportHome(Player player)
     {
         Clan clan = clanManager.getClanByPlayerUniqueId(player.getUniqueId());
