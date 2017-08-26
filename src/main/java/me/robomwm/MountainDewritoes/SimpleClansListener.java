@@ -235,46 +235,46 @@ public class SimpleClansListener implements Listener
         }
     }
 
-    /**
-     * Player can join a clan if they're clan-less
-     * TODO: Don't allow a player to rejoin a clan they were kicked from for w/e reason
-     */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    void onWantToJoinAClan(PlayerCommandPreprocessEvent event)
-    {
-        String invalid = "/clan join <clan tag> - joins a clan.";
-        String message = event.getMessage().toLowerCase();
-        Player player = event.getPlayer();
-
-        if (message.startsWith("/clan join"))
-        {
-            Clan playerclan = clanManager.getClanByPlayerUniqueId(player.getUniqueId());
-            if (playerclan != null)
-                return;
-
-            event.setCancelled(true);
-            String[] args = message.split(" ");
-
-            if (args.length < 3)
-            {
-                player.sendMessage(invalid);
-                return;
-            }
-
-            Clan clan = clanManager.getClan(args[2]);
-            if (clan != null)
-            {
-                clan.addPlayerToClan(clanManager.getCreateClanPlayer(player.getUniqueId()));
-                instance.getServer().broadcastMessage(player.getDisplayName() + " joined " + clan.getName());
-            }
-            else
-            {
-                player.sendMessage(ChatColor.RED + "Invalid clan tag. The clan tag is the letters inside the brackets. Here's the " + ChatColor.GOLD + "/clan list:");
-                player.performCommand("clan list");
-            }
-
-        }
-    }
+//    /**
+//     * Player can join a clan if they're clan-less
+//     * TO DO: Don't allow a player to rejoin a clan they were kicked from for w/e reason
+//     */
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+//    void onWantToJoinAClan(PlayerCommandPreprocessEvent event)
+//    {
+//        String invalid = "/clan join <clan tag> - joins a clan.";
+//        String message = event.getMessage().toLowerCase();
+//        Player player = event.getPlayer();
+//
+//        if (message.startsWith("/clan join"))
+//        {
+//            Clan playerclan = clanManager.getClanByPlayerUniqueId(player.getUniqueId());
+//            if (playerclan != null)
+//                return;
+//
+//            event.setCancelled(true);
+//            String[] args = message.split(" ");
+//
+//            if (args.length < 3)
+//            {
+//                player.sendMessage(invalid);
+//                return;
+//            }
+//
+//            Clan clan = clanManager.getClan(args[2]);
+//            if (clan != null)
+//            {
+//                clan.addPlayerToClan(clanManager.getCreateClanPlayer(player.getUniqueId()));
+//                instance.getServer().broadcastMessage(player.getDisplayName() + " joined " + clan.getName());
+//            }
+//            else
+//            {
+//                player.sendMessage(ChatColor.RED + "Invalid clan tag. The clan tag is the letters inside the brackets. Here's the " + ChatColor.GOLD + "/clan list:");
+//                player.performCommand("clan list");
+//            }
+//
+//        }
+//    }
 
     //Projectiles can pass through allies
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
