@@ -71,7 +71,6 @@ public class PseudoCommands implements Listener
                 instance.getSimpleClansListener().teleportHome(player);
                 return true;
         }
-
         if (args.length < 3)
             return false;
         switch (args[0])
@@ -82,7 +81,7 @@ public class PseudoCommands implements Listener
                     clanName.append(args[i] + " ");
                 clanName.setLength(clanName.length() - 1);
                 //Automatically colors the clan tag and makes it uppercase
-                player.performCommand("clan create " + instance.getSimpleClansListener().getColorCode(player) + ChatColor.stripColor(args[1].toUpperCase()) + " " + clanName.toString());
+                player.performCommand("clan create " + ChatColor.getByChar(instance.getSimpleClansListener().getColorCode(player)) + ChatColor.stripColor(args[1].toUpperCase()) + " " + clanName.toString());
                 return true;
         }
         return false;
