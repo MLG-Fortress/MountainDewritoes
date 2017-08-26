@@ -318,7 +318,7 @@ public class SimpleClansListener implements Listener
         ClanPlayer clanTarget = clanManager.getClanPlayer(target);
         if (clanPlayer == null || clanTarget == null)
             return false;
-        return clanPlayer.getClan() == clanTarget.getClan();
+        return clanPlayer.getClan() == clanTarget.getClan() || clanPlayer.getClan().isAlly(clanTarget.getClan().getTag());
     }
 
 }
