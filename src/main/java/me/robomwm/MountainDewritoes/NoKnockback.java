@@ -65,10 +65,10 @@ public class NoKnockback implements Listener
         if (event.getFinalDamage() > target.getHealth())
             return;
 
-        //We only care about melee and projectile damage - the rest provide negligible or intended knockback
+        //We only care about ~~melee and~~ projectile damage - the rest provide negligible or intended knockback
         switch (event.getCause())
         {
-            case ENTITY_ATTACK:
+            //case ENTITY_ATTACK:
             case PROJECTILE:
             case THORNS:
                 break;
