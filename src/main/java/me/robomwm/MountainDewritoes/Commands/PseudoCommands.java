@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,9 +29,17 @@ public class PseudoCommands implements Listener
         String command = heyo[0].substring(1).toLowerCase();
         String[] args = new String[heyo.length - 1];
         for (int i = 1; i < heyo.length; i++)
-            args[i - 1] = heyo[i];
+            args[i - 1] = heyo[i].toLowerCase();
 
         Player player = event.getPlayer();
+
+        //Aliases
+        switch(command)
+        {
+            case "home":
+                command = "clan home";
+                break;
+        }
 
         switch (command)
         {
@@ -39,10 +48,9 @@ public class PseudoCommands implements Listener
             case "money":
                 event.setCancelled(balanceHandler(player, command, args));
                 break;
-            case "home":
             case "f":
             case "clan":
-                event.setCancelled(homeHandler(player, command, args));
+                event.setCancelled(clanHandler(player, command, args));
                 break;
         }
     }
@@ -53,14 +61,30 @@ public class PseudoCommands implements Listener
         return false;
     }
 
-    private boolean homeHandler(Player player, String command, String[] args)
+    private boolean clanHandler(Player player, String command, String[] args)
     {
-        if (command.equalsIgnoreCase("clan") || command.equalsIgnoreCase("f"))
+        if (args.length < 1)
+            return false;
+        switch (args[0])
         {
-            if (args.length == 0 || !args[0].equalsIgnoreCase("home"))
-                return false;
+            case "home":
+                instance.getSimpleClansListener().teleportHome(player);
+                return true;
         }
-        instance.getSimpleClansListener().teleportHome(player);
-        return true;
+
+        if (args.length < 3)
+            return false;
+        switch (args[0])
+        {
+            case "create":
+                StringBuilder clanName = new StringBuilder();
+                for (int i = 2; i < args.length; i++)
+                    clanName.append(args[i] + " ");
+                clanName.setLength(clanName.length() - 1);
+                //Automatically colors the clan tag and makes it uppercase
+                player.performCommand("clan create " + instance.getSimpleClansListener().getColorCode(player) + ChatColor.stripColor(args[1].toUpperCase()) + " " + clanName.toString());
+                return true;
+        }
+        return false;
     }
 }
