@@ -200,11 +200,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Initialize commonly-used sets
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("spawn"));
-        survivalWorlds.add(getServer().getWorld("WORLD"));
+        survivalWorlds.add(getServer().getWorld("world"));
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
         survivalWorlds.add(getServer().getWorld("cityworld"));
-        knownWorlds.add(getServer().getWorld("WORLD"));
+        knownWorlds.add(getServer().getWorld("world"));
         knownWorlds.add(getServer().getWorld("world_nether"));
         knownWorlds.add(getServer().getWorld("world_the_end"));
         knownWorlds.add(getServer().getWorld("cityworld"));
