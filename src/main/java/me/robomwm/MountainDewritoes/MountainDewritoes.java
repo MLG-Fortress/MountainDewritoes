@@ -186,6 +186,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new PrisonIsAConfusingGamemode(this);
         new LodsOfEmone(this);
         new PseudoCommands(this);
+        new TabList(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
@@ -231,7 +232,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         titleManager = new TitleManager(this);
 
         //Commands
-        getCommand("nick").setExecutor(new NickCommand());
+        //getCommand("nick").setExecutor(new NickCommand());
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
         getCommand("tip").setExecutor(new TipCommand(this));

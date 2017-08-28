@@ -2,6 +2,8 @@ package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import me.robomwm.BetterTPA.BetterTPA;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -49,7 +51,10 @@ public class SimpleClansListener implements Listener
             public void run()
             {
                 for (Player player : instance.getServer().getOnlinePlayers())
+                {
+                    setDisplayName(player);
                     setClanPrefix(player);
+                }
             }
         }.runTaskTimer(instance, 6000L, 1200L);
     }
@@ -58,9 +63,8 @@ public class SimpleClansListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        final String colorCode = getColorCode(event.getPlayer());
         //Set colored display name
-        setDisplayName(event.getPlayer(), colorCode);
+        setDisplayName(event.getPlayer());
         setClanPrefix(event.getPlayer());
     }
 
@@ -84,54 +88,68 @@ public class SimpleClansListener implements Listener
 //    }
 
     //Get a randomized, consistent color code for player
-    public String getColorCode(Player player)
-    {
-        //Get hash code of player's UUID
-        int colorCode = player.getUniqueId().hashCode();
-        //Ensure number is positive
-        colorCode = Math.abs(colorCode);
-
-        //Will make configurable, hence this
-        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
-        //Divide hash code by length of acceptableColors, and use remainder
-        //to determine which index to use (like a hashtable/map/whatever)
-        colorCode = (colorCode % acceptableColors.length);
-        String stringColorCode = acceptableColors[colorCode];
-
-        return stringColorCode;
-    }
+//    public String getColorCode(Player player)
+//    {
+//        //Get hash code of player's UUID
+//        int colorCode = player.getUniqueId().hashCode();
+//        //Ensure number is positive
+//        colorCode = Math.abs(colorCode);
+//
+//        //Will make configurable, hence this
+//        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
+//        //Divide hash code by length of acceptableColors, and use remainder
+//        //to determine which index to use (like a hashtable/map/whatever)
+//        colorCode = (colorCode % acceptableColors.length);
+//        String stringColorCode = acceptableColors[colorCode];
+//
+//        return stringColorCode;
+//    }
 
     //Delayed set playerListName (Primarily for onJoin, since Essentials sets displayName late)
     //Automatically adds appropriate spacing
-    public void setListName(final Player player, final String prefix)
+//    public void setListName(final Player player, final String prefix)
+//    {
+//        scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+//        {
+//            public void run()
+//            {
+//                if (!player.isOnline())
+//                    return;
+//                if (prefix.isEmpty())
+//                    player.setPlayerListName(player.getDisplayName());
+//                else
+//                    player.setPlayerListName(prefix + " " + player.getDisplayName());
+//            }
+//        }, 20L);
+//    }
+
+    public void setDisplayName(Player player)
     {
-        scheduler.scheduleSyncDelayedTask(instance, new Runnable()
+        if (clanManager.getClanPlayer(player) == null)
         {
-            public void run()
-            {
-                if (!player.isOnline())
-                    return;
-                if (prefix.isEmpty())
-                    player.setPlayerListName(player.getDisplayName());
-                else
-                    player.setPlayerListName(prefix + " " + player.getDisplayName());
-            }
-        }, 20L);
+            player.setDisplayName(player.getName());
+            return;
+        }
+
+        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()));
     }
+
 
     //Delayed setDisplayName
     //Now kinda useless, and not delayed.
-    public void setDisplayName(final Player player1, final String colorCode)
-    {
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (!player1.hasPlayedBefore() || !ChatColor.stripColor(player1.getDisplayName()).contains(player1.getName()))
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "enick " + player1.getName() + " &" + colorCode + player1.getName());
-            }
-        }.runTaskLater(instance, 5L);
+//    public void setDisplayName(final Player player1, final String colorCode)
+//    {
+//        new BukkitRunnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                if (!player1.hasPlayedBefore() || !ChatColor.stripColor(player1.getDisplayName()).contains(player1.getName()))
+//                {
+//                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "enick " + player1.getName() + " &" + colorCode + player1.getName());
+//                }
+//            }
+//        }.runTaskLater(instance, 5L);
 
         //[16:34:22] RoboMWM: Does EssX constantly set or change the displayName? I'm able to change the displayName (I use it to setPlayerListName) but chat messages revert the color to white
         //[16:50:46] RoboMWM: Alright, so either I hook into Essentials and grab the nickname from there or implement my own sort of /nick
@@ -149,26 +167,24 @@ public class SimpleClansListener implements Listener
 //
 //            }
 //        }, 20L); //Ensure Essentials sets displayName before we set displayName (Essentials sets it later)
-    }
+//    }
 
     //Sets a player's appropriate chat color and prefix.
     public void setClanPrefix(final Player player)
     {
-        final String colorCode = getColorCode(player);
-
         ClanPlayer clanPlayer = clanManager.getClanPlayer(player);
         if (clanPlayer == null)
         {
             //If not part of a clan, set colored name and do no more
-            setListName(player, "");
+            player.setPlayerListName(player.getDisplayName());
             return;
         }
 
-        final String tag = (clanPlayer.getClan().getColorTag());
+        final String tag = clanPlayer.getClan().getColorTag();
 
         //Feature: set prefix in tablist
         //compatible with other prefix/suffix plugins since we just set PlayerListName
-        setListName(player, tag);
+        player.setPlayerListName(tag + " " + player.getDisplayName());
 
         //Feature: set prefix in nameplate
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()

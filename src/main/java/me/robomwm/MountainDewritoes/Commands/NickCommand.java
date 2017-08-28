@@ -30,7 +30,7 @@ public class NickCommand implements CommandExecutor
             builder.append(ChatColor.valueOf(ok.toUpperCase()));
             builder.append(ok);
             builder.append(", ");
-            if (i++ > 3)
+            if (++i % 3 == 0)
                 builder.append("\n");
         }
         acceptableColors = builder.toString().substring(0, builder.length() - 2);

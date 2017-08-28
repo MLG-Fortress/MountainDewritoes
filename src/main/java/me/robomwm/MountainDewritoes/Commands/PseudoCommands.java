@@ -81,9 +81,27 @@ public class PseudoCommands implements Listener
                     clanName.append(args[i] + " ");
                 clanName.setLength(clanName.length() - 1);
                 //Automatically colors the clan tag and makes it uppercase
-                player.performCommand("clan create " + ChatColor.getByChar(instance.getSimpleClansListener().getColorCode(player)) + ChatColor.stripColor(args[1].toUpperCase()) + " " + clanName.toString());
+                String tag = args[1].toUpperCase().replace("&", "");
+                player.performCommand("clan create " + ChatColor.getByChar(getColorCode(player)) + tag + " " + clanName.toString());
                 return true;
         }
         return false;
+    }
+
+    public String getColorCode(Player player)
+    {
+        //Get hash code of player's UUID
+        int colorCode = player.getUniqueId().hashCode();
+        //Ensure number is positive
+        colorCode = Math.abs(colorCode);
+
+        //Will make configurable, hence this
+        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
+        //Divide hash code by length of acceptableColors, and use remainder
+        //to determine which index to use (like a hashtable/map/whatever)
+        colorCode = (colorCode % acceptableColors.length);
+        String stringColorCode = acceptableColors[colorCode];
+
+        return stringColorCode;
     }
 }
