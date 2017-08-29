@@ -52,6 +52,8 @@ public class PseudoCommands implements Listener
             case "clan":
                 event.setCancelled(clanHandler(player, command, args));
                 break;
+            case "scs":
+                event.setCancelled(showcaseShopHandler(player, command, args));
         }
     }
 
@@ -84,6 +86,20 @@ public class PseudoCommands implements Listener
                 String tag = args[1].toUpperCase().replaceAll("&", "");
                 player.performCommand("clan create " + ChatColor.getByChar(getColorCode(player)) + tag + " " + clanName.toString());
                 return true;
+        }
+        return false;
+    }
+
+    private boolean showcaseShopHandler(Player player, String command, String[] args)
+    {
+        if (args.length == 0 || args[0].equalsIgnoreCase("help"))
+        {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&6/scs sell {item/this} {amount} {price} &f- Creates a shop to sell an item." +
+                            "\n&6/scs buy {item/this} {amount} {price} &f- Creates a shop to buy an item." +
+                            "\n&6/scs remove &f- Removes a shop" +
+                            "\n&eTip: hover over the shop description in chat to view the item's lore and enchantments."));
+            return true;
         }
         return false;
     }
