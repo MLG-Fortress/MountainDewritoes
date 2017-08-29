@@ -187,6 +187,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new LodsOfEmone(this);
         new PseudoCommands(this);
         new TabList(this);
+        new TheMidnightPortalToAnywhere(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
@@ -204,6 +205,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
         survivalWorlds.add(getServer().getWorld("cityworld"));
+        survivalWorlds.add(getServer().getWorld("cityworld_nether"));
         knownWorlds.add(getServer().getWorld("world"));
         knownWorlds.add(getServer().getWorld("world_nether"));
         knownWorlds.add(getServer().getWorld("world_the_end"));
