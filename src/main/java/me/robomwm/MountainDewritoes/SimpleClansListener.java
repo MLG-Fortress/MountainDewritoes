@@ -140,7 +140,7 @@ public class SimpleClansListener implements Listener
 
         if (clanManager.getClanPlayer(player) == null)
         {
-            player.setDisplayName(prefix + player.getName() + ChatColor.RESET);
+            player.setDisplayName(ChatColor.GRAY + prefix + player.getName() + ChatColor.RESET);
             return;
         }
 
