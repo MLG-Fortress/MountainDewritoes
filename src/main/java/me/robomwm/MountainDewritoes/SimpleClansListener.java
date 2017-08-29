@@ -136,13 +136,15 @@ public class SimpleClansListener implements Listener
 
     public void setDisplayName(Player player)
     {
+        String prefix = ChatColor.translateAlternateColorCodes('&', chat.getPlayerPrefix(player));
+
         if (clanManager.getClanPlayer(player) == null)
         {
-            player.setDisplayName(chat.getPlayerPrefix(player) + player.getName());
+            player.setDisplayName(prefix + player.getName());
             return;
         }
 
-        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()) + chat.getPlayerPrefix(player) + player.getName());
+        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()) + prefix + player.getName());
     }
 
 
