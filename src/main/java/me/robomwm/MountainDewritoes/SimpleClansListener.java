@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import me.robomwm.BetterTPA.BetterTPA;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.milkbowl.vault.chat.Chat;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -19,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
@@ -36,7 +38,8 @@ public class SimpleClansListener implements Listener
     public static ClanManager clanManager; //yes, I am lazy
     BukkitScheduler scheduler = Bukkit.getScheduler();
     private MountainDewritoes instance;
-    BetterTPA betterTPA;
+    private BetterTPA betterTPA;
+    private Chat chat;
 
     public SimpleClansListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
@@ -45,6 +48,7 @@ public class SimpleClansListener implements Listener
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "clan globalff allow");
         instance.registerListener(this);
+        setupChat();
         new BukkitRunnable()
         {
             @Override
@@ -57,6 +61,13 @@ public class SimpleClansListener implements Listener
                 }
             }
         }.runTaskTimer(instance, 6000L, 1200L);
+    }
+
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> rsp = instance.getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
     }
 
     //Set colors and prefix onJoin
@@ -127,11 +138,11 @@ public class SimpleClansListener implements Listener
     {
         if (clanManager.getClanPlayer(player) == null)
         {
-            player.setDisplayName(player.getName());
+            player.setDisplayName(chat.getPlayerPrefix(player) + player.getName());
             return;
         }
 
-        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()));
+        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()) + chat.getPlayerPrefix(player) + player.getName());
     }
 
 
@@ -176,7 +187,7 @@ public class SimpleClansListener implements Listener
         if (clanPlayer == null)
         {
             //If not part of a clan, set colored name and do no more
-            player.setPlayerListName(player.getDisplayName());
+            player.setPlayerListName(ChatColor.RESET + player.getDisplayName());
             return;
         }
 

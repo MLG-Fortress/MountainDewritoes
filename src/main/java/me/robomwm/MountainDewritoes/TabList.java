@@ -23,7 +23,7 @@ public class TabList implements Listener
     private void onJoin(PlayerJoinEvent event)
     {
         event.getPlayer().setPlayerListHeaderFooter(
-                TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&cM&eL&dG &bFortress")),
+                TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&cM&fL&9G &bFortress")),
                 TextComponent.fromLegacyText(ChatColor.AQUA + "IP: MLGFORT.US.TO"));
     }
 }
