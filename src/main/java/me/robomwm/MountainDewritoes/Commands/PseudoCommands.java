@@ -81,7 +81,7 @@ public class PseudoCommands implements Listener
                     clanName.append(args[i] + " ");
                 clanName.setLength(clanName.length() - 1);
                 //Automatically colors the clan tag and makes it uppercase
-                String tag = args[1].toUpperCase().replace("&", "");
+                String tag = args[1].toUpperCase().replaceAll("&", "");
                 player.performCommand("clan create " + ChatColor.getByChar(getColorCode(player)) + tag + " " + clanName.toString());
                 return true;
         }
