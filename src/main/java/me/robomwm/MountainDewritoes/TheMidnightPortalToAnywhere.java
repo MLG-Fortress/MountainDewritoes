@@ -124,7 +124,7 @@ public class TheMidnightPortalToAnywhere implements Listener
         if (!enabledWorlds.contains(chunk.getWorld()))
             return null;
 
-        String chunkId = String.valueOf(chunk.getX()) + chunk.getZ();
+        String chunkId = String.valueOf(chunk.getX()) + "," + chunk.getZ();
 
         if (storedPortals.getConfigurationSection(chunk.getWorld().getName()).contains(chunkId))
             return (Location)storedPortals.getConfigurationSection(chunk.getWorld().getName()).get(chunkId);
@@ -162,8 +162,8 @@ public class TheMidnightPortalToAnywhere implements Listener
         //Save linked portal locations
         Location toLocation = new Location(world, x, y, z);
         storedPortals.getConfigurationSection(chunk.getWorld().getName()).set(chunkId, toLocation);
-        chunk = location.getChunk();
-        chunkId = String.valueOf(chunk.getX()) + chunk.getZ();
+        chunk = toLocation.getChunk();
+        chunkId = String.valueOf(chunk.getX()) + "," + chunk.getZ();
         storedPortals.getConfigurationSection(chunk.getWorld().getName()).set(chunkId, location);
         saveStoredPortals();
 
