@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 8/29/2017.
@@ -122,12 +123,13 @@ public class TheMidnightPortalToAnywhere implements Listener
         Chunk chunk = location.getChunk();
         if (!enabledWorlds.contains(chunk.getWorld()))
             return null;
-        String seed = String.valueOf(chunk.getX()) + chunk.getZ();
 
-        if (storedPortals.getConfigurationSection(chunk.getWorld().getName()).contains(seed))
-            return (Location)storedPortals.getConfigurationSection(chunk.getWorld().getName()).get(seed);
+        String chunkId = String.valueOf(chunk.getX()) + chunk.getZ();
 
-        Random random = new Random(Long.valueOf(seed));
+        if (storedPortals.getConfigurationSection(chunk.getWorld().getName()).contains(chunkId))
+            return (Location)storedPortals.getConfigurationSection(chunk.getWorld().getName()).get(chunkId);
+
+        Random random = ThreadLocalRandom.current(); //Turns out since I'm storing generated links anyways, there's no need to seed the random object... oh well
         World world = enabledWorlds.get(random.nextInt(enabledWorlds.size()));
 
         //Find the min and max block locations within the worldborder to use in our random retriever thingy
@@ -159,10 +161,10 @@ public class TheMidnightPortalToAnywhere implements Listener
 
         //Save linked portal locations
         Location toLocation = new Location(world, x, y, z);
-        storedPortals.getConfigurationSection(chunk.getWorld().getName()).set(seed, toLocation);
+        storedPortals.getConfigurationSection(chunk.getWorld().getName()).set(chunkId, toLocation);
         chunk = location.getChunk();
-        seed = String.valueOf(chunk.getX()) + chunk.getZ();
-        storedPortals.getConfigurationSection(chunk.getWorld().getName()).set(seed, location);
+        chunkId = String.valueOf(chunk.getX()) + chunk.getZ();
+        storedPortals.getConfigurationSection(chunk.getWorld().getName()).set(chunkId, location);
         saveStoredPortals();
 
         return toLocation;
