@@ -201,11 +201,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Initialize commonly-used sets
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("spawn"));
+        safeWorlds.add(getServer().getWorld("prison"));
         survivalWorlds.add(getServer().getWorld("world"));
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
         survivalWorlds.add(getServer().getWorld("cityworld"));
         survivalWorlds.add(getServer().getWorld("cityworld_nether"));
+        survivalWorlds.add(getServer().getWorld("maxiworld"));
+        survivalWorlds.add(getServer().getWorld("wellworld"));
         knownWorlds.add(getServer().getWorld("world"));
         knownWorlds.add(getServer().getWorld("world_nether"));
         knownWorlds.add(getServer().getWorld("world_the_end"));
@@ -214,6 +217,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         knownWorlds.add(getServer().getWorld("spawn"));
         knownWorlds.add(getServer().getWorld("mall"));
         knownWorlds.add(getServer().getWorld("prison"));
+        knownWorlds.add(getServer().getWorld("maxiworld"));
+        knownWorlds.add(getServer().getWorld("wellworld"));
 
         //Utilities
         new ScoreboardStuff(this);

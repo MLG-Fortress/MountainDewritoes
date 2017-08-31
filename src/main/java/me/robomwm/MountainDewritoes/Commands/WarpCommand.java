@@ -9,8 +9,11 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,25 +24,81 @@ import java.util.Map;
  */
 public class WarpCommand implements CommandExecutor
 {
-    MountainDewritoes instance;
-    BetterTPA betterTPA;
-    Map<String, Location> warps = new HashMap<>();
+    private MountainDewritoes instance;
+    private BetterTPA betterTPA;
+    private Map<String, Location> warps = new HashMap<>();
+    private YamlConfiguration storedWarps;
 
-    public WarpCommand(MountainDewritoes mountainDewritoes)
+    public WarpCommand(MountainDewritoes plugin)
     {
-        instance = mountainDewritoes;
+        instance = plugin;
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
-        addWarp("spawn", "spawn", -389D, 5D, -124D, 180.344f, -18.881f);
-        addWarp("mall", "mall", 2.488, 5, -7.305, 0f, 0f);
-        addWarp("prison", "prison", -970, 62, 1591, 270f, 6f);
-        addWarp("jail", "minigames", -523D, 58.5D, -36D, 88.951f, 26.7f);
+        boolean isNew = false;
+
+        File storageFile = new File(plugin.getDataFolder(), "warps.yml");
+        if (!storageFile.exists())
+        {
+            try
+            {
+                storageFile.createNewFile();
+                isNew = true;
+            }
+            catch (IOException e)
+            {
+                plugin.getLogger().severe("Could not create " + storageFile.getName());
+                e.printStackTrace();
+                return;
+            }
+        }
+        storedWarps = YamlConfiguration.loadConfiguration(storageFile);
+
+        for (String warpName : storedWarps.getKeys(false))
+        {
+            warps.put(warpName, (Location)storedWarps.get(warpName));
+        }
+
+        if (isNew)
+        {
+            addWarp("spawn", "spawn", -389D, 5D, -124D, 180.344f, -18.881f);
+            addWarp("mall", "mall", 2.488, 5, -7.305, 0f, 0f);
+            addWarp("prison", "prison", -970, 62, 1591, 270f, 6f);
+            addWarp("jail", "minigames", -523D, 58.5D, -36D, 88.951f, 26.7f);
+        }
+    }
+
+    private void saveWarps()
+    {
+        File storageFile = new File(instance.getDataFolder(), "warps.yml");
+        if (!storageFile.exists())
+        {
+            try
+            {
+                storedWarps.save(storageFile);
+            }
+            catch (IOException e)
+            {
+                instance.getLogger().severe("Could not save " + storageFile.getName());
+                e.printStackTrace();
+                return;
+            }
+        }
     }
 
     private void addWarp(String warp, String worldName, double x, double y, double z, float yaw, float pitch)
     {
         if (instance.getServer().getWorld(worldName) == null)
             return;
-        warps.put(warp, new Location(instance.getServer().getWorld(worldName), x, y, z, yaw, pitch));
+        Location location = new Location(instance.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+        warps.put(warp, location);
+        storedWarps.set(warp, location);
+        saveWarps();
+    }
+
+    private void addWarp(String warp, Location location)
+    {
+        warps.put(warp, location);
+        storedWarps.set(warp, location);
+        saveWarps();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -52,6 +111,13 @@ public class WarpCommand implements CommandExecutor
         if (args.length < 1)
         {
             sendWarps(player);
+            return true;
+        }
+
+        if (player.isOp() && args[0].equalsIgnoreCase("create"))
+        {
+            addWarp(args[1].toLowerCase(), player.getLocation());
+            player.sendMessage("Warp created");
             return true;
         }
 
