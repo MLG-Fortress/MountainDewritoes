@@ -69,18 +69,15 @@ public class WarpCommand implements CommandExecutor
     private void saveWarps()
     {
         File storageFile = new File(instance.getDataFolder(), "warps.yml");
-        if (!storageFile.exists())
+        try
         {
-            try
-            {
-                storedWarps.save(storageFile);
-            }
-            catch (IOException e)
-            {
-                instance.getLogger().severe("Could not save " + storageFile.getName());
-                e.printStackTrace();
-                return;
-            }
+            storedWarps.save(storageFile);
+        }
+        catch (IOException e)
+        {
+            instance.getLogger().severe("Could not save " + storageFile.getName());
+            e.printStackTrace();
+            return;
         }
     }
 
