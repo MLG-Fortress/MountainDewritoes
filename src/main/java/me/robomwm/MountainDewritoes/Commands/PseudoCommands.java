@@ -25,21 +25,22 @@ public class PseudoCommands implements Listener
     @EventHandler
     private void processor(PlayerCommandPreprocessEvent event)
     {
-        String[] heyo = event.getMessage().split(" ");
+        String message = event.getMessage();
+        //Aliases
+        switch(message)
+        {
+            case "home":
+                message = "clan home";
+                break;
+        }
+        
+        String[] heyo = message.split(" ");
         String command = heyo[0].substring(1).toLowerCase();
         String[] args = new String[heyo.length - 1];
         for (int i = 1; i < heyo.length; i++)
             args[i - 1] = heyo[i].toLowerCase();
 
         Player player = event.getPlayer();
-
-        //Aliases
-        switch(command)
-        {
-            case "home":
-                command = "clan home";
-                break;
-        }
 
         switch (command)
         {
@@ -95,6 +96,7 @@ public class PseudoCommands implements Listener
         if (args.length == 0 || args[0].equalsIgnoreCase("help"))
         {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&e--------------/scs----------------\n" +
                     "&6/scs sell {item/this} {amount} {price} &f- Creates a shop to sell an item." +
                             "\n&6/scs buy {item/this} {amount} {price} &f- Creates a shop to buy an item." +
                             "\n&6/scs remove &f- Removes a shop" +
