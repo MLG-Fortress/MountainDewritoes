@@ -29,8 +29,8 @@ public class PseudoCommands implements Listener
         //Aliases
         switch(message)
         {
-            case "home":
-                message = "clan home";
+            case "/home":
+                message = "/clan home";
                 break;
         }
 
