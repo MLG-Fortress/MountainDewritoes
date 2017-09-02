@@ -169,7 +169,7 @@ public class LevelingProgression implements Listener
             ItemMeta itemMeta = itemToEnchant.getItemMeta();
             itemMeta.setLore(enchantBook.getItemMeta().getLore());
             itemToEnchant.setItemMeta(itemMeta);
-            event.setCursor(event.getCurrentItem());
+            event.setCursor(itemToEnchant);
             event.getClickedInventory().clear();
             return;
         }
