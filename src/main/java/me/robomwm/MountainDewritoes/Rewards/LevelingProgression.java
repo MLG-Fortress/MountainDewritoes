@@ -7,14 +7,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created on 8/14/2017.
@@ -23,8 +28,9 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class LevelingProgression implements Listener
 {
-    LodsOfEmone lodsOfEmone;
-    JavaPlugin instance;
+    private LodsOfEmone lodsOfEmone;
+    private JavaPlugin instance;
+    private Map<Player, Integer> playerLevel = new HashMap<>();
 
     public LevelingProgression(JavaPlugin plugin, LodsOfEmone lodsOfEmone)
     {
@@ -53,6 +59,13 @@ public class LevelingProgression implements Listener
 
         event.setExpLevelCost(0);
     }
+
+    @EventHandler
+    private void onJoin(PlayerJoinEvent event)
+    {
+        playerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
+    }
+
     @EventHandler(ignoreCancelled = true)
     private void enchantingIsNo(InventoryOpenEvent event)
     {
@@ -84,13 +97,19 @@ public class LevelingProgression implements Listener
             @Override
             public void run()
             {
-                while (nextLevel <= player.getLevel())
+                playerLevel.put(player, player.getLevel());
+
+                while (nextLevel <= playerLevel.get(player))
                 {
                     lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP);
                     nextLevel++;
                 }
             }
         }.runTask(instance);
+
+        //[11:42:40] RoboMWM: so it seems that xp orbs can be more precise values than ints
+        //[11:43:14] RoboMWM: yet we're only given an int from the API? Did xp used to be an int, and now it stays that way for compatibility?
+        //[11:43:49] RoboMWM: https://i.imgur.com/QxAMJ4H.png
 //        int nextLevelExp = SetExpFix.getExpToLevel(nextLevel) - player.getTotalExperience(); //Remaining experience required to level up
 //        int expAmount = event.getAmount(); //Current amount of exp from the orb
 //
@@ -104,5 +123,23 @@ public class LevelingProgression implements Listener
 //            expAmount -= nextLevelExp; //Subtract amount of xp remaining from the orb (we "spent" it on leveling up)
 //            nextLevelExp += SetExpFix.getExpAtLevel(++nextLevel); //Calculate the xp needed to level up to the next level (that's a lot of levels)
 //        }
+    }
+
+    //Allow anvil use (setting enchantment cost to 0 causes the client not to not try to enchant anything
+    @EventHandler(ignoreCancelled = true)
+    private void forceEnchant(InventoryClickEvent event)
+    {
+        if (event.getSlotType() != InventoryType.SlotType.RESULT || event.getClickedInventory().getType() != InventoryType.ANVIL)
+            return;
+
+        //don't accidentally delete a held item
+        if (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
+            return;
+
+        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+            return;
+
+        event.setCursor(event.getCurrentItem());
+        event.getClickedInventory().clear();
     }
 }
