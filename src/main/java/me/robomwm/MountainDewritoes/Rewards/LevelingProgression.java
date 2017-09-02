@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created on 8/14/2017.
@@ -23,9 +24,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class LevelingProgression implements Listener
 {
     LodsOfEmone lodsOfEmone;
+    JavaPlugin instance;
 
     public LevelingProgression(JavaPlugin plugin, LodsOfEmone lodsOfEmone)
     {
+        this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.lodsOfEmone = lodsOfEmone;
     }
@@ -73,19 +76,33 @@ public class LevelingProgression implements Listener
             return;
         Player player = event.getPlayer();
 
-        int nextLevel = player.getLevel() + 1;
-        int nextLevelExp = SetExpFix.getExpToLevel(nextLevel) - player.getTotalExperience(); //Remaining experience required to level up
-        int expAmount = event.getAmount(); //Current amount of exp from the orb
+        final int finalNextLevel = player.getLevel() + 1;
 
-        if (expAmount < nextLevelExp)
-            return;
-
-        //If the xp amount is enough to level up,
-        while (expAmount >= nextLevelExp)
+        new BukkitRunnable()
         {
-            lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP); //Reward player for leveling up
-            expAmount -= nextLevelExp; //Subtract amount of xp remaining from the orb (we "spent" it on leveling up)
-            nextLevelExp += SetExpFix.getExpAtLevel(++nextLevel); //Calculate the xp needed to level up to the next level (that's a lot of levels)
-        }
+            int nextLevel = finalNextLevel;
+            @Override
+            public void run()
+            {
+                while (nextLevel <= player.getLevel())
+                {
+                    lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP);
+                    nextLevel++;
+                }
+            }
+        }.runTask(instance);
+//        int nextLevelExp = SetExpFix.getExpToLevel(nextLevel) - player.getTotalExperience(); //Remaining experience required to level up
+//        int expAmount = event.getAmount(); //Current amount of exp from the orb
+//
+//        if (expAmount < nextLevelExp)
+//            return;
+//
+//        //If the xp amount is enough to level up,
+//        while (expAmount >= nextLevelExp)
+//        {
+//            lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP); //Reward player for leveling up
+//            expAmount -= nextLevelExp; //Subtract amount of xp remaining from the orb (we "spent" it on leveling up)
+//            nextLevelExp += SetExpFix.getExpAtLevel(++nextLevel); //Calculate the xp needed to level up to the next level (that's a lot of levels)
+//        }
     }
 }
