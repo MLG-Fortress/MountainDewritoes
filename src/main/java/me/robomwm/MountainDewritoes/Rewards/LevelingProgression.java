@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes.Rewards;
 import me.robomwm.MountainDewritoes.Commands.SetExpFix;
 import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,10 +16,13 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -136,8 +140,35 @@ public class LevelingProgression implements Listener
         if (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
             return;
 
+        //If nothing in results, first check if it's because of a magicloot enchantment book
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+        {
+            List<ItemStack> contents = Arrays.asList(event.getInventory().getContents());
+            ItemStack enchantBook = null;
+            ItemStack itemToEnchant = null;
+            for (ItemStack itemStack : event.getInventory().getContents())
+            {
+                Material type = itemStack.getType();
+                if (type.isBlock())
+                    return;
+                if (type == Material.ENCHANTED_BOOK)
+                    enchantBook = itemStack;
+                else
+                    itemToEnchant = itemStack;
+            }
+
+            if (itemToEnchant == null || enchantBook == null)
+                return;
+
+            Map<Enchantment, Integer> enchantments = enchantBook.getEnchantments();
+            for (Enchantment enchantment : enchantments.keySet())
+            {
+                itemToEnchant.addUnsafeEnchantment(enchantment, enchantments.get(enchantment));
+            }
+            event.setCursor(event.getCurrentItem());
+            event.getClickedInventory().clear();
             return;
+        }
 
         event.setCursor(event.getCurrentItem());
         event.getClickedInventory().clear();
