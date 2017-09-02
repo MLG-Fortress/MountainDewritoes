@@ -82,7 +82,9 @@ public class LevelingProgression implements Listener
     private void anvil(PrepareAnvilEvent event)
     {
         AnvilInventory anvilInventory = event.getInventory();
-        //int initialCost = anvilInventory.getRepairCost();
+        ItemStack magicLootItem = magicLootEnchant(event.getInventory().getContents());
+        if (magicLootItem != null)
+            event.setResult(magicLootItem);
         anvilInventory.setRepairCost(0);
     }
 
@@ -142,7 +144,7 @@ public class LevelingProgression implements Listener
             return;
 
         //first check if it's because of a magicloot enchantment book (only some or no enchants will be applied since they aren't "safe")
-        ItemStack magicLootEnchant = magicLootEnchant(event);
+        ItemStack magicLootEnchant = magicLootEnchant(event.getClickedInventory().getContents());
         if (magicLootEnchant != null)
         {
             event.setCursor(magicLootEnchant);
@@ -159,12 +161,11 @@ public class LevelingProgression implements Listener
     }
 
 
-    private ItemStack magicLootEnchant(InventoryClickEvent event)
+    private ItemStack magicLootEnchant(ItemStack[] contents)
     {
-        List<ItemStack> contents = Arrays.asList(event.getInventory().getContents());
         ItemStack enchantBook = null;
         ItemStack itemToEnchant = null;
-        for (ItemStack itemStack : event.getInventory().getContents())
+        for (ItemStack itemStack : contents)
         {
             Material type = itemStack.getType();
             if (type.isBlock())
