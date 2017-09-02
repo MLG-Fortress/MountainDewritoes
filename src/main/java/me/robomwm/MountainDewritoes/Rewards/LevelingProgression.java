@@ -141,40 +141,55 @@ public class LevelingProgression implements Listener
         if (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
             return;
 
-        //If nothing in results, first check if it's because of a magicloot enchantment book
-        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+        //first check if it's because of a magicloot enchantment book (only some or no enchants will be applied since they aren't "safe"
+        ItemStack magicLootEnchant = magicLootEnchant(event);
+        if (magicLootEnchant != null)
         {
-            List<ItemStack> contents = Arrays.asList(event.getInventory().getContents());
-            ItemStack enchantBook = null;
-            ItemStack itemToEnchant = null;
-            for (ItemStack itemStack : event.getInventory().getContents())
-            {
-                Material type = itemStack.getType();
-                if (type.isBlock())
-                    return;
-                if (type == Material.ENCHANTED_BOOK)
-                    enchantBook = itemStack;
-                else
-                    itemToEnchant = itemStack;
-            }
-
-            if (itemToEnchant == null || enchantBook == null)
-                return;
-
-            Map<Enchantment, Integer> enchantments = enchantBook.getEnchantments();
-            for (Enchantment enchantment : enchantments.keySet())
-            {
-                itemToEnchant.addUnsafeEnchantment(enchantment, enchantments.get(enchantment));
-            }
-            ItemMeta itemMeta = itemToEnchant.getItemMeta();
-            itemMeta.setLore(enchantBook.getItemMeta().getLore());
-            itemToEnchant.setItemMeta(itemMeta);
-            event.setCursor(itemToEnchant);
+            event.setCursor(magicLootEnchant);
             event.getClickedInventory().clear();
             return;
         }
 
+        //nothing in results
+        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+            return;
+
         event.setCursor(event.getCurrentItem());
         event.getClickedInventory().clear();
+    }
+
+
+    private ItemStack magicLootEnchant(InventoryClickEvent event)
+    {
+        List<ItemStack> contents = Arrays.asList(event.getInventory().getContents());
+        ItemStack enchantBook = null;
+        ItemStack itemToEnchant = null;
+        for (ItemStack itemStack : event.getInventory().getContents())
+        {
+            Material type = itemStack.getType();
+            if (type.isBlock())
+                return null;
+            if (type == Material.ENCHANTED_BOOK)
+                enchantBook = itemStack;
+            else
+                itemToEnchant = itemStack;
+        }
+
+        if (itemToEnchant == null || enchantBook == null)
+            return null;
+
+        //Not a MagicLoot enchant book
+        if (!enchantBook.getItemMeta().hasDisplayName())
+            return null;
+
+        Map<Enchantment, Integer> enchantments = enchantBook.getEnchantments();
+        for (Enchantment enchantment : enchantments.keySet())
+        {
+            itemToEnchant.addUnsafeEnchantment(enchantment, enchantments.get(enchantment));
+        }
+        ItemMeta itemMeta = itemToEnchant.getItemMeta();
+        itemMeta.setLore(enchantBook.getItemMeta().getLore());
+        itemToEnchant.setItemMeta(itemMeta);
+        return itemToEnchant;
     }
 }
