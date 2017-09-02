@@ -26,7 +26,7 @@ public class SleepManagement implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
-        WORLD = instance.getServer().getWorld("WORLD");
+        WORLD = instance.getServer().getWorld("cityworld");
         for (World world : plugin.getServer().getWorlds())
         {
             if (world.getGameRuleValue("doDaylightCycle").equals("false"))
@@ -70,7 +70,7 @@ public class SleepManagement implements Listener
             public void run()
             {
                 if (player.isSleeping())
-                    player.eject();
+                    player.damage(0D);
             }
         }.runTaskLater(instance, 80L);
     }

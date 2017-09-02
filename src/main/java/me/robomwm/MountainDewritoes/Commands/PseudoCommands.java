@@ -33,7 +33,7 @@ public class PseudoCommands implements Listener
                 message = "clan home";
                 break;
         }
-        
+
         String[] heyo = message.split(" ");
         String command = heyo[0].substring(1).toLowerCase();
         String[] args = new String[heyo.length - 1];
