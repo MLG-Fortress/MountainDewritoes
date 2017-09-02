@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -165,6 +166,9 @@ public class LevelingProgression implements Listener
             {
                 itemToEnchant.addUnsafeEnchantment(enchantment, enchantments.get(enchantment));
             }
+            ItemMeta itemMeta = itemToEnchant.getItemMeta();
+            itemMeta.setLore(enchantBook.getItemMeta().getLore());
+            itemToEnchant.setItemMeta(itemMeta);
             event.setCursor(event.getCurrentItem());
             event.getClickedInventory().clear();
             return;
