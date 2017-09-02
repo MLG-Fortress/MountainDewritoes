@@ -141,7 +141,7 @@ public class LevelingProgression implements Listener
         if (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
             return;
 
-        //first check if it's because of a magicloot enchantment book (only some or no enchants will be applied since they aren't "safe"
+        //first check if it's because of a magicloot enchantment book (only some or no enchants will be applied since they aren't "safe")
         ItemStack magicLootEnchant = magicLootEnchant(event);
         if (magicLootEnchant != null)
         {
@@ -189,6 +189,7 @@ public class LevelingProgression implements Listener
         }
         ItemMeta itemMeta = itemToEnchant.getItemMeta();
         itemMeta.setLore(enchantBook.getItemMeta().getLore());
+        itemMeta.setDisplayName(enchantBook.getItemMeta().getDisplayName());
         itemToEnchant.setItemMeta(itemMeta);
         return itemToEnchant;
     }
