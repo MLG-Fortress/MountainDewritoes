@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,7 +43,7 @@ public class LevelingProgression implements Listener
     //How many times did the player level up (compared to when we last checked)?
     private int getLevelUpAmount(Player player)
     {
-        int timesToLevelUp = recordedPlayerLevel.get(player) - player.getLevel();
+        final int timesToLevelUp = recordedPlayerLevel.get(player) - player.getLevel();
         if (timesToLevelUp > 0)
         {
             recordedPlayerLevel.put(player, player.getLevel());
@@ -75,7 +76,13 @@ public class LevelingProgression implements Listener
     @EventHandler
     private void onJoin(PlayerJoinEvent event)
     {
-        recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel() + 1);
+        recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
+    }
+
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event)
+    {
+        recordedPlayerLevel.remove(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -198,4 +205,7 @@ public class LevelingProgression implements Listener
         itemToEnchant.setItemMeta(itemMeta);
         return itemToEnchant;
     }
+    //https://bukkit.org/threads/how-to-put-unsafe-enchantments-to-result-item-in-anvil.412472/
+    //Apparently I should've used EnchantmentStorageMeta, but uh I guess I don't really need to...
+    //EnchantmentStorageMeta bookmeta = (EnchantmentStorageMeta) e.getInventory().getItem(1).getItemMeta();
 }
