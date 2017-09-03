@@ -1,7 +1,5 @@
 package me.robomwm.MountainDewritoes.Rewards;
 
-import me.robomwm.MountainDewritoes.Commands.SetExpFix;
-import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -14,16 +12,13 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,13 +30,25 @@ public class LevelingProgression implements Listener
 {
     private LodsOfEmone lodsOfEmone;
     private JavaPlugin instance;
-    private Map<Player, Integer> playerLevel = new HashMap<>();
+    private Map<Player, Integer> recordedPlayerLevel = new HashMap<>();
 
     public LevelingProgression(JavaPlugin plugin, LodsOfEmone lodsOfEmone)
     {
         this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.lodsOfEmone = lodsOfEmone;
+    }
+
+    //How many times did the player level up (compared to when we last checked)?
+    private int getLevelUpAmount(Player player)
+    {
+        int timesToLevelUp = recordedPlayerLevel.get(player) - player.getLevel();
+        if (timesToLevelUp > 0)
+        {
+            recordedPlayerLevel.put(player, player.getLevel());
+            return timesToLevelUp;
+        }
+        return 0;
     }
 
     /**
@@ -68,7 +75,7 @@ public class LevelingProgression implements Listener
     @EventHandler
     private void onJoin(PlayerJoinEvent event)
     {
-        playerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
+        recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel() + 1);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -92,24 +99,19 @@ public class LevelingProgression implements Listener
     private void levelChangeEvent(PlayerExpChangeEvent event)
     {
         //TODO: track exp (so players don't lose any)
-        if (event.getSource() == null)
-            return;
-        Player player = event.getPlayer();
 
-        final int finalNextLevel = player.getLevel() + 1;
+        Player player = event.getPlayer();
 
         new BukkitRunnable()
         {
-            int nextLevel = finalNextLevel;
             @Override
             public void run()
             {
-                playerLevel.put(player, player.getLevel());
-
-                while (nextLevel <= playerLevel.get(player))
+                int timesToLevelUp = getLevelUpAmount(player);
+                while (timesToLevelUp > 0)
                 {
-                    lodsOfEmone.rewardPlayer(player, nextLevel, RewardType.XP_LEVELUP);
-                    nextLevel++;
+                    lodsOfEmone.rewardPlayer(player, player.getLevel() - timesToLevelUp, RewardType.XP_LEVELUP);
+                    timesToLevelUp--;
                 }
             }
         }.runTask(instance);

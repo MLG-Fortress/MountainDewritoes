@@ -36,7 +36,7 @@ public class SimpleClansListener implements Listener
 {
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
     public static ClanManager clanManager; //yes, I am lazy
-    BukkitScheduler scheduler = Bukkit.getScheduler();
+    private BukkitScheduler scheduler = Bukkit.getScheduler();
     private MountainDewritoes instance;
     private BetterTPA betterTPA;
     private Chat chat;
