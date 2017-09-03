@@ -90,9 +90,9 @@ public class LevelingProgression implements Listener
     {
         AnvilInventory anvilInventory = event.getInventory();
         ItemStack magicLootItem = magicLootEnchant(event.getInventory().getContents());
+        anvilInventory.setRepairCost(0);
         if (magicLootItem != null)
             event.setResult(magicLootItem);
-        anvilInventory.setRepairCost(0);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -146,13 +146,13 @@ public class LevelingProgression implements Listener
             return;
 
         //first check if it's because of a magicloot enchantment book (only some or no enchants will be applied since they aren't "safe")
-        ItemStack magicLootEnchant = magicLootEnchant(event.getClickedInventory().getContents());
-        if (magicLootEnchant != null)
-        {
-            event.setCursor(magicLootEnchant);
-            event.getClickedInventory().clear();
-            return;
-        }
+//        ItemStack magicLootEnchant = magicLootEnchant(event.getClickedInventory().getContents());
+//        if (magicLootEnchant != null)
+//        {
+//            event.setCursor(magicLootEnchant);
+//            event.getClickedInventory().clear();
+//            return;
+//        }
 
         //nothing in results
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
@@ -169,13 +169,15 @@ public class LevelingProgression implements Listener
         ItemStack itemToEnchant = null;
         for (ItemStack itemStack : contents)
         {
+            if (itemStack == null)
+                continue;
             Material type = itemStack.getType();
             if (type.isBlock())
                 return null;
             if (type == Material.ENCHANTED_BOOK)
-                enchantBook = itemStack;
+                enchantBook = itemStack.clone();
             else
-                itemToEnchant = itemStack;
+                itemToEnchant = itemStack.clone();
         }
 
         if (itemToEnchant == null || enchantBook == null)
