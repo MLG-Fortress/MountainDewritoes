@@ -23,6 +23,7 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -357,6 +358,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     void onExplosionPushesItemsButNotViaATNTEntity(ShoutAreaOfEffectEvent event)
     {
+        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.fusrodah", SoundCategory.PLAYERS, 1.5f, 1.0f);
         if (!safeWorlds.contains(event.getPlayer().getWorld()) && !event.getPlayer().hasMetadata("DEAD"))
             return;
 
