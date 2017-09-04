@@ -33,12 +33,13 @@ public class GamemodeInventoryManager implements Listener
 {
     MountainDewritoes instance;
     private YamlConfiguration inventorySnapshots;
-    private File inventorySnapshotsFile = new File(instance.getDataFolder(), "inventorySnapshots.data");
+    private File inventorySnapshotsFile;
 
     public GamemodeInventoryManager(MountainDewritoes mountainDewritoes)
     {
         this.instance = mountainDewritoes;
         mountainDewritoes.getServer().getPluginManager().registerEvents(this, mountainDewritoes);
+        inventorySnapshotsFile = new File(instance.getDataFolder(), "inventorySnapshots.data");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
