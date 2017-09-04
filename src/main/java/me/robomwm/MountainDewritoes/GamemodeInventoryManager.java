@@ -110,7 +110,7 @@ public class GamemodeInventoryManager implements Listener
             event.getPlayer().getInventory().setItemInMainHand(null);
         }
     }
-    
+
     private boolean saveInventory(Player player)
     {
         if (instance.isMinigameWorld(player.getWorld()))
