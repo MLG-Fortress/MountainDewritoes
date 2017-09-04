@@ -174,7 +174,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new LowHealth(this), this);
         pm.registerEvents(new HitSound(this), this);
         pm.registerEvents(new SpawnWorldListener(this), this);
-        pm.registerEvents(new GamemodeInventoryManager(this), this);
+        new GamemodeInventoryManager(this);
         pm.registerEvents(new NoKnockback(this), this);
         new SleepManagement(this);
 

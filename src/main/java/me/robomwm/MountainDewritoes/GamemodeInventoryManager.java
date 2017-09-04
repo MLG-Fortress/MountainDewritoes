@@ -26,6 +26,7 @@ public class GamemodeInventoryManager implements Listener
     public GamemodeInventoryManager(MountainDewritoes mountainDewritoes)
     {
         this.instance = mountainDewritoes;
+        mountainDewritoes.getServer().getPluginManager().registerEvents(this, mountainDewritoes);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -45,7 +46,21 @@ public class GamemodeInventoryManager implements Listener
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    private void onPlayerTeleportsAcrossTimeAndSpace(PlayerChangedWorldEvent event)
+    private void onPlayerPreTeleport(PlayerTeleportEvent event)
+    {
+        World from = event.getFrom().getWorld();
+        World to = event.getTo().getWorld();
+
+        //If not traversing from/to a minigame world, or player is (somehow) in creative, no need to do anything
+        if (instance.isMinigameWorld(from) == instance.isMinigameWorld(to))
+            return;
+
+        if (instance.isMinigameWorld(to))
+            saveInventory(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    private void onPlayerPostTeleport(PlayerChangedWorldEvent event)
     {
         World from = event.getFrom();
         World to = event.getPlayer().getWorld();
@@ -56,9 +71,7 @@ public class GamemodeInventoryManager implements Listener
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
 
-        if (instance.isMinigameWorld(to))
-            saveInventory(event.getPlayer());
-        else
+        if (!instance.isMinigameWorld(to))
             restoreInventory(event.getPlayer());
     }
 
@@ -113,7 +126,7 @@ public class GamemodeInventoryManager implements Listener
 
     private boolean saveInventory(Player player)
     {
-        if (instance.isMinigameWorld(player.getWorld()))
+        if (instance.isMinigameWorld(player.getWorld()) || player.getGameMode() == GameMode.CREATIVE)
             return false;
         return UsefulUtil.storeAndClearInventory(player);
     }
