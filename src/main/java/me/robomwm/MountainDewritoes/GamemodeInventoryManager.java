@@ -227,7 +227,11 @@ public class GamemodeInventoryManager implements Listener
 
         ConfigurationSection snapshotSection = getPlayerSnapshotSection(player);
         if (snapshotSection.getList("items") == null)
+        {
+            for (String key : snapshotSection.getKeys(true))
+                instance.getLogger().info(key);
             return false;
+        }
 
         player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
         player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
