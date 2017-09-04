@@ -66,6 +66,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
     private Set<World> knownWorlds = new HashSet<>(); //Set of worlds we know players can teleport to for purposes other than minigames
+    private Set<World> minigameWorlds = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
     private boolean serverDoneLoading = false;
@@ -80,11 +81,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         return survivalWorlds.contains(world);
     }
 
-    public Set<World> getSurvivalWorlds()
-    {
-        return new HashSet<>(survivalWorlds);
-    }
-
     public boolean isSafeWorld(World world)
     {
         return safeWorlds.contains(world);
@@ -92,6 +88,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public boolean isKnownWorld(World world)
     {
         return knownWorlds.contains(world);
+    }
+    public boolean isMinigameWorld(World world)
+    {
+        return minigameWorlds.contains(world);
     }
 
     public void registerListener(Listener listener)
@@ -203,6 +203,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("spawn"));
         safeWorlds.add(getServer().getWorld("prison"));
+
         survivalWorlds.add(getServer().getWorld("world"));
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
@@ -210,6 +211,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("cityworld_nether"));
         survivalWorlds.add(getServer().getWorld("maxiworld"));
         survivalWorlds.add(getServer().getWorld("wellworld"));
+
+        minigameWorlds.add(getServer().getWorld("minigames"));
+        minigameWorlds.add(getServer().getWorld("bam"));
+        minigameWorlds.add(getServer().getWorld("flatroom"));
+        minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
+        minigameWorlds.add(getServer().getWorld("dogepvp"));
+
         knownWorlds.add(getServer().getWorld("world"));
         knownWorlds.add(getServer().getWorld("world_nether"));
         knownWorlds.add(getServer().getWorld("world_the_end"));
