@@ -87,20 +87,7 @@ public class TipCommand implements CommandExecutor
             public void run()
             {
                 //boolean store = true;
-                String tip;
-
-                if (label.toLowerCase().contains("beta") || (args.length > 0 && args[0].toLowerCase().contains("beta")))
-                {
-                    tip = getTip(player, betaTips);
-                    //store = false;
-                }
-                else if (args.length > 0 && args[0].toLowerCase().equals("join"))
-                {
-                    tip = getTip(player, randomTips);
-                    //store = false;
-                }
-                else
-                    tip = getTip(player, randomTips);
+                String tip = getTip(player, randomTips);
 
                 player.sendMessage(formatTip(tip));
 
