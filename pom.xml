@@ -135,7 +135,7 @@
         <dependency>
             <groupId>com.github.RoboMWM</groupId>
             <artifactId>UsefulUtil</artifactId>
-            <version>1.16</version>
+            <version>1.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
