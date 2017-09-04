@@ -192,6 +192,7 @@ public class GamemodeInventoryManager implements Listener
             saveInventorySnapshots();
             return true;
         }
+        instance.getLogger().info("already(?) deleted");
         return false;
     }
 
