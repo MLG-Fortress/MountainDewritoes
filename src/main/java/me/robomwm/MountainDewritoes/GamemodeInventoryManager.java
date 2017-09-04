@@ -1,8 +1,12 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.usefulutil.UsefulUtil;
+import me.robomwm.MountainDewritoes.Commands.SetExpFix;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,11 +15,16 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by RoboMWM on 9/24/2016.
@@ -23,6 +32,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class GamemodeInventoryManager implements Listener
 {
     MountainDewritoes instance;
+    private YamlConfiguration inventorySnapshots;
+    private File inventorySnapshotsFile = new File(instance.getDataFolder(), "inventorySnapshots.data");
+
     public GamemodeInventoryManager(MountainDewritoes mountainDewritoes)
     {
         this.instance = mountainDewritoes;
@@ -35,7 +47,7 @@ public class GamemodeInventoryManager implements Listener
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent addtemp webuilder 1h");
-            saveInventory(event.getPlayer());
+            storeAndClearInventory(event.getPlayer());
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
@@ -56,7 +68,7 @@ public class GamemodeInventoryManager implements Listener
             return;
 
         if (instance.isMinigameWorld(to))
-            saveInventory(event.getPlayer());
+            storeAndClearInventory(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -124,15 +136,110 @@ public class GamemodeInventoryManager implements Listener
         }
     }
 
-    private boolean saveInventory(Player player)
+    private void loadInventorySnapshots()
+    {
+        if (inventorySnapshots == null)
+        {
+            if (!inventorySnapshotsFile.exists())
+            {
+                try
+                {
+                    inventorySnapshotsFile.createNewFile();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+            inventorySnapshots = YamlConfiguration.loadConfiguration(inventorySnapshotsFile);
+        }
+    }
+
+    private void saveInventorySnapshots()
+    {
+        if (inventorySnapshots == null)
+            return;
+        try
+        {
+            inventorySnapshots.save(inventorySnapshotsFile);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private ConfigurationSection getPlayerSnapshotSection(Player player)
+    {
+        loadInventorySnapshots();
+        if (inventorySnapshots.get(player.getUniqueId().toString()) == null)
+        {
+            instance.getLogger().info("created");
+            return inventorySnapshots.createSection(player.getUniqueId().toString());
+        }
+        instance.getLogger().info("exists");
+        return inventorySnapshots.getConfigurationSection(player.getUniqueId().toString());
+    }
+
+    private boolean deletePlayerSnapshotSection(Player player)
+    {
+        if (inventorySnapshots.get(player.getUniqueId().toString()) != null)
+        {
+            inventorySnapshots.set(player.getUniqueId().toString(), null);
+            saveInventorySnapshots();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean storeAndClearInventory(Player player)
     {
         if (instance.isMinigameWorld(player.getWorld()) || player.getGameMode() == GameMode.CREATIVE)
             return false;
-        return UsefulUtil.storeAndClearInventory(player);
+
+        player.closeInventory();
+
+        ConfigurationSection snapshotSection = getPlayerSnapshotSection(player);
+        if (snapshotSection.getList("items") != null)
+            return false;
+
+        snapshotSection.set("items", player.getInventory().getContents()); //ItemStack[]
+        snapshotSection.set("armor", player.getInventory().getArmorContents()); //ItemStack[]
+        snapshotSection.set("exp", player.getTotalExperience() + 1); //int //For our purposes, totalExperience is ok since experience can't be spent. We add 1 since exp can be more precise than an int...
+        snapshotSection.set("health", player.getHealth()); //double
+        snapshotSection.set("maxHealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()); //double
+        snapshotSection.set("foodLevel", player.getFoodLevel()); //int
+
+        saveInventorySnapshots(); //TODO: schedule in a runnable instead (performance)?
+
+        player.getInventory().clear();
+
+        return true;
     }
 
     private boolean restoreInventory(Player player)
     {
-        return UsefulUtil.restoreInventory(player);
+        player.closeInventory();
+
+        ConfigurationSection snapshotSection = getPlayerSnapshotSection(player);
+        if (snapshotSection.getList("items") == null)
+            return false;
+
+        player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
+        player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
+        SetExpFix.setTotalExperience(player, snapshotSection.getInt("exp"));
+        player.setHealth(snapshotSection.getDouble("health"));
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
+        player.setFoodLevel(snapshotSection.getInt("foodLevel"));
+
+        if (snapshotSection.getInt("additionalExp") != 0)
+        {
+            Bukkit.getPluginManager().callEvent(new PlayerExpChangeEvent(player, snapshotSection.getInt("additionalExp")));
+        }
+
+        deletePlayerSnapshotSection(player);
+
+        return true;
     }
 }
