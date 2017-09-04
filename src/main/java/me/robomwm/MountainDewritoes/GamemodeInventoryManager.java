@@ -188,6 +188,7 @@ public class GamemodeInventoryManager implements Listener
         if (inventorySnapshots.get(player.getUniqueId().toString()) != null)
         {
             inventorySnapshots.set(player.getUniqueId().toString(), null);
+            instance.getLogger().info("deleted(?)");
             saveInventorySnapshots();
             return true;
         }
