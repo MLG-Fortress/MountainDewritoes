@@ -231,6 +231,8 @@ public class GamemodeInventoryManager implements Listener
             for (String key : snapshotSection.getKeys(true))
                 instance.getLogger().info(key);
             instance.getLogger().info(snapshotSection.get("items").toString());
+            instance.getLogger().info(snapshotSection.get("items").getClass().getCanonicalName());
+            instance.getLogger().info(snapshotSection.get("items").getClass().getName());
             return false;
         }
 
