@@ -236,6 +236,9 @@ public class GamemodeInventoryManager implements Listener
             return false;
         }
 
+        instance.getLogger().info(snapshotSection.get("items").getClass().getCanonicalName());
+        instance.getLogger().info(snapshotSection.get("items").getClass().getName());
+
         player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
         player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
         SetExpFix.setTotalExperience(player, snapshotSection.getInt("exp"));
