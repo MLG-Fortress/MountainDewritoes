@@ -214,7 +214,9 @@ public class GamemodeInventoryManager implements Listener
         snapshotSection.set("maxHealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()); //double
         snapshotSection.set("foodLevel", player.getFoodLevel()); //int
 
+        instance.getLogger().info("before save: " + snapshotSection.get("items").getClass().getCanonicalName());
         saveInventorySnapshots(); //TODO: schedule in a runnable instead (performance)?
+        instance.getLogger().info("after save: " + snapshotSection.get("items").getClass().getCanonicalName());
 
         player.getInventory().clear();
 
