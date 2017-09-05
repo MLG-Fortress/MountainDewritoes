@@ -25,6 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by RoboMWM on 9/24/2016.
@@ -175,11 +176,7 @@ public class GamemodeInventoryManager implements Listener
     {
         loadInventorySnapshots();
         if (inventorySnapshots.get(player.getUniqueId().toString()) == null)
-        {
-            instance.getLogger().info("created");
             return inventorySnapshots.createSection(player.getUniqueId().toString());
-        }
-        instance.getLogger().info("exists");
         return inventorySnapshots.getConfigurationSection(player.getUniqueId().toString());
     }
 
@@ -188,11 +185,9 @@ public class GamemodeInventoryManager implements Listener
         if (inventorySnapshots.get(player.getUniqueId().toString()) != null)
         {
             inventorySnapshots.set(player.getUniqueId().toString(), null);
-            instance.getLogger().info("deleted(?)");
             saveInventorySnapshots();
             return true;
         }
-        instance.getLogger().info("already(?) deleted");
         return false;
     }
 
@@ -207,16 +202,14 @@ public class GamemodeInventoryManager implements Listener
         if (snapshotSection.getList("items") != null)
             return false;
 
-        snapshotSection.set("items", player.getInventory().getContents()); //ItemStack[]
-        snapshotSection.set("armor", player.getInventory().getArmorContents()); //ItemStack[]
+        snapshotSection.set("items", Arrays.asList(player.getInventory().getContents()));
+        snapshotSection.set("armor", Arrays.asList(player.getInventory().getArmorContents()));
         snapshotSection.set("exp", player.getTotalExperience() + 1); //int //For our purposes, totalExperience is ok since experience can't be spent. We add 1 since exp can be more precise than an int...
         snapshotSection.set("health", player.getHealth()); //double
         snapshotSection.set("maxHealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()); //double
         snapshotSection.set("foodLevel", player.getFoodLevel()); //int
 
-        instance.getLogger().info("before save: " + snapshotSection.get("items").getClass().getCanonicalName());
         saveInventorySnapshots(); //TODO: schedule in a runnable instead (performance)?
-        instance.getLogger().info("after save: " + snapshotSection.get("items").getClass().getCanonicalName());
 
         player.getInventory().clear();
 
@@ -229,17 +222,7 @@ public class GamemodeInventoryManager implements Listener
 
         ConfigurationSection snapshotSection = getPlayerSnapshotSection(player);
         if (snapshotSection.getList("items") == null)
-        {
-            for (String key : snapshotSection.getKeys(true))
-                instance.getLogger().info(key);
-            instance.getLogger().info(snapshotSection.get("items").toString());
-            instance.getLogger().info(snapshotSection.get("items").getClass().getCanonicalName());
-            instance.getLogger().info(snapshotSection.get("items").getClass().getName());
             return false;
-        }
-
-        instance.getLogger().info(snapshotSection.get("items").getClass().getCanonicalName());
-        instance.getLogger().info(snapshotSection.get("items").getClass().getName());
 
         player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
         player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
