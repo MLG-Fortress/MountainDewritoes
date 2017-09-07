@@ -204,7 +204,8 @@ public class GamemodeInventoryManager implements Listener
 
         snapshotSection.set("items", Arrays.asList(player.getInventory().getContents()));
         snapshotSection.set("armor", Arrays.asList(player.getInventory().getArmorContents()));
-        snapshotSection.set("exp", player.getTotalExperience() + 1); //int //For our purposes, totalExperience is ok since experience can't be spent. We add 1 since exp can be more precise than an int...
+        snapshotSection.set("expLevel", player.getLevel()); //int
+        snapshotSection.set("expProgress", player.getExp()); //float
         snapshotSection.set("health", player.getHealth()); //double
         snapshotSection.set("maxHealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()); //double
         snapshotSection.set("foodLevel", player.getFoodLevel()); //int
@@ -224,16 +225,24 @@ public class GamemodeInventoryManager implements Listener
         if (snapshotSection.getList("items") == null)
             return false;
 
-        player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
-        player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
-        SetExpFix.setTotalExperience(player, snapshotSection.getInt("exp"));
-        player.setHealth(snapshotSection.getDouble("health"));
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
-        player.setFoodLevel(snapshotSection.getInt("foodLevel"));
-
-        if (snapshotSection.getInt("additionalExp") != 0)
+        try
         {
-            Bukkit.getPluginManager().callEvent(new PlayerExpChangeEvent(player, snapshotSection.getInt("additionalExp")));
+            player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
+            player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
+            player.setLevel(snapshotSection.getInt("expLevel"));
+            player.setExp((float)snapshotSection.get("expProgress"));
+            player.setHealth(snapshotSection.getDouble("health"));
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
+            player.setFoodLevel(snapshotSection.getInt("foodLevel"));
+
+            if (snapshotSection.getInt("additionalExp") != 0)
+            {
+                Bukkit.getPluginManager().callEvent(new PlayerExpChangeEvent(player, snapshotSection.getInt("additionalExp")));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         deletePlayerSnapshotSection(player);
