@@ -195,6 +195,11 @@ public class LevelingProgression implements Listener
             return null;
 
         Map<Enchantment, Integer> enchantments = enchantBook.getEnchantments();
+
+        //Slimefun guide, usually
+        if (enchantments.isEmpty())
+            return null;
+
         for (Enchantment enchantment : enchantments.keySet())
         {
             itemToEnchant.addUnsafeEnchantment(enchantment, enchantments.get(enchantment));
