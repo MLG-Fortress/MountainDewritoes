@@ -21,11 +21,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by RoboMWM on 9/24/2016.
@@ -193,26 +197,36 @@ public class GamemodeInventoryManager implements Listener
 
     private boolean storeAndClearInventory(Player player)
     {
-        if (instance.isMinigameWorld(player.getWorld()) || player.getGameMode() == GameMode.CREATIVE)
+        //Can happen if player was teleporting to a different world while in creative mode
+        if (player.getGameMode() == GameMode.CREATIVE)
             return false;
 
+        //No need to save if the player is in a minigame world
+        if (instance.isMinigameWorld(player.getWorld()))
+            return false;
+
+        //Avoid having to deal with players holding stuff with their mouse cursor and other inventory whatnot (though idk if a tick has to elapse for this to actually work, server side).
         player.closeInventory();
 
         ConfigurationSection snapshotSection = getPlayerSnapshotSection(player);
         if (snapshotSection.getList("items") != null)
             return false;
 
-        snapshotSection.set("items", Arrays.asList(player.getInventory().getContents()));
-        snapshotSection.set("armor", Arrays.asList(player.getInventory().getArmorContents()));
+        snapshotSection.set("items", Arrays.asList(player.getInventory().getContents())); //List<ItemStack> - arrays are stored and read as ArrayLists, so doing this to maintain consistency. Can optimize later if needed.
+        snapshotSection.set("armor", Arrays.asList(player.getInventory().getArmorContents())); //List<ItemStack>
         snapshotSection.set("expLevel", player.getLevel()); //int
         snapshotSection.set("expProgress", player.getExp()); //float
         snapshotSection.set("health", player.getHealth()); //double
         snapshotSection.set("maxHealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()); //double
         snapshotSection.set("foodLevel", player.getFoodLevel()); //int
+        snapshotSection.set("activePotionEffects", new ArrayList<>(player.getActivePotionEffects())); //List<PotionEffect> - no idea what collection type CB uses, but I'm pretty sure it'll also be stored and read as ArrayList.
 
         saveInventorySnapshots(); //TODO: schedule in a runnable instead (performance)?
 
         player.getInventory().clear();
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20D);
+        for (PotionEffect potionEffect : player.getActivePotionEffects())
+            player.removePotionEffect(potionEffect.getType());
 
         return true;
     }
@@ -234,6 +248,7 @@ public class GamemodeInventoryManager implements Listener
             player.setHealth(snapshotSection.getDouble("health"));
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
             player.setFoodLevel(snapshotSection.getInt("foodLevel"));
+            player.addPotionEffects((List<PotionEffect>)snapshotSection.getList("activePotionEffects"));
 
             if (snapshotSection.getInt("additionalExp") != 0)
             {
