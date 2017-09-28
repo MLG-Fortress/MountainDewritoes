@@ -216,8 +216,8 @@ public class GamemodeInventoryManager implements Listener
         snapshotSection.set("armor", Arrays.asList(player.getInventory().getArmorContents())); //List<ItemStack>
         snapshotSection.set("expLevel", player.getLevel()); //int
         snapshotSection.set("expProgress", player.getExp()); //float
-        snapshotSection.set("health", player.getHealth()); //double
         snapshotSection.set("maxHealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()); //double
+        snapshotSection.set("health", player.getHealth()); //double
         snapshotSection.set("foodLevel", player.getFoodLevel()); //int
         snapshotSection.set("activePotionEffects", new ArrayList<>(player.getActivePotionEffects())); //List<PotionEffect> - no idea what collection type CB uses, but I'm pretty sure it'll also be stored and read as ArrayList.
 
@@ -245,8 +245,8 @@ public class GamemodeInventoryManager implements Listener
             player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
             player.setLevel(snapshotSection.getInt("expLevel"));
             player.setExp((float)snapshotSection.get("expProgress"));
-            player.setHealth(snapshotSection.getDouble("health"));
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
+            player.setHealth(snapshotSection.getDouble("health"));
             player.setFoodLevel(snapshotSection.getInt("foodLevel"));
             player.addPotionEffects((List<PotionEffect>)snapshotSection.getList("activePotionEffects"));
 
