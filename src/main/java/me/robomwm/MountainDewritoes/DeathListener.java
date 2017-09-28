@@ -57,6 +57,7 @@ public class DeathListener implements Listener
         //if (player.getLevel() > 8)
         //    event.setNewLevel(player.getLevel() - 8);
 
+        //Don't drop any exp
         event.setKeepLevel(true);
         event.setDroppedExp(0);
 
