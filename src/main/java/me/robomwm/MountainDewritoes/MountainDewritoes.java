@@ -65,7 +65,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private long currentTick = 0L; //"Server time in ticks"
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
-    private Set<World> knownWorlds = new HashSet<>(); //Set of worlds we know players can teleport to for purposes other than minigames
     private Set<World> minigameWorlds = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
@@ -85,10 +84,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         return safeWorlds.contains(world);
     }
-    public boolean isKnownWorld(World world)
-    {
-        return knownWorlds.contains(world);
-    }
+
     public boolean isMinigameWorld(World world)
     {
         return minigameWorlds.contains(world);
@@ -212,23 +208,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("maxiworld"));
         survivalWorlds.add(getServer().getWorld("wellworld"));
         survivalWorlds.add(getServer().getWorld("mall"));
+        survivalWorlds.add(getServer().getWorld("prison"));
 
         minigameWorlds.add(getServer().getWorld("minigames"));
         minigameWorlds.add(getServer().getWorld("bam"));
         minigameWorlds.add(getServer().getWorld("flatroom"));
         minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
         minigameWorlds.add(getServer().getWorld("dogepvp"));
-
-        knownWorlds.add(getServer().getWorld("world"));
-        knownWorlds.add(getServer().getWorld("world_nether"));
-        knownWorlds.add(getServer().getWorld("world_the_end"));
-        knownWorlds.add(getServer().getWorld("cityworld"));
-        knownWorlds.add(getServer().getWorld("cityworld_nether"));
-        knownWorlds.add(getServer().getWorld("spawn"));
-        knownWorlds.add(getServer().getWorld("mall"));
-        knownWorlds.add(getServer().getWorld("prison"));
-        knownWorlds.add(getServer().getWorld("maxiworld"));
-        knownWorlds.add(getServer().getWorld("wellworld"));
 
         //Utilities
         new ScoreboardStuff(this);
