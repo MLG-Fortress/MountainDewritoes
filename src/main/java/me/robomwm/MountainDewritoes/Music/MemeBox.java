@@ -52,12 +52,20 @@ public class MemeBox implements Listener
     {
         Media media = new Media(ResourceType.MUSIC, song.getURL());
         media.setLooping(false);
-        JukeboxAPI.play(player, media);
+        try
+        {
+            JukeboxAPI.play(player, media);
+        }
+        catch (Throwable ignored){}
     }
 
     public void stopSound(Player player)
     {
-        JukeboxAPI.stopMusic(player);
+        try
+        {
+            JukeboxAPI.stopMusic(player);
+        }
+        catch (Throwable ignored){}
     }
 
     @EventHandler

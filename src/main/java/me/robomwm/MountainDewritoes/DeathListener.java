@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -72,7 +73,7 @@ public class DeathListener implements Listener
      * Gives back items that weren't dropped
      * Activates death spectating, if respawned within "respawn time"
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW) //Since we soft-depend MV, we'll still override it at this priority
     void onPlayerRespawn(PlayerRespawnEvent event)
     {
         Player player = event.getPlayer();

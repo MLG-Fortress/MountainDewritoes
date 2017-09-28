@@ -37,13 +37,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AtmosphericManager implements Listener
 {
     MountainDewritoes instance;
-    MemeBox memeBox;
+    //MemeBox memeBox;
     MemePack memePack;
 
     public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        memeBox = new MemeBox(mountainDewritoes);
+        //memeBox = new MemeBox(mountainDewritoes);
         memePack = new MemePack();
         new AtmosphericMusic(mountainDewritoes, this);
         instance.registerListener(this);
@@ -52,7 +52,7 @@ public class AtmosphericManager implements Listener
     public void stopMusic(Player player)
     {
         player.removeMetadata("MD_LISTENING", instance);
-        memeBox.stopSound(player);
+        //memeBox.stopSound(player);
         memePack.stopSound(player);
     }
 
@@ -98,8 +98,8 @@ public class AtmosphericManager implements Listener
                     //Is this playing via the /memebox or the MLG pack?
                     if (song.getSoundName() != null)
                         memePack.playSound(player, song);
-                    else
-                        memeBox.playSound(player, song);
+//                    else
+//                        memeBox.playSound(player, song);
 
                     //Schedule removal of metadata
                     new BukkitRunnable()
@@ -150,10 +150,10 @@ public class AtmosphericManager implements Listener
         }
         players.add(player); //it seems Entity#getNearbyEntities does not include the entity in question. Haven't specifically tested though.
         playSound(song, 0, players);
-        for (Player player1 : players) //eeeeh
-        {
-            memeBox.tellPlayerToOpenMemeBox(player1, true);
-        }
+//        for (Player player1 : players) //eeeeh
+//        {
+//            memeBox.tellPlayerToOpenMemeBox(player1, true);
+//        }
     }
 
     /**
