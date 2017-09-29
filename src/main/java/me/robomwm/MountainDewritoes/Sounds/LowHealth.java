@@ -4,6 +4,7 @@ import fr.mrsheepsheep.tinthealth.THAPI;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,8 +56,8 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         final double health = player.getHealth() - event.getFinalDamage();
-        final float lowHealthValue = 20f;
-        if (health <= lowHealthValue && !alreadyLowHealth.containsKey(player))
+        final double lowHealthValue = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        if (lowHealthValue <= 0.36f && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
             player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);

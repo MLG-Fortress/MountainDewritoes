@@ -66,6 +66,9 @@ public class BetterZeldaHearts implements Listener
     @EventHandler(priority = EventPriority.LOW)
     void onEntityDeath(EntityDeathEvent event)
     {
+        if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
+            return;
+
         if (!UsefulUtil.isMonster(event.getEntity()))
             return;
         LivingEntity entity = event.getEntity();
@@ -105,7 +108,6 @@ public class BetterZeldaHearts implements Listener
             event.getDrops().add(healthCanister);
         }
 
-        /*Mob Money*/
         /*Mob money*/
 
         if (economy == null)
@@ -115,7 +117,7 @@ public class BetterZeldaHearts implements Listener
         int moneyToDrop = maxHealth;
         moneyToDrop *= Math.log(entity.getTicksLived());
 
-        if (moneyToDrop > 0)
+        if (moneyToDrop > 1)
         {
             dropMobMoney(location, moneyToDrop);
         }
@@ -127,14 +129,15 @@ public class BetterZeldaHearts implements Listener
     {
         Player player = event.getEntity();
         Location location = player.getLocation();
-        if (!instance.isSurvivalWorld(location.getWorld()) && !instance.isSafeWorld(location.getWorld()))
+        if (!instance.isSurvivalWorld(location.getWorld()))
+            return;
 
-        /*Mob money*/
+        /*Taxes*/
         if (economy != null)
         {
             double moneyToDrop = Math.round(economy.getBalance(player) * 0.07);
 
-            if (moneyToDrop > 0)
+            if (moneyToDrop > 1)
             {
                 economy.withdrawPlayer(player, moneyToDrop);
                 player.sendMessage(ChatColor.RED + "Death tax: " + economy.format(moneyToDrop));
@@ -199,7 +202,7 @@ public class BetterZeldaHearts implements Listener
     void onNewJoin(PlayerJoinEvent event)
     {
         if (!event.getPlayer().hasPlayedBefore())
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D);
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
         event.getPlayer().setMaximumAir(600);
     }
 
@@ -268,19 +271,22 @@ public class BetterZeldaHearts implements Listener
         return true;
     }
 
-    //Player loses 1/8 of extra health
+    //Player loses 1 heart on death (down to minimum of 3 hearts)
     @EventHandler
     void resetHealthOnRespawn(PlayerRespawnEvent event)
     {
-        if (event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < 60D)
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D);
+        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
+        if (maxHealth <= 6D)
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
         else
         {
-            int extraHearts = (int)event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60;
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60 + (extraHearts - (extraHearts/8)));
-            //ensure even value
-            double health = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health - (health % 2));
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth - 2D);
+//            int extraHearts = (int)event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60;
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60 + (extraHearts - (extraHearts/8)));
+//            //ensure even value
+//            double health = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health - (health % 2));
         }
     }
 }
