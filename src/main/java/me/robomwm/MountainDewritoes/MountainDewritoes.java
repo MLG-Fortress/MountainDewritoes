@@ -80,6 +80,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         return survivalWorlds.contains(world);
     }
 
+    //Currently only used to bypass teleport warmup
     public boolean isSafeWorld(World world)
     {
         return safeWorlds.contains(world);
@@ -200,6 +201,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         safeWorlds.add(getServer().getWorld("spawn"));
         safeWorlds.add(getServer().getWorld("prison"));
 
+        survivalWorlds.add(getServer().getWorld("mall"));
+        survivalWorlds.add(getServer().getWorld("prison"));
         survivalWorlds.add(getServer().getWorld("world"));
         survivalWorlds.add(getServer().getWorld("world_nether"));
         survivalWorlds.add(getServer().getWorld("world_the_end"));
@@ -207,9 +210,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("cityworld_nether"));
         survivalWorlds.add(getServer().getWorld("maxiworld"));
         survivalWorlds.add(getServer().getWorld("wellworld"));
-        survivalWorlds.add(getServer().getWorld("mall"));
-        survivalWorlds.add(getServer().getWorld("prison"));
 
+        minigameWorlds.add(getServer().getWorld("spawn"));
         minigameWorlds.add(getServer().getWorld("minigames"));
         minigameWorlds.add(getServer().getWorld("bam"));
         minigameWorlds.add(getServer().getWorld("flatroom"));

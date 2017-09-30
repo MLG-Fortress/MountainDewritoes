@@ -187,18 +187,17 @@ public class GamemodeInventoryManager implements Listener
     {
         Player player = (Player)event.getPlayer();
 
-        //Only if they're in creative and/or in a minigame world
-        if (player.getGameMode() != GameMode.CREATIVE && !instance.isMinigameWorld(player.getWorld()))
+        if (event.getPlayer().isOp())
             return;
 
-        if (event.getInventory().getType() == InventoryType.ENDER_CHEST)
+        if (!instance.isSurvivalWorld(player.getWorld()) && event.getInventory().getType() == InventoryType.ENDER_CHEST)
         {
             event.setCancelled(true);
             return;
         }
 
-        //If in creative (implied if it got to here) and not in minigame world, also deny all inventory access
-        if (!instance.isMinigameWorld(event.getPlayer().getWorld()) && event.getInventory().getType() != InventoryType.CRAFTING)
+        //If in creative mode while in a survival world, also deny all inventory access
+        if (player.getGameMode() == GameMode.CREATIVE && instance.isSurvivalWorld(event.getPlayer().getWorld()) && event.getInventory().getType() != InventoryType.CRAFTING)
             event.setCancelled(true);
     }
 

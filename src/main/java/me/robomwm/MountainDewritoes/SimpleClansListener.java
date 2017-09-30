@@ -56,6 +56,8 @@ public class SimpleClansListener implements Listener
             {
                 for (Player player : instance.getServer().getOnlinePlayers())
                 {
+                    if (!instance.isSurvivalWorld(player.getWorld()))
+                        continue;
                     setDisplayName(player);
                     setClanPrefix(player);
                 }
@@ -219,6 +221,13 @@ public class SimpleClansListener implements Listener
 
                 team.setPrefix(tag + " ");
                 team.setColor(ChatColor.getByChar(tag.substring(1)));
+                if (instance.isSurvivalWorld(player.getWorld()))
+                    return;
+
+                if (player.getScoreboard() != sb)
+                {
+                    player.setScoreboard(sb);
+                }
             }
         }, 40L); //Ensure healthbar made the team
     }

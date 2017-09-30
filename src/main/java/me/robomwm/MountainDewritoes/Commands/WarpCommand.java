@@ -59,7 +59,7 @@ public class WarpCommand implements CommandExecutor
 
         if (isNew)
         {
-            addWarp("spawn", "spawn", -389D, 5D, -124D, 180.344f, -18.881f);
+            addWarp("minigames", "spawn", -389D, 5D, -124D, 180.344f, -18.881f);
             addWarp("mall", "mall", 2.488, 5, -7.305, 0f, 0f);
             addWarp("prison", "prison", -970, 62, 1591, 270f, 6f);
             addWarp("jail", "minigames", -523D, 58.5D, -36D, 88.951f, 26.7f);
@@ -125,7 +125,12 @@ public class WarpCommand implements CommandExecutor
         {
             case "hub":
             case "lobby":
-                desiredWarp = "spawn";
+            case "spawn":
+                desiredWarp = "mall";
+                break;
+            case "games":
+            case "game":
+                desiredWarp = "minigames";
                 break;
         }
 
@@ -134,7 +139,7 @@ public class WarpCommand implements CommandExecutor
         if (location == null)
             sendWarps(player);
         else
-            betterTPA.teleportPlayer(player, desiredWarp, location, !instance.isSafeWorld(player.getWorld()), null);
+            betterTPA.teleportPlayer(player, desiredWarp, location, !(instance.isSafeWorld(player.getWorld()) && instance.isSafeWorld(location.getWorld())), null);
         return true;
     }
 
