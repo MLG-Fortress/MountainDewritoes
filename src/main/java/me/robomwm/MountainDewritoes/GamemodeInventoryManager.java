@@ -60,6 +60,7 @@ public class GamemodeInventoryManager implements Listener
                 event.setCancelled(true);
                 return;
             }
+
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent addtemp webuilder 1h");
             storeAndClearInventory(event.getPlayer());
         }
