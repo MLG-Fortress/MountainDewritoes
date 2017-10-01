@@ -221,31 +221,29 @@ public class GamemodeInventoryManager implements Listener
                 try
                 {
                     inventorySnapshotsFile.createNewFile();
+                    inventorySnapshots = YamlConfiguration.loadConfiguration(inventorySnapshotsFile);
                 }
                 catch (IOException e)
                 {
                     e.printStackTrace();
-                    return;
                 }
             }
-            inventorySnapshots = YamlConfiguration.loadConfiguration(inventorySnapshotsFile);
         }
 
-        if (experienceSnapshotsFile == null)
+        if (experienceSnapshots == null)
         {
             if (!experienceSnapshotsFile.exists())
             {
                 try
                 {
                     experienceSnapshotsFile.createNewFile();
+                    experienceSnapshots = YamlConfiguration.loadConfiguration(experienceSnapshotsFile);
                 }
                 catch (IOException e)
                 {
                     e.printStackTrace();
-                    return;
                 }
             }
-            experienceSnapshots = YamlConfiguration.loadConfiguration(experienceSnapshotsFile);
         }
     }
 
