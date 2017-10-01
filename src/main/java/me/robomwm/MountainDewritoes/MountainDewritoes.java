@@ -37,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -310,6 +311,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //            }
 //        }.runTaskTimer(this, 300L, 100L);
 //    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onTimeout(PlayerKickEvent event)
+    {
+        if (event.getReason().equals("Timed out"))
+            event.setCancelled(true);
+    }
 
     /**
      * Worldguard doesn't fully protect paintings and itemframes from being destroyed...
