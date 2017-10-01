@@ -42,6 +42,7 @@ public class AtmosphericMusic implements Listener
         instance.registerListener(this);
 
         startAmbiance(instance.getServer().getWorld("mall"));
+        startAmbiance(instance.getServer().getWorld("spawn"));
         //normalAmbiance(instance.getSurvivalWorlds());
     }
 
