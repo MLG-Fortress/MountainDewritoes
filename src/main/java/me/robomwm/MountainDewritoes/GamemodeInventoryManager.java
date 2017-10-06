@@ -228,6 +228,8 @@ public class GamemodeInventoryManager implements Listener
                     e.printStackTrace();
                 }
             }
+            else
+                inventorySnapshots = YamlConfiguration.loadConfiguration(inventorySnapshotsFile);
         }
 
         if (experienceSnapshots == null)
@@ -244,6 +246,8 @@ public class GamemodeInventoryManager implements Listener
                     e.printStackTrace();
                 }
             }
+            else
+                experienceSnapshots = YamlConfiguration.loadConfiguration(experienceSnapshotsFile);
         }
     }
 
