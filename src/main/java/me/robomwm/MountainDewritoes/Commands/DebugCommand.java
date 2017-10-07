@@ -68,6 +68,24 @@ public class DebugCommand implements CommandExecutor
         if (args.length < 2)
             return false;
 
+        if (args[0].equalsIgnoreCase("wb"))
+        {
+            World world = instance.getServer().getWorld(args[1]);
+            if (world == null || !instance.isSurvivalWorld(world))
+                return false;
+
+            BorderData borderData = com.wimbli.WorldBorder.WorldBorder.plugin.getWorldBorder(world.getName());
+            WorldBorder border = world.getWorldBorder();
+
+            border.setCenter(new Location(world, 0, 0, 0));
+            border.setWarningDistance(0);
+            border.setSize((borderData.getRadiusX() * 2) - 20);
+
+            sender.sendMessage(world.getName());
+            sender.sendMessage("Center: " + border.getCenter().toString() + "\nSize: " + border.getSize());
+            return true;
+        }
+
         //2nd arg as player//
         Player target = Bukkit.getServer().getPlayerExact(args[1]);
         if (target == null)
@@ -93,23 +111,6 @@ public class DebugCommand implements CommandExecutor
         {
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
-        }
-
-        else if (args[0].equalsIgnoreCase("wb"))
-        {
-            World world = instance.getServer().getWorld(args[1]);
-            if (world == null || !instance.isSurvivalWorld(world))
-                return false;
-
-            BorderData borderData = com.wimbli.WorldBorder.WorldBorder.plugin.getWorldBorder(world.getName());
-            WorldBorder border = world.getWorldBorder();
-
-            border.setCenter(new Location(world, 0, 0, 0));
-            border.setWarningDistance(0);
-            border.setSize((borderData.getRadiusX() * 2) - 20);
-
-            sender.sendMessage(world.getName());
-            sender.sendMessage("Center: " + border.getCenter().toString() + "\nSize: " + border.getSize());
         }
         return false;
     }
