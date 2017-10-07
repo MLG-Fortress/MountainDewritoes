@@ -14,6 +14,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerKickEvent;
 
 /**
  * Created on 7/26/2017.
@@ -62,6 +63,7 @@ public class DebugCommand implements CommandExecutor
                     }
                 }
             }
+            return true;
         }
 
         //2 args//
@@ -85,14 +87,11 @@ public class DebugCommand implements CommandExecutor
             sender.sendMessage("Center: " + border.getCenter().toString() + "\nSize: " + border.getSize());
             return true;
         }
-
-        //2nd arg as player//
-        Player target = Bukkit.getServer().getPlayerExact(args[1]);
-        if (target == null)
-            return false;
-
-        if (args[0].equalsIgnoreCase("music"))
+        else if (args[0].equalsIgnoreCase("music"))
         {
+            Player target = Bukkit.getServer().getPlayerExact(args[1]);
+            if (target == null)
+                return false;
 
             if (!target.hasMetadata("MD_LISTENING"))
             {
@@ -109,6 +108,9 @@ public class DebugCommand implements CommandExecutor
         }
         else if (args[0].equalsIgnoreCase("clankick"))
         {
+            Player target = Bukkit.getServer().getPlayerExact(args[1]);
+            if (target == null)
+                return false;
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
         }
