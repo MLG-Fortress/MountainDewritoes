@@ -15,6 +15,7 @@ softdepend:
 - HolographicDisplays
 - BetterTPA
 - MCJukebox
+- WorldBorder
 loadbefore:
 - AbsorptionShields
 commands:

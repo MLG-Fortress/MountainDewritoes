@@ -1,10 +1,14 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import com.wimbli.WorldBorder.BorderData;
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,15 +22,19 @@ import org.bukkit.entity.Player;
  */
 public class DebugCommand implements CommandExecutor
 {
+    MountainDewritoes instance;
     ClanManager clanManager;
 
-    public DebugCommand()
+    public DebugCommand(MountainDewritoes plugin)
     {
+        instance = plugin;
         clanManager = SimpleClansListener.clanManager;
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
+        if (!sender.isOp())
+            return false;
         Player player = null;
         if (sender instanceof Player)
             player = (Player)sender;
@@ -65,7 +73,7 @@ public class DebugCommand implements CommandExecutor
         if (target == null)
             return false;
 
-        if (sender.isOp() && args[0].equalsIgnoreCase("music"))
+        if (args[0].equalsIgnoreCase("music"))
         {
 
             if (!target.hasMetadata("MD_LISTENING"))
@@ -81,10 +89,27 @@ public class DebugCommand implements CommandExecutor
             }
             return true;
         }
-        if (args[0].equalsIgnoreCase("clankick"))
+        else if (args[0].equalsIgnoreCase("clankick"))
         {
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
+        }
+
+        else if (args[0].equalsIgnoreCase("wb"))
+        {
+            World world = instance.getServer().getWorld(args[1]);
+            if (world == null || !instance.isSurvivalWorld(world))
+                return false;
+
+            BorderData borderData = com.wimbli.WorldBorder.WorldBorder.plugin.getWorldBorder(world.getName());
+            WorldBorder border = world.getWorldBorder();
+
+            border.setCenter(new Location(world, 0, 0, 0));
+            border.setWarningDistance(0);
+            border.setSize((borderData.getRadiusX() * 2) - 20);
+
+            sender.sendMessage(world.getName());
+            sender.sendMessage("Center: " + border.getCenter().toString() + "\nSize: " + border.getSize());
         }
         return false;
     }
