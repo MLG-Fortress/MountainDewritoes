@@ -7,6 +7,7 @@ public class MusicThing
 {
     private String soundName;
     private String URL;
+    private String description;
     private long length; //Stored in ticks
     private long startTime;
     private int priority = 0;
@@ -14,6 +15,12 @@ public class MusicThing
     public MusicThing(String URL, int seconds)
     {
         this(URL, seconds, false);
+    }
+
+    public MusicThing(String URLorName, long seconds, boolean isName, String description)
+    {
+        this(URLorName, seconds, isName);
+        this.description = description;
     }
 
     public MusicThing(String URLorName, long seconds, boolean isName)

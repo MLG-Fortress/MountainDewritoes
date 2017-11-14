@@ -21,33 +21,23 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("animallobbyextended", 60+52);
-        add("jenka1", 120+49);
-        add("pokemoncenterpianosolol", 180+3);
-        add("shopthemecover", 120+51);
-        add("skrillevapor", 120+20);
-        add("unusedupgradestation", 120+5);
-        add("wiishopthing", 120+17);
-        add("yeoldetemmieshop", 120+10);
+        add("jenka1", 120+49, "Jenka 1 by DM Dokuro on Bandcamp.\nhttps://dmdokuro.bandcamp.com/track/jenka-1");
+        add("unusedupgradestation", 120+5, "(unused) Upgrade Station Music from Team Fortress 2 (video game)");
+        add("wiishopthing", 120+17, "Mii Favorite Things by Skiff on Soundcloud.\nhttps://soundcloud.com/skiff-music/mii-favorite-things");
+        add("mall", 60+43, "Dead Bird Studio Reception from A Hat In Time (video game) by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
 
         category = "spawn";
-        add("kahootlobbymusic", 120+6);
-        add("dragonbornjeremysole", 120);
-        add("mainmenu1", 60+16);
-        add("overworld", 180+2);
-        add("safety", 120+24);
-        add("thetruebattleisyettocome", 60+58);
-        add("wirelessplaymenumariokart8deluxe", 60+8);
+        add("kahoot", (60*4)+42, "The Kahoot Lobby remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
 
         category = "minediamonds";
-        add("minediamonds", 22);
+        add("minediamonds", 22, null);
     }
 
-    private void add(String soundName, long durationInSeconds)
+    private void add(String soundName, long durationInSeconds, String description)
     {
         if (!master.containsKey(category))
             master.put(category, new ArrayList<>());
-        master.get(category).add(new MusicThing("music." + category + "." + soundName, durationInSeconds, true));
+        master.get(category).add(new MusicThing("music." + category + "." + soundName, durationInSeconds, true, description));
     }
 
     private List<MusicThing> get(Map<String, Object> sectionMap)
