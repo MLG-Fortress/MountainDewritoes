@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -22,9 +23,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class DeathListener implements Listener
 {
-    MountainDewritoes instance;
-    HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
-    Location defaultRespawnLocation;
+    private MountainDewritoes instance;
+    private HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
+    private Map<Player, Location> playersDesiredRespawnLocation = new HashMap<>();
+    private Location defaultRespawnLocation;
+
     DeathListener(MountainDewritoes yayNoMain)
     {
         instance = yayNoMain;
@@ -74,14 +77,15 @@ public class DeathListener implements Listener
      * Gives back items that weren't dropped
      * Activates death spectating, if respawned within "respawn time"
      */
-    @EventHandler(priority = EventPriority.LOW) //Since we soft-depend MV, we'll still override it at this priority
+    @EventHandler(priority = EventPriority.LOW) //Since we soft-depend MV, we'll still override it at this priority (it listens at LOW)
     void onPlayerRespawn(PlayerRespawnEvent event)
     {
         Player player = event.getPlayer();
 
-        Location respawnLocation = defaultRespawnLocation;
-        if (!instance.isSurvivalWorld(player.getWorld()))
-            respawnLocation = player.getWorld().getSpawnLocation();
+        Location respawnLocation = player.getWorld().getSpawnLocation();
+
+        if (instance.isSurvivalWorld(player.getWorld()))
+            respawnLocation = playersDesiredRespawnLocation.getOrDefault(player, defaultRespawnLocation);
         event.setRespawnLocation(respawnLocation);
 
         //Return items

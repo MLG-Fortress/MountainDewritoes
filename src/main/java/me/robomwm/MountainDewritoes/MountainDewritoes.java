@@ -38,6 +38,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -280,43 +281,37 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        usedEC.add(player);
 //    }
 
-    //Removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
-//    /**
-//     * Make chunk loading when teleporting between worlds seem faster
-//     * We aren't doing this for every teleport since plugins might perform teleports in same chunk (e.g. PortalStick)
-//     * On teleporting, sets view distance to 3, then back to 8 after 5 seconds
-//     * @param event
-//     */
-//    @EventHandler(priority = EventPriority.MONITOR)
-//    void onPlayerChangesWorldSetViewDistance(PlayerChangedWorldEvent event)
-//    {
-//        Player player = event.getPlayer();
-//        World WORLD = event.getPlayer().getWorld();
-//        if (player.hasMetadata("DEAD"))
-//            return;
-//        player.setViewDistance(3);
-//        new BukkitRunnable()
-//        {
-//            public void run()
-//            {
-//                //Don't execute if another task is scheduled
-//                if (player.getWorld() != WORLD || !player.isOnline())
-//                    this.cancel();
-//                //Wait for player to land before resetting view distance
-//                else if (player.isOnGround())
-//                {
-//                    player.setViewDistance(8);
-//                    this.cancel();
-//                }
-//            }
-//        }.runTaskTimer(this, 300L, 100L);
-//    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onTimeout(PlayerKickEvent event)
+    //Initially removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
+    //We'll see if this is still the case...
+    /**
+     * Make chunk loading when teleporting between worlds seem faster
+     * TODO: allow player to choose view distance(?)
+     * @param event
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    void onPlayerChangesWorldSetViewDistance(PlayerTeleportEvent event)
     {
-        if (event.getReason().equals("Timed out"))
-            event.setCancelled(true);
+        if (event.getFrom().getWorld() == event.getTo().getWorld())
+            return;
+
+        Player player = event.getPlayer();
+        if (player.hasMetadata("DEAD"))
+            return;
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                //Don't execute if already set
+                if (player.getViewDistance() > 3 || !player.isOnline())
+                    this.cancel();
+                //Wait for player to land before resetting view distance
+                else if (player.isOnGround())
+                {
+                    player.setViewDistance(6);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this, 300L, 100L);
     }
 
     /**
