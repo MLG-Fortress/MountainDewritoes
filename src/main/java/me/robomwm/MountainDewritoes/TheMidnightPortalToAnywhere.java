@@ -61,6 +61,7 @@ public class TheMidnightPortalToAnywhere implements Listener
         }
         catch (Throwable rock)
         {
+            instance.getLogger().warning("Could not load portals.yml.");
             return;
         }
 
