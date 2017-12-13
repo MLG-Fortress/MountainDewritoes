@@ -34,7 +34,6 @@ public class TheMidnightPortalToAnywhere implements Listener
     public TheMidnightPortalToAnywhere(MountainDewritoes plugin)
     {
         this.instance = plugin;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         enabledWorlds.add(instance.getServer().getWorld("world"));
         enabledWorlds.add(instance.getServer().getWorld("world_nether"));
         enabledWorlds.add(instance.getServer().getWorld("cityworld"));
@@ -55,7 +54,15 @@ public class TheMidnightPortalToAnywhere implements Listener
                 return;
             }
         }
-        storedPortals = YamlConfiguration.loadConfiguration(storageFile);
+
+        try
+        {
+            storedPortals = YamlConfiguration.loadConfiguration(storageFile);
+        }
+        catch (Throwable rock)
+        {
+            return;
+        }
 
         for (World world : enabledWorlds)
         {
@@ -64,6 +71,7 @@ public class TheMidnightPortalToAnywhere implements Listener
         }
 
         saveStoredPortals();
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     private void saveStoredPortals()
