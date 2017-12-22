@@ -188,10 +188,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new PseudoCommands(this);
         new TabList(this);
         new TheMidnightPortalToAnywhere(this);
+        new AtmosphericManager(this);
 
         //Plugin-dependent listeners
-        if (getServer().getPluginManager().getPlugin("MCJukebox") != null && getServer().getPluginManager().getPlugin("MCJukebox").isEnabled())
-            new AtmosphericManager(this);
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
             pm.registerEvents(new TeleportingEffects(this), this);
 

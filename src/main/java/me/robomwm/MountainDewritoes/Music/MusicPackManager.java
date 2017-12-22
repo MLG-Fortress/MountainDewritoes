@@ -21,13 +21,10 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("jenka1", 120+49, "Jenka 1 by DM Dokuro on Bandcamp.\nhttps://dmdokuro.bandcamp.com/track/jenka-1");
-        add("unusedupgradestation", 120+5, "(unused) Upgrade Station Music from Team Fortress 2 (video game)");
-        add("wiishopthing", 120+17, "Mii Favorite Things by Skiff on Soundcloud.\nhttps://soundcloud.com/skiff-music/mii-favorite-things");
-        add("mall", 60+43, "Dead Bird Studio Reception from A Hat In Time (video game) by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
+        add("mall", 60*4+6, "Dead Bird Studio Reception - A Hat In Time by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
 
         category = "spawn";
-        add("kahoot", (60*4)+42, "The Kahoot Lobby remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
+        add("kahoot", 60*4+42, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
 
         category = "minediamonds";
         add("minediamonds", 22, null);
