@@ -38,6 +38,7 @@ public class TheMidnightPortalToAnywhere implements Listener
         enabledWorlds.add(instance.getServer().getWorld("world_nether"));
         enabledWorlds.add(instance.getServer().getWorld("cityworld"));
         enabledWorlds.add(instance.getServer().getWorld("cityworld_nether"));
+        enabledWorlds.remove(null);
 
         //As much as I wanted to use some sort of mathematical function that links both locations, storing the location will help preserve the portal link if I ever change worldborders/worlds/etc.
         File storageFile = new File(plugin.getDataFolder(), "portal.data");
