@@ -16,8 +16,8 @@ softdepend:
 - BetterTPA
 - MCJukebox
 - WorldBorder
-loadbefore:
-- AbsorptionShields
+#loadbefore:
+#- AbsorptionShields
 commands:
   nick:
     aliases: [color]
