@@ -66,6 +66,12 @@ public class TheMidnightPortalToAnywhere implements Listener
             return;
         }
 
+        if (storedPortals == null)
+        {
+            instance.getLogger().warning("Could not load portals.yml.");
+            return;
+        }
+
         for (World world : enabledWorlds)
         {
             if (storedPortals.getConfigurationSection(world.getName()) == null)
