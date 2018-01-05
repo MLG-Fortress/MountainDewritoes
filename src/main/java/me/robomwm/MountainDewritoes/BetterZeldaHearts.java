@@ -197,12 +197,12 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-    //Set new player's health to 11 hearts
+    //Set new player's health to 3 hearts
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
-        if (!event.getPlayer().hasPlayedBefore() || event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() < 22D)
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(22D);
+        if (!event.getPlayer().hasPlayedBefore() || event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() < 6D)
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
         event.getPlayer().setMaximumAir(600);
     }
 
@@ -271,7 +271,7 @@ public class BetterZeldaHearts implements Listener
         return true;
     }
 
-    //Player loses 1 heart on death (down to minimum of 11 + currentLevel hearts)
+    //Player loses 1 heart on death (down to minimum of 3 + currentLevel hearts)
     @EventHandler
     void resetHealthOnRespawn(PlayerRespawnEvent event)
     {
@@ -280,8 +280,8 @@ public class BetterZeldaHearts implements Listener
 
         double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-        if (maxHealth <= 11D + event.getPlayer().getLevel())
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(11D + event.getPlayer().getLevel());
+        if (maxHealth <= 6D + (event.getPlayer().getLevel() * 2))
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D + (event.getPlayer().getLevel() * 2));
         else
         {
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth - 2D);
