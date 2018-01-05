@@ -43,63 +43,13 @@ public class LevelingProgression implements Listener
     //How many times did the player level up (compared to when we last checked)?
     private int getLevelUpAmount(Player player)
     {
-        final int timesToLevelUp = recordedPlayerLevel.get(player) - player.getLevel();
+        final int timesToLevelUp = player.getLevel() - recordedPlayerLevel.get(player);
         if (timesToLevelUp > 0)
         {
             recordedPlayerLevel.put(player, player.getLevel());
             return timesToLevelUp;
         }
         return 0;
-    }
-
-    /**
-     * Deny use of enchantment table. Make anything else require no levels to "enchant."
-     */
-    @EventHandler(ignoreCancelled = true)
-    private void enchantingIsNo(EnchantItemEvent event)
-    {
-        if (event.getExpLevelCost() <= 0)
-            return;
-
-        if (event.getEnchantBlock().getType() == Material.ENCHANTMENT_TABLE)
-        {
-            event.setCancelled(true);
-            event.getEnchanter().closeInventory();
-            return;
-        }
-
-        //Never gets here since this is only called for enchantment tables at the moment
-
-        event.setExpLevelCost(0);
-    }
-
-    @EventHandler
-    private void onJoin(PlayerJoinEvent event)
-    {
-        recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
-    }
-
-    @EventHandler
-    private void onQuit(PlayerQuitEvent event)
-    {
-        recordedPlayerLevel.remove(event.getPlayer());
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void enchantingIsNo(InventoryOpenEvent event)
-    {
-        if (event.getInventory().getType() != InventoryType.ENCHANTING)
-            return;
-        event.setCancelled(true);
-    }
-    @EventHandler
-    private void anvil(PrepareAnvilEvent event)
-    {
-        AnvilInventory anvilInventory = event.getInventory();
-        ItemStack magicLootItem = magicLootEnchant(event.getInventory().getContents());
-        anvilInventory.setRepairCost(0);
-        if (magicLootItem != null)
-            event.setResult(magicLootItem);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -139,6 +89,56 @@ public class LevelingProgression implements Listener
 //            expAmount -= nextLevelExp; //Subtract amount of xp remaining from the orb (we "spent" it on leveling up)
 //            nextLevelExp += SetExpFix.getExpAtLevel(++nextLevel); //Calculate the xp needed to level up to the next level (that's a lot of levels)
 //        }
+    }
+
+    @EventHandler
+    private void onJoin(PlayerJoinEvent event)
+    {
+        recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
+    }
+
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event)
+    {
+        recordedPlayerLevel.remove(event.getPlayer());
+    }
+
+    /**
+     * Deny use of enchantment table. Make anything else require no levels to "enchant."
+     */
+    @EventHandler(ignoreCancelled = true)
+    private void enchantingIsNo(EnchantItemEvent event)
+    {
+        if (event.getExpLevelCost() <= 0)
+            return;
+
+        if (event.getEnchantBlock().getType() == Material.ENCHANTMENT_TABLE)
+        {
+            event.setCancelled(true);
+            event.getEnchanter().closeInventory();
+            return;
+        }
+
+        //Never gets here since this is only called for enchantment tables at the moment
+
+        event.setExpLevelCost(0);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void enchantingIsNo(InventoryOpenEvent event)
+    {
+        if (event.getInventory().getType() != InventoryType.ENCHANTING)
+            return;
+        event.setCancelled(true);
+    }
+    @EventHandler
+    private void anvil(PrepareAnvilEvent event)
+    {
+        AnvilInventory anvilInventory = event.getInventory();
+        ItemStack magicLootItem = magicLootEnchant(event.getInventory().getContents());
+        anvilInventory.setRepairCost(0);
+        if (magicLootItem != null)
+            event.setResult(magicLootItem);
     }
 
     //Allow anvil use (setting enchantment cost to 0 causes the client not to not try to enchant anything

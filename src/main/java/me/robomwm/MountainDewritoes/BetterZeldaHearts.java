@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.usefulutil.SetExpFix;
 import me.robomwm.usefulutil.UsefulUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -85,7 +86,7 @@ public class BetterZeldaHearts implements Listener
             heartMeta.setDisplayName("healthHeart");
             heart.setItemMeta(heartMeta);
             Item heartItem = location.getWorld().dropItem(location, heart);
-            heartItem.setCustomName(ChatColor.RED + "health");
+            heartItem.setCustomName(ChatColor.RED + "healthpack");
             heartItem.setCustomNameVisible(true);
             heartItem.setPickupDelay(10);
         }
@@ -271,22 +272,25 @@ public class BetterZeldaHearts implements Listener
         return true;
     }
 
-    //Player loses 1 heart on death (down to minimum of 3 hearts)
-//    @EventHandler
-//    void resetHealthOnRespawn(PlayerRespawnEvent event)
-//    {
-//        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-//
-//        if (maxHealth <= 6D)
-//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
-//        else
-//        {
-//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth - 2D);
-////            int extraHearts = (int)event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60;
-////            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60 + (extraHearts - (extraHearts/8)));
-////            //ensure even value
-////            double health = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-////            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health - (health % 2));
-//        }
-//    }
+    //Player loses 1 heart on death (down to minimum of 11 + currentLevel hearts)
+    @EventHandler
+    void resetHealthOnRespawn(PlayerRespawnEvent event)
+    {
+        if (instance.isMinigameWorld(event.getRespawnLocation().getWorld()))
+            return;
+
+        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
+        if (maxHealth <= 11D + event.getPlayer().getLevel())
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(11D + event.getPlayer().getLevel());
+        else
+        {
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth - 2D);
+//            int extraHearts = (int)event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60;
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60 + (extraHearts - (extraHearts/8)));
+//            //ensure even value
+//            double health = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health - (health % 2));
+        }
+    }
 }

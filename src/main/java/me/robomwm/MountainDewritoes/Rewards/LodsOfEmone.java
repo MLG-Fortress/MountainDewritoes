@@ -52,7 +52,7 @@ public class LodsOfEmone
                     executeCommand("newkey 1 " + player.getName());
                 player.playSound(player.getLocation(), "fortress.levelup", SoundCategory.PLAYERS, 3000000f, 1.0f);
         }
-        instance.getTitleManager().addUsingTitle(player, 10, title.build());
+        instance.getTitleManager().sendTitle(player, 10, title.build());
     }
 
     public boolean executeCommand(String command)

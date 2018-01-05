@@ -8,7 +8,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -87,7 +86,7 @@ public class HitSound implements Listener
             public void run()
             {
                 killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
-                instance.getTitleManager().addUsingTitle(killer, 0, title);
+                instance.getTitleManager().sendTitle(killer, 0, title);
             }
         }.runTaskLater(instance, 3L);
 

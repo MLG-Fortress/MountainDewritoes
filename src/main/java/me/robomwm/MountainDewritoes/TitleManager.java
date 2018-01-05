@@ -38,7 +38,7 @@ public class TitleManager implements Listener
      * @param title
      * @return whether it successfully printed a title to the player
      */
-    public boolean addUsingTitle(Player player, int priority, Title title)
+    public boolean sendTitle(Player player, int priority, Title title)
     {
         //Deny if priority is lesser than existing title's priority and is currently active
         if (isUsingTitle(player))
