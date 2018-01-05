@@ -280,7 +280,9 @@ public class BetterZeldaHearts implements Listener
 
         double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-        if (maxHealth <= 6D + (event.getPlayer().getLevel() * 2))
+        if (event.getPlayer().getLevel() >= 90)
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(180D);
+        else if (maxHealth <= 6D + (event.getPlayer().getLevel() * 2))
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D + (event.getPlayer().getLevel() * 2));
         else
         {
