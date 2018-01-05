@@ -43,7 +43,7 @@ public class LevelingProgression implements Listener
     //How many times did the player level up (compared to when we last checked)?
     private int getLevelUpAmount(Player player)
     {
-        final int timesToLevelUp = player.getLevel() - recordedPlayerLevel.get(player);
+        final int timesToLevelUp = player.getLevel() - recordedPlayerLevel.get(player); //Current level - last seen level
         if (timesToLevelUp > 0)
         {
             recordedPlayerLevel.put(player, player.getLevel());
@@ -53,12 +53,13 @@ public class LevelingProgression implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
-    private void levelChangeEvent(PlayerExpChangeEvent event)
+    private void levelChangeEvent(PlayerExpChangeEvent event) //We only want to fire on naturally-collected XP.
     {
         //TODO: track exp (so players don't lose any)
 
         Player player = event.getPlayer();
 
+        //Wait a tick so player.getLevel() updates
         new BukkitRunnable()
         {
             @Override

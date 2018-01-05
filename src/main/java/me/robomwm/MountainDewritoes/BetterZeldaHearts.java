@@ -86,7 +86,7 @@ public class BetterZeldaHearts implements Listener
             heartMeta.setDisplayName("healthHeart");
             heart.setItemMeta(heartMeta);
             Item heartItem = location.getWorld().dropItem(location, heart);
-            heartItem.setCustomName(ChatColor.RED + "healthpack");
+            heartItem.setCustomName(ChatColor.RED + "SwagPack");
             heartItem.setCustomNameVisible(true);
             heartItem.setPickupDelay(10);
         }
@@ -101,9 +101,8 @@ public class BetterZeldaHearts implements Listener
             potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
             potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
             List<String> lore = new ArrayList<>();
-            lore.add("Permanently increases");
-            lore.add("your max health");
-            lore.add("(until you die).");
+            lore.add(ChatColor.BLACK + "MLGID:1");
+            lore.add("Increases ur maximum swegginess");
             potionMeta.setLore(lore);
             healthCanister.setItemMeta(potionMeta);
             event.getDrops().add(healthCanister);
@@ -176,7 +175,7 @@ public class BetterZeldaHearts implements Listener
             return;
 
         List<String> lore = potionMeta.getLore();
-        if (!lore.get(0).equals("Permanently increases") || !lore.get(1).startsWith("your max health"))
+        if (!lore.get(0).equals(ChatColor.BLACK + "MLGID:1"))
             return;
         Player player = event.getPlayer();
         if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= 180D)

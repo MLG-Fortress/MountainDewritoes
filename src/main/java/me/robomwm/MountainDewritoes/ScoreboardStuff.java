@@ -87,6 +87,6 @@ public class ScoreboardStuff implements Listener
         }
 
         sbManager.update(player, "Balance:  " + event.getEconomy().format(event.getEconomy().getBalance(player)), 0);
-        scheduleScoreboardRemoval(sbManager, player, instance, 100L);
+        scheduleScoreboardRemoval(sbManager, player, instance, 160L);
     }
 }
