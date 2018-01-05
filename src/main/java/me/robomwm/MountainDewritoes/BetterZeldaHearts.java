@@ -197,12 +197,12 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-    //Set new player's health to 30 hearts
+    //Set new player's health to 11 hearts
     @EventHandler
     void onNewJoin(PlayerJoinEvent event)
     {
-        if (!event.getPlayer().hasPlayedBefore())
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
+        if (!event.getPlayer().hasPlayedBefore() || event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() < 22D)
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(22D);
         event.getPlayer().setMaximumAir(600);
     }
 
@@ -272,21 +272,21 @@ public class BetterZeldaHearts implements Listener
     }
 
     //Player loses 1 heart on death (down to minimum of 3 hearts)
-    @EventHandler
-    void resetHealthOnRespawn(PlayerRespawnEvent event)
-    {
-        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-
-        if (maxHealth <= 6D)
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
-        else
-        {
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth - 2D);
-//            int extraHearts = (int)event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60;
-//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60 + (extraHearts - (extraHearts/8)));
-//            //ensure even value
-//            double health = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health - (health % 2));
-        }
-    }
+//    @EventHandler
+//    void resetHealthOnRespawn(PlayerRespawnEvent event)
+//    {
+//        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+//
+//        if (maxHealth <= 6D)
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
+//        else
+//        {
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth - 2D);
+////            int extraHearts = (int)event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 60;
+////            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60 + (extraHearts - (extraHearts/8)));
+////            //ensure even value
+////            double health = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+////            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health - (health % 2));
+//        }
+//    }
 }
