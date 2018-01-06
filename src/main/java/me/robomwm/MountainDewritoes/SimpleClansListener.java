@@ -56,7 +56,7 @@ public class SimpleClansListener implements Listener
             {
                 for (Player player : instance.getServer().getOnlinePlayers())
                 {
-                    if (!instance.isSurvivalWorld(player.getWorld()))
+                    if (instance.isMinigameWorld(player.getWorld()))
                         continue;
                     setDisplayName(player);
                     setClanPrefix(player);
