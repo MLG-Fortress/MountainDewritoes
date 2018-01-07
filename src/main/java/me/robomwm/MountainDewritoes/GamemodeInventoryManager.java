@@ -113,10 +113,11 @@ public class GamemodeInventoryManager implements Listener
             @Override
             public void run()
             {
-                if (!instance.isMinigameWorld(event.getPlayer().getWorld()) && event.getPlayer().getGameMode() != GameMode.CREATIVE)
+                if (instance.isSurvivalWorld(event.getPlayer().getWorld()) && event.getPlayer().getGameMode() != GameMode.CREATIVE)
                     restoreInventory(event.getPlayer());
             }
         }.runTask(instance);
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
     }
 
     //Restore and save experience when entering minigames spawn
