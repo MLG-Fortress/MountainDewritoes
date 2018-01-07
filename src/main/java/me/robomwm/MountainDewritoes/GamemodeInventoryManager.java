@@ -50,10 +50,9 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onChangeGamemode(PlayerGameModeChangeEvent event)
     {
+        World world = event.getPlayer().getWorld();
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
-            World world = event.getPlayer().getWorld();
-
             //If player is in a survival world (except prison) and is not op, deny creative gamemode
             if (instance.isSurvivalWorld(world) && instance.getServer().getWorld("prison") != world && !event.getPlayer().isOp())
             {
@@ -68,7 +67,8 @@ public class GamemodeInventoryManager implements Listener
         {
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
             event.getPlayer().getInventory().clear();
-            restoreInventory(event.getPlayer());
+            if (instance.isSurvivalWorld(world)) //Only restore inventory when in a survival world, otherwise ignore.
+                restoreInventory(event.getPlayer());
         }
     }
 
