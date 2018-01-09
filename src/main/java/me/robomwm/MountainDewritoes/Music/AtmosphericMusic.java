@@ -57,7 +57,7 @@ public class AtmosphericMusic implements Listener
             {
                 atmosphericManager.playSound(musicPackManager.getSong(world.getName()), world);
             }
-        }.runTaskTimer(instance, 300L, 600L);
+        }.runTaskTimer(instance, 300L, 300L);
     }
 
     private void normalAmbiance(Set<World> worlds)
