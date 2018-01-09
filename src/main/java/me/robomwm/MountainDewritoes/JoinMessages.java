@@ -64,7 +64,7 @@ public class JoinMessages implements Listener
         pack = instance.getConfig().getString("pack");
         loadingPackTitleBuilder = new Title.Builder();
         loadingPackTitleBuilder.fadeIn(0);
-        loadingPackTitleBuilder.stay(10);
+        loadingPackTitleBuilder.stay(40);
         loadingPackTitleBuilder.fadeOut(0);
         randomTitles.add("Loadin Memez");
         randomTitles.add("Laodin Maymays");
@@ -127,7 +127,7 @@ public class JoinMessages implements Listener
                     this.cancel();
                 }
             }
-        }.runTaskTimer(instance, 40L, 100L);
+        }.runTaskTimer(instance, 0L, 100L);
     }
 
     @EventHandler
@@ -160,6 +160,8 @@ public class JoinMessages implements Listener
                 break;
             case SUCCESSFULLY_LOADED:
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+                instance.getTitleManager().removeTitle(event.getPlayer(), 0);
+                break;
         }
     }
 
