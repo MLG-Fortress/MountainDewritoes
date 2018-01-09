@@ -1,12 +1,16 @@
 package me.robomwm.MountainDewritoes;
 
+import com.destroystokyo.paper.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
@@ -18,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/27/2016.
@@ -28,13 +33,17 @@ import java.util.UUID;
  */
 public class JoinMessages implements Listener
 {
-    MountainDewritoes instance;
+    private MountainDewritoes instance;
 
     //List<String> randomTips = new ArrayList<>();
     //Random random = new Random();
 
-    String pack;
-    Set<UUID> ignoredUUIDs = new HashSet<>();
+    private List<String> randomTitles = new ArrayList<>();
+    private List<String> randomSubTitles = new ArrayList<>();
+
+    private String pack;
+    private Set<UUID> ignoredUUIDs = new HashSet<>();
+    private Title.Builder loadingPackTitleBuilder;
 
     JoinMessages(MountainDewritoes blah)
     {
@@ -55,6 +64,23 @@ public class JoinMessages implements Listener
         //Resource pack notifier
         ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
         pack = instance.getConfig().getString("pack");
+        loadingPackTitleBuilder = new Title.Builder();
+        loadingPackTitleBuilder.fadeIn(0);
+        loadingPackTitleBuilder.stay(1);
+        loadingPackTitleBuilder.fadeOut(0);
+        randomTitles.add("Loadin Memez");
+        randomTitles.add("Laodin Maymays");
+        randomTitles.add("Meme Delivery");
+        randomTitles.add("Welcome to Minecraft");
+        randomTitles.add("Pls Dont timeout");
+        randomTitles.add("Don't 4get 2 breathe");
+        randomSubTitles.add("Did u no u can /tip");
+        randomSubTitles.add("Did u no u can /apply 4 staff");
+        randomSubTitles.add("Did u no theres over 120 plogenz here");
+        randomSubTitles.add("Did u no therez moar world typez no man has gone b4");
+        randomSubTitles.add("Did u no there r wormholes");
+        randomSubTitles.add("Did u no Did u no Did u no Did u no Did u no Did u no Did u no Did u no Did u no Did u no");
+        randomSubTitles.add(ChatColor.LIGHT_PURPLE + "* U_WOT_BOT is lonely");
     }
     //Tips
     @EventHandler
@@ -89,6 +115,11 @@ public class JoinMessages implements Listener
                     this.cancel();
                 else if (!event.getPlayer().isOnGround())
                     return;
+                else if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
+                {
+                    event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
+                    this.cancel();
+                }
                 else
                 {
                     event.getPlayer().setResourcePack(pack);
@@ -99,29 +130,47 @@ public class JoinMessages implements Listener
     }
 
     @EventHandler
-    void statusOfPack(PlayerResourcePackStatusEvent event)
+    void onPlayerChangeWorldWithNoPack(PlayerChangedWorldEvent event)
     {
-        if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED)
+        if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
+            event.getPlayer().setResourcePack(pack);
+    }
+
+    @EventHandler
+    private void statusOfPack(PlayerResourcePackStatusEvent event)
+    {
+        switch(event.getStatus())
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "irc say samplebot #MLG " + event.getPlayer().getName() + " denied da meme pack.");
+            case ACCEPTED:
+                loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
+                loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
+                instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
+                event.getPlayer().setMetadata("MD_ACCEPTED", new FixedMetadataValue(instance, true));
+                break;
+            case DECLINED:
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector loominarty " + event.getPlayer().getName() + " denied da meme pack.");
 
-            if (ignoredUUIDs.contains(event.getPlayer().getUniqueId()))
-                return;
+                if (ignoredUUIDs.contains(event.getPlayer().getUniqueId()))
+                    return;
 
-            new BukkitRunnable()
-            {
-                public void run()
+                new BukkitRunnable()
                 {
-                    if (event.getPlayer().isOnline())
-                        event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our meme resource pack. Please enable it by editing the server in your servers list.");
-                }
-            }.runTaskLater(instance, 1200L);
+                    public void run()
+                    {
+                        if (event.getPlayer().isOnline())
+                            event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our memetastic resource pack." + ChatColor.YELLOW + "\nU can enable resource packs by editing dis serbur in ur servers list.");
+                    }
+                }.runTaskLater(instance, 600L);
+                event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+                break;
+            case SUCCESSFULLY_LOADED:
+                event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
         }
     }
 
     //Use the latest version!
     @EventHandler
-    void onUsingOlderClient(PlayerJoinEvent event)
+    private void onUsingOlderClient(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
 
@@ -137,7 +186,7 @@ public class JoinMessages implements Listener
                     if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
                     {
                         player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~");
-                        player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "You are using an outdated version of Minecraft - Some features on this server might not appear to work correctly for you." + ChatColor.YELLOW + "\nFor the best and intended MLG experience, please update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
+                        player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "Some stuff might not look... on point. Or cause u 2 crash. But that's because you're using an outdated version of Minecraft!" + ChatColor.YELLOW + "\nFor the intended, memetastic experience, please update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
                         player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~");
                     }
                 }

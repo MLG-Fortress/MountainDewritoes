@@ -17,13 +17,18 @@ import java.util.Map;
  */
 public class TitleManager implements Listener
 {
-    MountainDewritoes instance;
+    private MountainDewritoes instance;
     private Map<Player, TitleMeta> usingTitlePlayers = new HashMap<>();
+    private Title blankTitle;
 
     public TitleManager(MountainDewritoes plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
+        Title.Builder titleBuilder = new Title.Builder();
+        titleBuilder.title(" ");
+        titleBuilder.subtitle(" ");
+        blankTitle = titleBuilder.build();
     }
 
     public boolean isUsingTitle(Player player)
@@ -52,6 +57,21 @@ public class TitleManager implements Listener
         usingTitlePlayers.put(player, new TitleMeta(priority, instance.getCurrentTick() + duration));
         player.sendTitle(title);
         return true;
+    }
+
+    /**
+     * Removes titles at or below the specified priority (since we do not ID title messages)
+     * @param player
+     */
+    public void removeTitle(Player player, int priority)
+    {
+        if (!isUsingTitle(player))
+            return;
+        TitleMeta titleMeta = usingTitlePlayers.get(player);
+        if (titleMeta.getPriority() > priority)
+            return;
+        player.sendTitle(blankTitle);
+        usingTitlePlayers.remove(player);
     }
 
     @EventHandler

@@ -56,13 +56,7 @@ public class HitSound implements Listener
 
         attacker.playSound(attacker.getLocation(), Sound.UI_BUTTON_CLICK, 3000000f, 1f);
 
-        if (!instance.getTitleManager().isUsingTitle(attacker) && !attacker.hasMetadata("DEAD"))
-        {
-//            if (event.getFinalDamage() < 10)
-//                attacker.sendTitle(hitMarker);
-//            else
-            attacker.sendTitle(largeHitMarker);
-        }
+        instance.getTitleManager().sendTitle(attacker, 0, largeHitMarker); //TODO: critical damage color modifier
     }
 
     @EventHandler
@@ -86,7 +80,7 @@ public class HitSound implements Listener
             public void run()
             {
                 killer.playSound(killer.getLocation(), "fortress.elimination", 3000000f, 1f);
-                instance.getTitleManager().sendTitle(killer, 0, title);
+                instance.getTitleManager().sendTitle(killer, 10, title);
             }
         }.runTaskLater(instance, 3L);
 
