@@ -306,11 +306,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 //Wait for player to land before resetting view distance
                 else if (player.isOnGround())
                 {
-                    player.setViewDistance(6);
+                    player.setViewDistance(8);
                     this.cancel();
                 }
             }
-        }.runTaskTimer(this, 300L, 100L);
+        }.runTaskTimer(this, 200L, 100L);
     }
 
     /**

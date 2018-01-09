@@ -42,7 +42,6 @@ public class JoinMessages implements Listener
     private List<String> randomSubTitles = new ArrayList<>();
 
     private String pack;
-    private Set<UUID> ignoredUUIDs = new HashSet<>();
     private Title.Builder loadingPackTitleBuilder;
 
     JoinMessages(MountainDewritoes blah)
@@ -62,7 +61,6 @@ public class JoinMessages implements Listener
 //        randomTips.add("Try an AbsorptionShield in the chest at spawn!");
 
         //Resource pack notifier
-        ignoredUUIDs.add(UUID.fromString("a1a23a3f-ab44-45c9-b484-76c99ae8fba8"));
         pack = instance.getConfig().getString("pack");
         loadingPackTitleBuilder = new Title.Builder();
         loadingPackTitleBuilder.fadeIn(0);
@@ -122,6 +120,9 @@ public class JoinMessages implements Listener
                 }
                 else
                 {
+                    loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
+                    loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
+                    instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
                     event.getPlayer().setResourcePack(pack);
                     this.cancel();
                 }
@@ -142,16 +143,10 @@ public class JoinMessages implements Listener
         switch(event.getStatus())
         {
             case ACCEPTED:
-                loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
-                loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
-                instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
                 event.getPlayer().setMetadata("MD_ACCEPTED", new FixedMetadataValue(instance, true));
                 break;
             case DECLINED:
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector loominarty " + event.getPlayer().getName() + " denied da meme pack.");
-
-                if (ignoredUUIDs.contains(event.getPlayer().getUniqueId()))
-                    return;
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " denied da memepak.");
 
                 new BukkitRunnable()
                 {
