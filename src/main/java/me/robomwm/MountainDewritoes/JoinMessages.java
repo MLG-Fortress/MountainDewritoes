@@ -64,7 +64,7 @@ public class JoinMessages implements Listener
         pack = instance.getConfig().getString("pack");
         loadingPackTitleBuilder = new Title.Builder();
         loadingPackTitleBuilder.fadeIn(0);
-        loadingPackTitleBuilder.stay(1);
+        loadingPackTitleBuilder.stay(10);
         loadingPackTitleBuilder.fadeOut(0);
         randomTitles.add("Loadin Memez");
         randomTitles.add("Laodin Maymays");

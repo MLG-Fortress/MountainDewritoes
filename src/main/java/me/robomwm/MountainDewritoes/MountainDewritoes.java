@@ -8,6 +8,7 @@ import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
+import me.robomwm.MountainDewritoes.Commands.ViewDistanceCommand;
 import me.robomwm.MountainDewritoes.Commands.VoiceCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
@@ -244,6 +245,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("tip").setExecutor(new TipCommand(this));
         getCommand("mdebug").setExecutor(new DebugCommand(this));
         getCommand("voice").setExecutor(new VoiceCommand(this));
+        getCommand("view").setExecutor(new ViewDistanceCommand());
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
@@ -282,36 +284,37 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     //Initially removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
     //We'll see if this is still the case...
-    /**
-     * Make chunk loading when teleporting between worlds seem faster
-     * TODO: allow player to choose view distance(?)
-     * @param event
-     */
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerChangesWorldSetViewDistance(PlayerTeleportEvent event)
-    {
-        if (event.getFrom().getWorld() == event.getTo().getWorld())
-            return;
-
-        Player player = event.getPlayer();
-        if (player.hasMetadata("DEAD"))
-            return;
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                //Don't execute if already set
-                if (player.getViewDistance() > 3 || !player.isOnline())
-                    this.cancel();
-                //Wait for player to land before resetting view distance
-                else if (player.isOnGround())
-                {
-                    player.setViewDistance(8);
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(this, 200L, 100L);
-    }
+    //idk if it's an issue but I haven't had world loading issues for a while. Though
+//    /**
+//     * Make chunk loading when teleporting between worlds seem faster
+//     * TODO: allow player to choose view distance(?)
+//     * @param event
+//     */
+//    @EventHandler(priority = EventPriority.MONITOR)
+//    void onPlayerChangesWorldSetViewDistance(PlayerTeleportEvent event)
+//    {
+//        if (event.getFrom().getWorld() == event.getTo().getWorld())
+//            return;
+//
+//        Player player = event.getPlayer();
+//        if (player.hasMetadata("DEAD"))
+//            return;
+//        new BukkitRunnable()
+//        {
+//            public void run()
+//            {
+//                //Don't execute if already set
+//                if (player.getViewDistance() > 3 || !player.isOnline())
+//                    this.cancel();
+//                //Wait for player to land before resetting view distance
+//                else if (player.isOnGround())
+//                {
+//                    player.setViewDistance(8);
+//                    this.cancel();
+//                }
+//            }
+//        }.runTaskTimer(this, 200L, 100L);
+//    }
 
     /**
      * Worldguard doesn't fully protect paintings and itemframes from being destroyed...
