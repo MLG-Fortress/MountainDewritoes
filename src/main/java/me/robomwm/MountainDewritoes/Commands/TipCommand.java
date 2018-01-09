@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created on 7/7/2017.
  *
- * I could do some sort of hashmap-id-pairing-efficiency but y' no
+ * Was going to be "smart" and only deliver unseen tips, but uh... after it not working once+nobody asking for /tips I decided not to waste time on that.
  * @author RoboMWM
  */
 public class TipCommand implements CommandExecutor
@@ -122,22 +122,22 @@ public class TipCommand implements CommandExecutor
     //TODO: word wrapping
     private String getTip(@Nonnull Player player, List<String> tips)
     {
-        List<String> shuffledTips = new ArrayList<>(tips);
-        Collections.shuffle(shuffledTips);
-        List<String> seenTips = new ArrayList<>();
-        //if (storage.getStringList(player.getUniqueId().toString()) != null)
-            //seenTips = storage.getStringList(player.getUniqueId().toString());
+//        List<String> shuffledTips = new ArrayList<>(tips);
+//        Collections.shuffle(shuffledTips);
+//        List<String> seenTips = new ArrayList<>();
+//        //if (storage.getStringList(player.getUniqueId().toString()) != null)
+//            //seenTips = storage.getStringList(player.getUniqueId().toString());
+//
+//        for (String tip : shuffledTips)
+//        {
+//            //if (!seenTips.contains(tip))
+//                return tip;
+//        }
 
-        for (String tip : shuffledTips)
-        {
-            //if (!seenTips.contains(tip))
-                return tip;
-        }
-
-        return shuffledTips.get(0);
+        return tips.get(ThreadLocalRandom.current().nextInt(tips.size() - 1));
     }
 
-    private ChatColor getRandomColor()
+    public ChatColor getRandomColor()
     {
         //Not the most CPU efficient but idc
         List<ChatColor> color = new ArrayList<>();
@@ -152,6 +152,11 @@ public class TipCommand implements CommandExecutor
         color.add(ChatColor.DARK_AQUA);
         color.add(ChatColor.DARK_GREEN);
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));
+    }
+
+    public String getTip()
+    {
+        return randomTips.get(ThreadLocalRandom.current().nextInt(randomTips.size() - 1));
     }
 
 //    private void saveStorage()

@@ -66,7 +66,10 @@ public class TitleManager implements Listener
     public void removeTitle(Player player, int priority)
     {
         if (!isUsingTitle(player))
+        {
+            player.sendTitle(blankTitle);
             return;
+        }
         TitleMeta titleMeta = usingTitlePlayers.get(player);
         if (titleMeta.getPriority() > priority)
             return;

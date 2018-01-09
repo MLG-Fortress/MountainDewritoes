@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -64,7 +65,7 @@ public class JoinMessages implements Listener
         pack = instance.getConfig().getString("pack");
         loadingPackTitleBuilder = new Title.Builder();
         loadingPackTitleBuilder.fadeIn(0);
-        loadingPackTitleBuilder.stay(40);
+        loadingPackTitleBuilder.stay(30);
         loadingPackTitleBuilder.fadeOut(0);
         randomTitles.add("Loadin Memez");
         randomTitles.add("Laodin Maymays");
@@ -100,34 +101,43 @@ public class JoinMessages implements Listener
     }
 
     //resource pack
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     void onPlayerJoin(PlayerJoinEvent event)
     {
         if (pack == null || pack.isEmpty())
             return;
-        new BukkitRunnable()
+        if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
+            event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
+        else
         {
-            public void run()
-            {
-                if (!event.getPlayer().isOnline())
-                    this.cancel();
-                else if (!event.getPlayer().isOnGround())
-                    return;
-                else if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
-                {
-                    event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
-                    this.cancel();
-                }
-                else
-                {
-                    loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
-                    loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
-                    instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
-                    event.getPlayer().setResourcePack(pack);
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(instance, 0L, 100L);
+            loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
+            loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
+            instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
+            event.getPlayer().setResourcePack(pack);
+        }
+//        new BukkitRunnable()
+//        {
+//            public void run()
+//            {
+//                if (!event.getPlayer().isOnline())
+//                    this.cancel();
+//                else if (!event.getPlayer().isOnGround())
+//                    return;
+//                else if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
+//                {
+//                    event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
+//                    this.cancel();
+//                }
+//                else
+//                {
+//                    loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
+//                    loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
+//                    instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
+//                    event.getPlayer().setResourcePack(pack);
+//                    this.cancel();
+//                }
+//            }
+//        }.runTaskTimer(instance, 0L, 100L);
     }
 
     @EventHandler
