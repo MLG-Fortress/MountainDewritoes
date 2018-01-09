@@ -22,7 +22,7 @@ public class GoldArmor implements Listener
 
     /* GOLD BOOTS */
     //Mid-air leap. Player looks in direction they wish to leap.
-    //Could've used player movement instead of where player looks (with some expense to performance), but would loose ability to control vertical trajectory.
+    //Could've used player movement instead of where player looks (with some expense to performance), but would lose ability to control vertical trajectory.
     @EventHandler(ignoreCancelled = true)
     private void onSneak(PlayerToggleSneakEvent event)
     {

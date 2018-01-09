@@ -60,28 +60,6 @@ public class AtmosphericMusic implements Listener
         }.runTaskTimer(instance, 300L, 300L);
     }
 
-    private void normalAmbiance(Set<World> worlds)
-    {
-        new BukkitRunnable()
-        {
-            private String timeOfDay;
-            @Override
-            public void run()
-            {
-                long time = instance.getServer().getWorld("world").getTime();
-                if (time > 13000 && time < 23000)
-                    timeOfDay = "night";
-                else
-                    timeOfDay = "day";
-
-                for (World world : worlds)
-                {
-                    atmosphericManager.playSound(musicPackManager.getSong(timeOfDay), world);
-                }
-            }
-        }.runTaskTimer(instance, 1200L, 2400L);
-    }
-
     @EventHandler
     private void onPlayerInteractJukebox(JukeboxInteractEvent event)
     {

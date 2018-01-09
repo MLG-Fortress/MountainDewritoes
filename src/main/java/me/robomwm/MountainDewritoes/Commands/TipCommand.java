@@ -28,7 +28,6 @@ public class TipCommand implements CommandExecutor
     JavaPlugin instance;
     //YamlConfiguration storage;
     List<String> randomTips = new ArrayList<>();
-    List<String> betaTips = new ArrayList<>();
     //File storageFile;
 
     public TipCommand(JavaPlugin plugin)
@@ -53,23 +52,21 @@ public class TipCommand implements CommandExecutor
 //            storage = YamlConfiguration.loadConfiguration(storageFile);
 
 
-        randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
-        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.BOLD + ChatColor.AQUA + "ALL fall damage!");
-        randomTips.add("We could always use more staff, feel free to /apply");
+        randomTips.add("Mobs may drop a health canister; use these 2 hold moar sweg.");
+        randomTips.add("Think u got wut it taeks 2 maek gud meemees? Den /apply");
         randomTips.add("Bored? Talk 2 U_W0T_B0T by mentioning it in chat!");
         randomTips.add("Got any suggestions for the MLG pack? Just state your opinions in chat!");
-        randomTips.add("ur message culd b here! Just bcome staff by /apply m8");
         randomTips.add("Play Watch2Win by typing /ad 2 win some neuuuu stooof");
-        randomTips.add("Need a crate key? Win one via an /ad or see if there's any at the /mall");
         randomTips.add("Lern 2 bend da meincraft world wit /help bending");
         randomTips.add("Don't keel dee endermins");
-        randomTips.add("Find loot quick mobs r hard");
+        randomTips.add("Find loot quick, mobs r hard");
         randomTips.add("Git sum cool stoof wit slamphun!! Lern how in da " + ChatColor.GOLD + "/sf guide");
         add("Build and fly a Minecraft-sized airship! &6/help autocraft");
-
-        betaTips.add("Try an AbsorptionShield in the chest at spawn!");
-        betaTips.add("Wallride like loo-see-oh frum ogrewatch. Hold a feather, jump and hold sneak near a wall");
-        betaTips.add("Test the portal gun - just craft a wood shovel");
+        add("Try some /voice commands!");
+        add("Sumtimes memes r so bad dat random rips in da world may appear 2 take u 2 other mysterious landz!!");
+        add("Nether portals aren't just portals to the nether...");
+        add("If ur in a clan and u claimed some capture points, u can /tppoint to 'em!");
+        add("Don't 4get u need to tp 2 /minigames if u want 2 play sum!");
     }
 
     public boolean add(String tip)
@@ -134,7 +131,7 @@ public class TipCommand implements CommandExecutor
 //                return tip;
 //        }
 
-        return tips.get(ThreadLocalRandom.current().nextInt(tips.size() - 1));
+        return tips.get(ThreadLocalRandom.current().nextInt(tips.size()));
     }
 
     public ChatColor getRandomColor()
@@ -147,16 +144,13 @@ public class TipCommand implements CommandExecutor
         color.add(ChatColor.BLUE);
         color.add(ChatColor.AQUA);
         color.add(ChatColor.YELLOW);
-        color.add(ChatColor.DARK_PURPLE);
         color.add(ChatColor.LIGHT_PURPLE);
-        color.add(ChatColor.DARK_AQUA);
-        color.add(ChatColor.DARK_GREEN);
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));
     }
 
     public String getTip()
     {
-        return randomTips.get(ThreadLocalRandom.current().nextInt(randomTips.size() - 1));
+        return randomTips.get(ThreadLocalRandom.current().nextInt(randomTips.size()));
     }
 
 //    private void saveStorage()
