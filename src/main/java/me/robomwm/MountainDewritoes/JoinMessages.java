@@ -131,11 +131,11 @@ public class JoinMessages implements Listener
                     //loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
                     //loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
                     //instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
-                    event.getPlayer().setResourcePack(pack);
                     instance.getLogger().info("Resending pack to " + event.getPlayer().getName());
+                    event.getPlayer().setResourcePack(pack);
                 }
             }
-        }.runTaskTimer(instance, 0L, 100L);
+        }.runTaskTimer(instance, 20L, 100L);
     }
 
     @EventHandler
