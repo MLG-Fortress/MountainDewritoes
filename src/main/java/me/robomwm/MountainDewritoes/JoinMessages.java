@@ -166,6 +166,7 @@ public class JoinMessages implements Listener
                     }
                 }.runTaskLater(instance, 600L);
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+                event.getPlayer().setViewDistance(8);
                 break;
             case SUCCESSFULLY_LOADED:
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
