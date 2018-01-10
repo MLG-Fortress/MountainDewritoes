@@ -145,7 +145,7 @@ public class JoinMessages implements Listener
             event.getPlayer().setResourcePack(pack);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void statusOfPack(PlayerResourcePackStatusEvent event)
     {
         switch(event.getStatus())
@@ -171,6 +171,7 @@ public class JoinMessages implements Listener
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
                 event.getPlayer().setMetadata("MD_LOADED", new FixedMetadataValue(instance, true));
                 instance.getTitleManager().removeTitle(event.getPlayer(), 0);
+                event.getPlayer().setViewDistance(8);
                 break;
         }
     }
