@@ -9,7 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -103,7 +102,7 @@ public class JoinMessages implements Listener
 
     //resource pack
     @EventHandler(priority = EventPriority.LOWEST)
-    void onPlayerJoin(PlayerLoginEvent event)
+    void onPlayerJoin(PlayerJoinEvent event)
     {
         if (pack == null || pack.isEmpty())
             return;
