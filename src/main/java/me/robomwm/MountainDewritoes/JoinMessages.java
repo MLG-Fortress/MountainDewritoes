@@ -115,29 +115,26 @@ public class JoinMessages implements Listener
             instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
             event.getPlayer().setResourcePack(pack);
         }
-//        new BukkitRunnable()
-//        {
-//            public void run()
-//            {
-//                if (!event.getPlayer().isOnline())
-//                    this.cancel();
-//                else if (!event.getPlayer().isOnGround())
-//                    return;
-//                else if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
-//                {
-//                    event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
-//                    this.cancel();
-//                }
-//                else
-//                {
-//                    loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
-//                    loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
-//                    instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
-//                    event.getPlayer().setResourcePack(pack);
-//                    this.cancel();
-//                }
-//            }
-//        }.runTaskTimer(instance, 0L, 100L);
+        //Prompt again if no response (sometimes prompt disappears on teleport and etc.)
+        new BukkitRunnable()
+        {
+            public void run()
+            {
+                if (!event.getPlayer().isOnline())
+                    this.cancel();
+                else if (!event.getPlayer().isOnGround())
+                    return;
+                else if (event.getPlayer().hasMetadata("MD_ACCEPTED") || event.getPlayer().hasMetadata("MD_DECLINED") || event.getPlayer().hasMetadata("MD_LOADED"))
+                    this.cancel();
+                else
+                {
+                    //loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size() - 1)));
+                    //loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size() - 1)));
+                    //instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
+                    event.getPlayer().setResourcePack(pack);
+                }
+            }
+        }.runTaskTimer(instance, 0L, 100L);
     }
 
     @EventHandler
@@ -156,6 +153,7 @@ public class JoinMessages implements Listener
                 event.getPlayer().setMetadata("MD_ACCEPTED", new FixedMetadataValue(instance, true));
                 break;
             case DECLINED:
+                event.getPlayer().setMetadata("MD_DECLINED", new FixedMetadataValue(instance, true));
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " denied da memepak.");
 
                 new BukkitRunnable()
@@ -170,9 +168,17 @@ public class JoinMessages implements Listener
                 break;
             case SUCCESSFULLY_LOADED:
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+                event.getPlayer().setMetadata("MD_LOADED", new FixedMetadataValue(instance, true));
                 instance.getTitleManager().removeTitle(event.getPlayer(), 0);
                 break;
         }
+    }
+
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event)
+    {
+        event.getPlayer().removeMetadata("MD_LOADED", instance);
+        event.getPlayer().removeMetadata("MD_DECLINED", instance);
     }
 
     //Use the latest version!
