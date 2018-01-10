@@ -110,9 +110,9 @@ public class JoinMessages implements Listener
             event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
         else
         {
-            //loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size())));
-            //loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size())));
-            //instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
+            loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size())));
+            loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size())));
+            instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
             event.getPlayer().setResourcePack(pack);
         }
 //        new BukkitRunnable()
