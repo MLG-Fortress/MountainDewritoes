@@ -154,6 +154,8 @@ public class JoinMessages implements Listener
                 event.getPlayer().setMetadata("MD_ACCEPTED", new FixedMetadataValue(instance, true));
                 break;
             case DECLINED:
+                if (event.getPlayer().hasMetadata("MD_DECLINED"))
+                    return;
                 event.getPlayer().setMetadata("MD_DECLINED", new FixedMetadataValue(instance, true));
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " denied da memepak.");
 
