@@ -203,6 +203,7 @@ public class JoinMessages implements Listener
                 {
                     if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
                     {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + "Yikes! " + event.getPlayer().getName() + " is running dinosaur " + ProtocolSupportAPI.getProtocolVersion(player).getName());
                         player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~");
                         player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "Some stuff might not look... on point. Or cause u 2 crash. But that's because you're using an outdated version of Minecraft!" + ChatColor.YELLOW + "\nFor the intended, memetastic experience, please update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
                         player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~");
