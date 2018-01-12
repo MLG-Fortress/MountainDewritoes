@@ -56,18 +56,7 @@ public class PseudoCommands implements Listener
             case "scs":
                 event.setCancelled(showcaseShopHandler(player, command, args));
                 break;
-            case "irc":
-                event.setCancelled(ircLink(player, command, args));
-                break;
         }
-    }
-
-    private boolean ircLink(Player player, String command, String[] args)
-    {
-        if (!player.isOp())
-            return false;
-        player.sendMessage("Join the IRC channel #MLG: http://thetechfortress.blogspot.com/p/mlg-fortress-irc.html");
-        return true;
     }
 
     private boolean balanceHandler(Player player, String command, String[] args)
