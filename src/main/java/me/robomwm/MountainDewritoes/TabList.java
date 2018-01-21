@@ -37,7 +37,7 @@ public class TabList implements Listener
             {
                 setTabList(event.getPlayer());
             }
-        }.runTaskTimer(instance, 1L, 200L);
+        }.runTaskTimer(instance, 1L, 5L);
     }
 
     private void setTabList(Player player)

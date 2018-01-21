@@ -29,11 +29,20 @@ public class TipCommand implements CommandExecutor
     private JavaPlugin instance;
     //YamlConfiguration storage;
     private List<String> randomTips = new ArrayList<>();
+    private List<ChatColor> color = new ArrayList<>();
     //File storageFile;
 
     public TipCommand(JavaPlugin plugin)
     {
         instance = plugin;
+
+        color.add(ChatColor.WHITE);
+        color.add(ChatColor.GOLD);
+        color.add(ChatColor.GREEN);
+        color.add(ChatColor.BLUE);
+        color.add(ChatColor.AQUA);
+        color.add(ChatColor.YELLOW);
+        color.add(ChatColor.LIGHT_PURPLE);
 //        storageFile = new File(plugin.getDataFolder(), "storage.data");
 //        if (!storageFile.exists())
 //        {
@@ -137,15 +146,6 @@ public class TipCommand implements CommandExecutor
 
     public ChatColor getRandomColor()
     {
-        //Not the most CPU efficient but idc
-        List<ChatColor> color = new ArrayList<>();
-        color.add(ChatColor.WHITE);
-        color.add(ChatColor.GOLD);
-        color.add(ChatColor.GREEN);
-        color.add(ChatColor.BLUE);
-        color.add(ChatColor.AQUA);
-        color.add(ChatColor.YELLOW);
-        color.add(ChatColor.LIGHT_PURPLE);
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));
     }
 
