@@ -68,8 +68,8 @@ public class LevelingProgression implements Listener
                 int timesToLevelUp = getLevelUpAmount(player);
                 while (timesToLevelUp > 0)
                 {
-                    lodsOfEmone.rewardPlayer(player, player.getLevel() - timesToLevelUp, RewardType.XP_LEVELUP);
                     timesToLevelUp--;
+                    lodsOfEmone.rewardPlayer(player, player.getLevel() - timesToLevelUp, RewardType.XP_LEVELUP);
                 }
             }
         }.runTask(instance);
