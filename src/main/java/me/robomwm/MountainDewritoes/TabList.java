@@ -37,7 +37,7 @@ public class TabList implements Listener
             {
                 setTabList(event.getPlayer());
             }
-        }.runTaskTimer(instance, 1L, 5L);
+        }.runTaskTimer(instance, 1L, 20L);
     }
 
     private void setTabList(Player player)
@@ -48,7 +48,7 @@ public class TabList implements Listener
 
         player.setPlayerListHeaderFooter(
                 TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
-                        instance.getTipCommand().getRandomColor() + instance.getEconomy().getBalance(player) + TAB +
+                        instance.getTipCommand().getRandomColor() + instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
                         instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms"),
                 TextComponent.fromLegacyText(ChatColor.AQUA + "IP: MLG.ROBOMWM.COM"));
     }
