@@ -81,6 +81,7 @@ public class JoinMessages implements Listener
         randomSubTitles.add("Did u no Did u no Did u no Did u no Did u no Did u no Did u no Did u no Did u no Did u no");
         randomSubTitles.add(ChatColor.LIGHT_PURPLE + "* U_WOT_BOT is lonely");
     }
+
     //Tips
     @EventHandler
     void onPlayerJoinToDeliverATip(PlayerJoinEvent event)

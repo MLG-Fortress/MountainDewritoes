@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +26,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class TipCommand implements CommandExecutor
 {
-    JavaPlugin instance;
+    private JavaPlugin instance;
     //YamlConfiguration storage;
-    List<String> randomTips = new ArrayList<>();
+    private List<String> randomTips = new ArrayList<>();
     //File storageFile;
 
     public TipCommand(JavaPlugin plugin)
@@ -117,7 +118,7 @@ public class TipCommand implements CommandExecutor
     }
 
     //TODO: word wrapping
-    private String getTip(@Nonnull Player player, List<String> tips)
+    private String getTip(@Nullable Player player, List<String> tips)
     {
 //        List<String> shuffledTips = new ArrayList<>(tips);
 //        Collections.shuffle(shuffledTips);

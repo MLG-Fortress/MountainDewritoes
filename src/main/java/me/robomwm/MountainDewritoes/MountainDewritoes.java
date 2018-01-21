@@ -103,6 +103,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private BetterNoDamageTicks betterNoDamageTicks;
     private TitleManager titleManager;
     private SimpleClansListener simpleClansListener;
+    private TipCommand tipCommand;
+
+    public TipCommand getTipCommand()
+    {
+        return tipCommand;
+    }
 
     public TitleManager getTitleManager()
     {
@@ -159,6 +165,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public void onEnable()
     {
         setupEconomy(this);
+        tipCommand = new TipCommand(this);
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
@@ -242,7 +249,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //getCommand("nick").setExecutor(new NickCommand());
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
-        getCommand("tip").setExecutor(new TipCommand(this));
+        getCommand("tip").setExecutor(tipCommand);
         getCommand("mdebug").setExecutor(new DebugCommand(this));
         getCommand("voice").setExecutor(new VoiceCommand(this));
         getCommand("view").setExecutor(new ViewDistanceCommand());

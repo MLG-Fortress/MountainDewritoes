@@ -16,6 +16,7 @@ softdepend:
 - BetterTPA
 - MCJukebox
 - WorldBorder
+- NoMyStuff
 #loadbefore:
 #- AbsorptionShields
 commands:
