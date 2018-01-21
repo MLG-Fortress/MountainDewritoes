@@ -17,6 +17,7 @@ import to.us.mlgfort.NoMyStuff.NoMyStuff;
  */
 public class TabList implements Listener
 {
+    private String TAB = "    ";
     private MountainDewritoes instance;
     private NoMyStuff noMyStuff;
     public TabList(MountainDewritoes plugin)
@@ -47,8 +48,8 @@ public class TabList implements Listener
 
         player.setPlayerListHeaderFooter(
                 TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
+                        instance.getTipCommand().getRandomColor() + instance.getEconomy().getBalance(player) + TAB +
                         instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms"),
-                TextComponent.fromLegacyText( instance.getTipCommand().getRandomColor() + "/TIP: " + instance.getTipCommand().getRandomColor() + instance.getTipCommand().getTip() +
-                        "\n" + ChatColor.AQUA + "IP: MLG.ROBOMWM.COM"));
+                TextComponent.fromLegacyText(ChatColor.AQUA + "IP: MLG.ROBOMWM.COM"));
     }
 }

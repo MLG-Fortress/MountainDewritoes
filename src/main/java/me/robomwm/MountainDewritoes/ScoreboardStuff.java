@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  */
 public class ScoreboardStuff implements Listener
 {
-    JavaPlugin instance;
+    private JavaPlugin instance;
     private Map<Player, List<String>> currentScoreboardView = new HashMap<>();
     private Map<Player, BukkitTask> removalTasks = new HashMap<>();
     private SbManager sbManager;
