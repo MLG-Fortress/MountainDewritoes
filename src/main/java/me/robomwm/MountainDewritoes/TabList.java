@@ -10,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import to.us.mlgfort.NoMyStuff.NoMyStuff;
 
+import java.text.DecimalFormat;
+
 /**
  * Created on 8/28/2017.
  *
@@ -20,6 +22,8 @@ public class TabList implements Listener
     private String TAB = "    ";
     private MountainDewritoes instance;
     private NoMyStuff noMyStuff;
+    private DecimalFormat df = new DecimalFormat("#.##");
+
     public TabList(MountainDewritoes plugin)
     {
         this.instance = plugin;
@@ -49,6 +53,7 @@ public class TabList implements Listener
         player.setPlayerListHeaderFooter(
                 TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
                         instance.getTipCommand().getRandomColor() + instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
+                        instance.getTipCommand().getRandomColor() + "TPS: " + df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
                         instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms"),
                 TextComponent.fromLegacyText(ChatColor.AQUA + "IP: MLG.ROBOMWM.COM"));
     }
