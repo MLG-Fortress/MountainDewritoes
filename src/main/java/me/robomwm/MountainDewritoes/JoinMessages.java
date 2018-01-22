@@ -107,6 +107,7 @@ public class JoinMessages implements Listener
     {
         if (pack == null || pack.isEmpty())
             return;
+        event.getPlayer().setMetadata("MD_JOINING", new FixedMetadataValue(instance, true));
         if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
             event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
         else
@@ -173,6 +174,7 @@ public class JoinMessages implements Listener
                 break;
             case SUCCESSFULLY_LOADED:
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+                event.getPlayer().removeMetadata("MD_JOINING", instance);
                 event.getPlayer().setMetadata("MD_LOADED", new FixedMetadataValue(instance, true));
                 instance.getTitleManager().removeTitle(event.getPlayer(), 0);
                 event.getPlayer().setViewDistance(8);

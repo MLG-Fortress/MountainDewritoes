@@ -81,7 +81,7 @@ public class AtmosphericManager implements Listener
                 for (Player player : players)
                 {
                     //Skip player if they're dead
-                    if (player.hasMetadata("DEAD") || player.isDead())
+                    if (player.hasMetadata("DEAD") || player.isDead() || player.hasMetadata("MD_JOINING"))
                         continue;
                     //Skip player if already listening to music
                     if (player.hasMetadata("MD_LISTENING"))
