@@ -43,6 +43,7 @@ public class AtmosphericMusic implements Listener
 
         startAmbiance(instance.getServer().getWorld("mall"));
         startAmbiance(instance.getServer().getWorld("spawn"));
+        startAmbiance(instance.getServer().getWorld("prison"));
         //normalAmbiance(instance.getSurvivalWorlds());
     }
 
@@ -146,18 +147,5 @@ public class AtmosphericMusic implements Listener
 
         if (NSA.getSpreePoints(killer) >= 20)
             atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer);
-    }
-	@EventHandler //Player breaks diamond ore
-    private void BlockBreakEvent(BlockBreakEvent event)
-    {
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
-        if (block.getType() == Material.DIAMOND_ORE)
-        {
-        	if(ThreadLocalRandom.current().nextInt() == 1) //0.1% chance of playing
-        	{
-            atmosphericManager.playSound(musicPackManager.getSong("minediamonds").setPriority(50), 0, player);
-        	}
-        }
     }
 }
