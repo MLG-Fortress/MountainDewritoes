@@ -80,10 +80,10 @@ public class GamemodeInventoryManager implements Listener
         World to = event.getTo().getWorld();
 
         //If teleporting within same world, no need to save
-        if (instance.isMinigameWorld(from) == instance.isMinigameWorld(to))
+        if (instance.isSurvivalWorld(from) == instance.isSurvivalWorld(to))
             return;
 
-        if (instance.isMinigameWorld(to))
+        if (!instance.isSurvivalWorld(to))
             storeAndClearInventory(event.getPlayer());
     }
 
@@ -95,12 +95,12 @@ public class GamemodeInventoryManager implements Listener
         World to = event.getPlayer().getWorld();
 
         //If not traversing from/to a minigame world, or player is (somehow) in creative, no need to do anything
-        if (instance.isMinigameWorld(from) == instance.isMinigameWorld(to))
+        if (instance.isSurvivalWorld(from) == instance.isSurvivalWorld(to))
             return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
 
-        if (!instance.isMinigameWorld(to))
+        if (instance.isSurvivalWorld(to))
             restoreInventory(event.getPlayer());
     }
 
@@ -166,7 +166,7 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler
     private void onPlayerTeleportRestoreExperience(PlayerChangedWorldEvent event)
     {
-        if (!instance.isMinigameWorld(event.getFrom()))
+        if (instance.isSurvivalWorld(event.getFrom()))
             return;
 
         new BukkitRunnable()
@@ -312,7 +312,7 @@ public class GamemodeInventoryManager implements Listener
             return false;
 
         //No need to save if the player is in a minigame world
-        if (instance.isMinigameWorld(player.getWorld()))
+        if (!instance.isSurvivalWorld(player.getWorld()))
             return false;
 
         //Avoid having to deal with players holding stuff with their mouse cursor and other inventory whatnot (though idk if a tick has to elapse for this to actually work, server side).
@@ -379,7 +379,7 @@ public class GamemodeInventoryManager implements Listener
             return false;
 
         //No need to save if the player is in a minigame world
-        if (instance.isMinigameWorld(player.getWorld()))
+        if (!instance.isSurvivalWorld(player.getWorld()))
             return false;
 
         ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
