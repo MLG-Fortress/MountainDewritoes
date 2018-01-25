@@ -66,7 +66,9 @@ public class PseudoCommands implements Listener
     {
         if (!player.isOp())
             return false;
-        player.sendMessage("Join the IRC channel #MLG: http://thetechfortress.blogspot.com/p/mlg-fortress-irc.html");
+        if (args.length > 0 && args[0].equals("list"))
+            return false;
+        player.performCommand("map");
         return true;
     }
 
