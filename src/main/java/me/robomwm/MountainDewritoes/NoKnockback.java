@@ -58,17 +58,16 @@ public class NoKnockback implements Listener
             return;
         }
 
-        Entity damager = event.getDamager();
         LivingEntity target = (LivingEntity)event.getEntity();
 
         //If the entity is likely to be dead anyways, don't bother trying to deal with knockback.
         if (event.getFinalDamage() > target.getHealth())
             return;
 
-        //We only care about ~~melee and~~ projectile damage - the rest provide negligible or intended knockback
+        //We only care about melee and projectile damage - the rest provide negligible or intended knockback
         switch (event.getCause())
         {
-            //case ENTITY_ATTACK:
+            case ENTITY_ATTACK:
             case PROJECTILE:
             case THORNS:
                 break;
