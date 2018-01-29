@@ -24,10 +24,10 @@ class MusicPackManager
         add("mall", 60*4+6, "Dead Bird Studio Reception - A Hat In Time by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
 
         category = "spawn";
-        add("kahoot", 60*4+42, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
+        add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
 
         category = "prison";
-        add("oddity", 60*4+5, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
+        add("oddity", 180+38, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("silverbells", 120+28, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("oceanman", 120+9, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("september", 180+41, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
