@@ -97,10 +97,7 @@ public class ArmorAugmentation implements Listener
         Player player = (Player)event.getEntity();
 
         if (event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED)
-        {
             event.setCancelled(true);
-            player.setSaturation(0f);
-        }
     }
 
     //That's an energy bar, not a hunger bar.
@@ -122,6 +119,7 @@ public class ArmorAugmentation implements Listener
             return;
 
         player.setFoodLevel(player.getFoodLevel() - 1);
+        player.setSaturation(1f);
 
         new BukkitRunnable()
         {
