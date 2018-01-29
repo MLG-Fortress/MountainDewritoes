@@ -54,7 +54,7 @@ public class GoldArmor implements Listener
         if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
             return;
 
-        if (NSA.getMidairMap().containsKey(player))
+        if (!NSA.getMidairMap().containsKey(player))
         {
             NSA.getMidairMap().put(player, 1);
             player.setVelocity(lastLocation.get(player).subtract(player.getLocation()).multiply(1.5D).toVector().setY(1D));
