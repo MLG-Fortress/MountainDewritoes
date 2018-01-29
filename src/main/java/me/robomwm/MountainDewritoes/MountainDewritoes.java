@@ -19,6 +19,7 @@ import me.robomwm.MountainDewritoes.Rewards.LodsOfEmone;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
+import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -197,6 +198,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new TabList(this);
         new TheMidnightPortalToAnywhere(this);
         new AtmosphericManager(this);
+        new ArmorAugmentation(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
