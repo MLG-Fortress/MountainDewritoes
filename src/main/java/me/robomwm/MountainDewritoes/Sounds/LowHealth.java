@@ -56,9 +56,8 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         final double health = player.getHealth() - event.getFinalDamage();
-        //final double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        //if (healthPercentage <= 0.36f && !alreadyLowHealth.containsKey(player))
-        if (health <= 7f && !alreadyLowHealth.containsKey(player))
+        final double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        if (healthPercentage <= 0.36f && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
             player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
@@ -73,24 +72,13 @@ public class LowHealth implements Listener
 
                 public void run()
                 {
-                    if (!alreadyLowHealth.containsKey(player))
+                    healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
+                    if (!alreadyLowHealth.containsKey(player) || healthPercentage > 0.36f)
                     {
-                        applyTint(player, false);
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
-                    if (healthPercentage)
-                    {
-                        alreadyLowHealth.remove(player);
-                        //THAPI.fadeTint(player, 100, 1); Fade is too slow
-                        applyTint(player, false);
-                        //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + player.getName() + " player fortress.lowhealth");
-                        player.stopSound("fortress.lowhealth", SoundCategory.PLAYERS);
-                        cancel(); //Player is not at critical health
-                        return;
-                    }
-
-
 
                     //Has it been 18 seconds yet? (Soundbyte we play is 18 seconds long)
                     if ((System.currentTimeMillis() - 17900L) < alreadyLowHealth.get(player))
@@ -99,6 +87,15 @@ public class LowHealth implements Listener
                     player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
                     applyTint(player, true);
                     //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound fortress.lowhealth player " + player.getName() + " 0 0 0 3000000");
+                }
+
+                @Override
+                public synchronized void cancel() throws IllegalStateException
+                {
+                    super.cancel();
+                    player.stopSound("fortress.lowhealth", SoundCategory.PLAYERS);
+                    applyTint(player, false);
+                    alreadyLowHealth.remove(player);
                 }
             }.runTaskTimer(instance, 100L, 2L);
 
@@ -147,7 +144,8 @@ public class LowHealth implements Listener
             if (should)
                 THAPI.setTint(player, 100);
             else
-                THAPI.removeTint(player);
+                THAPI.fadeTint(player, 100, 1);
+                //THAPI.removeTint(player);
         }
         catch (Exception | Error e)
         {
