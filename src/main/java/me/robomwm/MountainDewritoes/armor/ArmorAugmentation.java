@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.armor;
 
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -12,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -19,7 +21,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created on 1/3/2018.
@@ -30,9 +34,9 @@ import java.util.Map;
  */
 public class ArmorAugmentation implements Listener
 {
-    private JavaPlugin instance;
+    private MountainDewritoes instance;
 
-    public ArmorAugmentation(JavaPlugin plugin)
+    public ArmorAugmentation(MountainDewritoes plugin)
     {
         instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -108,15 +112,22 @@ public class ArmorAugmentation implements Listener
     }
 
     //Sprinting takes energy
+    private Map<Player, Long> sprinters = new HashMap<>();
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onSprint(PlayerToggleSprintEvent event)
     {
+        Player player = event.getPlayer();
+
         if (!event.isSprinting())
+        {
+            sprinters.remove(player);
+            return;
+        }
+        if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
             return;
 
-        Player player = event.getPlayer();
-        if (player.getFoodLevel() < 1)
-            return;
+        final long time = System.currentTimeMillis();
+        sprinters.put(player, time);
 
         player.setFoodLevel(player.getFoodLevel() - 1);
         player.setSaturation(1f);
@@ -127,12 +138,12 @@ public class ArmorAugmentation implements Listener
             @Override
             public void run()
             {
-                if (player.isSprinting())
+                if (sprinters.get(player) == time)
                     player.setFoodLevel(player.getFoodLevel() - 1);
                 else
                     this.cancel();
             }
-        }.runTaskTimer(instance, 10L, 10L);
+        }.runTaskTimer(instance, 20L, 20L);
     }
 
     //Refill energy bar gradually
@@ -150,7 +161,7 @@ public class ArmorAugmentation implements Listener
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
-        }.runTaskTimer(instance, 60L, 60L);
+        }.runTaskTimer(instance, 100L, 100L);
     }
 
     //Cancel minute falling damage, do goomba stomp

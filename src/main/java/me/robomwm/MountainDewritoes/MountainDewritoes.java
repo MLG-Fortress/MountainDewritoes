@@ -70,6 +70,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private Set<World> safeWorlds = new HashSet<>();
     private Set<World> survivalWorlds = new HashSet<>();
     private Set<World> minigameWorlds = new HashSet<>();
+    private Set<World> noModifyWorld = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
     private boolean serverDoneLoading = false;
@@ -93,6 +94,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public boolean isMinigameWorld(World world)
     {
         return minigameWorlds.contains(world);
+    }
+
+    public boolean isNoModifyWorld(World world)
+    {
+        return noModifyWorld.contains(world);
     }
 
     public void registerListener(Listener listener)
@@ -167,6 +173,31 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         setupEconomy(this);
         tipCommand = new TipCommand(this);
+
+        //Initialize commonly-used sets
+        safeWorlds.add(getServer().getWorld("mall"));
+        safeWorlds.add(getServer().getWorld("spawn"));
+        safeWorlds.add(getServer().getWorld("prison"));
+
+        survivalWorlds.add(getServer().getWorld("mall"));
+        survivalWorlds.add(getServer().getWorld("prison"));
+        survivalWorlds.add(getServer().getWorld("world"));
+        survivalWorlds.add(getServer().getWorld("world_nether"));
+        survivalWorlds.add(getServer().getWorld("world_the_end"));
+        survivalWorlds.add(getServer().getWorld("cityworld"));
+        survivalWorlds.add(getServer().getWorld("cityworld_nether"));
+        survivalWorlds.add(getServer().getWorld("maxiworld"));
+        survivalWorlds.add(getServer().getWorld("wellworld"));
+
+        minigameWorlds.add(getServer().getWorld("spawn"));
+        minigameWorlds.add(getServer().getWorld("minigames"));
+        minigameWorlds.add(getServer().getWorld("bam"));
+        minigameWorlds.add(getServer().getWorld("flatroom"));
+        minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
+        minigameWorlds.add(getServer().getWorld("dogepvp"));
+
+        noModifyWorld.add(getServer().getWorld("CreativeParkourMaps"));
+
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
@@ -206,27 +237,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Classes other classes might want to use
         new NSA(this);
 
-        //Initialize commonly-used sets
-        safeWorlds.add(getServer().getWorld("mall"));
-        safeWorlds.add(getServer().getWorld("spawn"));
-        safeWorlds.add(getServer().getWorld("prison"));
 
-        survivalWorlds.add(getServer().getWorld("mall"));
-        survivalWorlds.add(getServer().getWorld("prison"));
-        survivalWorlds.add(getServer().getWorld("world"));
-        survivalWorlds.add(getServer().getWorld("world_nether"));
-        survivalWorlds.add(getServer().getWorld("world_the_end"));
-        survivalWorlds.add(getServer().getWorld("cityworld"));
-        survivalWorlds.add(getServer().getWorld("cityworld_nether"));
-        survivalWorlds.add(getServer().getWorld("maxiworld"));
-        survivalWorlds.add(getServer().getWorld("wellworld"));
-
-        minigameWorlds.add(getServer().getWorld("spawn"));
-        minigameWorlds.add(getServer().getWorld("minigames"));
-        minigameWorlds.add(getServer().getWorld("bam"));
-        minigameWorlds.add(getServer().getWorld("flatroom"));
-        minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
-        minigameWorlds.add(getServer().getWorld("dogepvp"));
 
         //Utilities
         new ScoreboardStuff(this);
