@@ -55,6 +55,6 @@ public class TabList implements Listener
                         instance.getTipCommand().getRandomColor() + instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
                         instance.getTipCommand().getRandomColor() + "TPS: " + df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
                         instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms"),
-                TextComponent.fromLegacyText(ChatColor.AQUA + "IP: MLG.ROBOMWM.COM"));
+                TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "IP" + ChatColor.AQUA + ": MLG.ROBOMWM.COM"));
     }
 }

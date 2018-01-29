@@ -56,8 +56,9 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         final double health = player.getHealth() - event.getFinalDamage();
-        final double lowHealthValue = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        if (lowHealthValue <= 0.36f && !alreadyLowHealth.containsKey(player))
+        //final double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        //if (healthPercentage <= 0.36f && !alreadyLowHealth.containsKey(player))
+        if (health <= 7f && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
             player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
@@ -68,6 +69,8 @@ public class LowHealth implements Listener
 
             new BukkitRunnable()
             {
+                double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
                 public void run()
                 {
                     if (!alreadyLowHealth.containsKey(player))
@@ -76,7 +79,7 @@ public class LowHealth implements Listener
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;
                     }
-                    if (player.getHealth() > lowHealthValue)
+                    if (healthPercentage)
                     {
                         alreadyLowHealth.remove(player);
                         //THAPI.fadeTint(player, 100, 1); Fade is too slow
