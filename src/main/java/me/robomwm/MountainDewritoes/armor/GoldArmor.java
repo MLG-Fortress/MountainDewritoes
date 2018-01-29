@@ -58,7 +58,7 @@ public class GoldArmor implements Listener
         {
             NSA.getMidairMap().put(player, 1);
             Vector vector = lastLocation.get(player).toVector();
-            player.setVelocity(vector.subtract(player.getLocation().toVector()).setY(1D));
+            player.setVelocity(vector.add(player.getLocation().toVector()).setY(0.5D));
             player.sendActionBar(vector.toString());
         }
     }
