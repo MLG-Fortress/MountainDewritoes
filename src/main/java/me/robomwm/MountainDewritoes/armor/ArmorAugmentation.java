@@ -55,25 +55,6 @@ public class ArmorAugmentation implements Listener
         return equippedArmor != null && equippedArmor.getType() == armorToMatch;
     }
 
-    //Check to determine whether to activate one-use sneak ability
-    public boolean sneakAbility(Player player)
-    {
-        if (player.isOnGround())
-            return false;
-        if (player.hasMetadata("MD_USED_SNEAK"))
-            return false;
-        player.setMetadata("MD_USED_SNEAK", new FixedMetadataValue(instance, true));
-        return true;
-    }
-    @EventHandler
-    private void onLand(PlayerMoveEvent event)
-    {
-        if (!event.getPlayer().isOnGround())
-            return;
-        if (event.getPlayer().hasMetadata("MD_USED_SNEAK"))
-            event.getPlayer().removeMetadata("MD_USED_SNEAK", instance);
-    }
-
     //Misc. gameplay changes to accomodate
 
     //There's no such thing as starving

@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -38,6 +39,7 @@ public class NSA implements Listener
     private static MountainDewritoes instance;
 
     private static Map<Player, List<Transaction>> transactions = new HashMap<>();
+    private static Map<Player, Integer> midairMap = new HashMap<>();
 
     NSA(MountainDewritoes mountainDewritoes)
     {
@@ -55,6 +57,18 @@ public class NSA implements Listener
         Player player = event.getPlayer();
         player.removeMetadata(mobTrackingMetadata, instance);
         clearSpreePoints(player);
+    }
+
+    public static Map<Player, Integer> getMidairMap()
+    {
+        return midairMap;
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onPlayerLands(PlayerMoveEvent event)
+    {
+        if (event.getPlayer().isOnGround())
+            midairMap.remove(event.getPlayer());
     }
 
     /* # of mobs targeting player tracker */
