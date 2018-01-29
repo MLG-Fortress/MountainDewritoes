@@ -54,7 +54,7 @@ public class GoldArmor implements Listener
         if (!armorAugmentation.sneakAbility(player))
             return;
 
-        player.setVelocity(lastLocation.get(player).subtract(player.getLocation()).toVector().setY(0.5D));
+        player.setVelocity(lastLocation.get(player).subtract(player.getLocation()).toVector().normalize().setY(0.5D));
         //player.setVelocity(player.getLocation().getDirection());
     }
 
