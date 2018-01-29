@@ -134,7 +134,7 @@ public class ArmorAugmentation implements Listener
                 else
                     this.cancel();
             }
-        }.runTaskTimer(instance, 20L, 20L);
+        }.runTaskTimer(instance, 10L, 10L);
     }
 
     //Refill energy bar gradually
@@ -152,7 +152,7 @@ public class ArmorAugmentation implements Listener
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
-        }.runTaskTimer(instance, 40L, 40L);
+        }.runTaskTimer(instance, 60L, 60L);
     }
 
     //Cancel minute falling damage, do goomba stomp
