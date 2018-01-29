@@ -57,8 +57,9 @@ public class GoldArmor implements Listener
         if (!NSA.getMidairMap().containsKey(player))
         {
             NSA.getMidairMap().put(player, 1);
-            //player.setVelocity(lastLocation.get(player).toVector().subtract(player.getLocation().toVector()).multiply(1.5D).setY(1D));
-            player.sendActionBar(lastLocation.get(player).toVector().subtract(player.getLocation().toVector()).multiply(1.5D).setY(1D).toString());
+            Vector vector = lastLocation.get(player).toVector();
+            player.setVelocity(vector.subtract(player.getLocation().toVector()).setY(1D));
+            player.sendActionBar(vector.toString());
         }
     }
 
@@ -68,7 +69,7 @@ public class GoldArmor implements Listener
         Player player = event.getPlayer();
         if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
             return;
-        lastLocation.put(player, event.getTo());
+        lastLocation.put(player, event.getFrom());
     }
 
     //GOLD LEGGINGS
