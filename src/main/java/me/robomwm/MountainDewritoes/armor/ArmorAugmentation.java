@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes.armor;
 import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,6 +38,7 @@ public class ArmorAugmentation implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getServer().getPluginManager().registerEvents(new GoldArmor(this), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OldFood(instance), plugin);
+        ATPgeneration();
     }
 
     //Reduce messy if/else
@@ -53,6 +55,29 @@ public class ArmorAugmentation implements Listener
                 break;
         }
         return equippedArmor != null && equippedArmor.getType() == armorToMatch;
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    private void onPlayerFallDamageWearingLongFallBoots(EntityDamageEvent event)
+    {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
+            return;
+        if (!(event.getEntity() instanceof LivingEntity))
+            return;
+
+        LivingEntity entity = (LivingEntity)event.getEntity();
+
+        if (entity.getEquipment() == null || entity.getEquipment().getBoots() == null)
+            return;
+
+        switch(entity.getEquipment().getBoots().getType())
+        {
+            case GOLD_BOOTS:
+            case IRON_BOOTS:
+            case DIAMOND_BOOTS:
+                entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);
+                event.setCancelled(true);
+        }
     }
 
     //Misc. gameplay changes to accomodate
@@ -129,4 +154,16 @@ public class ArmorAugmentation implements Listener
             }
         }.runTaskTimer(instance, 40L, 40L);
     }
+
+    //Cancel minute falling damage, do goomba stomp
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    private void onHardlyAnyFalling(EntityDamageEvent event)
+    {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
+            return;
+        if (event.getDamage() < 5.0)
+            event.setCancelled(true);
+        //TODO: goomba stomp
+    }
+
 }

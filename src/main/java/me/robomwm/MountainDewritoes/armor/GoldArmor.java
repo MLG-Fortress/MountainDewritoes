@@ -40,47 +40,35 @@ public class GoldArmor implements Listener
     }
 
     /* GOLD BOOTS */
-    //Mid-air dive. Player looks in direction they wish to dive. Release to cancel dive
+    //Mid-air jump
     @EventHandler(ignoreCancelled = true)
     private void onSneak(PlayerToggleSneakEvent event)
     {
         Player player = event.getPlayer();
 
         if (!event.isSneaking())
-        {
-            if (NSA.getMidairMap().get(player) == 1)
-            {
-                player.setVelocity(player.getLocation().getDirection().multiply(0.1D).setY(0.5D));
-                NSA.getMidairMap().put(player, 2);
-            }
             return;
-        }
 
         if (event.getPlayer().isOnGround())
             return;
         if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
             return;
 
-        Integer diveOrCancel = NSA.getMidairMap().get(player);
-
-        if (diveOrCancel == null)
+        if (NSA.getMidairMap().containsKey(player))
         {
             NSA.getMidairMap().put(player, 1);
-            player.setVelocity(player.getLocation().getDirection().setY(0.2D));
+            player.setVelocity(lastLocation.get(player).subtract(player.getLocation()).multiply(1.5D).toVector().setY(1D));
         }
-
-        //player.setVelocity(lastLocation.get(player).subtract(player.getLocation()).toVector().setY(0.5D));
-
     }
 
-//    @EventHandler(ignoreCancelled = true)
-//    private void onMove(PlayerMoveEvent event)
-//    {
-//        Player player = event.getPlayer();
-//        if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
-//            return;
-//        lastLocation.put(player, event.getTo());
-//    }
+    @EventHandler(ignoreCancelled = true)
+    private void onMove(PlayerMoveEvent event)
+    {
+        Player player = event.getPlayer();
+        if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
+            return;
+        lastLocation.put(player, event.getTo());
+    }
 
     //GOLD LEGGINGS
     //I'm free, free-falling
