@@ -138,10 +138,10 @@ public class ArmorAugmentation implements Listener
             @Override
             public void run()
             {
-                if (sprinters.get(player) == time)
+                if (sprinters.containsKey(player) && sprinters.get(player) == time)
                     player.setFoodLevel(player.getFoodLevel() - 1);
                 else
-                    this.cancel();
+                    cancel();
             }
         }.runTaskTimer(instance, 20L, 20L);
     }
