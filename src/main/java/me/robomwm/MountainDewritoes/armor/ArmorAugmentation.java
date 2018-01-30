@@ -50,34 +50,32 @@ public class ArmorAugmentation implements Listener
         ATPgeneration();
     }
 
-
-    @Deprecated
-    public boolean isEquipped(Player player, Material armorToMatch)
-    {
-        ItemStack equippedArmor = null;
-        switch (armorToMatch)
-        {
-            case GOLD_LEGGINGS:
-            case IRON_LEGGINGS:
-            case DIAMOND_LEGGINGS:
-            case CHAINMAIL_LEGGINGS:
-                equippedArmor = player.getInventory().getLeggings();
-                break;
-            case GOLD_BOOTS:
-            case IRON_BOOTS:
-            case DIAMOND_BOOTS:
-            case CHAINMAIL_BOOTS:
-                equippedArmor = player.getInventory().getBoots();
-                break;
-        }
-        return equippedArmor != null && equippedArmor.getType() == armorToMatch;
-    }
+//    public boolean isEquipped(Player player, Material armorToMatch)
+//    {
+//        ItemStack equippedArmor = null;
+//        switch (armorToMatch)
+//        {
+//            case GOLD_LEGGINGS:
+//            case IRON_LEGGINGS:
+//            case DIAMOND_LEGGINGS:
+//            case CHAINMAIL_LEGGINGS:
+//                equippedArmor = player.getInventory().getLeggings();
+//                break;
+//            case GOLD_BOOTS:
+//            case IRON_BOOTS:
+//            case DIAMOND_BOOTS:
+//            case CHAINMAIL_BOOTS:
+//                equippedArmor = player.getInventory().getBoots();
+//                break;
+//        }
+//        return equippedArmor != null && equippedArmor.getType() == armorToMatch;
+//    }
 
     @EventHandler(ignoreCancelled = true)
     private void onSneakAugmentation(PlayerToggleSneakEvent event)
     {
         Player player = event.getPlayer();
-        Material equippedArmor = player.getInventory().getLeggings().getType();
+        Material equippedArmor = player.getInventory().getBoots().getType();
         if (equippedArmor == null)
             return;
         switch (equippedArmor)
