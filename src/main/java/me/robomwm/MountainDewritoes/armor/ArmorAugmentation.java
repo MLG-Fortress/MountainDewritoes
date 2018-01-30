@@ -55,7 +55,7 @@ public class ArmorAugmentation implements Listener
             case IRON_LEGGINGS:
             case DIAMOND_LEGGINGS:
             case CHAINMAIL_LEGGINGS:
-                equippedArmor = player.getInventory().getChestplate();
+                equippedArmor = player.getInventory().getLeggings();
                 break;
             case GOLD_BOOTS:
             case IRON_BOOTS:
