@@ -40,7 +40,7 @@ public class GoldArmor implements ArmorTemplate
         {
             NSA.getMidairMap().put(player, 1);
             Vector vector = player.getLocation().toVector();
-            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(1.5D).setY(0.7D));
+            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(5D).setY(0.7D));
         }
     }
 
@@ -55,7 +55,7 @@ public class GoldArmor implements ArmorTemplate
         if (player.hasPotionEffect(PotionEffectType.SPEED))
             return;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 20, true, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 30, true, false));
         player.setFoodLevel(0);
     }
 }
