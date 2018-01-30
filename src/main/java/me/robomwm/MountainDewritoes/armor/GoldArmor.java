@@ -56,6 +56,6 @@ public class GoldArmor implements ArmorTemplate
             return;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 15, true, false));
-        player.setFoodLevel(4);
+        player.setFoodLevel(10);
     }
 }

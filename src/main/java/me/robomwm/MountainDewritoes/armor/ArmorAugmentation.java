@@ -44,7 +44,7 @@ public class ArmorAugmentation implements Listener
     {
         instance = plugin;
         goldArmor = new GoldArmor();
-        ironArmor = new IronArmor();
+        ironArmor = new IronArmor(instance);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getServer().getPluginManager().registerEvents(new OldFood(instance), plugin);
         ATPgeneration();
@@ -93,6 +93,8 @@ public class ArmorAugmentation implements Listener
     private void onSprintAugmentation(PlayerToggleSprintEvent event)
     {
         Player player = event.getPlayer();
+        if (player.getFoodLevel() < 20)
+            return;
         Material equippedArmor = player.getInventory().getLeggings().getType();
         if (equippedArmor == null)
             return;
@@ -186,7 +188,7 @@ public class ArmorAugmentation implements Listener
             public void run()
             {
                 if (sprinters.containsKey(player) && sprinters.get(player) == time)
-                    player.setFoodLevel(player.getFoodLevel() - 1);
+                    player.setFoodLevel(player.getFoodLevel() - 2);
                 else
                     cancel();
             }
@@ -208,7 +210,7 @@ public class ArmorAugmentation implements Listener
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
-        }.runTaskTimer(instance, 100L, 100L);
+        }.runTaskTimer(instance, 20L, 20L);
     }
 
     //Cancel minute falling damage, do goomba stomp
