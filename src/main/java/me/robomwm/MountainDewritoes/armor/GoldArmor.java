@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -79,5 +81,15 @@ public class GoldArmor implements Listener
     {
         if (!event.isSprinting())
             return;
+
+        Player player = event.getPlayer();
+
+        if (!armorAugmentation.isEquipped(player, Material.GOLD_LEGGINGS))
+            return;
+        if (player.hasPotionEffect(PotionEffectType.SPEED))
+            return;
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 15, true, false));
+        player.setFoodLevel(2);
     }
 }
