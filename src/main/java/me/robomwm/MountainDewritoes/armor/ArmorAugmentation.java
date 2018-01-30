@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -14,6 +15,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -35,17 +37,21 @@ import java.util.Set;
 public class ArmorAugmentation implements Listener
 {
     private MountainDewritoes instance;
+    private ArmorTemplate goldArmor;
+    private ArmorTemplate ironArmor;
 
     public ArmorAugmentation(MountainDewritoes plugin)
     {
         instance = plugin;
+        goldArmor = new GoldArmor();
+        ironArmor = new IronArmor();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        plugin.getServer().getPluginManager().registerEvents(new GoldArmor(this), plugin);
         plugin.getServer().getPluginManager().registerEvents(new OldFood(instance), plugin);
         ATPgeneration();
     }
 
-    //Reduce messy if/else
+
+    @Deprecated
     public boolean isEquipped(Player player, Material armorToMatch)
     {
         ItemStack equippedArmor = null;
@@ -65,6 +71,42 @@ public class ArmorAugmentation implements Listener
                 break;
         }
         return equippedArmor != null && equippedArmor.getType() == armorToMatch;
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onSneakAugmentation(PlayerToggleSneakEvent event)
+    {
+        Player player = event.getPlayer();
+        Material equippedArmor = player.getInventory().getLeggings().getType();
+        if (equippedArmor == null)
+            return;
+        switch (equippedArmor)
+        {
+            case GOLD_BOOTS:
+                goldArmor.onSneak(event, player);
+                break;
+            case IRON_BOOTS:
+                ironArmor.onSneak(event, player);
+                break;
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onSprintAugmentation(PlayerToggleSprintEvent event)
+    {
+        Player player = event.getPlayer();
+        Material equippedArmor = player.getInventory().getLeggings().getType();
+        if (equippedArmor == null)
+            return;
+        switch (equippedArmor)
+        {
+            case GOLD_LEGGINGS:
+                goldArmor.onSprint(event, player);
+                break;
+            case IRON_LEGGINGS:
+                ironArmor.onSprint(event, player);
+                break;
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

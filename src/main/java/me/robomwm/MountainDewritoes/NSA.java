@@ -4,6 +4,7 @@ import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.Events.TransactionEvent;
 import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -40,6 +41,7 @@ public class NSA implements Listener
 
     private static Map<Player, List<Transaction>> transactions = new HashMap<>();
     private static Map<Player, Integer> midairMap = new HashMap<>();
+    private static Map<Player, Location> lastLocation = new HashMap<>();
 
     NSA(MountainDewritoes mountainDewritoes)
     {
@@ -57,6 +59,21 @@ public class NSA implements Listener
         Player player = event.getPlayer();
         player.removeMetadata(mobTrackingMetadata, instance);
         clearSpreePoints(player);
+        lastLocation.remove(event.getPlayer());
+        midairMap.remove(event.getPlayer());
+    }
+
+    public static Location getLastLocation(Player player)
+    {
+        return lastLocation.get(player);
+    }
+
+    //Track last location (for precise "current velocity")
+    @EventHandler(ignoreCancelled = true)
+    private void onMove(PlayerMoveEvent event)
+    {
+        Player player = event.getPlayer();
+        lastLocation.put(player, event.getFrom());
     }
 
     public static Map<Player, Integer> getMidairMap()
@@ -64,6 +81,7 @@ public class NSA implements Listener
         return midairMap;
     }
 
+    //Clear mid-air "metadata" when no longer in air.
     @EventHandler(ignoreCancelled = true)
     private void onPlayerLands(PlayerMoveEvent event)
     {

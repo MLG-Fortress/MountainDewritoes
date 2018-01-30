@@ -24,72 +24,38 @@ import java.util.Map;
  *
  * @author RoboMWM
  */
-public class GoldArmor implements Listener
+public class GoldArmor implements ArmorTemplate
 {
-    private JavaPlugin instance;
-    private ArmorAugmentation armorAugmentation;
-    private Map<Player, Location> lastLocation = new HashMap<>();
-
-    public GoldArmor(ArmorAugmentation armorAugmentation)
-    {
-        this.armorAugmentation = armorAugmentation;
-    }
-
-    @EventHandler
-    private void cleanup(PlayerQuitEvent event)
-    {
-        lastLocation.remove(event.getPlayer());
-    }
-
     /* GOLD BOOTS */
     //Mid-air jump
-    @EventHandler(ignoreCancelled = true)
-    private void onSneak(PlayerToggleSneakEvent event)
+    public void onSneak(PlayerToggleSneakEvent event, Player player)
     {
-        Player player = event.getPlayer();
-
         if (!event.isSneaking())
             return;
 
         if (event.getPlayer().isOnGround())
-            return;
-        if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
             return;
 
         if (!NSA.getMidairMap().containsKey(player))
         {
             NSA.getMidairMap().put(player, 1);
             Vector vector = player.getLocation().toVector();
-            player.setVelocity(vector.subtract(lastLocation.get(player).toVector()).setY(0.7D));
+            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(1.3D).setY(0.7D));
         }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void onMove(PlayerMoveEvent event)
-    {
-        Player player = event.getPlayer();
-        if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
-            return;
-        lastLocation.put(player, event.getFrom());
     }
 
     //GOLD LEGGINGS
     //I'm free, free-falling
     //Player experiences less gravitational pull/feels floaty while sprinting
-    @EventHandler(ignoreCancelled = true)
-    private void onSprint(PlayerToggleSprintEvent event)
+    public void onSprint(PlayerToggleSprintEvent event, Player player)
     {
         if (!event.isSprinting())
             return;
 
-        Player player = event.getPlayer();
-
-        if (!armorAugmentation.isEquipped(player, Material.GOLD_LEGGINGS))
-            return;
         if (player.hasPotionEffect(PotionEffectType.SPEED))
             return;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 15, true, false));
-        player.setFoodLevel(2);
+        player.setFoodLevel(4);
     }
 }
