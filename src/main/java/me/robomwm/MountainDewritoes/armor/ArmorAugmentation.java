@@ -51,6 +51,12 @@ public class ArmorAugmentation implements Listener
         ItemStack equippedArmor = null;
         switch (armorToMatch)
         {
+            case GOLD_LEGGINGS:
+            case IRON_LEGGINGS:
+            case DIAMOND_LEGGINGS:
+            case CHAINMAIL_LEGGINGS:
+                equippedArmor = player.getInventory().getChestplate();
+                break;
             case GOLD_BOOTS:
             case IRON_BOOTS:
             case DIAMOND_BOOTS:
@@ -121,6 +127,7 @@ public class ArmorAugmentation implements Listener
         if (!event.isSprinting())
         {
             sprinters.remove(player);
+            player.setSaturation(20f);
             return;
         }
         if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
@@ -130,7 +137,7 @@ public class ArmorAugmentation implements Listener
         sprinters.put(player, time);
 
         player.setFoodLevel(player.getFoodLevel() - 1);
-        player.setSaturation(1f);
+        player.setSaturation(0f);
 
         new BukkitRunnable()
         {
