@@ -192,7 +192,7 @@ public class ArmorAugmentation implements Listener
                 else
                     cancel();
             }
-        }.runTaskTimer(instance, 20L, 20L);
+        }.runTaskTimer(instance, 10L, 10L);
     }
 
     //Refill energy bar gradually
