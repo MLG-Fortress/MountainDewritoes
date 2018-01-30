@@ -40,7 +40,7 @@ public class GoldArmor implements ArmorTemplate
         {
             NSA.getMidairMap().put(player, 1);
             Vector vector = player.getLocation().toVector();
-            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(5D).setY(0.7D));
+            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(2.5D).setY(0.7D));
         }
     }
 
