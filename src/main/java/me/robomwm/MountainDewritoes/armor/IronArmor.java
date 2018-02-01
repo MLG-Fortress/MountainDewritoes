@@ -37,16 +37,19 @@ public class IronArmor implements ArmorTemplate
         {
             player.setFoodLevel(player.getFoodLevel() - 1);
             if (player.getVelocity().getY() < -0.5)
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 1200, 5, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 5, true, false));
             else
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 1200, 5, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 1, true, false));
             new BukkitRunnable()
             {
                 @Override
                 public void run()
                 {
                     if (player.isSneaking() && player.getFoodLevel() > 0)
+                    {
                         player.setFoodLevel(player.getFoodLevel() - 1);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 5, true, false));
+                    }
                     else
                         cancel();
                 }
@@ -55,7 +58,7 @@ public class IronArmor implements ArmorTemplate
                 public synchronized void cancel() throws IllegalStateException
                 {
                     super.cancel();
-                    if (player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 1)
+                    if (player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 1 || player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 5)
                         player.removePotionEffect(PotionEffectType.LEVITATION);
 
                 }
