@@ -35,21 +35,15 @@ public class IronArmor implements ArmorTemplate
 
         if (event.isSneaking() && !player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getFoodLevel() > 0)
         {
-            player.setFoodLevel(player.getFoodLevel() - 1);
-            if (player.getVelocity().getY() < -0.5)
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 5, true, false));
-            else
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 1, true, false));
+            magnetizeBoots(player);
+
             new BukkitRunnable()
             {
                 @Override
                 public void run()
                 {
                     if (player.isSneaking() && player.getFoodLevel() > 0)
-                    {
-                        player.setFoodLevel(player.getFoodLevel() - 1);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 5, true, false));
-                    }
+                        magnetizeBoots(player);
                     else
                         cancel();
                 }
@@ -58,7 +52,7 @@ public class IronArmor implements ArmorTemplate
                 public synchronized void cancel() throws IllegalStateException
                 {
                     super.cancel();
-                    if (player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 1 || player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 5)
+                    //if (player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 1 || player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 5)
                         player.removePotionEffect(PotionEffectType.LEVITATION);
 
                 }
@@ -66,6 +60,16 @@ public class IronArmor implements ArmorTemplate
         }
         else if (!event.isSneaking() && player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() == 1)
             player.removePotionEffect(PotionEffectType.LEVITATION);
+    }
+
+    private void magnetizeBoots(Player player)
+    {
+        int velocity = (int)(-player.getVelocity().getY() * 10);
+        if (velocity < 1)
+            velocity = 1;
+        player.removePotionEffect(PotionEffectType.LEVITATION);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 40, velocity, true, false));
+        player.setFoodLevel(player.getFoodLevel() - 1);
     }
 
     @Override
