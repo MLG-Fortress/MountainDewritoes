@@ -36,7 +36,10 @@ public class IronArmor implements ArmorTemplate
         if (event.isSneaking() && !player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getFoodLevel() > 0)
         {
             player.setFoodLevel(player.getFoodLevel() - 1);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 1200, 1, true, false));
+            if (player.getVelocity().getY() < -0.5)
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 1200, 5, true, false));
+            else
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 1200, 5, true, false));
             new BukkitRunnable()
             {
                 @Override
