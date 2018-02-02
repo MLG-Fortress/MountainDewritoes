@@ -6,11 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import to.us.mlgfort.NoMyStuff.NoMyStuff;
 
 import java.text.DecimalFormat;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created on 8/28/2017.
@@ -23,25 +26,22 @@ public class TabList implements Listener
     private MountainDewritoes instance;
     private NoMyStuff noMyStuff;
     private DecimalFormat df = new DecimalFormat("#.##");
+    private Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
 
     public TabList(MountainDewritoes plugin)
     {
         this.instance = plugin;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         noMyStuff = (NoMyStuff)plugin.getServer().getPluginManager().getPlugin("NoMyStuff");
-    }
-
-    @EventHandler
-    private void onJoin(PlayerJoinEvent event)
-    {
-        new BukkitRunnable()
+        onlinePlayers.addAll(instance.getServer().getOnlinePlayers());
+        new BukkitRunnable() //premature optimization is the root of all evils... or rather, a waste of time
         {
             @Override
             public void run()
             {
-                setTabList(event.getPlayer());
+                for (Player player : instance.getServer().getOnlinePlayers())
+                    setTabList(player);
             }
-        }.runTaskTimer(instance, 1L, 20L);
+        }.runTaskTimer(instance, 20L, 20L);
     }
 
     private void setTabList(Player player)
