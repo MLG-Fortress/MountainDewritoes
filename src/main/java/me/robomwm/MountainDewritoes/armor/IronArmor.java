@@ -64,7 +64,7 @@ public class IronArmor implements ArmorTemplate
 
     private void magnetizeBoots(Player player)
     {
-        int velocity = (int)(-player.getVelocity().getY() * 30);
+        int velocity = (int)(-player.getVelocity().getY() * 15);
         if (velocity < 1)
             velocity = 1;
         else if (velocity > 127)
