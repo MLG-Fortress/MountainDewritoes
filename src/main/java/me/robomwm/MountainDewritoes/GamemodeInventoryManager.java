@@ -105,7 +105,7 @@ public class GamemodeInventoryManager implements Listener
     }
 
     //Recover inventory on join (e.g. player was in creative while in a "survival"-classed world)
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onJoin(PlayerJoinEvent event)
     {
         new BukkitRunnable()

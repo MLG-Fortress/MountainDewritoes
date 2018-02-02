@@ -91,7 +91,7 @@ public class JoinMessages implements Listener
         {
             public void run()
             {
-                if (player.isOnline())
+                if (!instance.getServer().getOnlinePlayers().contains(player))
                 {
                     //String tip = randomTips.get(random.nextInt(randomTips.size()));
                     //instance.timedActionBar(player, 20, ChatColor.GOLD + tip);
@@ -122,7 +122,7 @@ public class JoinMessages implements Listener
         {
             public void run()
             {
-                if (!event.getPlayer().isOnline())
+                if (!instance.getServer().getOnlinePlayers().contains(event.getPlayer()))
                     this.cancel();
                 else if (!event.getPlayer().isOnGround())
                     return;
@@ -165,7 +165,7 @@ public class JoinMessages implements Listener
                 {
                     public void run()
                     {
-                        if (event.getPlayer().isOnline())
+                        if (!instance.getServer().getOnlinePlayers().contains(event.getPlayer()))
                             event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our memetastic resource pack." + ChatColor.YELLOW + "\nU can enable resource packs by editing dis serbur in ur servers list.");
                     }
                 }.runTaskLater(instance, 600L);
@@ -200,8 +200,9 @@ public class JoinMessages implements Listener
             @Override
             public void run()
             {
-                if (!player.isOnline())
+                if (!instance.getServer().getOnlinePlayers().contains(player))
                     return;
+                player.loadData();
                 try
                 {
                     if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))

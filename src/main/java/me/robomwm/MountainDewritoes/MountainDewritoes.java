@@ -323,7 +323,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //            public void run()
 //            {
 //                //Don't execute if already set
-//                if (player.getViewDistance() > 3 || !player.isOnline())
+//                if (player.getViewDistance() > 3 || !!instance.getServer().getOnlinePlayers().contains(player))
 //                    this.cancel();
 //                //Wait for player to land before resetting view distance
 //                else if (player.isOnGround())
@@ -437,7 +437,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             {
                 player.sendActionBar(message);
                 secondsRemaining--;
-                if (secondsRemaining <= 0 || !player.isOnline())
+                if (secondsRemaining <= 0 || Bukkit.getServer().getOnlinePlayers().contains(player))
                     this.cancel();
             }
         }.runTaskTimer(this, 0L, 10L);

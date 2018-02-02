@@ -126,7 +126,7 @@ public class SimpleClansListener implements Listener
 //        {
 //            public void run()
 //            {
-//                if (!player.isOnline())
+//                if (!!instance.getServer().getOnlinePlayers().contains(player))
 //                    return;
 //                if (prefix.isEmpty())
 //                    player.setPlayerListName(player.getDisplayName());
@@ -207,7 +207,7 @@ public class SimpleClansListener implements Listener
             public void run()
             {
                 Team team = sb.getTeam(player.getName());
-                if (team == null || !player.isOnline())
+                if (team == null || instance.getServer().getOnlinePlayers().contains(player))
                     return;
                 //Feature: color nameplate name
                 //Get displayName color (player can change color via /nick)
