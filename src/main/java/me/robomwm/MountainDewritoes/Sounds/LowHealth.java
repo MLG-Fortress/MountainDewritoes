@@ -38,6 +38,8 @@ public class LowHealth implements Listener
             return;
 
         Player player = (Player)event.getEntity();
+        if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() <= 8D)
+            return;
 
         //Only play the low health sound once, until the player is no longer at low health
 //        if (alreadyLowHealth.contains(player))
