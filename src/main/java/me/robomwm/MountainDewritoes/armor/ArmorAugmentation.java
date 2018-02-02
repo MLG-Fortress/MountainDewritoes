@@ -75,10 +75,10 @@ public class ArmorAugmentation implements Listener
     private void onSneakAugmentation(PlayerToggleSneakEvent event)
     {
         Player player = event.getPlayer();
-        Material equippedArmor = player.getInventory().getBoots().getType();
+        ItemStack equippedArmor = player.getInventory().getBoots();
         if (equippedArmor == null)
             return;
-        switch (equippedArmor)
+        switch (equippedArmor.getType())
         {
             case GOLD_BOOTS:
                 goldArmor.onSneak(event, player);
@@ -95,10 +95,10 @@ public class ArmorAugmentation implements Listener
         Player player = event.getPlayer();
         if (player.getFoodLevel() < 20)
             return;
-        Material equippedArmor = player.getInventory().getLeggings().getType();
+        ItemStack equippedArmor = player.getInventory().getLeggings();
         if (equippedArmor == null)
             return;
-        switch (equippedArmor)
+        switch (equippedArmor.getType())
         {
             case GOLD_LEGGINGS:
                 goldArmor.onSprint(event, player);
