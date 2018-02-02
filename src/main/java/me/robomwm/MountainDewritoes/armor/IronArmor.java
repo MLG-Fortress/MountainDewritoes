@@ -64,7 +64,7 @@ public class IronArmor implements ArmorTemplate
 
     private void magnetizeBoots(Player player)
     {
-        int velocity = (int)(-player.getVelocity().getY() * 10);
+        int velocity = (int)(-player.getVelocity().getY() * 100);
         if (velocity < 1)
             velocity = 1;
         player.removePotionEffect(PotionEffectType.LEVITATION);
