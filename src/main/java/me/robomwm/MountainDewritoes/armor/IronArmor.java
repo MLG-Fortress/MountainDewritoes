@@ -67,8 +67,8 @@ public class IronArmor implements ArmorTemplate
         int velocity = (int)(-player.getVelocity().getY() * 15);
         if (velocity < 1)
             velocity = 1;
-        else if (velocity > 127)
-            velocity = 127;
+        else if (velocity > 100)
+            velocity = 100;
         player.removePotionEffect(PotionEffectType.LEVITATION);
         player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 40, velocity, true, false));
         player.setFoodLevel(player.getFoodLevel() - 1);
