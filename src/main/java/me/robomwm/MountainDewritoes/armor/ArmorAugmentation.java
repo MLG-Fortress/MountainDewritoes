@@ -146,8 +146,8 @@ public class ArmorAugmentation implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onStomachHeal(EntityRegainHealthEvent event)
     {
-        Player player = (Player)event.getEntity();
-
+        if (event.getEntityType() != EntityType.PLAYER)
+            return;
         if (event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED)
             event.setCancelled(true);
     }
