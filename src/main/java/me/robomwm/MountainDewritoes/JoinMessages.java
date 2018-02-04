@@ -109,7 +109,10 @@ public class JoinMessages implements Listener
             return;
         event.getPlayer().setMetadata("MD_JOINING", new FixedMetadataValue(instance, true));
         if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
-            event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. We'll wait until you switch worlds before trying again.");
+        {
+            event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. Try restarting Minecraft?");
+            event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+        }
         else
         {
             //loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size())));
@@ -138,13 +141,6 @@ public class JoinMessages implements Listener
                 }
             }
         }.runTaskTimer(instance, 20L, 100L);
-    }
-
-    @EventHandler
-    void onPlayerChangeWorldWithNoPack(PlayerChangedWorldEvent event)
-    {
-        if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
-            event.getPlayer().setResourcePack(pack);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
