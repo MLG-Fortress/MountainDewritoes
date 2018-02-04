@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -24,6 +26,18 @@ public class OldFood implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
+    private void onPlayerPreEat(PlayerInteractEvent event)
+    {
+        Player player = event.getPlayer();
+        if (player.getFoodLevel() >= 20)
+            return;
+        if (player.getHealth() >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+            return;
+        if (getFood(event.getItem()) > 0)
+            player.setFoodLevel(19);
+    }
+
+    @EventHandler(ignoreCancelled = true)
     private void onPlayerEats(PlayerItemConsumeEvent event)
     {
         Player player = event.getPlayer();
@@ -34,17 +48,11 @@ public class OldFood implements Listener
         if (health >= maxHealth)
         {
             player.sendActionBar(player.getDisplayName() + " says I'm stuffed.");
+            event.setCancelled(true);
             return;
         }
 
-        switch(event.getItem().getType())
-        {
-            //TODO: fill
-            case POTION:
-                return;
-            default:
-                healthToAdd = 1D;
-        }
+        healthToAdd = getFood(event.getItem());
 
         if (health + healthToAdd >= maxHealth)
             healthToAdd = maxHealth - health;
@@ -56,5 +64,18 @@ public class OldFood implements Listener
         else
             player.setHealth(health + healthToAdd);
 
+    }
+
+    private double getFood(ItemStack itemStack)
+    {
+        if (itemStack == null)
+            return 0;
+        switch(itemStack.getType())
+        {
+            case POTION:
+                return 0;
+            default:
+                return 1D;
+        }
     }
 }
