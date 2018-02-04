@@ -206,7 +206,7 @@ public class ArmorAugmentation implements Listener
                 for (Player player : instance.getServer().getOnlinePlayers())
                 {
                     if (player.getFoodLevel() >= 20)
-                        return;
+                        continue;
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
