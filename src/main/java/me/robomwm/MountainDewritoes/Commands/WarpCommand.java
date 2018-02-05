@@ -130,6 +130,8 @@ public class WarpCommand implements CommandExecutor
                 break;
             case "games":
             case "game":
+            case "mini":
+            case "minigame":
                 desiredWarp = "minigames";
                 break;
         }

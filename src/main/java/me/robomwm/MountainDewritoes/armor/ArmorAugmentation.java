@@ -160,40 +160,40 @@ public class ArmorAugmentation implements Listener
     }
 
     //Sprinting takes energy
-    private Map<Player, Long> sprinters = new HashMap<>();
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    private void onSprint(PlayerToggleSprintEvent event)
-    {
-        Player player = event.getPlayer();
-
-        if (!event.isSprinting())
-        {
-            sprinters.remove(player);
-            player.setSaturation(20f);
-            return;
-        }
-        if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
-            return;
-
-        final long time = System.currentTimeMillis();
-        sprinters.put(player, time);
-
-        player.setFoodLevel(player.getFoodLevel() - 1);
-        player.setSaturation(0f);
-
-        new BukkitRunnable()
-        {
-
-            @Override
-            public void run()
-            {
-                if (sprinters.containsKey(player) && sprinters.get(player) == time)
-                    player.setFoodLevel(player.getFoodLevel() - 2);
-                else
-                    cancel();
-            }
-        }.runTaskTimer(instance, 10L, 10L);
-    }
+//    private Map<Player, Long> sprinters = new HashMap<>();
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+//    private void onSprint(PlayerToggleSprintEvent event)
+//    {
+//        Player player = event.getPlayer();
+//
+//        if (!event.isSprinting())
+//        {
+//            sprinters.remove(player);
+//            player.setSaturation(20f);
+//            return;
+//        }
+//        if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
+//            return;
+//
+//        final long time = System.currentTimeMillis();
+//        sprinters.put(player, time);
+//
+//        player.setFoodLevel(player.getFoodLevel() - 1);
+//        player.setSaturation(0f);
+//
+//        new BukkitRunnable()
+//        {
+//
+//            @Override
+//            public void run()
+//            {
+//                if (sprinters.containsKey(player) && sprinters.get(player) == time)
+//                    player.setFoodLevel(player.getFoodLevel() - 2);
+//                else
+//                    cancel();
+//            }
+//        }.runTaskTimer(instance, 10L, 10L);
+//    }
 
     //Refill energy bar gradually
     private void ATPgeneration()
@@ -205,7 +205,7 @@ public class ArmorAugmentation implements Listener
             {
                 for (Player player : instance.getServer().getOnlinePlayers())
                 {
-                    if (player.getFoodLevel() >= 20)
+                    if (player.getFoodLevel() >= 20 || player.isSprinting())
                         continue;
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }

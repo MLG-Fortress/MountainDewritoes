@@ -27,7 +27,7 @@ public class ShoppingMall implements Listener
      * @param event
      */
     World mallWorld = Bukkit.getWorld("mall");
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onWorldChange(PlayerChangedWorldEvent event)
     {
         Player player = event.getPlayer();
