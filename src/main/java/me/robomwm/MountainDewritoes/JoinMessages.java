@@ -110,7 +110,7 @@ public class JoinMessages implements Listener
         event.getPlayer().setMetadata("MD_JOINING", new FixedMetadataValue(instance, true));
         if (event.getPlayer().hasMetadata("MD_ACCEPTED"))
         {
-            event.getPlayer().sendMessage("Seems you timed out while attempting to load the resource pack. Try restarting Minecraft?");
+            event.getPlayer().sendMessage("Seems u timed out while attempting 2 load de memepack. Try restarting Minecraft?\nWe'll resend it 2 u da next time u join.");
             event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
         }
         else
@@ -162,9 +162,9 @@ public class JoinMessages implements Listener
                     public void run()
                     {
                         if (!instance.getServer().getOnlinePlayers().contains(event.getPlayer()))
-                            event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our memetastic resource pack." + ChatColor.YELLOW + "\nU can enable resource packs by editing dis serbur in ur servers list.");
+                            event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our memetastic resource pack." + ChatColor.YELLOW + "\nEnable the pack by editing da serbur in ur servers list.");
                     }
-                }.runTaskLater(instance, 600L);
+                }.runTaskLater(instance, 100L); //5 seconds
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
                 event.getPlayer().setViewDistance(8);
                 break;
@@ -190,6 +190,19 @@ public class JoinMessages implements Listener
     private void onUsingOlderClient(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
+        try
+        {
+            if (ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC))
+                return;
+        }
+        catch (Throwable e)
+        {
+            instance.getLogger().info("Probably need to update ProtocolSupport dependency (or it isn't loaded atm.)");
+            instance.getLogger().warning(e.getMessage());
+            return;
+        }
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " is using archaic " + ProtocolSupportAPI.getProtocolVersion(player).getName());
 
         new BukkitRunnable()
         {
@@ -197,25 +210,15 @@ public class JoinMessages implements Listener
             public void run()
             {
                 if (!instance.getServer().getOnlinePlayers().contains(player))
+                {
+                    cancel();
                     return;
-                player.loadData();
-                try
-                {
-                    if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
-                    {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + "Yikes! " + event.getPlayer().getName() + " is running dinosaur " + ProtocolSupportAPI.getProtocolVersion(player).getName());
-                        player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~");
-                        player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "Some stuff might not look... on point. Or cause u 2 crash. But that's because you're using an outdated version of Minecraft!" + ChatColor.YELLOW + "\nFor the intended, memetastic experience, please update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
-                        player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~");
-                    }
                 }
-                catch (Throwable e)
-                {
-                    instance.getLogger().info("Probably need to update ProtocolSupport dependency (or it isn't loaded atm.)");
-                    instance.getLogger().warning(e.getMessage());
-                }
+                player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~\n");
+                player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "Some stuff might look broken because you're using an outdated version of Minecraft!" + ChatColor.YELLOW + "\nPlease update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
+                player.sendMessage(ChatColor.DARK_RED + "\n~~~~~~~~---------~~~~~~~~~");
             }
-        }.runTaskLater(instance, 900L); //15 seconds after joining
+        }.runTaskTimer(instance, 200L, 24000); //10 seconds after joining, and every 20 minutes
 
     }
 }
