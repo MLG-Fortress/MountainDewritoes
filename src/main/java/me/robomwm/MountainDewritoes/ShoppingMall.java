@@ -16,17 +16,18 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class ShoppingMall implements Listener
 {
-    MountainDewritoes instance;
+    private MountainDewritoes instance;
+    private World mallWorld;
     public ShoppingMall(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
+        mallWorld = instance.getServer().getWorld("mall");
     }
 
     /**
      * Set walking speed when entering or leaving mall
      * @param event
      */
-    World mallWorld = Bukkit.getWorld("mall");
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onWorldChange(PlayerChangedWorldEvent event)
     {

@@ -49,8 +49,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BetterZeldaHearts implements Listener
 {
-    MountainDewritoes instance;
-    Economy economy;
+    private MountainDewritoes instance;
+    private Economy economy;
 
     public BetterZeldaHearts(MountainDewritoes plugin, Economy economy)
     {
