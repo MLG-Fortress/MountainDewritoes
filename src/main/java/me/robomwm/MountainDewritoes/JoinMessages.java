@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -155,7 +156,7 @@ public class JoinMessages implements Listener
                 if (event.getPlayer().hasMetadata("MD_DECLINED"))
                     return;
                 event.getPlayer().setMetadata("MD_DECLINED", new FixedMetadataValue(instance, true));
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " denied da memepak.");
+                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " denied da memepak.");
 
                 new BukkitRunnable()
                 {
@@ -202,7 +203,7 @@ public class JoinMessages implements Listener
             return;
         }
 
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " is using archaic " + ProtocolSupportAPI.getProtocolVersion(player).getName());
+        //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " is using archaic " + ProtocolSupportAPI.getProtocolVersion(player).getName());
 
         new BukkitRunnable()
         {
@@ -220,5 +221,31 @@ public class JoinMessages implements Listener
             }
         }.runTaskTimer(instance, 200L, 24000); //10 seconds after joining, and every 20 minutes
 
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onChat(AsyncPlayerChatEvent event)
+    {
+        Player player = event.getPlayer();
+        if (NSA.setTempdata(event.getPlayer(), "chatted"))
+            return;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                if (ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC))
+                    stringBuilder.append(player.getName() + " is using archaic "
+                            + ProtocolSupportAPI.getProtocolVersion(player).getName() + ". ");
+
+                if (player.hasMetadata("MD_DECLINED"))
+                    stringBuilder.append(player.getName() + " denied da memepak. ");
+
+                if (stringBuilder.length() > 0)
+                    instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(),
+                            "communicationconnector " + stringBuilder.toString());
+            }
+        }.runTask(instance);
     }
 }

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created on 2/13/2017.
@@ -42,6 +43,7 @@ public class NSA implements Listener
     private static Map<Player, List<Transaction>> transactions = new HashMap<>();
     private static Map<Player, Integer> midairMap = new HashMap<>();
     private static Map<Player, Location> lastLocation = new HashMap<>();
+    private static Map<Player, Set<String>> tempMetadata = new ConcurrentHashMap<>(); //thread-safe????????
 
     NSA(MountainDewritoes mountainDewritoes)
     {
@@ -53,6 +55,18 @@ public class NSA implements Listener
     static private final String killStreak = "MD_KILLSTREAK";
     static private final String spreePoints = "MD_KILLSTREAKPOINTS";
 
+    public static boolean getTempdata(Player player, String key)
+    {
+        return tempMetadata.containsKey(player) && tempMetadata.get(player).contains(key);
+    }
+
+    public static boolean setTempdata(Player player, String key) //Also add way to unset when needed
+    {
+        if (!tempMetadata.containsKey(player))
+            tempMetadata.put(player, ConcurrentHashMap.newKeySet());
+        return tempMetadata.get(player).add(key);
+    }
+
     @EventHandler
     private void cleanupMetadataOnQuit(PlayerQuitEvent event) //You never know if memory leaks
     {
@@ -61,6 +75,7 @@ public class NSA implements Listener
         clearSpreePoints(player);
         lastLocation.remove(event.getPlayer());
         midairMap.remove(event.getPlayer());
+        tempMetadata.remove(event.getPlayer());
     }
 
     public static Location getLastLocation(Player player)
