@@ -59,7 +59,7 @@ public class IronArmor implements Listener
 
         if (!player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getFoodLevel() > 0)
         {
-            new BukkitRunnable()
+            floaters.put(player, new BukkitRunnable()
             {
                 @Override
                 public void run()
@@ -86,7 +86,7 @@ public class IronArmor implements Listener
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
                 }
-            }.runTaskTimer(instance, 0L, 5L);
+            }.runTaskTimer(instance, 0L, 5L));
         }
     }
 
