@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -24,16 +25,26 @@ import java.util.Map;
  *
  * @author RoboMWM
  */
-public class GoldArmor implements ArmorTemplate
+public class GoldArmor implements Listener
 {
+    private ArmorAugmentation armorAugmentation;
+
+    GoldArmor(JavaPlugin plugin, ArmorAugmentation armorAugmentation)
+    {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.armorAugmentation = armorAugmentation;
+    }
+
     /* GOLD BOOTS */
     //Mid-air jump
-    public void onSneak(PlayerToggleSneakEvent event, Player player)
+    @EventHandler(ignoreCancelled = true)
+    public void onSneak(PlayerToggleSneakEvent event)
     {
-        if (!event.isSneaking())
-            return;
+        Player player = event.getPlayer();
 
-        if (event.getPlayer().isOnGround())
+        if (!event.isSneaking() || event.getPlayer().isOnGround())
+            return;
+        if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
             return;
 
         if (!NSA.getMidairMap().containsKey(player))
@@ -47,15 +58,18 @@ public class GoldArmor implements ArmorTemplate
     //GOLD LEGGINGS
     //I'm free, free-falling
     //Player experiences less gravitational pull/feels floaty while sprinting
-    public void onSprint(PlayerToggleSprintEvent event, Player player)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onSprint(PlayerToggleSprintEvent event)
     {
-        if (!event.isSprinting())
+        Player player = event.getPlayer();
+
+        if (!event.isSprinting() || player.getFoodLevel() < 20 || player.hasPotionEffect(PotionEffectType.SPEED))
             return;
 
-        if (player.hasPotionEffect(PotionEffectType.SPEED))
+        if (!armorAugmentation.isEquipped(player, Material.GOLD_LEGGINGS))
             return;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 30, true, false));
-        player.setFoodLevel(0);
+        player.setFoodLevel(10);
     }
 }

@@ -37,76 +37,36 @@ import java.util.Set;
 public class ArmorAugmentation implements Listener
 {
     private MountainDewritoes instance;
-    private ArmorTemplate goldArmor;
-    private ArmorTemplate ironArmor;
 
     public ArmorAugmentation(MountainDewritoes plugin)
     {
         instance = plugin;
-        goldArmor = new GoldArmor();
-        ironArmor = new IronArmor(instance);
+        new GoldArmor(instance, this);
+        new IronArmor(instance, this);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getServer().getPluginManager().registerEvents(new OldFood(instance), plugin);
         ATPgeneration();
     }
 
-//    public boolean isEquipped(Player player, Material armorToMatch)
-//    {
-//        ItemStack equippedArmor = null;
-//        switch (armorToMatch)
-//        {
-//            case GOLD_LEGGINGS:
-//            case IRON_LEGGINGS:
-//            case DIAMOND_LEGGINGS:
-//            case CHAINMAIL_LEGGINGS:
-//                equippedArmor = player.getInventory().getLeggings();
-//                break;
-//            case GOLD_BOOTS:
-//            case IRON_BOOTS:
-//            case DIAMOND_BOOTS:
-//            case CHAINMAIL_BOOTS:
-//                equippedArmor = player.getInventory().getBoots();
-//                break;
-//        }
-//        return equippedArmor != null && equippedArmor.getType() == armorToMatch;
-//    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void onSneakAugmentation(PlayerToggleSneakEvent event)
+    public boolean isEquipped(Player player, Material armorToMatch)
     {
-        Player player = event.getPlayer();
-        ItemStack equippedArmor = player.getInventory().getBoots();
-        if (equippedArmor == null)
-            return;
-        switch (equippedArmor.getType())
-        {
-            case GOLD_BOOTS:
-                goldArmor.onSneak(event, player);
-                break;
-            case IRON_BOOTS:
-                ironArmor.onSneak(event, player);
-                break;
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void onSprintAugmentation(PlayerToggleSprintEvent event)
-    {
-        Player player = event.getPlayer();
-        if (player.getFoodLevel() < 20)
-            return;
-        ItemStack equippedArmor = player.getInventory().getLeggings();
-        if (equippedArmor == null)
-            return;
-        switch (equippedArmor.getType())
+        ItemStack equippedArmor = null;
+        switch (armorToMatch)
         {
             case GOLD_LEGGINGS:
-                goldArmor.onSprint(event, player);
-                break;
             case IRON_LEGGINGS:
-                ironArmor.onSprint(event, player);
+            case DIAMOND_LEGGINGS:
+            case CHAINMAIL_LEGGINGS:
+                equippedArmor = player.getInventory().getLeggings();
+                break;
+            case GOLD_BOOTS:
+            case IRON_BOOTS:
+            case DIAMOND_BOOTS:
+            case CHAINMAIL_BOOTS:
+                equippedArmor = player.getInventory().getBoots();
                 break;
         }
+        return equippedArmor != null && equippedArmor.getType() == armorToMatch;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -159,7 +119,52 @@ public class ArmorAugmentation implements Listener
         event.setCancelled(true);
     }
 
-    //Sprinting takes energy
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    private void onSprint(PlayerToggleSprintEvent event)
+    {
+        Player player = event.getPlayer();
+        if (instance.isNoModifyWorld(player.getWorld()))
+            return;
+        if (event.isSprinting() && player.getFoodLevel() > 1)
+            player.setFoodLevel(player.getFoodLevel() - 1);
+    }
+
+    //Refill energy bar gradually, unless sprinting
+    private void ATPgeneration()
+    {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (Player player : instance.getServer().getOnlinePlayers())
+                {
+                    if (player.getFoodLevel() >= 20 || instance.isNoModifyWorld(player.getWorld()))
+                        continue;
+                    if (player.isSprinting())
+                        player.setFoodLevel(player.getFoodLevel() - 1);
+                    else
+                        player.setFoodLevel(player.getFoodLevel() + 1);
+                }
+            }
+        }.runTaskTimer(instance, 30L, 30L);
+    }
+
+    //Cancel minute falling damage, do goomba stomp
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    private void onHardlyAnyFalling(EntityDamageEvent event)
+    {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
+            return;
+        if (event.getDamage() < 5.0)
+            event.setCancelled(true);
+        //TODO: goomba stomp
+    }
+
+}
+
+//trash
+//Sprinting takes energy
 //    private Map<Player, Long> sprinters = new HashMap<>();
 //    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 //    private void onSprint(PlayerToggleSprintEvent event)
@@ -194,34 +199,3 @@ public class ArmorAugmentation implements Listener
 //            }
 //        }.runTaskTimer(instance, 10L, 10L);
 //    }
-
-    //Refill energy bar gradually
-    private void ATPgeneration()
-    {
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                for (Player player : instance.getServer().getOnlinePlayers())
-                {
-                    if (player.getFoodLevel() >= 20 || player.isSprinting())
-                        continue;
-                    player.setFoodLevel(player.getFoodLevel() + 1);
-                }
-            }
-        }.runTaskTimer(instance, 20L, 20L);
-    }
-
-    //Cancel minute falling damage, do goomba stomp
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    private void onHardlyAnyFalling(EntityDamageEvent event)
-    {
-        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
-            return;
-        if (event.getDamage() < 5.0)
-            event.setCancelled(true);
-        //TODO: goomba stomp
-    }
-
-}

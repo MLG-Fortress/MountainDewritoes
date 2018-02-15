@@ -18,10 +18,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class OldFood implements Listener
 {
-    JavaPlugin instance;
+    private JavaPlugin instance;
 
     OldFood(JavaPlugin plugin)
     {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         instance = plugin;
     }
 
@@ -29,7 +30,7 @@ public class OldFood implements Listener
     private void onPlayerPreEat(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
-        if (player.getFoodLevel() >= 20)
+        if (player.getFoodLevel() < 20)
             return;
         if (player.getHealth() >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
             return;
