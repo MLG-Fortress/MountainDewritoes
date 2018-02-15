@@ -243,8 +243,13 @@ public class JoinMessages implements Listener
                     stringBuilder.append(player.getName() + " denied da memepak. ");
 
                 if (stringBuilder.length() > 0)
+                {
                     instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(),
                             "communicationconnector " + stringBuilder.toString());
+                    instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(),
+                            "broadcast " + stringBuilder.toString());
+                }
+
             }
         }.runTask(instance);
     }
