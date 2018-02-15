@@ -28,7 +28,7 @@ public class IronArmor implements Listener
 {
     private JavaPlugin instance;
     private ArmorAugmentation armorAugmentation;
-    private final Map<Player, BukkitTask> floaters = new HashMap<>();
+    private final Map<Player, BukkitRunnable> floaters = new HashMap<>();
 
     IronArmor(JavaPlugin plugin, ArmorAugmentation armorAugmentation)
     {
@@ -60,7 +60,7 @@ public class IronArmor implements Listener
 
         if (!player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getFoodLevel() > 0)
         {
-            floaters.put(player, new BukkitRunnable()
+            BukkitRunnable runnable = new BukkitRunnable()
             {
                 @Override
                 public void run()
@@ -83,12 +83,13 @@ public class IronArmor implements Listener
                 @Override
                 public synchronized void cancel() throws IllegalStateException
                 {
+                    super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
-                    Bukkit.broadcastMessage("canceled");
-                    super.cancel();
                 }
-            }.runTaskTimer(instance, 0L, 5L));
+            };
+            floaters.put(player, runnable);
+            runnable.runTaskTimer(instance, 0L, 5L);
         }
     }
 
