@@ -227,7 +227,7 @@ public class JoinMessages implements Listener
     private void onChat(AsyncPlayerChatEvent event)
     {
         Player player = event.getPlayer();
-        if (NSA.setTempdata(event.getPlayer(), "chatted"))
+        if (!NSA.setTempdata(event.getPlayer(), "chatted"))
             return;
         new BukkitRunnable()
         {
@@ -235,7 +235,7 @@ public class JoinMessages implements Listener
             public void run()
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                if (ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC))
+                if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
                     stringBuilder.append(player.getName() + " is using archaic "
                             + ProtocolSupportAPI.getProtocolVersion(player).getName() + ". ");
 
