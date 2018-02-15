@@ -111,6 +111,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TitleManager titleManager;
     private SimpleClansListener simpleClansListener;
     private TipCommand tipCommand;
+    private AtmosphericManager atmosphericManager;
 
     public TipCommand getTipCommand()
     {
@@ -227,7 +228,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new PseudoCommands(this);
         new TabList(this);
         new TheMidnightPortalToAnywhere(this);
-        new AtmosphericManager(this);
+        atmosphericManager = new AtmosphericManager(this);
         new ArmorAugmentation(this);
 
         //Plugin-dependent listeners
@@ -276,6 +277,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         //TODO: delete instantiated worlds (i.e. those not in MV)
         betterNoDamageTicks.onDisable();
+        for (Player player : getServer().getOnlinePlayers())
+            atmosphericManager.stopMusic(player);
     }
 
     /**
