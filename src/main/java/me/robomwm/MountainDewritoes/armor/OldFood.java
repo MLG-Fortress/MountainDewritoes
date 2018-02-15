@@ -27,7 +27,7 @@ public class OldFood implements Listener
         instance = plugin;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onPlayerPreEat(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
