@@ -223,7 +223,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new Ogrewatch(this);
         betterNoDamageTicks = new BetterNoDamageTicks(this);
         new FineSine(this);
-        new PrisonIsAConfusingGamemode(this);
         new LodsOfEmone(this);
         new PseudoCommands(this);
         new TabList(this);
