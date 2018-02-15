@@ -64,7 +64,7 @@ public class IronArmor implements Listener
                 @Override
                 public void run()
                 {
-                    if (player.getFoodLevel() <= 0 || !armorAugmentation.isEquipped(player, Material.IRON_BOOTS))
+                    if (player.getFoodLevel() <= 0 || !armorAugmentation.isEquipped(player, Material.IRON_BOOTS) || this.isCancelled())
                     {
                         cancel();
                         return;
