@@ -82,10 +82,10 @@ public class IronArmor implements Listener
                 @Override
                 public synchronized void cancel() throws IllegalStateException
                 {
-                    super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
                     player.sendMessage("canceled");
+                    super.cancel();
                 }
             }.runTaskTimer(instance, 0L, 5L));
         }
