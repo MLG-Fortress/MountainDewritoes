@@ -85,6 +85,7 @@ public class IronArmor implements Listener
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
+                    player.sendMessage("canceled");
                 }
             }.runTaskTimer(instance, 0L, 5L));
         }
