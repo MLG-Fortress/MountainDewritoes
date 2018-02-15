@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.armor;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -84,7 +85,7 @@ public class IronArmor implements Listener
                 {
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
-                    player.sendMessage("canceled");
+                    Bukkit.broadcastMessage("canceled");
                     super.cancel();
                 }
             }.runTaskTimer(instance, 0L, 5L));
