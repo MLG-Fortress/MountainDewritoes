@@ -58,7 +58,7 @@ public class IronArmor implements Listener
         if (!armorAugmentation.isEquipped(player, Material.IRON_BOOTS))
             return;
 
-        if (!player.hasPotionEffect(PotionEffectType.LEVITATION) && player.getFoodLevel() > 0)
+        if (player.getFoodLevel() > 0)
         {
             BukkitRunnable runnable = new BukkitRunnable()
             {
@@ -85,6 +85,7 @@ public class IronArmor implements Listener
                 {
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
                     floaters.remove(player);
                 }
             };

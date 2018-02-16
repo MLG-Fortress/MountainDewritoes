@@ -147,7 +147,7 @@ public class ArmorAugmentation implements Listener
                         player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
-        }.runTaskTimer(instance, 30L, 30L);
+        }.runTaskTimer(instance, 20L, 20L);
     }
 
     //Cancel minute falling damage, do goomba stomp
