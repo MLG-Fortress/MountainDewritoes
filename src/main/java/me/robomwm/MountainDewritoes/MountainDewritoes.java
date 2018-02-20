@@ -6,6 +6,7 @@ import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
+import me.robomwm.MountainDewritoes.Commands.ResetCommands;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import me.robomwm.MountainDewritoes.Commands.ViewDistanceCommand;
@@ -262,9 +263,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("restart").setExecutor(new StaffRestartCommand(this));
         getCommand("tip").setExecutor(tipCommand);
-        getCommand("mdebug").setExecutor(new DebugCommand(this));
+        DebugCommand debugCommand = new DebugCommand(this);
+        getCommand("mdebug").setExecutor(debugCommand);
+        getCommand("lejail").setExecutor(debugCommand);
+        getCommand("watchwinreward").setExecutor(debugCommand);
         getCommand("voice").setExecutor(new VoiceCommand(this));
         getCommand("view").setExecutor(new ViewDistanceCommand());
+        getCommand("reset").setExecutor(new ResetCommands(this));
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
