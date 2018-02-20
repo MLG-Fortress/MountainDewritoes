@@ -14,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class StaffRestartCommand implements CommandExecutor
 {
-    JavaPlugin instance;
+    private JavaPlugin instance;
 
     public StaffRestartCommand(JavaPlugin plugin)
     {
@@ -70,7 +70,7 @@ public class StaffRestartCommand implements CommandExecutor
                 if (!onlinePlayer.hasPermission("mlgstaff"))
                 {
                     player.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now. Might b best 2 wait until dey leve b4 u /restart meh.");
-                    return false;
+                    return true;
                 }
             }
         }

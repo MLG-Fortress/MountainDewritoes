@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class EmoticonCommands implements CommandExecutor
 {
-    JavaPlugin instance;
+    private JavaPlugin instance;
 
     public EmoticonCommands(JavaPlugin plugin)
     {
@@ -29,7 +29,7 @@ public class EmoticonCommands implements CommandExecutor
 
         if (cmd.getName().equalsIgnoreCase("shrug"))
         {
-            player.chat(String.join(" ", args) + " \u00AF\\_(\u30C4)_/\u00AF"); //¯\_(ツ)_/¯
+            chat(player, String.join(" ", args) + " \u00AF\\_(\u30C4)_/\u00AF"); //¯\_(ツ)_/¯
         }
 
         return true;

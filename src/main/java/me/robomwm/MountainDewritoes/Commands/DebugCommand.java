@@ -1,11 +1,14 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import com.destroystokyo.paper.Title;
 import com.wimbli.WorldBorder.BorderData;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -15,6 +18,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created on 7/26/2017.
@@ -114,6 +118,44 @@ public class DebugCommand implements CommandExecutor
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
         }
+        else if (cmd.getName().equalsIgnoreCase("lejail"))
+        {
+            Player target = instance.getServer().getPlayerExact(args[0]);
+            if (target.hasPermission("i.am.jailed"))
+                return false;
+            commander("jail " + args[0] + args[1]);
+            commander("lp user " + args[0] + " parent set default");
+            commander("lp user " + args[0] + " set i.am.jailed");
+            commander("communicationconnector Da loominarty caught " + args[0] + " for " + args[1]);
+            Title.Builder title = new Title.Builder();
+            title.title(ChatColor.DARK_GREEN + "DE_LOOMINARTY");
+            title.subtitle(ChatColor.GREEN + "CAPTURED U");
+            title.stay(100);
+            title.fadeOut(100);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    target.sendMessage("o nu, da loominarty caught u!\nBut u can try 2 scare em away by watching an " + ChatColor.GOLD + "/ad");
+                    target.performCommand("ad");
+                }
+            }.runTaskLater(instance, 200L);
+            return true;
+        }
+        else if (cmd.getName().equalsIgnoreCase("watchwinreward"))
+        {
+            commander("unjail " + args[0]);
+            commander("lp user " + args[0] + " unset i.am.jailed");
+            args[0] = null;
+            commander(StringUtils.join(args, " "));
+            return true;
+        }
         return false;
+    }
+
+    private void commander(String thing)
+    {
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), thing);
     }
 }
