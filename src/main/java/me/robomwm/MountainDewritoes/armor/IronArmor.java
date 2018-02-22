@@ -70,12 +70,11 @@ public class IronArmor implements Listener
                         cancel();
                         return;
                     }
-//                    int velocity = (int)(-player.getVelocity().getY() * 15);
-//                    if (velocity < 1)
-//                        velocity = 1;
-//                    else if (velocity > 100)
-//                        velocity = 100;
-                    int velocity = 1;
+                    int velocity = (int)(-player.getVelocity().getY() * 15);
+                    if (velocity < 1)
+                        velocity = 1;
+                    else if (velocity > 100)
+                        velocity = 100;
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, velocity, true, false));
                     player.setFoodLevel(player.getFoodLevel() - 1);
@@ -86,7 +85,7 @@ public class IronArmor implements Listener
                 {
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
+                    //player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
                     floaters.remove(player);
                 }
             };
