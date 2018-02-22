@@ -121,9 +121,9 @@ public class DebugCommand implements CommandExecutor
         else if (cmd.getName().equalsIgnoreCase("lejail"))
         {
             Player target = instance.getServer().getPlayerExact(args[0]);
-            if (target.hasPermission("i.am.jailed"))
+            if (target == null || target.hasPermission("i.am.jailed"))
                 return false;
-            commander("jail " + args[0] + args[1]);
+            commander("jail " + args[0] + " " + args[1]);
             commander("lp user " + args[0] + " parent set default");
             commander("lp user " + args[0] + " set i.am.jailed");
             commander("communicationconnector Da loominarty caught " + args[0] + " for " + args[1]);
@@ -132,6 +132,7 @@ public class DebugCommand implements CommandExecutor
             title.subtitle(ChatColor.GREEN + "CAPTURED U");
             title.stay(100);
             title.fadeOut(100);
+            player.sendTitle(title.build());
             new BukkitRunnable()
             {
                 @Override

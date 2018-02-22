@@ -104,9 +104,10 @@ public class NSA implements Listener
     {
         if (event.getPlayer().isOnGround())
         {
-            Integer integer = midairMap.remove(event.getPlayer());
-            if (integer != null && integer < 0)
-                instance.getServer().getPluginManager().callEvent(new PlayerLandEvent(event.getPlayer(), integer));
+            midairMap.remove(event.getPlayer());
+//            Integer integer = midairMap.remove(event.getPlayer());
+//            if (integer != null && integer < 0)
+//                instance.getServer().getPluginManager().callEvent(new PlayerLandEvent(event.getPlayer(), integer));
         }
     }
 

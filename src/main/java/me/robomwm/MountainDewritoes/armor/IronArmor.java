@@ -70,11 +70,12 @@ public class IronArmor implements Listener
                         cancel();
                         return;
                     }
-                    int velocity = (int)(-player.getVelocity().getY() * 15);
-                    if (velocity < 1)
-                        velocity = 1;
-                    else if (velocity > 100)
-                        velocity = 100;
+//                    int velocity = (int)(-player.getVelocity().getY() * 15);
+//                    if (velocity < 1)
+//                        velocity = 1;
+//                    else if (velocity > 100)
+//                        velocity = 100;
+                    int velocity = 1;
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, velocity, true, false));
                     player.setFoodLevel(player.getFoodLevel() - 1);
@@ -90,7 +91,7 @@ public class IronArmor implements Listener
                 }
             };
             floaters.put(player, runnable);
-            runnable.runTaskTimer(instance, 0L, 5L);
+            runnable.runTaskTimer(instance, 0L, 10L);
         }
     }
 
@@ -100,9 +101,7 @@ public class IronArmor implements Listener
         Player player = event.getPlayer();
         if (!armorAugmentation.isFullPower(event, Material.IRON_LEGGINGS))
             return;
-        if (!player.isOnGround())
-            return;
         player.setVelocity(player.getLocation().getDirection().multiply(2));
-        player.setFoodLevel(4);
+        player.setFoodLevel(10);
     }
 }

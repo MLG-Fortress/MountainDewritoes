@@ -43,8 +43,11 @@ public class DiamondArmor implements Listener
         if (!NSA.getMidairMap().containsKey(player))
         {
             NSA.getMidairMap().put(player, -1);
-            Vector vector = player.getLocation().toVector();
-            player.setVelocity(player.getLocation().getDirection().setY(0));
+            Vector vector = player.getLocation().getDirection();
+            if (vector.getY() > 0)
+            {
+                player.setVelocity(vector.setY(0));
+            }
         }
     }
 
