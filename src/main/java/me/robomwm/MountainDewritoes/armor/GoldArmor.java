@@ -53,23 +53,22 @@ public class GoldArmor implements Listener
             Vector vector = player.getLocation().toVector();
             player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(2.5D).setY(0.7D));
         }
+        else if (NSA.getMidairMap().get(player) == 1)
+        {
+            NSA.getMidairMap().put(player, 2);
+            player.setVelocity(player.getLocation().getDirection().setY(0.3));
+        }
     }
 
-    //GOLD LEGGINGS
-    //I'm free, free-falling
-    //Player experiences less gravitational pull/feels floaty while sprinting
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onSprint(PlayerToggleSprintEvent event)
     {
         Player player = event.getPlayer();
 
-        if (!event.isSprinting() || player.getFoodLevel() < 20 || player.hasPotionEffect(PotionEffectType.SPEED))
-            return;
-
-        if (!armorAugmentation.isEquipped(player, Material.GOLD_LEGGINGS))
+        if (!armorAugmentation.isFullPower(event, Material.GOLD_LEGGINGS) || player.hasPotionEffect(PotionEffectType.SPEED))
             return;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 30, true, false));
-        player.setFoodLevel(10);
+        player.setFoodLevel(12);
     }
 }

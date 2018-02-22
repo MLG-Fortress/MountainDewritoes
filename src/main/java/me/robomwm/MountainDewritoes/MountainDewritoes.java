@@ -230,6 +230,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new TheMidnightPortalToAnywhere(this);
         atmosphericManager = new AtmosphericManager(this);
         new ArmorAugmentation(this);
+        new AntiLag(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
@@ -308,15 +309,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        usedEC.add(player);
 //    }
 
-    //Initially removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
-    //We'll see if this is still the case...
-    //idk if it's an issue but I haven't had world loading issues for a while. Though
+//    Initially removed because it occasionally caused client-side chunk errors. Clients can reduce render distance if they're having chunk loading issues.
+//    We'll see if this is still the case...
+//    idk if it's an issue but I haven't had world loading issues for a while. Though
 //    /**
 //     * Make chunk loading when teleporting between worlds seem faster
-//     * TODO: allow player to choose view distance(?)
 //     * @param event
 //     */
-//    @EventHandler(priority = EventPriority.MONITOR)
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 //    void onPlayerChangesWorldSetViewDistance(PlayerTeleportEvent event)
 //    {
 //        if (event.getFrom().getWorld() == event.getTo().getWorld())
@@ -330,7 +330,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //            public void run()
 //            {
 //                //Don't execute if already set
-//                if (player.getViewDistance() > 3 || !!instance.getServer().getOnlinePlayers().contains(player))
+//                if (player.getViewDistance() > 3 || !getServer().getOnlinePlayers().contains(player))
 //                    this.cancel();
 //                //Wait for player to land before resetting view distance
 //                else if (player.isOnGround())

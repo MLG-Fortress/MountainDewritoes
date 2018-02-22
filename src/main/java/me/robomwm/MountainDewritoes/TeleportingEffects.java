@@ -20,9 +20,10 @@ import java.util.Map;
 
 /**
  * Created by RoboMWM on 9/16/2016.
- * Yes, I'm _not_ going to re-implement EssentialsX's teleportation system just so I can add some stupid effects
- * Instead, I'll just do a lazy implementation of its warmup and watch commandpreprocess cuz yea.
- * I understand this probably doesn't account for cooldowns or whatever. Oh well.
+ * <s>Yes, I'm _not_ going to re-implement EssentialsX's teleportation system just so I can add some stupid effects</s>
+ * Guess what, I end up doing just that lol.
+ * <s>Instead, I'll just do a lazy implementation of its warmup and watch commandpreprocess cuz yea.</s>
+ * <s>I understand this probably doesn't account for cooldowns or whatever. Oh well.</s>
  */
 public class TeleportingEffects implements Listener
 {

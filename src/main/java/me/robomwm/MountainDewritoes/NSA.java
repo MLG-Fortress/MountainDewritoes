@@ -1,10 +1,12 @@
 package me.robomwm.MountainDewritoes;
 
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
+import me.robomwm.MountainDewritoes.Events.PlayerLandEvent;
 import me.robomwm.MountainDewritoes.Events.TransactionEvent;
 import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -30,6 +32,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 2/13/2017.
@@ -41,7 +44,7 @@ public class NSA implements Listener
     private static MountainDewritoes instance;
 
     private static Map<Player, List<Transaction>> transactions = new HashMap<>();
-    private static Map<Player, Integer> midairMap = new HashMap<>();
+    private static Map<OfflinePlayer, Integer> midairMap = new HashMap<>();
     private static Map<Player, Location> lastLocation = new HashMap<>();
     private static Map<Player, Set<String>> tempMetadata = new ConcurrentHashMap<>(); //thread-safe????????
 
@@ -73,8 +76,7 @@ public class NSA implements Listener
         Player player = event.getPlayer();
         player.removeMetadata(mobTrackingMetadata, instance);
         clearSpreePoints(player);
-        lastLocation.remove(event.getPlayer());
-        midairMap.remove(event.getPlayer());
+        lastLocation.remove(player);
         tempMetadata.remove(event.getPlayer());
     }
 
@@ -91,7 +93,7 @@ public class NSA implements Listener
         lastLocation.put(player, event.getFrom());
     }
 
-    public static Map<Player, Integer> getMidairMap()
+    public static Map<OfflinePlayer, Integer> getMidairMap()
     {
         return midairMap;
     }
@@ -101,7 +103,11 @@ public class NSA implements Listener
     private void onPlayerLands(PlayerMoveEvent event)
     {
         if (event.getPlayer().isOnGround())
-            midairMap.remove(event.getPlayer());
+        {
+            Integer integer = midairMap.remove(event.getPlayer());
+            if (integer != null && integer < 0)
+                instance.getServer().getPluginManager().callEvent(new PlayerLandEvent(event.getPlayer(), integer));
+        }
     }
 
     /* # of mobs targeting player tracker */
@@ -260,6 +266,11 @@ public class NSA implements Listener
         if (!transactions.containsKey(player))
             transactions.put(player, new ArrayList<>());
         transactions.get(player).add(new Transaction(change));
+    }
+
+    public static String getRandomString(String... strings)
+    {
+        return strings[ThreadLocalRandom.current().nextInt(strings.length)];
     }
 }
 

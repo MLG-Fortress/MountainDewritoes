@@ -17,8 +17,9 @@ softdepend:
 - MCJukebox
 - WorldBorder
 - NoMyStuff
-#loadbefore:
-#- AbsorptionShields
+#Currently needed until we nuke crackshot
+loadbefore:
+- AbsorptionShields
 commands:
   nick:
     aliases: [color]

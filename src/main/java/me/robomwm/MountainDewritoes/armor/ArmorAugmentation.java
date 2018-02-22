@@ -43,6 +43,7 @@ public class ArmorAugmentation implements Listener
         instance = plugin;
         new GoldArmor(instance, this);
         new IronArmor(instance, this);
+        new DiamondArmor(instance, this);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getServer().getPluginManager().registerEvents(new OldFood(instance), plugin);
         ATPgeneration();
@@ -67,6 +68,17 @@ public class ArmorAugmentation implements Listener
                 break;
         }
         return equippedArmor != null && equippedArmor.getType() == armorToMatch;
+    }
+
+    //Used by sprint ability usually
+    public boolean isFullPower(PlayerToggleSprintEvent event, Material leggings)
+    {
+        Player player = event.getPlayer();
+        if (!event.isSprinting() || player.getFoodLevel() < 20)
+            return false;
+        if (!this.isEquipped(player, leggings))
+            return false;
+        return true;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -112,7 +124,7 @@ public class ArmorAugmentation implements Listener
             event.setCancelled(true);
     }
 
-    //That's an energy bar, not a hunger bar.
+    //That's ~~an energy~~ power bar, not a hunger bar.
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onGettingHungry(FoodLevelChangeEvent event)
     {

@@ -19,6 +19,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -92,7 +93,7 @@ public class JoinMessages implements Listener
         {
             public void run()
             {
-                if (!instance.getServer().getOnlinePlayers().contains(player))
+                if (instance.getServer().getOnlinePlayers().contains(player))
                 {
                     //String tip = randomTips.get(random.nextInt(randomTips.size()));
                     //instance.timedActionBar(player, 20, ChatColor.GOLD + tip);
@@ -156,16 +157,6 @@ public class JoinMessages implements Listener
                 if (event.getPlayer().hasMetadata("MD_DECLINED"))
                     return;
                 event.getPlayer().setMetadata("MD_DECLINED", new FixedMetadataValue(instance, true));
-                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " denied da memepak.");
-
-                new BukkitRunnable()
-                {
-                    public void run()
-                    {
-                        if (!instance.getServer().getOnlinePlayers().contains(event.getPlayer()))
-                            event.getPlayer().sendMessage(ChatColor.GOLD + "Ayyy, we noticed u denied our memetastic resource pack." + ChatColor.YELLOW + "\nEnable the pack by editing da serbur in ur servers list.");
-                    }
-                }.runTaskLater(instance, 100L); //5 seconds
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
                 event.getPlayer().setViewDistance(8);
                 break;
@@ -173,8 +164,15 @@ public class JoinMessages implements Listener
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
                 event.getPlayer().removeMetadata("MD_JOINING", instance);
                 event.getPlayer().setMetadata("MD_LOADED", new FixedMetadataValue(instance, true));
-                instance.getTitleManager().removeTitle(event.getPlayer(), 0);
-                event.getPlayer().setViewDistance(8);
+                //instance.getTitleManager().removeTitle(event.getPlayer(), 0);
+                new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        event.getPlayer().setViewDistance(8);
+                    }
+                }.runTaskLater(instance, 20L);
                 break;
         }
     }
@@ -184,43 +182,6 @@ public class JoinMessages implements Listener
     {
         event.getPlayer().removeMetadata("MD_LOADED", instance);
         event.getPlayer().removeMetadata("MD_DECLINED", instance);
-    }
-
-    //Use the latest version!
-    @EventHandler
-    private void onUsingOlderClient(PlayerJoinEvent event)
-    {
-        Player player = event.getPlayer();
-        try
-        {
-            if (ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC))
-                return;
-        }
-        catch (Throwable e)
-        {
-            instance.getLogger().info("Probably need to update ProtocolSupport dependency (or it isn't loaded atm.)");
-            instance.getLogger().warning(e.getMessage());
-            return;
-        }
-
-        //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "communicationconnector " + event.getPlayer().getName() + " is using archaic " + ProtocolSupportAPI.getProtocolVersion(player).getName());
-
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (!instance.getServer().getOnlinePlayers().contains(player))
-                {
-                    cancel();
-                    return;
-                }
-                player.sendMessage(ChatColor.DARK_RED + "~~~~~~~~---------~~~~~~~~~\n");
-                player.sendMessage(ChatColor.RED + "Warning: " + ChatColor.GOLD + "Some stuff might look broken because you're using an outdated version of Minecraft!" + ChatColor.YELLOW + "\nPlease update to " + ProtocolVersion.getLatest(ProtocolType.PC).getName());
-                player.sendMessage(ChatColor.DARK_RED + "\n~~~~~~~~---------~~~~~~~~~");
-            }
-        }.runTaskTimer(instance, 200L, 24000); //10 seconds after joining, and every 20 minutes
-
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -234,16 +195,30 @@ public class JoinMessages implements Listener
             @Override
             public void run()
             {
+                if (!instance.getServer().getOnlinePlayers().contains(player))
+                    return;
                 StringBuilder stringBuilder = new StringBuilder();
                 if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
-                    stringBuilder.append(player.getName() + " is using archaic "
-                            + ProtocolSupportAPI.getProtocolVersion(player).getName() + ". ");
+                {
+                    String old = NSA.getRandomString("archaic", "ancient", "outdated", "out of date", "old", "dum");
+                    stringBuilder.append("is using ");
+                    stringBuilder.append(old);
+                    stringBuilder.append(" ");
+                    stringBuilder.append(ProtocolSupportAPI.getProtocolVersion(player).getName());
+                }
 
                 if (player.hasMetadata("MD_DECLINED"))
-                    stringBuilder.append(player.getName() + " denied da memepak. ");
+                {
+                    if (stringBuilder.length() > 0)
+                        stringBuilder.append(" and ");
+                    stringBuilder.append("denied da memepak");
+                    stringBuilder.append(" (enable the resource pack by editing da serbur in da multiplayer servers list!)");
+                }
 
                 if (stringBuilder.length() > 0)
                 {
+                    stringBuilder.insert(0, player.getName() + " ");
+                    stringBuilder.append(".");
                     instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(),
                             "communicationconnector " + stringBuilder.toString());
                     instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(),

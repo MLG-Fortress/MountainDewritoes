@@ -95,7 +95,14 @@ public class IronArmor implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onSprint(PlayerToggleSprintEvent event, Player player)
+    public void onSprint(PlayerToggleSprintEvent event)
     {
+        Player player = event.getPlayer();
+        if (!armorAugmentation.isFullPower(event, Material.IRON_LEGGINGS))
+            return;
+        if (!player.isOnGround())
+            return;
+        player.setVelocity(player.getLocation().getDirection().multiply(2));
+        player.setFoodLevel(4);
     }
 }
