@@ -240,6 +240,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         atmosphericManager = new AtmosphericManager(this);
         new ArmorAugmentation(this);
         new AntiLag(this);
+        new FirstJoin(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
