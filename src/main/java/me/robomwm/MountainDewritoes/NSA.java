@@ -63,6 +63,14 @@ public class NSA implements Listener
         return tempMetadata.containsKey(player) && tempMetadata.get(player).contains(key);
     }
 
+    public static boolean removeTempdata(Player player, String key)
+    {
+        boolean existed = getTempdata(player, key);
+        if (existed)
+            tempMetadata.get(player).remove(key);
+        return existed;
+    }
+
     public static boolean setTempdata(Player player, String key) //Also add way to unset when needed
     {
         if (!tempMetadata.containsKey(player))

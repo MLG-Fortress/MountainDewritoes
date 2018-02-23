@@ -63,7 +63,7 @@ public class DiamondArmor implements Listener
         if (!damager.isSprinting() || !armorAugmentation.isEquipped(damager, Material.DIAMOND_LEGGINGS))
             return;
 
-        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(0));
+        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(0.02));
     }
 
     @EventHandler(ignoreCancelled = true)
