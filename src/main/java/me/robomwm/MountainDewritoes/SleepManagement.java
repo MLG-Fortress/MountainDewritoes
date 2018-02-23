@@ -26,13 +26,8 @@ public class SleepManagement implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
-        WORLD = instance.getServer().getWorld("cityworld");
-        for (World world : plugin.getServer().getWorlds())
-        {
-            if (world.getGameRuleValue("doDaylightCycle").equals("false"))
-                continue;
-            worldsToSync.add(world);
-        }
+        WORLD = instance.getServer().getWorld("mall");
+
 
         worldsToSync.remove(WORLD);
 
@@ -40,19 +35,16 @@ public class SleepManagement implements Listener
         {
             public void run()
             {
-                for (World world : worldsToSync)
-                    syncTime(world);
+                for (World world : plugin.getServer().getWorlds())
+                {
+                    if (world.getGameRuleValue("doDaylightCycle").equals("false"))
+                        continue;
+                    if (WORLD.getTime() == world.getTime())
+                        return;
+                    world.setTime(WORLD.getTime());
+                }
             }
         }.runTaskTimer(instance, 1200L, 1200L);
-    }
-
-    void syncTime(World targetWorld) //Allows for worlds to not be loaded (recovering from backup or w/e) without the entire plugin breaking
-    {
-        if (targetWorld == null)
-            return;
-        if (WORLD.getTime() == targetWorld.getTime())
-            return;
-        targetWorld.setTime(WORLD.getTime());
     }
 
 

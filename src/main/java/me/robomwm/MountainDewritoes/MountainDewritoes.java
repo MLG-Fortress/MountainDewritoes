@@ -191,6 +191,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         survivalWorlds.add(getServer().getWorld("maxiworld"));
         survivalWorlds.add(getServer().getWorld("wellworld"));
 
+        //Set border on survival worlds
+        for (World world : survivalWorlds)
+        {
+            if (!safeWorlds.contains(world))
+                world.getWorldBorder().setSize(20000);
+        }
+
         minigameWorlds.add(getServer().getWorld("spawn"));
         minigameWorlds.add(getServer().getWorld("minigames"));
         minigameWorlds.add(getServer().getWorld("bam"));

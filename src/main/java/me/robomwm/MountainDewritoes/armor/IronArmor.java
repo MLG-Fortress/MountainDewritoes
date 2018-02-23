@@ -90,7 +90,7 @@ public class IronArmor implements Listener
                 }
             };
             floaters.put(player, runnable);
-            runnable.runTaskTimer(instance, 0L, 10L);
+            runnable.runTaskTimer(instance, 0L, 5L);
         }
     }
 
