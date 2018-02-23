@@ -3,6 +3,8 @@ package me.robomwm.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,6 +45,7 @@ public class FirstJoin implements Listener
                     player.sendBlockChange(new Location(WORLD, -1, 71, -6), Material.SMOOTH_BRICK, (byte)2);
                     player.sendBlockChange(new Location(WORLD, -1, 70, -6), Material.SMOOTH_BRICK, (byte)1);
                     player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.AIR, (byte)0);
+                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, SoundCategory.AMBIENT, 1.0f, 1.0f);
                 }
             }
         }.runTaskTimer(plugin, 1200L, 10L);
@@ -50,7 +53,7 @@ public class FirstJoin implements Listener
 
     private void onJoinWorld(Player player)
     {
-        //todo: if player not at spawn, put to spawn location
+        player.teleport(new Location(WORLD, 3.5, 100, 16.5, -90, 10));
         player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.SMOOTH_BRICK, (byte)2);
         NSA.setTempdata(player, "firstjoin");
     }
