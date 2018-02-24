@@ -45,6 +45,8 @@ public class FirstJoin implements Listener
                     player.sendBlockChange(new Location(WORLD, -1, 71, -6), Material.SMOOTH_BRICK, (byte)2);
                     player.sendBlockChange(new Location(WORLD, -1, 70, -6), Material.SMOOTH_BRICK, (byte)1);
                     player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.AIR, (byte)0);
+                    player.sendBlockChange(new Location(WORLD, -2, 70, -4), Material.AIR, (byte)0);
+                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, SoundCategory.AMBIENT, 1.0f, 1.0f);
                     player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, SoundCategory.AMBIENT, 1.0f, 1.0f);
                 }
             }

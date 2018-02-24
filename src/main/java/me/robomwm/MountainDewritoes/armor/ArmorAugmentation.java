@@ -2,8 +2,11 @@ package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Container;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -13,17 +16,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -171,6 +180,82 @@ public class ArmorAugmentation implements Listener
         if (event.getDamage() < 5.0)
             event.setCancelled(true);
         //TODO: goomba stomp
+    }
+
+    //Loreize items
+    private boolean realHolder(InventoryHolder holder)
+    {
+        return holder instanceof Player || holder instanceof Container || holder instanceof DoubleChest;
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onInventoryClick(InventoryClickEvent event)
+    {
+        if (!realHolder(event.getInventory().getHolder()))
+            return;
+        loreize(event.getCurrentItem());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onCraft(CraftItemEvent event)
+    {
+        loreize(event.getCurrentItem());
+    }
+
+    private void loreize(ItemStack itemStack)
+    {
+        if (itemStack == null)
+            return;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.hasLore())
+            return;
+
+        List<String> lore = new ArrayList<>();
+
+        switch (itemStack.getType())
+        {
+            case GOLD_LEGGINGS:
+                lore.add("Gold sanic???");
+                lore.add("");
+                lore.add(ChatColor.YELLOW + "Super Dash");
+                lore.add("At full dorito power, sprint to dash.");
+                break;
+            case GOLD_BOOTS:
+                lore.add("Compressed air makes it easier to defy gravity!");
+                lore.add("");
+                lore.add(ChatColor.YELLOW + "Jump+Dive");
+                lore.add("Sneak in midair to doublejump.");
+                lore.add("Sneak again to airdive.");
+                lore.add("Sneak a third time to cancel dive.");
+                lore.add("");
+                lore.add(ChatColor.GRAY + "Passives:");
+                lore.add(ChatColor.GRAY + "Fall damage protection");
+                lore.add(ChatColor.GRAY + "No power cost");
+                break;
+            case IRON_LEGGINGS:
+                lore.add("Electromagnets work");
+                lore.add("");
+                lore.add(ChatColor.WHITE + "Hover");
+                lore.add("Sneak in midair to hover.");
+                lore.add("");
+                lore.add(ChatColor.GRAY + "Passives:");
+                lore.add(ChatColor.GRAY + "Fall damage protection");
+                break;
+            case IRON_BOOTS:
+                lore.add("Magnets, how do they work?");
+                lore.add("");
+                lore.add(ChatColor.WHITE + "Hover");
+                lore.add("Sneak in midair to hover.");
+                lore.add("");
+                lore.add(ChatColor.GRAY + "Passives:");
+                lore.add(ChatColor.GRAY + "Fall damage protection");
+                break;
+            default:
+                return;
+        }
+        itemMeta.setLore(lore);
+        NSA.setItemVersion(itemMeta, 2, 1);
+        itemStack.setItemMeta(itemMeta);
     }
 
 }
