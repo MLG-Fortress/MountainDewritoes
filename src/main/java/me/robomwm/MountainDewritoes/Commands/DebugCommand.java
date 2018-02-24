@@ -23,7 +23,11 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Created on 7/26/2017.
@@ -57,16 +61,17 @@ public class DebugCommand implements CommandExecutor
         {
             case "recipe":
                 sender.sendMessage("recipe");
+                List<Recipe> existingRecipes = new LinkedList<>();
                 Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
                 while (recipeIterator.hasNext())
                 {
-                    ItemStack itemStack = recipeIterator.next().getResult();
-                    if (itemStack.getType() == Material.GOLD_BOOTS)
-                    {
-                        recipeIterator.remove();
-                        sender.sendMessage("attempted to delete " + itemStack.toString());
-                    }
+                    Recipe recipe = recipeIterator.next();
+                    if (recipe.getResult().getType() != Material.GOLD_BOOTS)
+                        existingRecipes.add(recipe);
                 }
+                plugin.getServer().clearRecipes();
+                for (Recipe recipe : existingRecipes)
+                    plugin.getServer().addRecipe(recipe);
                 return true;
             case "refreshBlocks":
                 assert player != null;
