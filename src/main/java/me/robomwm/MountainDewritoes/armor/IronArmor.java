@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -100,6 +101,11 @@ public class IronArmor implements Listener
         Player player = event.getPlayer();
         if (!armorAugmentation.isFullPower(event, Material.IRON_LEGGINGS))
             return;
+        Vector velocity = player.getLocation().getDirection();
+        if (velocity.getY() < 0.1)
+        {
+
+        }
         player.setVelocity(player.getLocation().getDirection().multiply(2));
         player.setFoodLevel(10);
     }
