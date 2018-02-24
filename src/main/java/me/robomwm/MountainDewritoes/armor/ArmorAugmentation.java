@@ -193,22 +193,26 @@ public class ArmorAugmentation implements Listener
     {
         if (!realHolder(event.getInventory().getHolder()))
             return;
-        loreize(event.getCurrentItem());
+        ItemStack itemStack = loreize(event.getCurrentItem());
+        if (itemStack != null)
+            event.setCurrentItem(itemStack);
     }
 
     @EventHandler(ignoreCancelled = true)
     private void onCraft(CraftItemEvent event)
     {
-        loreize(event.getCurrentItem());
+        ItemStack itemStack = loreize(event.getCurrentItem());
+        if (itemStack != null)
+            event.setCurrentItem(itemStack);
     }
 
-    private void loreize(ItemStack itemStack)
+    private ItemStack loreize(ItemStack itemStack)
     {
         if (itemStack == null || !itemStack.hasItemMeta())
-            return;
+            return null;
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasLore())
-            return;
+            return null;
 
         List<String> lore = new ArrayList<>();
 
@@ -250,11 +254,12 @@ public class ArmorAugmentation implements Listener
                 lore.add(ChatColor.GRAY + "Fall damage protection");
                 break;
             default:
-                return;
+                return null;
         }
         itemMeta.setLore(lore);
         NSA.setItemVersion(itemMeta, 2, 1);
         itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
 }
