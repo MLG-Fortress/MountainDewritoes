@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.items.CustomItems;
 import me.robomwm.usefulutil.SetExpFix;
 import me.robomwm.usefulutil.UsefulUtil;
 import net.milkbowl.vault.economy.Economy;
@@ -49,6 +50,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BetterZeldaHearts implements Listener
 {
+    private CustomItems customItems;
     private MountainDewritoes instance;
     private Economy economy;
 
@@ -57,6 +59,26 @@ public class BetterZeldaHearts implements Listener
         this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.economy = economy;
+
+        ItemStack heart = new ItemStack(Material.INK_SACK);
+        heart.setDurability((short)1);
+        ItemMeta heartMeta = heart.getItemMeta();
+        heartMeta.setDisplayName("healthHeart");
+        heart.setItemMeta(heartMeta);
+        customItems.registerItem(heart,"healthHeart");
+
+        ItemStack healthCanister = new ItemStack(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+        potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.BLACK + "MLGID:1");
+        lore.add("Increases ur maximum swegginess");
+        potionMeta.setLore(lore);
+        healthCanister.setItemMeta(potionMeta);
+        customItems.registerItem(healthCanister, "healthCanister");
+
+        customItems.registerItem(new ItemStack(Material.GOLD_INGOT), "mobMoney");
     }
 
     Random random = new Random();
@@ -80,12 +102,7 @@ public class BetterZeldaHearts implements Listener
         //Should we spawn a heart (heals on pickup)
         if (random.nextInt(3) == 1)
         {
-            ItemStack heart = new ItemStack(Material.INK_SACK);
-            heart.setDurability((short)1);
-            ItemMeta heartMeta = heart.getItemMeta();
-            heartMeta.setDisplayName("healthHeart");
-            heart.setItemMeta(heartMeta);
-            Item heartItem = location.getWorld().dropItem(location, heart);
+            Item heartItem = location.getWorld().dropItem(location, customItems.getItem("healthHeart"));
             heartItem.setCustomName(ChatColor.RED + "SwagPack");
             heartItem.setCustomNameVisible(true);
             heartItem.setPickupDelay(10);
@@ -96,16 +113,7 @@ public class BetterZeldaHearts implements Listener
         else if (random.nextInt(10) == 1)
         {
             //Prepare a new health canister
-            ItemStack healthCanister = new ItemStack(Material.POTION);
-            PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
-            potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
-            potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
-            List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.BLACK + "MLGID:1");
-            lore.add("Increases ur maximum swegginess");
-            potionMeta.setLore(lore);
-            healthCanister.setItemMeta(potionMeta);
-            event.getDrops().add(healthCanister);
+            event.getDrops().add(customItems.getItem("healthCanister"));
         }
 
         /*Mob money*/
@@ -148,7 +156,7 @@ public class BetterZeldaHearts implements Listener
 
     private void dropMobMoney(Location location, double amount)
     {
-        ItemStack money = new ItemStack(Material.GOLD_INGOT);
+        ItemStack money = customItems.getItem("mobMoney");
         ItemMeta moneyMeta = money.getItemMeta();
         moneyMeta.setDisplayName(ChatColor.YELLOW + economy.format(amount));
         moneyMeta.setLore(Collections.singletonList(String.valueOf(amount)));
@@ -174,8 +182,7 @@ public class BetterZeldaHearts implements Listener
         if (!potionMeta.hasLore())
             return;
 
-        List<String> lore = potionMeta.getLore();
-        if (!lore.get(0).equals(ChatColor.BLACK + "MLGID:1"))
+        if (!customItems.isItem("healthCanister", item))
             return;
         Player player = event.getPlayer();
         if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= 180D)
@@ -249,11 +256,11 @@ public class BetterZeldaHearts implements Listener
 
     boolean isHealthHeart(ItemStack item)
     {
-        return item.getType() == Material.INK_SACK && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("healthHeart"));
+        return item.getType() == Material.INK_SACK && customItems.isItem("healthHeart", item);
     }
     boolean isMobMoney(ItemStack item)
     {
-        return item.getType() == Material.GOLD_INGOT && item.hasItemMeta() && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith(ChatColor.YELLOW + economy.format(0).substring(0,1)));
+        return item.getType() == Material.GOLD_INGOT && customItems.isItem("mobMoney", item);
     }
 
     boolean healPlayer(Player player)

@@ -282,40 +282,6 @@ public class NSA implements Listener
     {
         return strings[ThreadLocalRandom.current().nextInt(strings.length)];
     }
-
-    public static boolean isItemId(ItemMeta itemMeta, int id)
-    {
-        if (!itemMeta.hasLore())
-            return false;
-        String[] version = itemMeta.getLore().get(itemMeta.getLore().size()).split(":");
-        if (!version[0].equalsIgnoreCase(ChatColor.BLACK + "MLGID"))
-            return false;
-        return Integer.valueOf(version[1]) == id;
-    }
-
-    public static int getItemVersion(ItemMeta itemMeta)
-    {
-        if (!itemMeta.hasLore())
-            return 0;
-        String[] version = itemMeta.getLore().get(itemMeta.getLore().size() - 1).split(":");
-        if (!version[0].equalsIgnoreCase(ChatColor.BLACK + "MLGID"))
-            return 0;
-        return Integer.valueOf(version[2]);
-    }
-
-    public static void setItemVersion(ItemMeta itemMeta, int id, int version)
-    {
-        int currentVersion = getItemVersion(itemMeta);
-        List<String> lore;
-        if (!itemMeta.hasLore())
-            lore = new ArrayList<>();
-        else
-            lore = itemMeta.getLore();
-        if (currentVersion != 0)
-            lore.remove(lore.size() - 1);
-        lore.add(ChatColor.BLACK + "MLGID:" + id + ":" + version);
-        itemMeta.setLore(lore);
-    }
 }
 
 class Transaction
