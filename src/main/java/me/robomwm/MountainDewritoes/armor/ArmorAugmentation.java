@@ -210,6 +210,7 @@ public class ArmorAugmentation implements Listener
     {
         if (itemStack == null || !itemStack.hasItemMeta())
             return null;
+        itemStack = itemStack.clone();
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasLore())
             return null;
