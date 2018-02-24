@@ -14,6 +14,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,11 +74,12 @@ public class IronArmor implements Listener
                         cancel();
                         return;
                     }
-                    int velocity = (int)(-player.getVelocity().getY() * 15);
-                    if (velocity < 1)
-                        velocity = 1;
-                    else if (velocity > 100)
-                        velocity = 100;
+                    int velocity = 1;
+//                    int velocity = (int)(-player.getVelocity().getY() * 15);
+//                    if (velocity < 1)
+//                        velocity = 1;
+//                    else if (velocity > 100)
+//                        velocity = 100;
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, velocity, true, false));
                     player.setFoodLevel(player.getFoodLevel() - 1);
@@ -86,12 +90,19 @@ public class IronArmor implements Listener
                 {
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
-                    //player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
                     floaters.remove(player);
+                    try
+                    {
+                        if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
+                            return;
+                    }
+                    catch (Throwable ignored){}
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
+
                 }
             };
             floaters.put(player, runnable);
-            runnable.runTaskTimer(instance, 0L, 5L);
+            runnable.runTaskTimer(instance, 0L, 8L);
         }
     }
 
