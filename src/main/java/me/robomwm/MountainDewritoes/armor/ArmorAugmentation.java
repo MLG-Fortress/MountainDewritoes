@@ -226,7 +226,6 @@ public class ArmorAugmentation implements Listener
                 lore.add(ChatColor.YELLOW + "Jump+Dive");
                 lore.add("Sneak in midair to doublejump.");
                 lore.add("Sneak again to airdive.");
-                lore.add("Sneak a third time to cancel dive.");
                 lore.add("");
                 lore.add(ChatColor.GRAY + "Passives:");
                 lore.add(ChatColor.GRAY + "Fall damage protection");

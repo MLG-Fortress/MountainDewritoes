@@ -63,10 +63,10 @@ public class GoldArmor implements Listener
                     NSA.getMidairMap().put(player, 2);
                     player.setVelocity(player.getLocation().getDirection().setY(0.3));
                     break;
-                case 2:
-                    NSA.getMidairMap().put(player, 3);
-                    player.setVelocity(new Vector(0, 0.3, 0));
-                    break;
+//                case 2:
+//                    NSA.getMidairMap().put(player, 3);
+//                    player.setVelocity(new Vector(0, 0.3, 0));
+//                    break;
             }
         }
     }
