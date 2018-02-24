@@ -162,11 +162,12 @@ public class DebugCommand implements CommandExecutor
             switch(args[0].toLowerCase())
             {
                 case "recipe":
+                    player.sendMessage("recipe");
                     Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
                     while (recipeIterator.hasNext())
                     {
                         ItemStack itemStack = recipeIterator.next().getResult();
-                        player.sendMessage(itemStack.toString());
+                        sender.sendMessage(itemStack.toString());
                         if (itemStack.getType() == Material.GOLD_BOOTS)
                         {
                             ItemMeta itemMeta = itemStack.getItemMeta();
@@ -175,6 +176,7 @@ public class DebugCommand implements CommandExecutor
                             plugin.getLogger().info("attempted to modify " + itemStack.toString());
                         }
                     }
+                    return true;
             }
 
         }
