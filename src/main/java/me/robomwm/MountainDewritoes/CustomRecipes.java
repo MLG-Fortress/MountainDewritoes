@@ -17,17 +17,6 @@ public class CustomRecipes
 {
     public CustomRecipes(JavaPlugin plugin)
     {
-        Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
-        while (recipeIterator.hasNext())
-        {
-            ItemStack itemStack = recipeIterator.next().getResult();
-            if (itemStack.getType() == Material.GOLD_BOOTS)
-            {
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.setDisplayName("test");
-                itemStack.setItemMeta(itemMeta);
-                plugin.getLogger().info("attempted to modify " + itemStack.toString());
-            }
-        }
+
     }
 }

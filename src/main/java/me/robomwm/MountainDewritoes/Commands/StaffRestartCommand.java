@@ -90,7 +90,7 @@ public class StaffRestartCommand implements CommandExecutor
             world.save();
         }
 
-        //instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "minecraft:stop");
+        //plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "minecraft:stop");
         instance.getServer().shutdown();
         return true;
     }

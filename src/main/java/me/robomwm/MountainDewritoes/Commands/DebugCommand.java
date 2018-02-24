@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
@@ -17,8 +18,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Iterator;
 
 /**
  * Created on 7/26/2017.
@@ -27,12 +32,12 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DebugCommand implements CommandExecutor
 {
-    MountainDewritoes instance;
-    ClanManager clanManager;
+    private MountainDewritoes plugin;
+    private ClanManager clanManager;
 
     public DebugCommand(MountainDewritoes plugin)
     {
-        instance = plugin;
+        this.plugin = plugin;
         clanManager = SimpleClansListener.clanManager;
     }
 
@@ -76,8 +81,8 @@ public class DebugCommand implements CommandExecutor
 
         if (args[0].equalsIgnoreCase("wb"))
         {
-            World world = instance.getServer().getWorld(args[1]);
-            if (world == null || !instance.isSurvivalWorld(world))
+            World world = plugin.getServer().getWorld(args[1]);
+            if (world == null || !plugin.isSurvivalWorld(world))
                 return false;
 
             BorderData borderData = com.wimbli.WorldBorder.WorldBorder.plugin.getWorldBorder(world.getName());
@@ -120,7 +125,7 @@ public class DebugCommand implements CommandExecutor
         }
         else if (cmd.getName().equalsIgnoreCase("lejail"))
         {
-            Player target = instance.getServer().getPlayerExact(args[0]);
+            Player target = plugin.getServer().getPlayerExact(args[0]);
             if (target == null || target.hasPermission("i.am.jailed"))
                 return false;
             commander("jail " + args[0] + " " + args[1]);
@@ -141,7 +146,7 @@ public class DebugCommand implements CommandExecutor
                     target.sendMessage("o nu, da loominarty caught u!\nBut u can try 2 scare em away by watching an " + ChatColor.GOLD + "/ad");
                     target.performCommand("ad");
                 }
-            }.runTaskLater(instance, 200L);
+            }.runTaskLater(plugin, 200L);
             return true;
         }
         else if (cmd.getName().equalsIgnoreCase("watchwinreward"))
@@ -152,11 +157,32 @@ public class DebugCommand implements CommandExecutor
             commander(StringUtils.join(args, " "));
             return true;
         }
+        else if (cmd.getName().equalsIgnoreCase("md"))
+        {
+            switch(args[0].toLowerCase())
+            {
+                case "recipe":
+                    Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
+                    while (recipeIterator.hasNext())
+                    {
+                        ItemStack itemStack = recipeIterator.next().getResult();
+                        player.sendMessage(itemStack.toString());
+                        if (itemStack.getType() == Material.GOLD_BOOTS)
+                        {
+                            ItemMeta itemMeta = itemStack.getItemMeta();
+                            itemMeta.setDisplayName("test");
+                            itemStack.setItemMeta(itemMeta);
+                            plugin.getLogger().info("attempted to modify " + itemStack.toString());
+                        }
+                    }
+            }
+
+        }
         return false;
     }
 
     private void commander(String thing)
     {
-        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), thing);
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), thing);
     }
 }

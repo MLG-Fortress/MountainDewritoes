@@ -113,7 +113,7 @@ public class TipCommand implements CommandExecutor
 //                            storage.set(player.getUniqueId().toString(), seenTips);
 //                            saveStorage();
 //                        }
-//                    }.runTaskLater(instance, 0L);
+//                    }.runTaskLater(plugin, 0L);
 //                }
             }
         }.runTaskAsynchronously(instance);

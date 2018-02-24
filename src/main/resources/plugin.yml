@@ -34,6 +34,7 @@ commands:
   shrug: {}
   lejail: {}
   reset: {}
+  md: {}
   watchwinreward: {}
   view:
     aliases: [viewdistance, distance, vd, renderdistance, render]
