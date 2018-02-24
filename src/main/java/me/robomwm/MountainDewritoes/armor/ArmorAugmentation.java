@@ -205,7 +205,7 @@ public class ArmorAugmentation implements Listener
 
     private void loreize(ItemStack itemStack)
     {
-        if (itemStack == null || !itemStack.hasItemMeta())
+        if (itemStack == null || itemStack.getType() == Material.AIR)
             return;
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasLore())
