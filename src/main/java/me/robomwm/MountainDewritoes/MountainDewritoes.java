@@ -241,6 +241,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ArmorAugmentation(this);
         new AntiLag(this);
         new FirstJoin(this);
+        new CustomRecipes(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())

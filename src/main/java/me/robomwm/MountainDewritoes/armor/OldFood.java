@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -30,6 +31,8 @@ public class OldFood implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     private void onPlayerPreEat(PlayerInteractEvent event)
     {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR)
+            return;
         Player player = event.getPlayer();
         if (player.getFoodLevel() < 20)
             return;
