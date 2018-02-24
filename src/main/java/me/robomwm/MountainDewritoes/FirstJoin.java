@@ -54,7 +54,8 @@ public class FirstJoin implements Listener
     private void onJoinWorld(Player player)
     {
         player.teleport(new Location(WORLD, 3.5, 100, -16.5, -90, 10));
-        player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.GLOWING_REDSTONE_ORE, (byte)0);
+        player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.SUGAR_CANE_BLOCK, (byte)0);
+        player.sendBlockChange(new Location(WORLD, -2, 70, -4), Material.SUGAR_CANE_BLOCK, (byte)0);
         NSA.setTempdata(player, "firstjoin");
     }
 
