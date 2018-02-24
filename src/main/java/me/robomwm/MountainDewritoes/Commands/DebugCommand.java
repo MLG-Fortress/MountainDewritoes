@@ -63,10 +63,8 @@ public class DebugCommand implements CommandExecutor
                     ItemStack itemStack = recipeIterator.next().getResult();
                     if (itemStack.getType() == Material.GOLD_BOOTS)
                     {
-                        ItemMeta itemMeta = itemStack.getItemMeta();
-                        itemMeta.setDisplayName("test");
-                        itemStack.setItemMeta(itemMeta);
-                        sender.sendMessage("attempted to modify " + itemStack.toString());
+                        recipeIterator.remove();
+                        sender.sendMessage("attempted to delete " + itemStack.toString());
                     }
                 }
                 return true;
