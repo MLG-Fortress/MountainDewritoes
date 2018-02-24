@@ -53,27 +53,43 @@ public class DebugCommand implements CommandExecutor
         if (args.length < 1)
             return false;
 
-        if (args[0].equalsIgnoreCase("reloadBlocks"))
+        switch(args[0].toLowerCase())
         {
-            assert player != null;
-            Location location = player.getLocation();
-
-            for (int x = 0; x <= 10; x++)
-            {
-                location.add(x, 0, 0);
-                for (int y = 0; y <= 10; y++)
+            case "recipe":
+                Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
+                while (recipeIterator.hasNext())
                 {
-                    location.add(0, y, 0);
-                    for (int z = 0; z <= 10; z++)
+                    ItemStack itemStack = recipeIterator.next().getResult();
+                    if (itemStack.getType() == Material.GOLD_BOOTS)
                     {
-                        location.add(0, 0, z);
-                        Block block = location.getBlock();
-                        player.sendBlockChange(location, block.getType(), block.getData());
+                        ItemMeta itemMeta = itemStack.getItemMeta();
+                        itemMeta.setDisplayName("test");
+                        itemStack.setItemMeta(itemMeta);
+                        plugin.getLogger().info("attempted to modify " + itemStack.toString());
                     }
                 }
-            }
-            return true;
+                return true;
+            case "refreshBlocks":
+                assert player != null;
+                Location location = player.getLocation();
+
+                for (int x = 0; x <= 10; x++)
+                {
+                    location.add(x, 0, 0);
+                    for (int y = 0; y <= 10; y++)
+                    {
+                        location.add(0, y, 0);
+                        for (int z = 0; z <= 10; z++)
+                        {
+                            location.add(0, 0, z);
+                            Block block = location.getBlock();
+                            player.sendBlockChange(location, block.getType(), block.getData());
+                        }
+                    }
+                }
+                return true;
         }
+
 
         //2 args//
         if (args.length < 2)
@@ -156,29 +172,6 @@ public class DebugCommand implements CommandExecutor
             args[0] = null;
             commander(StringUtils.join(args, " "));
             return true;
-        }
-        else if (cmd.getName().equalsIgnoreCase("md"))
-        {
-            switch(args[0].toLowerCase())
-            {
-                case "recipe":
-                    player.sendMessage("recipe");
-                    Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
-                    while (recipeIterator.hasNext())
-                    {
-                        ItemStack itemStack = recipeIterator.next().getResult();
-                        sender.sendMessage(itemStack.toString());
-                        if (itemStack.getType() == Material.GOLD_BOOTS)
-                        {
-                            ItemMeta itemMeta = itemStack.getItemMeta();
-                            itemMeta.setDisplayName("test");
-                            itemStack.setItemMeta(itemMeta);
-                            plugin.getLogger().info("attempted to modify " + itemStack.toString());
-                        }
-                    }
-                    return true;
-            }
-
         }
         return false;
     }
