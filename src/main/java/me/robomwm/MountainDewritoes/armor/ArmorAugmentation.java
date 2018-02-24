@@ -256,6 +256,7 @@ public class ArmorAugmentation implements Listener
         itemMeta.setLore(lore);
         NSA.setItemVersion(itemMeta, 2, 1);
         itemStack.setItemMeta(itemMeta);
+        instance.getLogger().info("attempted to loreize");
     }
 
 }
