@@ -56,6 +56,7 @@ public class DebugCommand implements CommandExecutor
         switch(args[0].toLowerCase())
         {
             case "recipe":
+                sender.sendMessage("recipe");
                 Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
                 while (recipeIterator.hasNext())
                 {
@@ -65,7 +66,7 @@ public class DebugCommand implements CommandExecutor
                         ItemMeta itemMeta = itemStack.getItemMeta();
                         itemMeta.setDisplayName("test");
                         itemStack.setItemMeta(itemMeta);
-                        plugin.getLogger().info("attempted to modify " + itemStack.toString());
+                        sender.sendMessage("attempted to modify " + itemStack.toString());
                     }
                 }
                 return true;
