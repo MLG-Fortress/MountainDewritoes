@@ -297,7 +297,7 @@ public class NSA implements Listener
     {
         if (!itemMeta.hasLore())
             return 0;
-        String[] version = itemMeta.getLore().get(itemMeta.getLore().size()).split(":");
+        String[] version = itemMeta.getLore().get(itemMeta.getLore().size() - 1).split(":");
         if (!version[0].equalsIgnoreCase(ChatColor.BLACK + "MLGID"))
             return 0;
         return Integer.valueOf(version[2]);
