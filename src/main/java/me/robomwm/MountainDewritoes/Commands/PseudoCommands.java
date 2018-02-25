@@ -56,7 +56,17 @@ public class PseudoCommands implements Listener
             case "irc":
                 event.setCancelled(ircLink(player, command, args));
                 break;
+            case "afk":
+            case "brb":
+                event.setCancelled(afkSeen(player));
+                break;
         }
+    }
+
+    private boolean afkSeen(Player player)
+    {
+        player.performCommand("seen " + player.getName());
+        return false;
     }
 
     private boolean ircLink(Player player, String command, String[] args)
