@@ -1,12 +1,7 @@
 package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.MountainDewritoes.NSA;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Container;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -16,25 +11,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created on 1/3/2018.
@@ -50,6 +32,7 @@ public class ArmorAugmentation implements Listener
     public ArmorAugmentation(MountainDewritoes plugin)
     {
         instance = plugin;
+        plugin.getCustomItemRecipes().removeRecipe(new HashSet<>(Arrays.asList(Material.GOLD_BOOTS, Material.GOLD_LEGGINGS, Material.IRON_BOOTS, Material.IRON_LEGGINGS))); //todo fill
         new GoldArmor(instance, this);
         new IronArmor(instance, this);
         new DiamondArmor(instance, this);
@@ -182,6 +165,44 @@ public class ArmorAugmentation implements Listener
         //TODO: goomba stomp
     }
 
+}
+
+//trash
+//Sprinting takes energy
+//    private Map<Player, Long> sprinters = new HashMap<>();
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+//    private void onSprint(PlayerToggleSprintEvent event)
+//    {
+//        Player player = event.getPlayer();
+//
+//        if (!event.isSprinting())
+//        {
+//            sprinters.remove(player);
+//            player.setSaturation(20f);
+//            return;
+//        }
+//        if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
+//            return;
+//
+//        final long time = System.currentTimeMillis();
+//        sprinters.put(player, time);
+//
+//        player.setFoodLevel(player.getFoodLevel() - 1);
+//        player.setSaturation(0f);
+//
+//        new BukkitRunnable()
+//        {
+//
+//            @Override
+//            public void run()
+//            {
+//                if (sprinters.containsKey(player) && sprinters.get(player) == time)
+//                    player.setFoodLevel(player.getFoodLevel() - 2);
+//                else
+//                    cancel();
+//            }
+//        }.runTaskTimer(instance, 10L, 10L);
+//    }
 //    //Loreize items
 //    private boolean realHolder(InventoryHolder holder)
 //    {
@@ -257,42 +278,29 @@ public class ArmorAugmentation implements Listener
 //        NSA.setItemVersion(itemMeta, 2, 1);
 //        itemStack.setItemMeta(itemMeta);
 //    }
-
-}
-
-//trash
-//Sprinting takes energy
-//    private Map<Player, Long> sprinters = new HashMap<>();
-//    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-//    private void onSprint(PlayerToggleSprintEvent event)
-//    {
-//        Player player = event.getPlayer();
+//        CustomItemRecipes customItems = plugin.getCustomItemRecipes();
 //
-//        if (!event.isSprinting())
-//        {
-//            sprinters.remove(player);
-//            player.setSaturation(20f);
-//            return;
-//        }
-//        if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
-//            return;
+//        List<String> bootsLore = new ArrayList<>();
+//        bootsLore.add("The standard gravity-defying doublejump");
+//        bootsLore.add("");
+//        bootsLore.add(ChatColor.YELLOW + "Jump+Dive");
+//        bootsLore.add("Sneak in midair to doublejump.");
+//        bootsLore.add("Sneak again to airdive.");
+//        bootsLore.add("");
+//        bootsLore.add(ChatColor.GRAY + "Passives:");
+//        bootsLore.add(ChatColor.GRAY + "Fall damage protection");
+//        bootsLore.add(ChatColor.GRAY + "No power cost");
+//        customItems.registerItem(customItems.loreize(new ItemStack(Material.GOLD_BOOTS), bootsLore), "goldBoots");
+//        ShapedRecipe bootsRecipe = customItems.getShapedRecipe(plugin, "goldBoots");
+//        bootsRecipe.shape("gag", "gag").setIngredient('g', Material.GOLD_INGOT).setIngredient('a', Material.AIR);
+//        plugin.getServer().addRecipe(bootsRecipe);
 //
-//        final long time = System.currentTimeMillis();
-//        sprinters.put(player, time);
-//
-//        player.setFoodLevel(player.getFoodLevel() - 1);
-//        player.setSaturation(0f);
-//
-//        new BukkitRunnable()
-//        {
-//
-//            @Override
-//            public void run()
-//            {
-//                if (sprinters.containsKey(player) && sprinters.get(player) == time)
-//                    player.setFoodLevel(player.getFoodLevel() - 2);
-//                else
-//                    cancel();
-//            }
-//        }.runTaskTimer(instance, 10L, 10L);
-//    }
+//        List<String> leggingsLore = new ArrayList<>();
+//        leggingsLore.add("ur 2 slow");
+//        leggingsLore.add("");
+//        leggingsLore.add(ChatColor.YELLOW + "Sonic Dash");
+//        leggingsLore.add("At full power, sprint to dash.");
+//        customItems.registerItem(customItems.loreize(new ItemStack(Material.GOLD_LEGGINGS), leggingsLore), "goldLeggings");
+//        ShapedRecipe leggingsRecipe = customItems.getShapedRecipe(plugin, "goldLeggings");
+//        leggingsRecipe.shape("ggg", "gag", "gag").setIngredient('g', Material.GOLD_INGOT).setIngredient('a', Material.AIR);
+//        plugin.getServer().addRecipe(leggingsRecipe);

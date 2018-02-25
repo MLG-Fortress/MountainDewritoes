@@ -149,7 +149,7 @@ public class DebugCommand implements CommandExecutor
             if (target == null || target.hasPermission("i.am.jailed"))
                 return false;
             commander("jail " + args[0] + " " + args[1]);
-            commander("lp user " + args[0] + " parent set default");
+            commander("lp user " + args[0] + " parent set scrub");
             commander("lp user " + args[0] + " set i.am.jailed");
             commander("communicationconnector Da loominarty caught " + args[0] + " for " + args[1]);
             Title.Builder title = new Title.Builder();

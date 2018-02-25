@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -42,10 +43,11 @@ public class ChatListener implements Listener
         GriefPrevention gp = (GriefPrevention)instance.getServer().getPluginManager().getPlugin("GriefPrevention");
         this.ds = gp.dataStore;
         this.clanManager = clanManager;
-        filterThingy.add(Pattern.compile("n[^a](gg|99)+(a|er|uh)"));
+        filterThingy.add(Pattern.compile("\\bn[^a](gg|99)+(a|er|uh)"));
         filterThingy.add(Pattern.compile("\\bfag+(s)?\\b|fag+.t|gay"));
         filterThingy.add(Pattern.compile("(i hate|fuck)+ this server|this server is (shit|crap)+|server sucks"));
         filterThingy.add(Pattern.compile("\\bass\\b"));
+        filterThingy.add(Pattern.compile("\\bcum\\b"));
         filterThingy.add(Pattern.compile("f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+|f+u+c+"));
         filterThingy.add(Pattern.compile("cunt|whore|fag|slut|queer|bitch|bastard|damn|damm|\\bcrap|shit"));
         filterThingy.add(Pattern.compile("\\bd\\s*i\\s*c?\\s*k\\b|\\bp\\s*e\\s*n(\\s|\\.)*i\\s*s\\b"));
@@ -255,11 +257,20 @@ public class ChatListener implements Listener
                 name = ChatColor.GRAY + clanManager.getClanPlayer(player).getClan().getColorTag() + " " + name;
             event.getPlayer().sendMessage(String.format(event.getFormat(), name, event.getMessage()));
             event.setMessage(message);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (player.hasPermission("chester.log"))
+                        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + player.getName() + " parent set scrub");
+                }
+            }.runTask(instance);
         }
 
     }
 
-    Set<AsyncPlayerChatEvent> softmutedChats = new HashSet<>();
+    private Set<AsyncPlayerChatEvent> softmutedChats = new HashSet<>();
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onPlayerChatCheckSoftmute(AsyncPlayerChatEvent event)

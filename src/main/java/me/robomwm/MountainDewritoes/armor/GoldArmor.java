@@ -1,9 +1,7 @@
 package me.robomwm.MountainDewritoes.armor;
 
-import com.robomwm.customitemrecipes.CustomItemRecipes;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,14 +9,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created on 1/3/2018.
@@ -33,32 +26,6 @@ public class GoldArmor implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.armorAugmentation = armorAugmentation;
-        CustomItemRecipes customItems = plugin.getCustomItemRecipes();
-
-        List<String> bootsLore = new ArrayList<>();
-        bootsLore.add("The standard gravity-defying doublejump");
-        bootsLore.add("");
-        bootsLore.add(ChatColor.YELLOW + "Jump+Dive");
-        bootsLore.add("Sneak in midair to doublejump.");
-        bootsLore.add("Sneak again to airdive.");
-        bootsLore.add("");
-        bootsLore.add(ChatColor.GRAY + "Passives:");
-        bootsLore.add(ChatColor.GRAY + "Fall damage protection");
-        bootsLore.add(ChatColor.GRAY + "No power cost");
-        customItems.registerItem(customItems.loreize(new ItemStack(Material.GOLD_BOOTS), bootsLore), "goldBoots");
-        ShapedRecipe bootsRecipe = customItems.getShapedRecipe(plugin, "goldBoots");
-        bootsRecipe.shape("gag", "gag").setIngredient('g', Material.GOLD_INGOT).setIngredient('a', Material.AIR);
-        plugin.getServer().addRecipe(bootsRecipe);
-
-        List<String> leggingsLore = new ArrayList<>();
-        leggingsLore.add("ur 2 slow");
-        leggingsLore.add("");
-        leggingsLore.add(ChatColor.YELLOW + "Sonic Dash");
-        leggingsLore.add("At full power, sprint to dash.");
-        customItems.registerItem(customItems.loreize(new ItemStack(Material.GOLD_LEGGINGS), leggingsLore), "goldLeggings");
-        ShapedRecipe leggingsRecipe = customItems.getShapedRecipe(plugin, "goldLeggings");
-        leggingsRecipe.shape("ggg", "gag", "gag").setIngredient('g', Material.GOLD_INGOT).setIngredient('a', Material.AIR);
-        plugin.getServer().addRecipe(leggingsRecipe);
     }
 
     /* GOLD BOOTS */
