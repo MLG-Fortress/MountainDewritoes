@@ -1,7 +1,7 @@
 # MountainDewritoes
 Custom server plugin for the MLG Fortress Minecraft server.
 
-IP: mlgfort.us.to
+IP: mlg.robomwm.com
 
 Some features include:
 
@@ -17,4 +17,6 @@ Some features include:
 - Eliminations
 - Health canisters
 - Health pickups
+- ArmorAugmentation (armor does stuff)
 - Others
+- Seriously I can't seem to stop myself from adding more in here
