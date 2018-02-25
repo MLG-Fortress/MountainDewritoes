@@ -91,12 +91,6 @@ public class IronArmor implements Listener
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
-                    try
-                    {
-                        if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
-                            return;
-                    }
-                    catch (Throwable ignored){}
                     player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
 
                 }

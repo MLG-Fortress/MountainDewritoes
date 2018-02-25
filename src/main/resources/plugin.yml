@@ -3,6 +3,8 @@ version: ${project.version}
 #website:
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
+depend:
+- CustomItemRecipes
 softdepend:
 - ExtraHardMode
 - Healthbar

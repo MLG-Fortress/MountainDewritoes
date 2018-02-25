@@ -182,82 +182,81 @@ public class ArmorAugmentation implements Listener
         //TODO: goomba stomp
     }
 
-    //Loreize items
-    private boolean realHolder(InventoryHolder holder)
-    {
-        return holder instanceof Player || holder instanceof Container || holder instanceof DoubleChest;
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void onInventoryClick(InventoryClickEvent event)
-    {
-        if (!realHolder(event.getInventory().getHolder()))
-            return;
-        loreize(event.getCurrentItem());
-        loreize(event.getCursor());
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void onCraft(CraftItemEvent event)
-    {
-        loreize(event.getCurrentItem());
-    }
-
-    private void loreize(ItemStack itemStack)
-    {
-        if (itemStack == null || itemStack.getType() == Material.AIR)
-            return;
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.hasLore())
-            return;
-
-        List<String> lore = new ArrayList<>();
-
-        switch (itemStack.getType())
-        {
-            case GOLD_LEGGINGS:
-                lore.add("Gold sanic???");
-                lore.add("");
-                lore.add(ChatColor.YELLOW + "Super Dash");
-                lore.add("At full dorito power, sprint to dash.");
-                break;
-            case GOLD_BOOTS:
-                lore.add("Compressed air makes it easier to defy gravity!");
-                lore.add("");
-                lore.add(ChatColor.YELLOW + "Jump+Dive");
-                lore.add("Sneak in midair to doublejump.");
-                lore.add("Sneak again to airdive.");
-                lore.add("");
-                lore.add(ChatColor.GRAY + "Passives:");
-                lore.add(ChatColor.GRAY + "Fall damage protection");
-                lore.add(ChatColor.GRAY + "No power cost");
-                break;
-            case IRON_LEGGINGS:
-                lore.add("Electromagnets work");
-                lore.add("");
-                lore.add(ChatColor.WHITE + "Hover");
-                lore.add("Sneak in midair to hover.");
-                lore.add("");
-                lore.add(ChatColor.GRAY + "Passives:");
-                lore.add(ChatColor.GRAY + "Fall damage protection");
-                break;
-            case IRON_BOOTS:
-                lore.add("Magnets, how do they work?");
-                lore.add("");
-                lore.add(ChatColor.WHITE + "Hover");
-                lore.add("Sneak in midair to hover.");
-                lore.add("");
-                lore.add(ChatColor.GRAY + "Passives:");
-                lore.add(ChatColor.GRAY + "Fall damage protection");
-                break;
-            default:
-                return;
-        }
-        itemMeta.setLore(lore);
-        NSA.setItemVersion(itemMeta, 2, 1);
-        itemStack.setItemMeta(itemMeta);
-        instance.getLogger().info("attempted to loreize");
-    }
+//    //Loreize items
+//    private boolean realHolder(InventoryHolder holder)
+//    {
+//        return holder instanceof Player || holder instanceof Container || holder instanceof DoubleChest;
+//    }
+//
+//    @EventHandler(ignoreCancelled = true)
+//    private void onInventoryClick(InventoryClickEvent event)
+//    {
+//        if (!realHolder(event.getInventory().getHolder()))
+//            return;
+//        loreize(event.getCurrentItem());
+//        loreize(event.getCursor());
+//    }
+//
+//    @EventHandler(ignoreCancelled = true)
+//    private void onCraft(CraftItemEvent event)
+//    {
+//        loreize(event.getCurrentItem());
+//    }
+//
+//    private void loreize(ItemStack itemStack)
+//    {
+//        if (itemStack == null || itemStack.getType() == Material.AIR)
+//            return;
+//        ItemMeta itemMeta = itemStack.getItemMeta();
+//        if (itemMeta.hasLore())
+//            return;
+//
+//        List<String> lore = new ArrayList<>();
+//
+//        switch (itemStack.getType())
+//        {
+//            case GOLD_LEGGINGS:
+//                lore.add("Gold sanic???");
+//                lore.add("");
+//                lore.add(ChatColor.YELLOW + "Super Dash");
+//                lore.add("At full power, sprint to dash.");
+//                break;
+//            case GOLD_BOOTS:
+//                lore.add("Compressed air makes it easier to defy gravity!");
+//                lore.add("");
+//                lore.add(ChatColor.YELLOW + "Jump+Dive");
+//                lore.add("Sneak in midair to doublejump.");
+//                lore.add("Sneak again to airdive.");
+//                lore.add("");
+//                lore.add(ChatColor.GRAY + "Passives:");
+//                lore.add(ChatColor.GRAY + "Fall damage protection");
+//                lore.add(ChatColor.GRAY + "No power cost");
+//                break;
+//            case IRON_LEGGINGS:
+//                lore.add("Electromagnets work");
+//                lore.add("");
+//                lore.add(ChatColor.WHITE + "Hover");
+//                lore.add("Sneak in midair to hover.");
+//                lore.add("");
+//                lore.add(ChatColor.GRAY + "Passives:");
+//                lore.add(ChatColor.GRAY + "Fall damage protection");
+//                break;
+//            case IRON_BOOTS:
+//                lore.add("Magnets, how do they work?");
+//                lore.add("");
+//                lore.add(ChatColor.WHITE + "Hover");
+//                lore.add("Sneak in midair to hover.");
+//                lore.add("");
+//                lore.add(ChatColor.GRAY + "Passives:");
+//                lore.add(ChatColor.GRAY + "Fall damage protection");
+//                break;
+//            default:
+//                return;
+//        }
+//        itemMeta.setLore(lore);
+//        NSA.setItemVersion(itemMeta, 2, 1);
+//        itemStack.setItemMeta(itemMeta);
+//    }
 
 }
 

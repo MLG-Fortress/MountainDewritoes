@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
+import com.robomwm.customitemrecipes.CustomItemRecipes;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
@@ -18,7 +19,6 @@ import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
 import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
-import me.robomwm.MountainDewritoes.items.CustomRecipes;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -107,6 +107,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private SimpleClansListener simpleClansListener;
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
+    private CustomItemRecipes customItemRecipes;
+
+    public CustomItemRecipes getCustomItemRecipes()
+    {
+        return customItemRecipes;
+    }
 
     public TipCommand getTipCommand()
     {
@@ -169,6 +175,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         setupEconomy(this);
         tipCommand = new TipCommand(this);
+        customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
 
         //Initialize commonly-used sets
         safeWorlds.add(getServer().getWorld("mall"));
@@ -235,7 +242,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ArmorAugmentation(this);
         new AntiLag(this);
         new FirstJoin(this);
-        new CustomRecipes(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())

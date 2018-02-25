@@ -1,7 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.MountainDewritoes.items.CustomItems;
-import me.robomwm.usefulutil.SetExpFix;
+import com.robomwm.customitemrecipes.CustomItemRecipes;
 import me.robomwm.usefulutil.UsefulUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -11,10 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,13 +23,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -41,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/25/2016.
@@ -50,7 +43,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BetterZeldaHearts implements Listener
 {
-    private CustomItems customItems;
+    private CustomItemRecipes customItems;
     private MountainDewritoes instance;
     private Economy economy;
 
@@ -59,6 +52,7 @@ public class BetterZeldaHearts implements Listener
         this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.economy = economy;
+        customItems = plugin.getCustomItemRecipes();
 
         ItemStack heart = new ItemStack(Material.INK_SACK);
         heart.setDurability((short)1);
