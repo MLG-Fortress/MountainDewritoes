@@ -11,6 +11,9 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Created on 8/16/2017.
  *
  * @author RoboMWM
+ *
+ * @Deprecated
+ * @see me.robomwm.MountainDewritoes.Emoticons
  */
 public class EmoticonCommands implements CommandExecutor
 {
