@@ -66,7 +66,6 @@ public class BetterZeldaHearts implements Listener
         potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
         potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.BLACK + "MLGID:1");
         lore.add("Increases ur maximum swegginess");
         potionMeta.setLore(lore);
         healthCanister.setItemMeta(potionMeta);
@@ -152,8 +151,10 @@ public class BetterZeldaHearts implements Listener
     {
         ItemStack money = customItems.getItem("mobMoney");
         ItemMeta moneyMeta = money.getItemMeta();
+        List<String> lore = moneyMeta.getLore();
         moneyMeta.setDisplayName(ChatColor.YELLOW + economy.format(amount));
-        moneyMeta.setLore(Collections.singletonList(String.valueOf(amount)));
+        lore.add(0, Double.toString(amount));
+        moneyMeta.setLore(lore);
         money.setItemMeta(moneyMeta);
         Item moneyItem = location.getWorld().dropItem(location, money);
         moneyItem.setCustomName(moneyMeta.getDisplayName());

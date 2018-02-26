@@ -174,7 +174,7 @@ public class DebugCommand implements CommandExecutor
             commander("unjail " + args[0]);
             commander("lp user " + args[0] + " unset i.am.jailed");
             args[0] = null;
-            commander(StringUtils.join(args, " "));
+            commander(StringUtils.join(args, " ").substring(1));
             return true;
         }
         return false;
