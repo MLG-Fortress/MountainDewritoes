@@ -29,6 +29,7 @@ commands:
   mdebug: {}
   restart:
     aliases: [stop]
+  schedulerestart: {}
   tip:
     aliases: [getatip, betafish, beta, tips]
   voice:

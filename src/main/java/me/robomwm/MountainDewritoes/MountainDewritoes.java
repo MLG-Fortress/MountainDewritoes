@@ -279,7 +279,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Commands
         //getCommand("nick").setExecutor(new NickCommand());
         getCommand("warp").setExecutor(new WarpCommand(this));
-        getCommand("restart").setExecutor(new StaffRestartCommand(this));
+        StaffRestartCommand staffRestartCommand = new StaffRestartCommand(this);
+        getCommand("restart").setExecutor(staffRestartCommand);
+        getCommand("schedulerestart").setExecutor(staffRestartCommand);
         getCommand("tip").setExecutor(tipCommand);
         DebugCommand debugCommand = new DebugCommand(this);
         getCommand("mdebug").setExecutor(debugCommand);

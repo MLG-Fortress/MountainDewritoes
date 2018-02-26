@@ -52,21 +52,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             String reason = "";
             if (args.length > 0)
                 reason = String.join(" ", args);
-
-            for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
-            {
-                onlinePlayer.kickPlayer("Serbur restartin: " + reason);
-            }
-
-            instance.getServer().savePlayers(); //Probably dumb since I'm kickin 'em anyways
-
-            //In case some dum plugin freezes the serbur onDisable...
-            for (World world : instance.getServer().getWorlds())
-            {
-                world.save();
-            }
-
-            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "minecraft:stop");
+            if (cmd.getName().equalsIgnoreCase("schedulerestart"))
+                this.scheduledRestart = reason;
+            else
+                shutdown(null, reason);
             return true;
         }
 
@@ -115,7 +104,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
     {
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
-            onlinePlayer.kickPlayer("Serbur restartin bcuz of " + playerName + ": " + reason);
+            if (playerName != null)
+                onlinePlayer.kickPlayer("Serbur restartin cuz " + playerName + " sez " + reason);
+            else
+                onlinePlayer.kickPlayer("Serbur restartin: " + reason);
         }
 
         instance.getServer().savePlayers(); //Probably dumb since I'm kickin 'em anyways

@@ -25,18 +25,18 @@ public class Emoticons implements Listener
     public Emoticons(JavaPlugin plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        put(Pattern.compile(":shrug:"), "\u00AF\\_(\u30C4)_/\u00AF");
-        put(Pattern.compile(":shrug:"), " ┐('～`)┌");
-        put(Pattern.compile(":shrug:"), " ┐('～`；)┌");
-        put(Pattern.compile(":shrug:"), "~\\_(''/)_/~ ");
-        put(Pattern.compile(":shrug:"), "┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻");
-        put(Pattern.compile(":flip:"), "( ﾉ⊙︵⊙）ﾉ ︵ ┻━┻");
-        put(Pattern.compile(":flip:"), "┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻");
-        put(Pattern.compile(":lenny:"), "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)");
-        put(Pattern.compile(":lenny:"), "( ͜。 ͡ʖ ͜。)");
-        put(Pattern.compile(":lenny:"), "°.ʖ ͡°");
-        put(Pattern.compile(":heart:"), "♥");
-        put(Pattern.compile(":\\)"), "☺");
+        put(":shrug:", "\u00AF\\_(\u30C4)_/\u00AF");
+        put(":shrug:", " ┐('～`)┌");
+        put(":shrug:", " ┐('～`；)┌");
+        put(":shrug:", "~\\_(''/)_/~ ");
+        put(":shrug:", "┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻");
+        put(":flip:", "( ﾉ⊙︵⊙）ﾉ ︵ ┻━┻");
+        put(":flip:", "┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻");
+        put(":lenny:", "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)");
+        put(":lenny:", "( ͜。 ͡ʖ ͜。)");
+        put(":lenny:", "°.ʖ ͡°");
+        put(":heart:", "♥");
+        put(":\\)", "☺");
     }
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
@@ -45,17 +45,27 @@ public class Emoticons implements Listener
         for (Pattern pattern : emojiMovie.keySet())
         {
             Matcher matcher = pattern.matcher(message);
-            message = matcher.replaceAll(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size())));
+            message = matcher.replaceAll(Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))));
         }
         event.setMessage(message);
     }
 
-    private void put(Pattern pattern, String emote)
+    private void put(String patternString, String emote)
     {
-        if (!emojiMovie.containsKey(pattern))
-            emojiMovie.put(pattern, new ArrayList<>());
-        List<String> thing = emojiMovie.get(pattern);
+        List<String> thing = null;
+        for (Pattern pattern : emojiMovie.keySet())
+        {
+            if (pattern.pattern().equalsIgnoreCase(patternString))
+            {
+                thing = emojiMovie.get(pattern);
+                break;
+            }
+        }
+        if (thing == null)
+        {
+            thing = new ArrayList<>();
+            emojiMovie.put(Pattern.compile(patternString), thing);
+        }
         thing.add(emote);
-        emojiMovie.put(pattern, thing);
     }
 }
