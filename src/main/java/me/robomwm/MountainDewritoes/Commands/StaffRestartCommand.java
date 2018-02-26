@@ -53,7 +53,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             if (args.length > 0)
                 reason = String.join(" ", args);
             if (cmd.getName().equalsIgnoreCase("schedulerestart"))
+            {
                 this.scheduledRestart = reason;
+                sender.sendMessage("Restart scheduled");
+            }
             else
                 shutdown(null, reason);
             return true;
