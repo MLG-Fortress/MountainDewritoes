@@ -45,7 +45,7 @@ public class Emoticons implements Listener
         for (Pattern pattern : emojiMovie.keySet())
         {
             Matcher matcher = pattern.matcher(message);
-            message = matcher.replaceAll(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size() - 1)));
+            message = matcher.replaceAll(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size())));
         }
         event.setMessage(message);
     }
