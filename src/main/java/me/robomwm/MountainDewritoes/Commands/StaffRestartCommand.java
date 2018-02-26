@@ -40,9 +40,12 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             @Override
             public void run()
             {
+                for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
+                    if (!onlinePlayer.hasPermission("mlgstaff") && onlinePlayer.hasPermission("chester.log"))
+                        return;
                 shutdown(name, scheduledRestart);
             }
-        }.runTask(instance);
+        }.runTaskLater(instance, 1L);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
