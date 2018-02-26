@@ -32,7 +32,7 @@ public class ArmorAugmentation implements Listener
     public ArmorAugmentation(MountainDewritoes plugin)
     {
         instance = plugin;
-        plugin.getCustomItemRecipes().removeRecipe(new HashSet<>(Arrays.asList(Material.GOLD_BOOTS, Material.GOLD_LEGGINGS, Material.IRON_BOOTS, Material.IRON_LEGGINGS))); //todo fill
+        //plugin.getCustomItemRecipes().removeRecipe(new HashSet<>(Arrays.asList(Material.GOLD_BOOTS, Material.GOLD_LEGGINGS, Material.IRON_BOOTS, Material.IRON_LEGGINGS))); //todo fill
         new GoldArmor(instance, this);
         new IronArmor(instance, this);
         new DiamondArmor(instance, this);
