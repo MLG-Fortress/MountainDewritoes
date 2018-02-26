@@ -38,7 +38,7 @@ public class Emoticons implements Listener
         put(Pattern.compile(":heart:"), "♥");
         put(Pattern.compile(":\\)"), "☺");
     }
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
     {
         String message = event.getMessage();

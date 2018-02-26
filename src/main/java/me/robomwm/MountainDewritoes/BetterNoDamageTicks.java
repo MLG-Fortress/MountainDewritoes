@@ -45,7 +45,6 @@ public class BetterNoDamageTicks implements Listener
         {
             entity.removeMetadata(DAMAGE_IMMUNITY_KEY, instance);
         }
-        entitiesToClear.clear();
     }
 
     @EventHandler

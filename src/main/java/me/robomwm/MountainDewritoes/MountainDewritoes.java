@@ -108,6 +108,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
     private CustomItemRecipes customItemRecipes;
+    private NSA nsa;
+
+    public NSA getNsa()
+    {
+        return nsa;
+    }
 
     public CustomItemRecipes getCustomItemRecipes()
     {
@@ -227,21 +233,21 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new NoKnockback(this), this);
         new SleepManagement(this);
 
-        new ReverseOsmosis(this);
-        simpleClansListener = new SimpleClansListener(this, clanManager);
-        new ReplacementSoundEffects(this);
-        new Ogrewatch(this);
-        betterNoDamageTicks = new BetterNoDamageTicks(this);
-        new FineSine(this);
-        new LodsOfEmone(this);
-        new PseudoCommands(this);
-        new TabList(this);
-        new TheMidnightPortalToAnywhere(this);
-        atmosphericManager = new AtmosphericManager(this);
-        new ArmorAugmentation(this);
-        new AntiLag(this);
-        new FirstJoin(this);
-        new Emoticons(this);
+//        new ReverseOsmosis(this);
+//        simpleClansListener = new SimpleClansListener(this, clanManager);
+//        new ReplacementSoundEffects(this);
+//        new Ogrewatch(this);
+//        betterNoDamageTicks = new BetterNoDamageTicks(this);
+//        new FineSine(this);
+//        new LodsOfEmone(this);
+//        new PseudoCommands(this);
+//        new TabList(this);
+//        new TheMidnightPortalToAnywhere(this);
+//        atmosphericManager = new AtmosphericManager(this);
+//        new ArmorAugmentation(this);
+//        new AntiLag(this);
+//        new FirstJoin(this);
+//        new Emoticons(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
@@ -295,7 +301,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //TODO: delete instantiated worlds (i.e. those not in MV)
         betterNoDamageTicks.onDisable();
         for (Player player : getServer().getOnlinePlayers())
+        {
             atmosphericManager.stopMusic(player);
+            nsa.cleanup(player);
+        }
     }
 
     /**

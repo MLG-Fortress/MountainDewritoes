@@ -82,11 +82,15 @@ public class NSA implements Listener
     @EventHandler
     private void cleanupMetadataOnQuit(PlayerQuitEvent event) //You never know if memory leaks
     {
-        Player player = event.getPlayer();
+        cleanup(event.getPlayer());
+    }
+
+    public void cleanup(Player player)
+    {
         player.removeMetadata(mobTrackingMetadata, instance);
         clearSpreePoints(player);
         lastLocation.remove(player);
-        tempMetadata.remove(event.getPlayer());
+        tempMetadata.remove(player);
     }
 
     public static Location getLastLocation(Player player)
