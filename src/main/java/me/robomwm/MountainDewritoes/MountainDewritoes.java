@@ -108,12 +108,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
     private CustomItemRecipes customItemRecipes;
-    private NSA nsa;
-
-    public NSA getNsa()
-    {
-        return nsa;
-    }
 
     public CustomItemRecipes getCustomItemRecipes()
     {
@@ -216,6 +210,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         noModifyWorld.add(getServer().getWorld("CreativeParkourMaps"));
 
+        //Classes other classes might want to use
+        new NSA(this);
+
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
@@ -252,11 +249,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
             pm.registerEvents(new TeleportingEffects(this), this);
-
-        //Classes other classes might want to use
-        new NSA(this);
-
-
 
         //Utilities
         new ScoreboardStuff(this);
@@ -303,10 +295,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //TODO: delete instantiated worlds (i.e. those not in MV)
         betterNoDamageTicks.onDisable();
         for (Player player : getServer().getOnlinePlayers())
-        {
             atmosphericManager.stopMusic(player);
-            nsa.cleanup(player);
-        }
     }
 
     /**
