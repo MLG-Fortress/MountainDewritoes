@@ -241,13 +241,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new FineSine(this);
         new LodsOfEmone(this);
         new PseudoCommands(this);
-//        new TabList(this);
-//        new TheMidnightPortalToAnywhere(this);
-//        atmosphericManager = new AtmosphericManager(this);
-//        new ArmorAugmentation(this);
-//        new AntiLag(this);
-//        new FirstJoin(this);
-//        new Emoticons(this);
+        new TabList(this);
+        new TheMidnightPortalToAnywhere(this);
+        atmosphericManager = new AtmosphericManager(this);
+        new ArmorAugmentation(this);
+        new AntiLag(this);
+        new FirstJoin(this);
+        new Emoticons(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
