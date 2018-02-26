@@ -233,14 +233,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new NoKnockback(this), this);
         new SleepManagement(this);
 
-//        new ReverseOsmosis(this);
-//        simpleClansListener = new SimpleClansListener(this, clanManager);
-//        new ReplacementSoundEffects(this);
-//        new Ogrewatch(this);
-//        betterNoDamageTicks = new BetterNoDamageTicks(this);
-//        new FineSine(this);
-//        new LodsOfEmone(this);
-//        new PseudoCommands(this);
+        new ReverseOsmosis(this);
+        simpleClansListener = new SimpleClansListener(this, clanManager);
+        new ReplacementSoundEffects(this);
+        new Ogrewatch(this);
+        betterNoDamageTicks = new BetterNoDamageTicks(this);
+        new FineSine(this);
+        new LodsOfEmone(this);
+        new PseudoCommands(this);
 //        new TabList(this);
 //        new TheMidnightPortalToAnywhere(this);
 //        atmosphericManager = new AtmosphericManager(this);
