@@ -5,22 +5,45 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created on 6/30/2017.
  *
  * @author RoboMWM
  */
-public class StaffRestartCommand implements CommandExecutor
+public class StaffRestartCommand implements CommandExecutor, Listener
 {
     private JavaPlugin instance;
 
     public StaffRestartCommand(JavaPlugin plugin)
     {
         this.instance = plugin;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    private String name = null;
+    private String scheduledRestart = null;
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onPlayerLeave(PlayerQuitEvent event)
+    {
+        if (scheduledRestart == null)
+            return;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                shutdown(name, scheduledRestart);
+            }
+        }.runTask(instance);
+    }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
@@ -54,6 +77,11 @@ public class StaffRestartCommand implements CommandExecutor
             sender.sendMessage("/restart <reason...>");
             return false;
         }
+        if (args[0].equalsIgnoreCase("reset"))
+        {
+            scheduledRestart = null;
+            sender.sendMessage("Canceled scheduled restart.");
+        }
 
         String reason = String.join(" ", args);
 
@@ -69,17 +97,25 @@ public class StaffRestartCommand implements CommandExecutor
             {
                 if (!onlinePlayer.hasPermission("mlgstaff"))
                 {
-                    player.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now. Might b best 2 wait until dey leve b4 u /restart meh.");
+                    player.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use /restart cancel to cancel.");
+                    scheduledRestart = reason;
+                    name = player.getDisplayName();
                     return true;
                 }
             }
         }
 
-        String playerName = player.getDisplayName(); //Might not be necessary since we're running in sync but w/e
+        shutdown(player.getDisplayName(), reason);
 
+
+        return true;
+    }
+
+    private void shutdown(String playerName, String reason)
+    {
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
-            onlinePlayer.kickPlayer("Serbur iz restartin bcuz of " + playerName + ": " + reason);
+            onlinePlayer.kickPlayer("Serbur restartin bcuz of " + playerName + ": " + reason);
         }
 
         instance.getServer().savePlayers(); //Probably dumb since I'm kickin 'em anyways
@@ -92,6 +128,5 @@ public class StaffRestartCommand implements CommandExecutor
 
         //plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "minecraft:stop");
         instance.getServer().shutdown();
-        return true;
     }
 }
