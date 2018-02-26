@@ -56,5 +56,6 @@ public class Emoticons implements Listener
             emojiMovie.put(pattern, new ArrayList<>());
         List<String> thing = emojiMovie.get(pattern);
         thing.add(emote);
+        emojiMovie.put(pattern, thing);
     }
 }
