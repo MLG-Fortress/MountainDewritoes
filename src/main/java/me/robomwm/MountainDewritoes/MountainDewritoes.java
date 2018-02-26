@@ -243,7 +243,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new PseudoCommands(this);
         new TabList(this);
         new TheMidnightPortalToAnywhere(this);
-        atmosphericManager = new AtmosphericManager(this);
+        //atmosphericManager = new AtmosphericManager(this);
         new ArmorAugmentation(this);
         new AntiLag(this);
         new FirstJoin(this);
