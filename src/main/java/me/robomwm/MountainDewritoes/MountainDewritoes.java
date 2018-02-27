@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemrecipes.CustomItemRecipes;
+import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
@@ -283,6 +284,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("voice").setExecutor(new VoiceCommand(this));
         getCommand("view").setExecutor(new ViewDistanceCommand());
         getCommand("reset").setExecutor(new ResetCommands(this));
+        getCommand("clearchat").setExecutor(new ClearChatCommand());
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);

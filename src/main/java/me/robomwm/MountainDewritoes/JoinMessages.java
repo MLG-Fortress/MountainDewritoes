@@ -142,7 +142,7 @@ public class JoinMessages implements Listener
                     event.getPlayer().setResourcePack(pack);
                 }
             }
-        }.runTaskTimer(instance, 100L, 100L);
+        }.runTaskTimer(instance, 100L, 200L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

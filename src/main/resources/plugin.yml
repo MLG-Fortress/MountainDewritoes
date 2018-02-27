@@ -30,6 +30,8 @@ commands:
   restart:
     aliases: [stop]
   schedulerestart: {}
+  clearchat:
+    aliases: [chatclear]
   tip:
     aliases: [getatip, betafish, beta, tips]
   voice:

@@ -41,8 +41,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             public void run()
             {
                 for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
+                {
                     if (!onlinePlayer.hasPermission("mlgstaff") && onlinePlayer.hasPermission("chester.log"))
                         return;
+                }
                 shutdown(name, scheduledRestart);
             }
         }.runTaskLater(instance, 1L);
@@ -72,8 +74,9 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             sender.sendMessage("/restart <reason...>");
             return false;
         }
-        if (args[0].equalsIgnoreCase("reset"))
+        if (args[0].equalsIgnoreCase("cancel"))
         {
+            name = null;
             scheduledRestart = null;
             sender.sendMessage("Canceled scheduled restart.");
         }
