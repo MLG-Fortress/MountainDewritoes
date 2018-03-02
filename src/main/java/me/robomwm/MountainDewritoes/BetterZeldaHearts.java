@@ -277,7 +277,7 @@ public class BetterZeldaHearts implements Listener
     @EventHandler
     void resetHealthOnRespawn(PlayerRespawnEvent event)
     {
-        if (instance.isMinigameWorld(event.getRespawnLocation().getWorld()))
+        if (!instance.isSurvivalWorld(event.getRespawnLocation().getWorld()))
             return;
 
         double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 2D;
