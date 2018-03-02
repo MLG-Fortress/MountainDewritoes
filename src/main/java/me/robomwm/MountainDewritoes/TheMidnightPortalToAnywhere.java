@@ -160,7 +160,7 @@ public class TheMidnightPortalToAnywhere implements Listener
         else
         {
             borderCenter = world.getWorldBorder().getCenter();
-            borderSize = (int)(world.getWorldBorder().getSize()) - 1000; //i.e. world must have a border size above 1000
+            borderSize = (int)(world.getWorldBorder().getSize() / 2) - 1000; //i.e. world must have a border size above 1000
         }
         int maxX = borderCenter.getBlockX() + borderSize;
         int minX = borderCenter.getBlockX() - borderSize;
