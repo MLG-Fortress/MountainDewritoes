@@ -1,9 +1,11 @@
 package me.robomwm.MountainDewritoes.Rewards;
 
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,14 +32,16 @@ import java.util.Map;
 public class LevelingProgression implements Listener
 {
     private LodsOfEmone lodsOfEmone;
-    private JavaPlugin instance;
+    private MountainDewritoes instance;
     private Map<Player, Integer> recordedPlayerLevel = new HashMap<>();
 
-    public LevelingProgression(JavaPlugin plugin, LodsOfEmone lodsOfEmone)
+    public LevelingProgression(MountainDewritoes plugin, LodsOfEmone lodsOfEmone)
     {
         this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.lodsOfEmone = lodsOfEmone;
+        for (Player player : plugin.getServer().getOnlinePlayers())
+            recordedPlayerLevel.put(player, player.getLevel());
     }
 
     //How many times did the player level up (compared to when we last checked)?
@@ -55,7 +59,8 @@ public class LevelingProgression implements Listener
     @EventHandler(ignoreCancelled = true)
     private void levelChangeEvent(PlayerExpChangeEvent event) //We only want to fire on naturally-collected XP.
     {
-        //TODO: track exp (so players don't lose any)
+        if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
+            return;
 
         Player player = event.getPlayer();
 
@@ -98,10 +103,16 @@ public class LevelingProgression implements Listener
         recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     private void onQuit(PlayerQuitEvent event)
     {
-        recordedPlayerLevel.remove(event.getPlayer());
+        Player player = event.getPlayer();
+        int level = recordedPlayerLevel.remove(event.getPlayer());
+        if (level < player.getLevel())
+        {
+            instance.getLogger().info("Fixing " + player + " who had level " + player.getLevel() + " but should be at least " + level);
+            player.setLevel(level);
+        }
     }
 
     /**

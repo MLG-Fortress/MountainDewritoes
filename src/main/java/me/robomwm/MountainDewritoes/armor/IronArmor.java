@@ -75,6 +75,7 @@ public class IronArmor implements Listener
                         return;
                     }
                     int velocity = 1;
+                    //Compensate for falling velocity //No longer needed since we reduced power cost.
 //                    int velocity = (int)(-player.getVelocity().getY() * 15);
 //                    if (velocity < 1)
 //                        velocity = 1;
@@ -102,7 +103,7 @@ public class IronArmor implements Listener
                 }
             };
             floaters.put(player, runnable);
-            runnable.runTaskTimer(instance, 0L, 8L);
+            runnable.runTaskTimer(instance, 0L, 7L);
         }
     }
 
