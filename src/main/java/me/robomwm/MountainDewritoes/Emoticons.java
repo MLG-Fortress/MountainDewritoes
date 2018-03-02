@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,17 +38,30 @@ public class Emoticons implements Listener
         put(":lenny:", "°.ʖ ͡°");
         put(":heart:", "♥");
         put(":\\)", "☺");
+        put("\\$", "Ð");
     }
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
     {
-        String message = event.getMessage();
+        event.setMessage(playEmojiMovie(event.getMessage()));
+    }
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void signer(SignChangeEvent event)
+    {
+        String[] lines = event.getLines();
+        int i = 0;
+        for (String line : lines)
+            event.setLine(i++, playEmojiMovie(line));
+    }
+
+    private String playEmojiMovie(String message)
+    {
         for (Pattern pattern : emojiMovie.keySet())
         {
             Matcher matcher = pattern.matcher(message);
             message = matcher.replaceAll(Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))));
         }
-        event.setMessage(message);
+        return message;
     }
 
     private void put(String patternString, String emote)
