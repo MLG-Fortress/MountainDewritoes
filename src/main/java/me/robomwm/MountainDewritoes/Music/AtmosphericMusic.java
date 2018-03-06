@@ -41,13 +41,13 @@ public class AtmosphericMusic implements Listener
         this.atmosphericManager = atmosphericManager;
         instance.registerListener(this);
 
-        startAmbiance(instance.getServer().getWorld("mall"));
-        startAmbiance(instance.getServer().getWorld("spawn"));
-        startAmbiance(instance.getServer().getWorld("prison"));
+        startAmbiance(instance.getServer().getWorld("mall"), 1200L);
+        startAmbiance(instance.getServer().getWorld("spawn"), 300L);
+        startAmbiance(instance.getServer().getWorld("prison"), 12000L);
         //normalAmbiance(instance.getSurvivalWorlds());
     }
 
-    private void startAmbiance(World world)
+    private void startAmbiance(World world, long interval)
     {
         if (world == null)
             return;
@@ -58,7 +58,7 @@ public class AtmosphericMusic implements Listener
             {
                 atmosphericManager.playSound(musicPackManager.getSong(world.getName()), world);
             }
-        }.runTaskTimer(instance, 300L, 300L);
+        }.runTaskTimer(instance, interval, interval);
     }
 
     @EventHandler
