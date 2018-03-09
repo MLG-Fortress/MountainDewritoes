@@ -97,8 +97,8 @@ public class NickCommand implements CommandExecutor, Listener
                 return true;
             }
             //player.performCommand("enick " + convertColor(color) + player.getName());
-            grandioseAPI.getGrandPlayerManager().getGrandPlayer(player).setNameColor(color);
             player.setDisplayName(color + chat.getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
+            grandioseAPI.getGrandPlayerManager().getGrandPlayer(player).setNameColor(color);
             return true;
         }
         return false;
@@ -115,6 +115,7 @@ public class NickCommand implements CommandExecutor, Listener
             case DARK_GRAY:
             case GRAY:
             case WHITE:
+            case RESET:
                 return true;
         }
         return false;
