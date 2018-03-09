@@ -39,7 +39,7 @@ public class SimpleClansListener implements Listener
     private BukkitScheduler scheduler = Bukkit.getScheduler();
     private MountainDewritoes instance;
     private BetterTPA betterTPA;
-    private Chat chat;
+//    private Chat chat;
 
     public SimpleClansListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
@@ -48,7 +48,7 @@ public class SimpleClansListener implements Listener
         betterTPA = (BetterTPA)instance.getServer().getPluginManager().getPlugin("BetterTPA");
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "clan globalff allow");
         instance.registerListener(this);
-        setupChat();
+//        setupChat();
         new BukkitRunnable()
         {
             @Override
@@ -65,12 +65,12 @@ public class SimpleClansListener implements Listener
         }.runTaskTimer(instance, 6000L, 1200L);
     }
 
-    private boolean setupChat()
-    {
-        RegisteredServiceProvider<Chat> rsp = instance.getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-    }
+//    private boolean setupChat()
+//    {
+//        RegisteredServiceProvider<Chat> rsp = instance.getServer().getServicesManager().getRegistration(Chat.class);
+//        chat = rsp.getProvider();
+//        return chat != null;
+//    }
 
     //Set colors and prefix onJoin
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -207,7 +207,7 @@ public class SimpleClansListener implements Listener
             public void run()
             {
                 Team team = sb.getTeam(player.getName());
-                if (team == null || instance.getServer().getOnlinePlayers().contains(player))
+                if (team == null || !instance.getServer().getOnlinePlayers().contains(player))
                     return;
                 //Feature: color nameplate name
                 //Get displayName color (player can change color via /nick)
