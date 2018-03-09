@@ -23,7 +23,7 @@ public class PseudoCommands implements Listener
         instance = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     private void processor(PlayerCommandPreprocessEvent event)
     {
         String message = event.getMessage();
@@ -100,8 +100,8 @@ public class PseudoCommands implements Listener
         switch (args[0])
         {
             case "home":
-                player.sendMessage("Use /tppoint");
-                //instance.getSimpleClansListener().teleportHome(player);
+                //player.sendMessage("Use /tppoint");
+                instance.getSimpleClansListener().teleportHome(player);
                 return true;
         }
         if (args.length < 3)
