@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -36,7 +37,6 @@ public class GamemodeInventoryManager implements Listener
     private YamlConfiguration experienceSnapshots;
     private File inventorySnapshotsFile;
     private File experienceSnapshotsFile;
-    private World MINIGAMES_SPAWN;
 
     public GamemodeInventoryManager(MountainDewritoes mountainDewritoes)
     {
@@ -44,7 +44,6 @@ public class GamemodeInventoryManager implements Listener
         mountainDewritoes.getServer().getPluginManager().registerEvents(this, mountainDewritoes);
         inventorySnapshotsFile = new File(instance.getDataFolder(), "inventorySnapshots.data");
         experienceSnapshotsFile = new File(instance.getDataFolder(), "experienceSnapshots.data");
-        MINIGAMES_SPAWN = instance.getServer().getWorld("spawn");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -62,123 +61,58 @@ public class GamemodeInventoryManager implements Listener
 
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent addtemp webuilder 3h");
             storeAndClearInventory(event.getPlayer());
+            saveExperience(event.getPlayer());
         }
         else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) //from creative
         {
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
+            event.getPlayer().setItemOnCursor(null);
+            event.getPlayer().closeInventory();
             event.getPlayer().getInventory().clear();
-            if (instance.isSurvivalWorld(world)) //Only restore inventory when in a survival world, otherwise ignore.
-                restoreInventory(event.getPlayer());
+            restoreInventory(event.getPlayer());
+            restoreExperience(event.getPlayer());
         }
     }
 
-    //Save inventory before inter-world teleport
+    //Save or restore inventory before inter-world teleport
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onPlayerPreTeleport(PlayerTeleportEvent event)
     {
         World from = event.getFrom().getWorld();
         World to = event.getTo().getWorld();
 
-        //If teleporting within same world, no need to save
-        if (instance.isSurvivalWorld(from) == instance.isSurvivalWorld(to))
-            return;
-
-        if (!instance.isSurvivalWorld(to))
-            storeAndClearInventory(event.getPlayer());
-    }
-
-    //Restore inventory after inter-world teleport
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    private void onPlayerPostTeleport(PlayerChangedWorldEvent event)
-    {
-        World from = event.getFrom();
-        World to = event.getPlayer().getWorld();
-
-        //If not traversing from/to a minigame world, or player is (somehow) in creative, no need to do anything
+        //If teleporting within same world/world type, no need to save/restore
         if (instance.isSurvivalWorld(from) == instance.isSurvivalWorld(to))
             return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
 
-        if (instance.isSurvivalWorld(to))
+        //Save if exiting survival world (and not in creative)
+        if (!instance.isSurvivalWorld(to))
+        {
+            storeAndClearInventory(event.getPlayer());
+            saveExperience(event.getPlayer());
+        }
+        //Restore if entering a survival world (and isn't in creative)
+        else
+        {
             restoreInventory(event.getPlayer());
+            restoreExperience(event.getPlayer());
+        }
     }
 
     //Recover inventory on join (e.g. player was in creative while in a "survival"-classed world)
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onJoin(PlayerJoinEvent event)
     {
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (instance.isSurvivalWorld(event.getPlayer().getWorld()) && event.getPlayer().getGameMode() != GameMode.CREATIVE)
-                    restoreInventory(event.getPlayer());
-            }
-        }.runTask(instance);
+        restoreInventory(event.getPlayer());
+        restoreExperience(event.getPlayer());
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
     }
 
-    //Restore and save experience when entering minigames spawn
-    @EventHandler(priority = EventPriority.MONITOR)
-    private void onPlayerTeleportToMinigamesSpawn(PlayerChangedWorldEvent event)
-    {
-        if (event.getPlayer().getWorld() != MINIGAMES_SPAWN)
-            return;
 
-        //1 tick delay, in case the minigame plugin restores player data after teleporting instead of before.
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (event.getPlayer().getWorld() != MINIGAMES_SPAWN)
-                    return;
 
-                //Restore experience, if saved before
-                restoreExperience(event.getPlayer());
 
-                saveExperience(event.getPlayer());
-            }
-        }.runTask(instance);
-    }
-    @EventHandler
-    private void onPlayerJoinInMinigamesSpawn(PlayerJoinEvent event)
-    {
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (event.getPlayer().getWorld() != MINIGAMES_SPAWN)
-                    return;
-
-                //Restore experience, if saved before
-                restoreExperience(event.getPlayer());
-
-                saveExperience(event.getPlayer());
-            }
-        }.runTask(instance);
-    }
-
-    //Restore experience if teleporting to a survival world from a minigames world
-    @EventHandler
-    private void onPlayerTeleportRestoreExperience(PlayerChangedWorldEvent event)
-    {
-        if (instance.isSurvivalWorld(event.getFrom()))
-            return;
-
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (instance.isSurvivalWorld(event.getPlayer().getWorld()))
-                    restoreExperience(event.getPlayer());
-            }
-        }.runTask(instance);
-    }
 
     //"Security"
 
@@ -319,7 +253,7 @@ public class GamemodeInventoryManager implements Listener
         player.closeInventory();
 
         ConfigurationSection snapshotSection = getPlayerInventorySnapshotSection(player);
-        if (snapshotSection.getList("items") != null)
+        if (snapshotSection.getList("items") != null) //Do not overwrite
             return false;
 
         snapshotSection.set("items", Arrays.asList(player.getInventory().getContents())); //List<ItemStack> - arrays are stored and read as ArrayLists, so doing this to maintain consistency. Can optimize later if needed.
@@ -341,35 +275,51 @@ public class GamemodeInventoryManager implements Listener
         return true;
     }
 
-    private boolean restoreInventory(Player player)
+    private void restoreInventory(Player player)
     {
-        player.closeInventory();
-
-        ConfigurationSection snapshotSection = getPlayerInventorySnapshotSection(player);
-        if (snapshotSection.getList("items") == null)
-            return false;
-
-        try
+        new BukkitRunnable()
         {
-            player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
-            player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
-            //player.setLevel(snapshotSection.getInt("expLevel"));
-            //player.setExp((float)snapshotSection.get("expProgress"));
-            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
-            player.setHealth(snapshotSection.getDouble("health"));
-            player.setFoodLevel(snapshotSection.getInt("foodLevel"));
-            for (PotionEffect potionEffect : player.getActivePotionEffects())
-                player.removePotionEffect(potionEffect.getType());
-            player.addPotionEffects((List<PotionEffect>)snapshotSection.getList("activePotionEffects"));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+            @Override
+            public void run()
+            {
+                //Don't restore to creative mode players, else they'll just lose their inventory
+                if (player.getGameMode() == GameMode.CREATIVE)
+                    return;
 
-        deletePlayerInventorySnapshotSection(player);
+                //No need to restore if the player is in a minigame world
+                if (!instance.isSurvivalWorld(player.getWorld()))
+                    return;
 
-        return true;
+                ConfigurationSection snapshotSection = getPlayerInventorySnapshotSection(player);
+                if (snapshotSection.getList("items") == null) //Nothing to restore
+                    return;
+
+                player.setItemOnCursor(null);
+                player.closeInventory();
+
+                try
+                {
+                    player.getInventory().setContents(snapshotSection.getList("items").toArray(new ItemStack[player.getInventory().getContents().length]));
+                    player.getInventory().setArmorContents(snapshotSection.getList("armor").toArray(new ItemStack[player.getInventory().getArmorContents().length]));
+                    //player.setLevel(snapshotSection.getInt("expLevel"));
+                    //player.setExp((float)snapshotSection.get("expProgress"));
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(snapshotSection.getDouble("maxHealth"));
+                    player.setHealth(snapshotSection.getDouble("health"));
+                    player.setFoodLevel(snapshotSection.getInt("foodLevel"));
+                    for (PotionEffect potionEffect : player.getActivePotionEffects())
+                        player.removePotionEffect(potionEffect.getType());
+                    player.addPotionEffects((List<PotionEffect>)snapshotSection.getList("activePotionEffects"));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    player.sendMessage(ChatColor.RED + "Error occurred in attempting to restore your inventory :c Please report this!");
+                    return;
+                }
+
+                deletePlayerInventorySnapshotSection(player);
+            }
+        }.runTask(instance);
     }
 
     private boolean saveExperience(Player player)
@@ -383,7 +333,7 @@ public class GamemodeInventoryManager implements Listener
             return false;
 
         ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
-        if (snapshotSection.getList("expLevel") != null)
+        if (snapshotSection.getList("expLevel") != null) //Do not overwrite
             return false;
 
         snapshotSection.set("expLevel", player.getLevel()); //int
@@ -392,24 +342,38 @@ public class GamemodeInventoryManager implements Listener
         return true;
     }
 
-    private boolean restoreExperience(Player player)
+    private void restoreExperience(Player player)
     {
-        ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
-        if (snapshotSection.getList("expLevel") == null)
-            return false;
-
-        try
+        new BukkitRunnable()
         {
-            player.setLevel(snapshotSection.getInt("expLevel"));
-            player.setExp((float)snapshotSection.get("expProgress"));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+            @Override
+            public void run()
+            {
+                //Don't restore to creative mode players, else they'll just lose their experience
+                if (player.getGameMode() == GameMode.CREATIVE)
+                    return;
 
-        deletePlayerExperienceSnapshotSection(player);
+                //No need to restore if the player is in a minigame world
+                if (!instance.isSurvivalWorld(player.getWorld()))
+                    return;
 
-        return true;
+                ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
+                if (snapshotSection.getList("expLevel") == null) //nothing to restore
+                    return;
+
+                try
+                {
+                    player.setLevel(snapshotSection.getInt("expLevel"));
+                    player.setExp((float)snapshotSection.get("expProgress"));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    player.sendMessage(ChatColor.RED + "Error occurred in attempting to restore your experience :c Please report this!");
+                    return;
+                }
+                deletePlayerExperienceSnapshotSection(player);
+            }
+        }.runTask(instance);
     }
 }

@@ -58,7 +58,7 @@ public class SimpleClansListener implements Listener
                 {
                     if (instance.isMinigameWorld(player.getWorld()))
                         continue;
-                    setDisplayName(player);
+                    //setDisplayName(player);
                     setClanPrefix(player);
                 }
             }
@@ -77,7 +77,7 @@ public class SimpleClansListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         //Set colored display name
-        setDisplayName(event.getPlayer());
+        //setDisplayName(event.getPlayer());
         setClanPrefix(event.getPlayer());
     }
 
@@ -136,18 +136,18 @@ public class SimpleClansListener implements Listener
 //        }, 20L);
 //    }
 
-    public void setDisplayName(Player player)
-    {
-        String prefix = ChatColor.translateAlternateColorCodes('&', chat.getPlayerPrefix(player));
-
-        if (clanManager.getClanPlayer(player) == null)
-        {
-            player.setDisplayName(ChatColor.GRAY + prefix + player.getName() + ChatColor.RESET);
-            return;
-        }
-
-        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()) + prefix + player.getName() + ChatColor.RESET);
-    }
+//    public void setDisplayName(Player player)
+//    {
+//        String prefix = ChatColor.translateAlternateColorCodes('&', chat.getPlayerPrefix(player));
+//
+//        if (clanManager.getClanPlayer(player) == null)
+//        {
+//            player.setDisplayName(ChatColor.GRAY + prefix + player.getName() + ChatColor.RESET);
+//            return;
+//        }
+//
+//        player.setDisplayName(ChatColor.getLastColors(clanManager.getClanPlayer(player).getClan().getColorTag()) + prefix + player.getName() + ChatColor.RESET);
+//    }
 
 
     //Delayed setDisplayName

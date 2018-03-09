@@ -5,6 +5,7 @@ author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
 depend:
 - CustomItemRecipes
+- GrandioseAPI
 softdepend:
 - ExtraHardMode
 - Healthbar
@@ -24,7 +25,7 @@ loadbefore:
 - AbsorptionShields
 commands:
   nick:
-    aliases: [color]
+    aliases: [color, name, nickname, changecolor]
   warp: {}
   mdebug: {}
   restart:

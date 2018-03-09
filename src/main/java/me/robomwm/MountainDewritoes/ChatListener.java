@@ -289,7 +289,7 @@ public class ChatListener implements Listener
         if (softmutedChats.remove(event))
             event.setCancelled(false);
         else if (event.isCancelled())
-            log("Canceled: " + event.getMessage());
+            log("Canceled: " + event.getPlayer().getName() + ": " + event.getMessage());
     }
 
     void log(String message)

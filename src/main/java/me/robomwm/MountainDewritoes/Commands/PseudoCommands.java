@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created on 8/19/2017.
@@ -15,7 +16,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
  */
 public class PseudoCommands implements Listener
 {
-    MountainDewritoes instance;
+    private MountainDewritoes instance;
     public PseudoCommands(MountainDewritoes plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -65,7 +66,14 @@ public class PseudoCommands implements Listener
 
     private boolean afkSeen(Player player)
     {
-        player.performCommand("seen " + player.getName());
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                player.performCommand("seen " + player.getName());
+            }
+        }.runTask(instance);
         return false;
     }
 
@@ -92,7 +100,8 @@ public class PseudoCommands implements Listener
         switch (args[0])
         {
             case "home":
-                instance.getSimpleClansListener().teleportHome(player);
+                player.sendMessage("Use /tppoint");
+                //instance.getSimpleClansListener().teleportHome(player);
                 return true;
         }
         if (args.length < 3)
@@ -104,7 +113,7 @@ public class PseudoCommands implements Listener
                 for (int i = 2; i < args.length; i++)
                     clanName.append(args[i] + " ");
                 clanName.setLength(clanName.length() - 1);
-                //Automatically colors the clan tag and makes it uppercase
+                //Automatically colors the clan tag with the founder's nickname color and makes it uppercase
                 String tag = args[1].toUpperCase().replaceAll("&", "");
                 player.performCommand("clan create &" + getColorCode(player) + tag + " " + clanName.toString());
                 return true;
@@ -114,18 +123,19 @@ public class PseudoCommands implements Listener
 
     public String getColorCode(Player player)
     {
-        //Get hash code of player's UUID
-        int colorCode = player.getUniqueId().hashCode();
-        //Ensure number is positive
-        colorCode = Math.abs(colorCode);
-
-        //Will make configurable, hence this
-        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
-        //Divide hash code by length of acceptableColors, and use remainder
-        //to determine which index to use (like a hashtable/map/whatever)
-        colorCode = (colorCode % acceptableColors.length);
-        String stringColorCode = acceptableColors[colorCode];
-
-        return stringColorCode;
+        return instance.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player).getNameColor().toString();
+//        //Get hash code of player's UUID
+//        int colorCode = player.getUniqueId().hashCode();
+//        //Ensure number is positive
+//        colorCode = Math.abs(colorCode);
+//
+//        //Will make configurable, hence this
+//        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
+//        //Divide hash code by length of acceptableColors, and use remainder
+//        //to determine which index to use (like a hashtable/map/whatever)
+//        colorCode = (colorCode % acceptableColors.length);
+//        String stringColorCode = acceptableColors[colorCode];
+//
+//        return stringColorCode;
     }
 }

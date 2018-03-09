@@ -2,9 +2,11 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemrecipes.CustomItemRecipes;
+import com.robomwm.grandioseapi.GrandioseAPI;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
+import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.ResetCommands;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
@@ -40,6 +42,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,8 +53,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -60,6 +67,16 @@ import java.util.logging.Level;
  */
 public class MountainDewritoes extends JavaPlugin implements Listener
 {
+    //metadata "API" that allows us to clear metadata onDisable
+    private Map<String, Set<Metadatable>> usedMetadata = new HashMap<>();
+    public void setMetadata(Metadatable target, String key, Object value)
+    {
+        if (!usedMetadata.containsKey(key))
+            usedMetadata.put(key, new HashSet<>());
+        usedMetadata.get(key).add(target);
+        target.setMetadata(key, new FixedMetadataValue(this, value));
+    }
+
     //Set<Player> usedEC = new HashSet<>();
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     private long currentTick = 0L; //"Server time in ticks"
@@ -109,6 +126,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
     private CustomItemRecipes customItemRecipes;
+
+    public GrandioseAPI getGrandioseAPI()
+    {
+        return (GrandioseAPI)getServer().getPluginManager().getPlugin("GrandioseAPI");
+    }
 
     public CustomItemRecipes getCustomItemRecipes()
     {
@@ -270,7 +292,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         titleManager = new TitleManager(this);
 
         //Commands
-        //getCommand("nick").setExecutor(new NickCommand());
+        getCommand("nick").setExecutor(new NickCommand(this));
         getCommand("warp").setExecutor(new WarpCommand(this));
         StaffRestartCommand staffRestartCommand = new StaffRestartCommand(this);
         getCommand("restart").setExecutor(staffRestartCommand);
@@ -298,6 +320,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         betterNoDamageTicks.onDisable();
         for (Player player : getServer().getOnlinePlayers())
             atmosphericManager.stopMusic(player);
+        for (String key : usedMetadata.keySet())
+            for (Metadatable target : usedMetadata.get(key))
+                target.removeMetadata(key, this);
     }
 
     /**

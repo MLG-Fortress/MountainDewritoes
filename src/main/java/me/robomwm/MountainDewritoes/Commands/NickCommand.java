@@ -1,10 +1,24 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import com.robomwm.grandioseapi.GrandioseAPI;
+import com.robomwm.grandioseapi.player.GrandPlayer;
+import me.robomwm.MountainDewritoes.MountainDewritoes;
+import me.robomwm.usefulutil.UsefulUtil;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,23 +26,34 @@ import java.util.Set;
 
 /**
  * Created on 2/20/2017.
- * Yes I realized my package names are capitlized
+ * Yes I realized my package names are capitalized
  * Oh well ¯\_(ツ)_/¯
  * @author RoboMWM
  */
-public class NickCommand implements CommandExecutor
+public class NickCommand implements CommandExecutor, Listener
 {
-    String acceptableColors;
+    private GrandioseAPI grandioseAPI;
+    private String acceptableColors;
+    private MountainDewritoes plugin;
+    private YamlConfiguration playerColorsYaml;
+    private Chat chat;
 
-    public NickCommand()
+    public NickCommand(MountainDewritoes plugin)
     {
+        //Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
+        this.plugin = plugin;
+        grandioseAPI = (GrandioseAPI)plugin.getServer().getPluginManager().getPlugin("GrandioseAPI");
+        RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+
         StringBuilder builder = new StringBuilder();
-        Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
         int i = 0;
-        for (String ok : colorThingy)
+        for (ChatColor ok : ChatColor.values())
         {
-            builder.append(ChatColor.valueOf(ok.toUpperCase()));
+            if (isBannedColor(ok))
+                continue;
             builder.append(ok);
+            builder.append(ok.name());
             builder.append(", ");
             if (++i % 3 == 0)
                 builder.append("\n");
@@ -52,7 +77,7 @@ public class NickCommand implements CommandExecutor
 
         if (cmd.getName().equalsIgnoreCase("nick"))
         {
-            ChatColor color = null;
+            ChatColor color;
             try
             {
                 color = ChatColor.valueOf(args[0].toUpperCase());
@@ -70,13 +95,15 @@ public class NickCommand implements CommandExecutor
                 player.sendMessage("Valid colors: " + acceptableColors);
                 return true;
             }
-            player.performCommand("enick " + convertColor(color) + player.getName());
+            //player.performCommand("enick " + convertColor(color) + player.getName());
+            grandioseAPI.getGrandPlayerManager().getGrandPlayer(player).setNameColor(color);
+            player.setDisplayName(color + chat.getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
             return true;
         }
         return false;
     }
 
-    boolean isBannedColor(ChatColor color)
+    private boolean isBannedColor(ChatColor color)
     {
         if (color.isFormat())
             return true;
@@ -92,7 +119,39 @@ public class NickCommand implements CommandExecutor
         return false;
     }
 
-    String convertColor(ChatColor color)
+    //Automatically give a color to new players
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void colorizeNewPlayers(PlayerJoinEvent event)
+    {
+        GrandPlayer grandPlayer = grandioseAPI.getGrandPlayerManager().getGrandPlayer(event.getPlayer());
+        event.getPlayer().setDisplayName(grandPlayer.getNameColor() + chat.getPlayerPrefix(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
+    }
+
+    //Now resides in GrandioseAPI
+    public ChatColor getChatColor(Player player)
+    {
+        return ChatColor.getByChar(getColorCode(player));
+    }
+
+    public String getColorCode(Player player)
+    {
+        //Get hash code of player's UUID
+        int colorCode = player.getUniqueId().hashCode();
+        //Ensure number is positive
+        colorCode = Math.abs(colorCode);
+
+        //Will make configurable, hence this
+        String[] acceptableColors = "2,3,4,5,6,9,a,b,c,d,e".split(",");
+        //Divide hash code by length of acceptableColors, and use remainder
+        //to determine which index to use (like a hashtable/map/whatever)
+        colorCode = (colorCode % acceptableColors.length);
+        String stringColorCode = acceptableColors[colorCode];
+
+        return stringColorCode;
+    }
+
+    //Used to be back when we used Essentials /nick
+    private String convertColor(ChatColor color)
     {
         switch (color)
         {
