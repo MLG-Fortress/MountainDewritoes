@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -79,6 +80,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             name = null;
             scheduledRestart = null;
             sender.sendMessage("Canceled scheduled restart.");
+            return true;
         }
 
         String reason = String.join(" ", args);
@@ -95,7 +97,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             {
                 if (!onlinePlayer.hasPermission("mlgstaff"))
                 {
-                    player.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use /restart cancel to cancel.");
+                    player.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use " + ChatColor.GOLD + "/restart cancel " + ChatColor.RESET + "to cancel.");
                     scheduledRestart = reason;
                     name = player.getDisplayName();
                     return true;
