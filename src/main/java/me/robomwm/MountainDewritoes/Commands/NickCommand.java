@@ -42,6 +42,7 @@ public class NickCommand implements CommandExecutor, Listener
     {
         //Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
         this.plugin = plugin;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         grandioseAPI = (GrandioseAPI)plugin.getServer().getPluginManager().getPlugin("GrandioseAPI");
         RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
         chat = rsp.getProvider();
