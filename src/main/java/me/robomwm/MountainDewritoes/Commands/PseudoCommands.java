@@ -79,9 +79,9 @@ public class PseudoCommands implements Listener
 
     private boolean ircLink(Player player, String command, String[] args)
     {
-        if (!player.isOp())
+        if (player.isOp())
             return false;
-        if (args.length > 0 && args[0].equals("list"))
+        if (args.length > 0 && args[0].equalsIgnoreCase("list"))
             return false;
         player.performCommand("map");
         return true;
