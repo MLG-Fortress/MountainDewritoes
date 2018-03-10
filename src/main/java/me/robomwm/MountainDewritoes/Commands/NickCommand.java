@@ -54,7 +54,7 @@ public class NickCommand implements CommandExecutor, Listener
             if (isBannedColor(ok))
                 continue;
             builder.append(ok);
-            builder.append(ok.name());
+            builder.append(ok.name().toLowerCase());
             builder.append(", ");
             if (++i % 4 == 0)
                 builder.append("\n");
@@ -99,6 +99,7 @@ public class NickCommand implements CommandExecutor, Listener
             //player.performCommand("enick " + convertColor(color) + player.getName());
             player.setDisplayName(color + chat.getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
             grandioseAPI.getGrandPlayerManager().getGrandPlayer(player).setNameColor(color);
+            player.sendMessage("Your name's color is now " + color + color.name().toLowerCase());
             return true;
         }
         return false;

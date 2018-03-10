@@ -62,7 +62,7 @@ public class SimpleClansListener implements Listener
                     setClanPrefix(player);
                 }
             }
-        }.runTaskTimer(instance, 6000L, 1200L);
+        }.runTaskTimer(instance, 1200L, 1200L);
     }
 
 //    private boolean setupChat()
