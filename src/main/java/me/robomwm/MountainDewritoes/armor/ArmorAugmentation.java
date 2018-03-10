@@ -37,7 +37,7 @@ public class ArmorAugmentation implements Listener
         new IronArmor(instance, this);
         new DiamondArmor(instance, this);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        plugin.getServer().getPluginManager().registerEvents(new OldFood(instance), plugin);
+        new OldFood(instance);
         ATPgeneration();
     }
 
