@@ -56,7 +56,7 @@ public class NickCommand implements CommandExecutor, Listener
             builder.append(ok);
             builder.append(ok.name());
             builder.append(", ");
-            if (++i % 3 == 0)
+            if (++i % 4 == 0)
                 builder.append("\n");
         }
         acceptableColors = builder.toString().substring(0, builder.length() - 2);
