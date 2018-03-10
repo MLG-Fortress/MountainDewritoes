@@ -121,9 +121,9 @@ public class PseudoCommands implements Listener
         return false;
     }
 
-    public String getColorCode(Player player)
+    public char getColorCode(Player player)
     {
-        return instance.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player).getNameColor().toString();
+        return instance.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player).getNameColor().getChar();
 //        //Get hash code of player's UUID
 //        int colorCode = player.getUniqueId().hashCode();
 //        //Ensure number is positive
