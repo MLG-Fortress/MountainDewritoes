@@ -54,6 +54,7 @@
                     <artifactSet>
                         <includes>
                             <include>com.github.RoboMWM:UsefulUtil</include>
+                            <include>pw.valaria.bookutil</include>
                         </includes>
                     </artifactSet>
                     <relocations>
