@@ -82,6 +82,7 @@ public class Emoticons implements CommandExecutor, Listener
 
     private void put(String patternString, String emote)
     {
+        patternString = "(?<!\\S)\\Q" + patternString + "\\E(?!\\S)";
         List<String> thing = null;
         for (Pattern pattern : emojiMovie.keySet())
         {
@@ -94,7 +95,8 @@ public class Emoticons implements CommandExecutor, Listener
         if (thing == null)
         {
             thing = new ArrayList<>();
-            emojiMovie.put(Pattern.compile("\\s\\Q" + patternString + "\\E\\s"), thing);
+            //Match the patternString exactly, and only if nothing except whitespace is pre/appended
+            emojiMovie.put(Pattern.compile(patternString), thing);
         }
         thing.add(emote);
     }
@@ -104,28 +106,50 @@ public class Emoticons implements CommandExecutor, Listener
         //Too lazy to check
         Player player = (Player)sender;
 
-        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-        BookMeta bookMeta = (BookMeta)book.getItemMeta();
-
         List<BaseComponent> baseComponents = new ArrayList<>(emojiMovie.keySet().size());
-
-        int i = 0;
         for (Pattern pattern : emojiMovie.keySet())
         {
-            String code = pattern.toString();
+            String code = pattern.pattern().substring(4, pattern.pattern().length() - 4) + "  ";
             String example = emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()));
             baseComponents.add(LazyUtil.getClickableSuggestion(code + "\n", code, example));
-            if (++i >= 14)
+            if (baseComponents.size() >= 4)
             {
-                bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
+                player.sendMessage(baseComponents.toArray(new BaseComponent[0]));
                 baseComponents.clear();
-                i = 0;
             }
         }
 
-        bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
-        book.setItemMeta(bookMeta);
-        plugin.getBookUtil().openBook(player, book);
+        player.sendMessage(baseComponents.toArray(new BaseComponent[0]));
         return true;
     }
 }
+
+//    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+//    {
+//        //Too lazy to check
+//        Player player = (Player)sender;
+//
+//        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+//        BookMeta bookMeta = (BookMeta)book.getItemMeta();
+//
+//        List<BaseComponent> baseComponents = new ArrayList<>(emojiMovie.keySet().size());
+//
+//        int i = 0;
+//        for (Pattern pattern : emojiMovie.keySet())
+//        {
+//            String code = pattern.pattern().substring(4, pattern.pattern().length() - 4);
+//            String example = emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()));
+//            baseComponents.add(LazyUtil.getClickableSuggestion(code + "\n", code, example));
+//            if (++i >= 14)
+//            {
+//                bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
+//                baseComponents.clear();
+//                i = 0;
+//            }
+//        }
+//
+//        bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
+//        book.setItemMeta(bookMeta);
+//        plugin.getBookUtil().openBook(player, book);
+//        return true;
+//    }
