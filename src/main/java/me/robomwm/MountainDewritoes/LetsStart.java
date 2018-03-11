@@ -33,12 +33,12 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
                 "\n\n\n\n",
-                LazyUtil.getClickableCommand("           Minigames hub      \n", "/minigames"),
+                LazyUtil.getClickableCommand("          Minigames hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("            Emoticons         \n", "/emote"),
-                LazyUtil.getClickableCommand("               TP             \n", "/tp", "/tp>"),
-                LazyUtil.getClickableCommand("           Claim points       \n", "/tppoint", "/tppoint <world> <x> <z>"),
+                LazyUtil.getClickableCommand("                 TP             \n", "/tp", "/tp>"),
+                LazyUtil.getClickableCommand("           Claim Posts       \n", "/help post", "/tppoint <world> <x> <z>"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("          Voice callouts      \n", "/v"),
+                LazyUtil.getClickableCommand("         Voice callouts      \n", "/v"),
                 LazyUtil.getClickableCommand("            Get a tip         \n", "/tip")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
@@ -76,8 +76,9 @@ public class LetsStart implements Listener, CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         Player player = (Player)sender;
-        if (args.length == 0 || !cmd.getName().equalsIgnoreCase("page"))
+        if (args.length == 0)
             return openStartBook(player);
+
         switch (args[0].toLowerCase())
         {
             case "post":
@@ -87,6 +88,9 @@ public class LetsStart implements Listener, CommandExecutor
             case "claimpoint":
             case "tppoint":
                 plugin.getBookUtil().openBook(player, post);
+                break;
+            default:
+                return openStartBook(player);
         }
         return true;
     }
