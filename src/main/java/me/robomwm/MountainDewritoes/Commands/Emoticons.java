@@ -109,9 +109,9 @@ public class Emoticons implements CommandExecutor, Listener
         List<BaseComponent> baseComponents = new ArrayList<>(emojiMovie.keySet().size());
         for (Pattern pattern : emojiMovie.keySet())
         {
-            String code = pattern.pattern().substring(4, pattern.pattern().length() - 4) + "  ";
+            String code = pattern.pattern().substring(9, pattern.pattern().length() - 9);
             String example = emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()));
-            baseComponents.add(LazyUtil.getClickableSuggestion(code + "\n", code, example));
+            baseComponents.add(LazyUtil.getClickableSuggestion(code + "  ", code, example));
             if (baseComponents.size() >= 4)
             {
                 player.sendMessage(baseComponents.toArray(new BaseComponent[0]));
