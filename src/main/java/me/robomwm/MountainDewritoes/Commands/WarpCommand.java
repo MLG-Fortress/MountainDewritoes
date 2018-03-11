@@ -153,9 +153,9 @@ public class WarpCommand implements CommandExecutor
     {
         BookMeta bookMeta = LazyUtil.getBookMeta();
         List<BaseComponent> baseComponents = new ArrayList<>();
-        LazyUtil.addLegacyText(ChatColor.DARK_BLUE + "Warps:\n", baseComponents);
+        LazyUtil.addLegacyText(ChatColor.DARK_BLUE + "Warps:\n\n", baseComponents);
         for (String warp : warps.keySet())
-            baseComponents.add(LazyUtil.getClickableCommand(warp + "\n", "/warp " + warp));
+            baseComponents.add(LazyUtil.getClickableCommand("  " + warp + "     \n", "/warp " + warp));
         bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[baseComponents.size()]));
         instance.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
     }
