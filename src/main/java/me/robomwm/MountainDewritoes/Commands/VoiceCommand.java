@@ -47,10 +47,10 @@ public class VoiceCommand implements CommandExecutor
 
         bookMeta.spigot().addPage(buildPage("Voicelines:\n",
                 "Greetings: ",
-                getClickableChat("Hello,", "v hello", "say Hi"),
-                getClickableChat(" Thanks", "v thanks", "thx"),
+                getClickableChat("Hello,", "/v hello", "say Hi"),
+                getClickableChat(" Thanks", "/v thanks", "thx"),
                 "\nCallouts: ",
-                getClickableChat("Over here!", "v overhere", null)));
+                getClickableChat("Over here!", "/v overhere", null)));
         book.setItemMeta(bookMeta);
         return book;
     }
@@ -58,14 +58,14 @@ public class VoiceCommand implements CommandExecutor
     private BaseComponent[] buildPage(Object... strings)
     {
         List<BaseComponent> baseComponents = new ArrayList<>(strings.length);
-        for (Object object : baseComponents)
+        for (Object object : strings)
         {
             if (object instanceof TextComponent)
                 baseComponents.add((TextComponent)object);
             else if (object instanceof String)
                 baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText((String)object)));
         }
-        return baseComponents.toArray(new BaseComponent[baseComponents.size()]);
+        return baseComponents.toArray(new BaseComponent[0]);
     }
 
     private TextComponent getClickableChat(String message, String command, String hover)
