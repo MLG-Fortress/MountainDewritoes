@@ -54,7 +54,7 @@ public class Emoticons implements CommandExecutor, Listener
         put("<3", "♥");
         put(":relaxed:", "☺");
         put("$", "Ð");
-        put(">:\\(", "Ò╭╮Ó");
+        //put(">:\\(", "Ò╭╮Ó");
     }
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
