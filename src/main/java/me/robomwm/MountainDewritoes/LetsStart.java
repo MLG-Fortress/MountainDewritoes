@@ -31,13 +31,28 @@ public class LetsStart implements Listener, CommandExecutor
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
+                "\n\n\n\n",
+                LazyUtil.getClickableCommand("Warps\n", "/warp"),
+                LazyUtil.getClickableCommand("Minigames hub\n", "/minigames"),
                 LazyUtil.getClickableCommand("Voice callouts\n", "/v"),
-                LazyUtil.getClickableCommand("Emoticons\n", "/emote")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "   MLG Fortress\n",
+                LazyUtil.getClickableCommand("Emoticons\n", "/emote"),
+                LazyUtil.getClickableCommand("Claim points\n", "/tppoint", "/tppoint <world> <x> <z>"),
+                LazyUtil.getClickableCommand("Get a tip", "/tip")));
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
+                LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
+                LazyUtil.getClickableCommand("Shops\n", "/shop"),
+                LazyUtil.getClickableCommand("IRC (chatroom)\n", "/irc"),
+                LazyUtil.getClickableCommand("Live Map\n", "/map"),
+                LazyUtil.getClickableCommand("Dumcord\n", "/dumcord"),
+                LazyUtil.getClickableCommand("Shops\n", "/shop"),
                 LazyUtil.getClickableCommand("Warps\n", "/warp")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "   MLG Fortress\n",
-                "So uh yea pls /apply cuz uh this is a lot to do but um yea??dsf"));
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
+                LazyUtil.getClickableCommand("Autocraft Airships\n", "/einfo autocraft", "/ac"),
+                LazyUtil.getClickableCommand("Element Bending\n", "/einfo bending"),
+                LazyUtil.getClickableCommand("Slimefun Guide\n", "/sf guide")));
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
+                "There's a lot more...\nSo uh yea pls /apply cuz uh this is a lot to do but um yea??dsf"));
         book.setItemMeta(bookMeta);
     }
 

@@ -2,7 +2,9 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import com.google.common.collect.Maps;
 import me.robomwm.BetterTPA.BetterTPA;
+import me.robomwm.MountainDewritoes.LazyUtil;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,7 +16,9 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -123,11 +127,11 @@ public class WarpCommand implements CommandExecutor
         //Aliases
         switch (desiredWarp)
         {
-            case "hub":
-            case "lobby":
             case "spawn":
                 desiredWarp = "mall";
                 break;
+            case "lobby":
+            case "hub":
             case "games":
             case "game":
             case "mini":
@@ -148,13 +152,23 @@ public class WarpCommand implements CommandExecutor
     private void sendWarps(Player player)
     {
         player.sendMessage("Warps:");
-        StringBuilder lazy = new StringBuilder(ChatColor.GOLD.toString());
+        List<BaseComponent> baseComponents = new ArrayList<>();
         for (String warp : warps.keySet())
-        {
-            lazy.append(warp);
-            lazy.append(", ");
-        }
-        lazy.setLength(lazy.length() - 2);
-        player.sendMessage(lazy.toString());
+            baseComponents.add(LazyUtil.getClickableCommand(warp + " ", "/warp " + warp));
+        player.sendMessage(LazyUtil.buildPage(baseComponents));
     }
+
+    //old String method
+//    private void sendWarps(Player player)
+//    {
+//        player.sendMessage("Warps:");
+//        StringBuilder lazy = new StringBuilder(ChatColor.GOLD.toString());
+//        for (String warp : warps.keySet())
+//        {
+//            lazy.append(warp);
+//            lazy.append(", ");
+//        }
+//        lazy.setLength(lazy.length() - 2);
+//        player.sendMessage(lazy.toString());
+//    }
 }
