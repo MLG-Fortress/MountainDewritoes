@@ -70,7 +70,7 @@ public class LetsStart implements Listener, CommandExecutor
                 "Right-click the post's beacon, and input the following:\n",
                 "Emerald Blocks to increase health\n",
                 "Diamond Blocks to reduce vulnerability time (amount of time to capture)"));
-        post.setItemMeta(postMeta);
+        post = LazyUtil.getBook(postMeta);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
