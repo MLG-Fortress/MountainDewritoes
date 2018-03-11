@@ -111,7 +111,7 @@ public class Emoticons implements CommandExecutor, Listener
         {
             String code = pattern.pattern().substring(9, pattern.pattern().length() - 8);
             String example = emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()));
-            baseComponents.add(LazyUtil.getClickableSuggestion("   " + code, code, example));
+            baseComponents.add(LazyUtil.getClickableSuggestion(" " + code + " ", code, example));
             if (baseComponents.size() >= 10)
             {
                 player.sendMessage(baseComponents.toArray(new BaseComponent[0]));
