@@ -6,6 +6,7 @@ import com.robomwm.grandioseapi.GrandioseAPI;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
+import me.robomwm.MountainDewritoes.Commands.Emoticons;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.ResetCommands;
@@ -56,7 +57,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -275,7 +275,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ArmorAugmentation(this);
         new AntiLag(this);
         new FirstJoin(this);
-        new Emoticons(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
@@ -315,6 +314,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("view").setExecutor(new ViewDistanceCommand());
         getCommand("reset").setExecutor(new ResetCommands(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand());
+        getCommand("emoticons").setExecutor(new Emoticons(this));
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);

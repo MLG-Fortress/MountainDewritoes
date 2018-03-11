@@ -1,10 +1,20 @@
-package me.robomwm.MountainDewritoes;
+package me.robomwm.MountainDewritoes.Commands;
 
+import me.robomwm.MountainDewritoes.LazyUtil;
+import me.robomwm.MountainDewritoes.MountainDewritoes;
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -20,11 +30,13 @@ import java.util.regex.Pattern;
  *
  * @author RoboMWM
  */
-public class Emoticons implements Listener
+public class Emoticons implements CommandExecutor, Listener
 {
+    private MountainDewritoes plugin;
     private Map<Pattern, List<String>> emojiMovie = new HashMap<>();
-    public Emoticons(JavaPlugin plugin)
+    public Emoticons(MountainDewritoes plugin)
     {
+        this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         put(":shrug:", "\u00AF\\_(\u30C4)_/\u00AF");
         put(":shrug:", " ┐('～`)┌");
@@ -39,7 +51,8 @@ public class Emoticons implements Listener
         put(":lenny:", "| ﾟ! ﾟ|");
         put(":lenny:", "°.ʖ ͡°");
         put(":heart:", "♥");
-        put(":)", "☺");
+        put("<3", "♥");
+        put(":relaxed:", "☺");
         put("$", "Ð");
         put(">:(", "Ò╭╮Ó");
     }
@@ -84,5 +97,34 @@ public class Emoticons implements Listener
             emojiMovie.put(Pattern.compile(Matcher.quoteReplacement(patternString)), thing);
         }
         thing.add(emote);
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+    {
+        //Too lazy to check
+        Player player = (Player)sender;
+
+        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+        BookMeta bookMeta = (BookMeta)book.getItemMeta();
+
+        List<BaseComponent> baseComponents = new ArrayList<>(emojiMovie.keySet().size());
+
+        int i = 0;
+        for (Pattern pattern : emojiMovie.keySet())
+        {
+            String code = pattern.toString();
+            String example = emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()));
+            baseComponents.add(LazyUtil.getClickableSuggestion(code + "\n", code, example));
+            if (++i >= 14)
+            {
+                bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
+                baseComponents.clear();
+                i = 0;
+            }
+        }
+
+        bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
+        plugin.getBookUtil().openBook(player, book);
+        return true;
     }
 }

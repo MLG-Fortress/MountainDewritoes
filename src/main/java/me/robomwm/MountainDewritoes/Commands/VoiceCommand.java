@@ -1,10 +1,7 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import me.robomwm.MountainDewritoes.LazyUtil;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,12 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,36 +38,14 @@ public class VoiceCommand implements CommandExecutor
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
 
-        bookMeta.spigot().addPage(buildPage("Voicelines:\n",
-                "Greetings: ",
-                getClickableChat("Hello,", "/v hello", "say Hi"),
-                getClickableChat(" Thanks", "/v thanks", "thx"),
-                "\nCallouts: ",
-                getClickableChat("Over here!", "/v overhere", null)));
+        bookMeta.spigot().addPage(LazyUtil.buildPage("Voicelines:\n",
+                "Greetings:\n",
+                LazyUtil.getClickableCommand("Hello,", "/v hello", "say Hi"),
+                LazyUtil.getClickableCommand(" Thanks", "/v thanks", "thx"),
+                "\nCallouts:\n",
+                LazyUtil.getClickableCommand("Over here!", "/v overhere", null)));
         book.setItemMeta(bookMeta);
         return book;
-    }
-
-    private BaseComponent[] buildPage(Object... strings)
-    {
-        List<BaseComponent> baseComponents = new ArrayList<>(strings.length);
-        for (Object object : strings)
-        {
-            if (object instanceof TextComponent)
-                baseComponents.add((TextComponent)object);
-            else if (object instanceof String)
-                baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText((String)object)));
-        }
-        return baseComponents.toArray(new BaseComponent[0]);
-    }
-
-    private TextComponent getClickableChat(String message, String command, String hover)
-    {
-        TextComponent textComponent = new TextComponent(message);
-        textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
-        if (hover != null)
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
-        return textComponent;
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

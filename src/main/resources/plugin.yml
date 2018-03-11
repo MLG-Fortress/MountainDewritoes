@@ -37,6 +37,8 @@ commands:
     aliases: [getatip, betafish, beta, tips]
   voice:
     aliases: [v]
+  emoticons:
+    aliases: [emoji, emote, emotes, emojimovie]
   shrug: {}
   lejail: {}
   reset: {}
