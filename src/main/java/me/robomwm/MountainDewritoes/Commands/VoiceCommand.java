@@ -65,7 +65,7 @@ public class VoiceCommand implements CommandExecutor
             else if (object instanceof String)
                 baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText((String)object)));
         }
-        return baseComponents.toArray(new BaseComponent[0]);
+        return baseComponents.toArray(new BaseComponent[baseComponents.size()]);
     }
 
     private TextComponent getClickableChat(String message, String command, String hover)
