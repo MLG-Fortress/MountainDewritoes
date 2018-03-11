@@ -36,8 +36,8 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getClickableCommand("Emoticons\n", "/emote"),
                 LazyUtil.getClickableCommand("Claim points\n", "/tppoint", "/tppoint <world> <x> <z>"),
                 LazyUtil.getClickableCommand("              Warps         \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("          Voice callouts    \n", "/v"),
-                LazyUtil.getClickableCommand("            Get a tip         ", "/tip")));
+                LazyUtil.getClickableCommand("            Get a tip         ", "/tip"),
+                LazyUtil.getClickableCommand("          Voice callouts    \n", "/v")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
                 LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
