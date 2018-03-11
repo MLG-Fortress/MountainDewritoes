@@ -29,6 +29,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>valaria</id>
+            <url>https://repo.valaria.pw/repository/maven-public/</url>
+        </repository>
     </repositories>
     <build>
         <finalName>${project.name}</finalName>
@@ -55,6 +59,10 @@
                     <relocations>
                         <relocation>
                             <pattern>me.robomwm.usefulutil</pattern>
+                            <shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>pw.valaria.bookutil</pattern>
                             <shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>
                         </relocation>
                     </relocations>
@@ -170,6 +178,12 @@
             <artifactId>GrandioseAPI</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>pw.valaria</groupId>
+            <artifactId>bookutil</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

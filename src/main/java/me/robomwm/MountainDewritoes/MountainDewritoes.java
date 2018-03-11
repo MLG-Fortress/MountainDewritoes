@@ -48,6 +48,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import pw.valaria.bookutil.BookUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -126,10 +127,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
     private CustomItemRecipes customItemRecipes;
+    private BookUtil bookUtil;
 
     public GrandioseAPI getGrandioseAPI()
     {
         return (GrandioseAPI)getServer().getPluginManager().getPlugin("GrandioseAPI");
+    }
+
+    public BookUtil getBookUtil()
+    {
+        return bookUtil;
     }
 
     public CustomItemRecipes getCustomItemRecipes()
@@ -199,6 +206,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         setupEconomy(this);
         tipCommand = new TipCommand(this);
         customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
+        bookUtil = new BookUtil(this);
 
         //Initialize commonly-used sets
         safeWorlds.add(getServer().getWorld("mall"));
