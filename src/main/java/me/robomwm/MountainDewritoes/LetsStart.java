@@ -30,13 +30,13 @@ public class LetsStart implements Listener, CommandExecutor
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "IP: MLG.ROBOMWM.COM\n",
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
                 LazyUtil.getClickableCommand("Voice callouts\n", "/v"),
                 LazyUtil.getClickableCommand("Emoticons\n", "/emote")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "MLG Fortress\n",
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "   MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
                 LazyUtil.getClickableCommand("Warps\n", "/warp")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "MLG Fortress\n",
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "   MLG Fortress\n",
                 "So uh yea pls /apply cuz uh this is a lot to do but um yea??dsf"));
         book.setItemMeta(bookMeta);
     }
@@ -55,7 +55,7 @@ public class LetsStart implements Listener, CommandExecutor
     @EventHandler(ignoreCancelled = true)
     private void onPressFWhileSneaking(PlayerSwapHandItemsEvent event)
     {
-        if (!event.getPlayer().isSneaking())
+        if (event.getPlayer().isSneaking())
             return;
         event.setCancelled(openStartBook(event.getPlayer()));
     }
