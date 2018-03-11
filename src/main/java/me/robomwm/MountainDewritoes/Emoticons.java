@@ -30,15 +30,18 @@ public class Emoticons implements Listener
         put(":shrug:", " ┐('～`)┌");
         put(":shrug:", " ┐('～`；)┌");
         put(":shrug:", "~\\_(''/)_/~ ");
-        put(":shrug:", "┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻");
         put(":flip:", "( ﾉ⊙︵⊙）ﾉ ︵ ┻━┻");
         put(":flip:", "┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻");
+        put(":flip:", "(ノᚖ⍘ᚖ)ノ彡┻━┻");
         put(":lenny:", "( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)");
         put(":lenny:", "( ͜。 ͡ʖ ͜。)");
+        put(":lenny:", "乁(´益`)ㄏ");
+        put(":lenny:", "| ﾟ! ﾟ|");
         put(":lenny:", "°.ʖ ͡°");
         put(":heart:", "♥");
-        put(":\\)", "☺");
-        put("\\$", "Ð");
+        put(":)", "☺");
+        put("$", "Ð");
+        put(">:(", "Ò╭╮Ó");
     }
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
@@ -78,7 +81,7 @@ public class Emoticons implements Listener
         if (thing == null)
         {
             thing = new ArrayList<>();
-            emojiMovie.put(Pattern.compile(patternString), thing);
+            emojiMovie.put(Pattern.compile(Matcher.quoteReplacement(patternString)), thing);
         }
         thing.add(emote);
     }
