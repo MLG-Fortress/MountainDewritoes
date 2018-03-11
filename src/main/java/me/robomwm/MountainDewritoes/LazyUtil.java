@@ -45,6 +45,13 @@ public class LazyUtil
         return baseComponents.toArray(new BaseComponent[baseComponents.size()]);
     }
 
+    public static List<BaseComponent> addLegacyText(String string, List<BaseComponent> baseComponents)
+    {
+        for (BaseComponent baseComponent : TextComponent.fromLegacyText(string))
+            baseComponents.add(baseComponent);
+        return baseComponents;
+    }
+
     public static TextComponent getClickableCommand(String message, String command)
     {
         return getClickableCommand(message, command, command);
