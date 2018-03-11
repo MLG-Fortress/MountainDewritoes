@@ -198,7 +198,7 @@ public class JoinMessages implements Listener
                 if (!instance.getServer().getOnlinePlayers().contains(player))
                     return;
                 StringBuilder stringBuilder = new StringBuilder();
-                if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
+                if (!instance.isLatest(player))
                 {
                     String old = NSA.getRandomString("archaic", "ancient", "outdated", "out of date", "old", "dum");
                     stringBuilder.append("is using ");

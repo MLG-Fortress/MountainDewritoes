@@ -36,9 +36,11 @@ commands:
   tip:
     aliases: [getatip, betafish, beta, tips]
   voice:
-    aliases: [v]
+    aliases: [v, voiceline, callout, voicelines, voices]
   emoticons:
     aliases: [emoji, emote, emotes, emojimovie]
+  start:
+      aliases: [menu, book, gui, ui, main, mainmenu, help, info]
   shrug: {}
   lejail: {}
   reset: {}

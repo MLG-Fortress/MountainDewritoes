@@ -49,6 +49,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import protocolsupport.ProtocolSupport;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 import pw.valaria.bookutil.BookUtil;
 
 import java.io.File;
@@ -319,6 +323,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
 
+        getCommand("start").setExecutor(new LetsStart(this));
         saveConfig();
     }
 
@@ -334,7 +339,15 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 target.removeMetadata(key, this);
     }
 
-    /**
+    /*Convenience methods that rely on soft dependencies*/
+    public boolean isLatest(Player player)
+    {
+        if (getServer().getPluginManager().isPluginEnabled("ProtocolSupport"))
+            return true;
+        return ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC);
+    }
+
+    /*
      * Everything below are solely "miscellaneous" enhancements and fixes
      */
 

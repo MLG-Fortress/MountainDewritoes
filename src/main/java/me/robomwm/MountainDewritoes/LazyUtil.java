@@ -30,6 +30,11 @@ public class LazyUtil
         return baseComponents.toArray(new BaseComponent[0]);
     }
 
+    public static TextComponent getClickableCommand(String message, String command)
+    {
+        return getClickableCommand(message, command, command);
+    }
+
     public static TextComponent getClickableCommand(String message, String command, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
