@@ -1,18 +1,22 @@
 package me.robomwm.MountainDewritoes.Commands;
 
 import com.google.common.collect.Maps;
+import jdk.management.resource.internal.WrapInstrumentation;
 import me.robomwm.BetterTPA.BetterTPA;
 import me.robomwm.MountainDewritoes.LazyUtil;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import java.io.File;
 import java.io.IOException;
@@ -151,11 +155,12 @@ public class WarpCommand implements CommandExecutor
 
     private void sendWarps(Player player)
     {
-        player.sendMessage("Warps:");
+        BookMeta bookMeta = LazyUtil.getBookMeta();
         List<BaseComponent> baseComponents = new ArrayList<>();
         for (String warp : warps.keySet())
-            baseComponents.add(LazyUtil.getClickableCommand(warp + " ", "/warp " + warp));
-        player.sendMessage(LazyUtil.buildPage(baseComponents));
+            baseComponents.add(LazyUtil.getClickableCommand(warp + "\n", "/warp " + warp));
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Warps:\n", baseComponents));
+        instance.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
     }
 
     //old String method

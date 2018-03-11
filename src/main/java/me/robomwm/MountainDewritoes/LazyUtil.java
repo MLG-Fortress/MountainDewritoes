@@ -5,6 +5,9 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +20,18 @@ import java.util.List;
  */
 public class LazyUtil
 {
+    public static BookMeta getBookMeta()
+    {
+        return (BookMeta)(new ItemStack(Material.WRITTEN_BOOK).getItemMeta());
+    }
+
+    public static ItemStack getBook(BookMeta bookMeta)
+    {
+        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+        book.setItemMeta(bookMeta);
+        return book;
+    }
+
     public static BaseComponent[] buildPage(Object... strings)
     {
         List<BaseComponent> baseComponents = new ArrayList<>(strings.length);

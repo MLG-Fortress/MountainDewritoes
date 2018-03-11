@@ -32,12 +32,12 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
                 "\n\n\n\n",
-                LazyUtil.getClickableCommand("Warps\n", "/warp"),
                 LazyUtil.getClickableCommand("Minigames hub\n", "/minigames"),
-                LazyUtil.getClickableCommand("Voice callouts\n", "/v"),
                 LazyUtil.getClickableCommand("Emoticons\n", "/emote"),
                 LazyUtil.getClickableCommand("Claim points\n", "/tppoint", "/tppoint <world> <x> <z>"),
-                LazyUtil.getClickableCommand("Get a tip", "/tip")));
+                LazyUtil.getClickableCommand("              Warps         \n", "/warp <warp>"),
+                LazyUtil.getClickableCommand("          Voice callouts    \n", "/v"),
+                LazyUtil.getClickableCommand("            Get a tip         ", "/tip")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
                 LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
