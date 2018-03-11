@@ -23,6 +23,7 @@ public class LetsStart implements Listener, CommandExecutor
 {
     private MountainDewritoes plugin;
     private ItemStack book;
+    private ItemStack post;
 
     public LetsStart(MountainDewritoes plugin)
     {
@@ -32,9 +33,10 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
                 "\n\n\n\n",
-                LazyUtil.getClickableCommand("          Minigames hub       \n", "/minigames"),
+                LazyUtil.getClickableCommand("           Minigames hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("            Emoticons         \n", "/emote"),
-                LazyUtil.getClickableCommand("          Claim points        \n", "/tppoint", "/tppoint <world> <x> <z>"),
+                LazyUtil.getClickableCommand("               TP             \n", "/tp", "/tp>"),
+                LazyUtil.getClickableCommand("           Claim points       \n", "/tppoint", "/tppoint <world> <x> <z>"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
                 LazyUtil.getClickableCommand("          Voice callouts      \n", "/v"),
                 LazyUtil.getClickableCommand("            Get a tip         \n", "/tip")));
@@ -54,11 +56,39 @@ public class LetsStart implements Listener, CommandExecutor
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 "There's a lot more...\nSo uh yea pls /apply cuz uh this is a lot to do but um yea??dsf"));
         book.setItemMeta(bookMeta);
+        BookMeta postMeta = LazyUtil.getBookMeta();
+        postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Claim posts\n(a.k.a. Capture/Control points)\n\n",
+                "Claim posts can be found in known worlds. They contain a beacon, with emeralds and bedrock.\n",
+                "Capture a post via breaking it before the timer runs out.\n",
+                "Capturing these provides",
+                LazyUtil.getHoverable(" protection ", "Others can only break blocks with tools\nTools are damaged more than usual in enemy claims.\nTeleportation is also restricted."),
+                ChatColor.RESET + "and",
+                LazyUtil.getClickableCommand(" teleportation ", "/tppoint"),
+                "\nClaim posts are shared amongst clan members and allies."));
+        postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Upgrading claim posts\n\n",
+                ChatColor.RED + "Warning: this feature is in beta and subject to change!\n",
+                "Right-click the post's beacon, and input the following:\n",
+                "Emerald Blocks to increase health\n",
+                "Diamond Blocks to reduce vulnerability time (amount of time to capture)"));
+        post.setItemMeta(postMeta);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        return openStartBook((Player)sender);
+        Player player = (Player)sender;
+        if (args.length == 0 || !cmd.getName().equalsIgnoreCase("page"))
+            return openStartBook(player);
+        switch (args[0].toLowerCase())
+        {
+            case "post":
+            case "point":
+            case "claim":
+            case "claimpost":
+            case "claimpoint":
+            case "tppoint":
+                plugin.getBookUtil().openBook(player, post);
+        }
+        return true;
     }
 
     private boolean openStartBook(Player player)

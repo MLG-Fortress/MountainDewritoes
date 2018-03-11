@@ -114,12 +114,11 @@ public class Emoticons implements CommandExecutor, Listener
             baseComponents.add(LazyUtil.getClickableSuggestion(" " + code + " ", code, example));
             if (baseComponents.size() >= 10)
             {
-                player.sendMessage(baseComponents.toArray(new BaseComponent[0]));
+                player.sendMessage(baseComponents.toArray(new BaseComponent[baseComponents.size()]));
                 baseComponents.clear();
             }
         }
-
-        player.sendMessage(baseComponents.toArray(new BaseComponent[0]));
+        player.sendMessage(baseComponents.toArray(new BaseComponent[baseComponents.size()]));
         return true;
     }
 }

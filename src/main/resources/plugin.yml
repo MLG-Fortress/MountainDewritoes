@@ -40,7 +40,7 @@ commands:
   emoticons:
     aliases: [emoji, emote, emotes, emojimovie]
   start:
-      aliases: [menu, book, gui, ui, main, mainmenu, help, info]
+      aliases: [menu, book, gui, ui, main, mainmenu, help, info, page]
   shrug: {}
   lejail: {}
   reset: {}

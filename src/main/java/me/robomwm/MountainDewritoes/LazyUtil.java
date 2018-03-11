@@ -76,4 +76,12 @@ public class LazyUtil
             textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
         return textComponent;
     }
+
+    public static TextComponent getHoverable(String message, String hover)
+    {
+        TextComponent textComponent = new TextComponent(message);
+        textComponent.setColor(ChatColor.GOLD);
+        textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
+        return textComponent;
+    }
 }
