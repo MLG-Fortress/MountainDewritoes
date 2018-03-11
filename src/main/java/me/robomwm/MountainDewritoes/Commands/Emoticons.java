@@ -54,7 +54,7 @@ public class Emoticons implements CommandExecutor, Listener
         put("<3", "♥");
         put(":relaxed:", "☺");
         put("$", "Ð");
-        //put(">:\\(", "Ò╭╮Ó");
+        put(">:(", "Ò╭╮Ó");
     }
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
@@ -75,7 +75,7 @@ public class Emoticons implements CommandExecutor, Listener
         for (Pattern pattern : emojiMovie.keySet())
         {
             Matcher matcher = pattern.matcher(message);
-            message = matcher.replaceAll(Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))));
+            message = matcher.replaceAll(" " + Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))) + " ");
         }
         return message;
     }
@@ -94,7 +94,7 @@ public class Emoticons implements CommandExecutor, Listener
         if (thing == null)
         {
             thing = new ArrayList<>();
-            emojiMovie.put(Pattern.compile(Matcher.quoteReplacement(patternString)), thing);
+            emojiMovie.put(Pattern.compile("\\s\\Q" + patternString + "\\E\\s"), thing);
         }
         thing.add(emote);
     }
@@ -124,6 +124,7 @@ public class Emoticons implements CommandExecutor, Listener
         }
 
         bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));
+        book.setItemMeta(bookMeta);
         plugin.getBookUtil().openBook(player, book);
         return true;
     }

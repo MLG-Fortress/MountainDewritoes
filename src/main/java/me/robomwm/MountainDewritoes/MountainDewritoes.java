@@ -324,6 +324,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void onDisable()
     {
+        getServer().getScheduler().cancelTasks(this);
         //TODO: delete instantiated worlds (i.e. those not in MV)
         betterNoDamageTicks.onDisable();
         for (Player player : getServer().getOnlinePlayers())
