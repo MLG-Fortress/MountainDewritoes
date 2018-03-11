@@ -37,17 +37,12 @@ public class LazyUtil
         List<BaseComponent> baseComponents = new ArrayList<>(strings.length);
         for (Object object : strings)
         {
-            if (object instanceof TextComponent)
-                baseComponents.add((TextComponent)object);
+            if (object instanceof BaseComponent)
+                baseComponents.add((BaseComponent)object);
             else if (object instanceof String)
                 baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText((String)object)));
         }
-        return baseComponents.toArray(new BaseComponent[0]);
-    }
-
-    public static BaseComponent[] buildPage(List<BaseComponent> baseComponents)
-    {
-        return baseComponents.toArray(new BaseComponent[0]);
+        return baseComponents.toArray(new BaseComponent[baseComponents.size()]);
     }
 
     public static TextComponent getClickableCommand(String message, String command)
