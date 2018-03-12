@@ -35,18 +35,18 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getHoverable("                         ? ",
                         "Everything in " + ChatColor.DARK_AQUA + "dark aqua" + ChatColor.RESET +
                                 " is hoverable\n" +
-                        "Everything in " + ChatColor.AQUA + "aqua" + ChatColor.RESET + " is clickable.\n"),
+                        "Everything in " + ChatColor.AQUA + "aqua" + ChatColor.RESET + " is clickable."),
                 LazyUtil.getClickableCommand(" ⚙ ", "","Settings\nNot implemented... yet"),
                 LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
                         "and IRC chatroom"),
                 "\n",
-                LazyUtil.getClickableCommand("        Minigames hub      \n", "/minigames"),
+                LazyUtil.getClickableCommand("        Minigames Hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("       Items+Recipes   \n", "", "Not implemented yet"),
+                LazyUtil.getClickableCommand("        Items+Recipes   \n", "", "Not implemented yet"),
                 LazyUtil.getClickableCommand("           Emoticons         \n", "/emote"),
-                LazyUtil.getClickableCommand("              Tip jar         \n", "/tip"),
+                LazyUtil.getClickableCommand("              Tip Jar         \n", "/tip"),
                 LazyUtil.getClickableCommand("          Claim Posts       \n", "/help post", "/help post"),
-                LazyUtil.getClickableCommand("         tp ", "/tp"),
+                LazyUtil.getClickableCommand("        tp ", "/tp"),
                 ChatColor.BLACK + "and",
                 LazyUtil.getClickableCommand(" tppost      \n", "/tppost"),
                 ChatColor.BLACK + "\n        Vocal Callouts:\n",
@@ -58,20 +58,18 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getClickableCommand(" Help! ", "/v help"),
                 LazyUtil.getClickableCommand(" More...", "/voice")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
-                LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
-                LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
-                LazyUtil.getClickableCommand("Shops\n", "/shop"),
                 LazyUtil.getClickableURL("IRC (chatroom)\n", "http://r.robomwm.com/mememap", "/irc"),
                 LazyUtil.getClickableURL("Live Map\n", "http://r.robomwm.com/mememap", "/map"),
                 LazyUtil.getClickableURL("Dumcord\n", "https://discord.gg/3TXnkfa", "/dumcord"),
-                LazyUtil.getClickableCommand("Shops\n", "/shop"),
-                LazyUtil.getClickableCommand("Warps\n", "/warp")));
+                LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
+                LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
+                LazyUtil.getClickableCommand("Shops\n", "/shop")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Autocraft Airships\n", "/einfo autocraft", "/ac"),
                 LazyUtil.getClickableCommand("Element Bending\n", "/einfo bending"),
                 LazyUtil.getClickableCommand("Slimefun Guide\n", "/sf guide")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
-                "There's a lot more...\nSo uh yea pls /apply cuz uh this is a lot to do but um yea??dsf"));
+                "There's a lot more... I means there's like 150+ plugins...\nSo uh yea pls /apply cuz uh this is a lot to do but um yea??"));
         book.setItemMeta(bookMeta);
 
         //claim posts
