@@ -113,6 +113,7 @@ public class NickCommand implements CommandExecutor, Listener
         switch (color)
         {
             case BLACK:
+            case DARK_BLUE:
             case DARK_GRAY:
             case GRAY:
             case WHITE:

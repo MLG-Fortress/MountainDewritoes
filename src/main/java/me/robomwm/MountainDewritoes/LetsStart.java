@@ -32,15 +32,17 @@ public class LetsStart implements Listener, CommandExecutor
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getHoverable("                     ?",
-                        "Everything in " + ChatColor.DARK_AQUA + "dark_aqua" + ChatColor.RESET +
-                                " has hover messages, like this one!\n" +
+                LazyUtil.getHoverable("                         ? ",
+                        "Everything in " + ChatColor.DARK_AQUA + "dark aqua" + ChatColor.RESET +
+                                " is hoverable\n" +
                         "Everything in " + ChatColor.AQUA + "aqua" + ChatColor.RESET + " is clickable.\n"),
-                LazyUtil.getHoverable("⚙", "Settings\nNot implemented... yet"),
+                LazyUtil.getClickableCommand(" ⚙ ", "","Settings\nNot implemented... yet"),
+                LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
+                        "and IRC chatroom"),
                 "\n",
-                LazyUtil.getClickableCommand("         Minigames hub      \n", "/minigames"),
+                LazyUtil.getClickableCommand("        Minigames hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("        Items+Recipes   \n", "", "Not implemented yet"),
+                LazyUtil.getClickableCommand("       Items+Recipes   \n", "", "Not implemented yet"),
                 LazyUtil.getClickableCommand("           Emoticons         \n", "/emote"),
                 LazyUtil.getClickableCommand("              Tip jar         \n", "/tip"),
                 LazyUtil.getClickableCommand("          Claim Posts       \n", "/help post", "/help post"),
@@ -59,9 +61,9 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
                 LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
                 LazyUtil.getClickableCommand("Shops\n", "/shop"),
-                LazyUtil.getClickableCommand("IRC (chatroom)\n", "/irc"),
-                LazyUtil.getClickableCommand("Live Map\n", "/map"),
-                LazyUtil.getClickableCommand("Dumcord\n", "/dumcord"),
+                LazyUtil.getClickableURL("IRC (chatroom)\n", "http://r.robomwm.com/mememap", "/irc"),
+                LazyUtil.getClickableURL("Live Map\n", "http://r.robomwm.com/mememap", "/map"),
+                LazyUtil.getClickableURL("Dumcord\n", "https://discord.gg/3TXnkfa", "/dumcord"),
                 LazyUtil.getClickableCommand("Shops\n", "/shop"),
                 LazyUtil.getClickableCommand("Warps\n", "/warp")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
@@ -77,7 +79,7 @@ public class LetsStart implements Listener, CommandExecutor
         postMeta.spigot().addPage(LazyUtil.buildPage(
                 "Claim posts exist in known worlds with a beacon.\n",
                 "Captured posts provide ",
-                LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage.\n- Teleportation is restricted."),
+                LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage\n- Teleportation is restricted"),
                 ChatColor.BLACK + " and ",
                 LazyUtil.getClickableCommand("teleportation\n", "/tppoint"),
                 "\nclan members and allies share claim posts."));

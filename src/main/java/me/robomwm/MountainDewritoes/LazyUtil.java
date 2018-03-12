@@ -67,6 +67,16 @@ public class LazyUtil
         return textComponent;
     }
 
+    public static TextComponent getClickableURL(String message, String URL, String hover)
+    {
+        TextComponent textComponent = new TextComponent(message);
+        textComponent.setColor(ChatColor.AQUA);
+        textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
+        if (hover != null)
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
+        return textComponent;
+    }
+
     public static TextComponent getClickableSuggestion(String message, String suggestion, String hover)
     {
         TextComponent textComponent = new TextComponent(message);

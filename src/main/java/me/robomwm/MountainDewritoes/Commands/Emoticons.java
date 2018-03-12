@@ -96,7 +96,7 @@ public class Emoticons implements CommandExecutor, Listener
         put(":radioactive:", "☢");
         put(":biohazard:", "☣");
         put(":coffee:", "☕");
-        put(":coffee:", "☕");
+        put(":gear:", "⚙");
         put("<3", "♥");
         put(":relaxed:", "☺");
         put(":)", "☻");
