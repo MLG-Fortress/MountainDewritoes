@@ -235,6 +235,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 world.getWorldBorder().setSize(20000);
         }
 
+        //Don't keep spawn chunks in memory
+        for (World world : getServer().getWorlds())
+        {
+            world.setKeepSpawnInMemory(false);
+        }
+
         minigameWorlds.add(getServer().getWorld("spawn"));
         minigameWorlds.add(getServer().getWorld("minigames"));
         minigameWorlds.add(getServer().getWorld("bam"));

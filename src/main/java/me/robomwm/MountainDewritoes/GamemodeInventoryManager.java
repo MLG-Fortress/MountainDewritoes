@@ -277,6 +277,12 @@ public class GamemodeInventoryManager implements Listener
 
     private void restoreInventory(Player player)
     {
+        ConfigurationSection snapshotSection = getPlayerInventorySnapshotSection(player);
+        if (snapshotSection.getList("items") == null) //Nothing to restore
+            return;
+        player.setItemOnCursor(null);
+        player.closeInventory();
+        player.getInventory().clear();
         new BukkitRunnable()
         {
             @Override
@@ -344,6 +350,9 @@ public class GamemodeInventoryManager implements Listener
 
     private void restoreExperience(Player player)
     {
+        ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
+        if (snapshotSection.getList("expLevel") == null) //nothing to restore
+            return;
         new BukkitRunnable()
         {
             @Override

@@ -73,12 +73,13 @@ public class TipCommand implements CommandExecutor
         randomTips.add("Git sum cool stoof wit slamphun!! Lern how in da " + ChatColor.GOLD + "/sf guide");
         add("Build and fly a Minecraft-sized airship! &6/help autocraft");
         add("Try some /voice commands!");
-        add("Sumtimes memes r so bad dat random rips in da world may appear 2 take u 2 other mysterious landz!!");
+        add("Hmm, I've been finding these random portal-like things... maybe you should find one and check it out?");
         add("Nether portals aren't just portals to the nether...");
         add("If ur in a clan and u claimed some capture points, u can /tppoint to 'em!");
         add("Don't 4get u need to tp 2 /minigames if u want 2 play sum!");
         add("Press F (swap items button) to open the /menu. (Hold sneak if you wish to swap items.)");
         add("Can't play but want to ensure nobody's raiding your claims? Check out da LIVE /map");
+        add("Leveling up increases ur swag, lungs, and even grants u some kewl rewards! Go get those experience orbs!");
     }
 
     public boolean add(String tip)

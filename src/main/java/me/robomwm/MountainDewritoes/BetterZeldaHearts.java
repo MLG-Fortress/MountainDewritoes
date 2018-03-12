@@ -180,32 +180,38 @@ public class BetterZeldaHearts implements Listener
         if (!customItems.isItem("healthCanister", item))
             return;
         Player player = event.getPlayer();
-        if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= 180D)
+        AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (maxHealth.getValue() >= 180D)
         {
             player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 90 swegcaps!");
-            event.setCancelled(true);
-            return;
+            player.sendMessage("But we'll fully heal u tho.");
         }
         else
-        {
-            AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
             maxHealth.setBaseValue(maxHealth.getValue() + 2D);
-            player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
-            EntityRegainHealthEvent healthEvent = new EntityRegainHealthEvent(player, maxHealth.getValue() - player.getHealth(), EntityRegainHealthEvent.RegainReason.CUSTOM);
-            Bukkit.getPluginManager().callEvent(healthEvent);
-            if (!healthEvent.isCancelled())
-                player.setHealth(maxHealth.getValue()); //Fully heal player
-            event.setItem(null);
-        }
+
+        EntityRegainHealthEvent healthEvent = new EntityRegainHealthEvent(player, maxHealth.getValue() - player.getHealth(), EntityRegainHealthEvent.RegainReason.CUSTOM);
+        Bukkit.getPluginManager().callEvent(healthEvent);
+        if (healthEvent.isCancelled())
+            return;
+        player.setHealth(maxHealth.getValue()); //Fully heal player
+        healPlayer(player);
+        event.setItem(null);
+        player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
     }
 
     //Set new player's health to 3 hearts
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     void onNewJoin(PlayerJoinEvent event)
     {
+        Player player = event.getPlayer();
         if (!event.getPlayer().hasPlayedBefore())
+        {
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2D);
-        event.getPlayer().setMaximumAir(600);
+            event.getPlayer().setLevel(1);
+        }
+        int level = player.getLevel();
+        level = Math.min(level, 5);
+        event.getPlayer().setMaximumAir(level * 10);
     }
 
     //Don't allow mobs to pick this up

@@ -76,11 +76,11 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta postMeta = LazyUtil.getBookMeta();
         postMeta.spigot().addPage(LazyUtil.buildPage(
                 "Claim posts exist in known worlds with a beacon.\n",
-                "Captured posts provide ",
+                "\nCaptured posts provide ",
                 LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage\n- Teleportation is restricted"),
                 ChatColor.BLACK + " and ",
-                LazyUtil.getClickableCommand("teleportation\n", "/tppoint"),
-                "\nclan members and allies share claim posts."));
+                LazyUtil.getClickableCommand("teleportation.\n", "/tppoint"),
+                "\nClan members and allies share claim posts."));
         postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Upgrading claim posts\n\n",
                 "Right-click the beacon to add upgrades:\n",
                 LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),

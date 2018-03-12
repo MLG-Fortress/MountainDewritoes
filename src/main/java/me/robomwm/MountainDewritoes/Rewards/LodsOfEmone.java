@@ -37,26 +37,36 @@ public class LodsOfEmone
                 title.subtitle(ChatColor.WHITE + "                             Lv " + level);
                 message.append(ChatColor.AQUA + ChatColor.BOLD.toString() + "REACHED LEVEL " + level + "!" + ChatColor.DARK_AQUA + " U g0t: ");
 
-                //Increase health (if under max of 90), heal, feed
+                //Increase health (if under max of 90), heal
                 double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                 if (maxHealth < 180D)
+                {
                     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth + 2D);
+                    message.append("a new red swag cap");
+                }
                 player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                 player.removePotionEffect(PotionEffectType.POISON);
                 player.removePotionEffect(PotionEffectType.WITHER);
-                player.setFoodLevel(20);
+
+                player.setMaximumAir(level * 5);
+
+                //Give random crate (needs to be updated as new crate series are added)
+                executeCommand("newcrate " + String.valueOf(instance.r4nd0m(1, 5)) + " 1 " + player.getName());
+                message.append(", a Steve Co. Supply Crate");
+                //Also give key if level is divisible by 5
+                if (level % 5 == 0)
+                {
+                    executeCommand("newkey 1 " + player.getName());
+                    message.append(", a Steve Co. Supply Crate Key");
+                }
 
                 //Give moniez
                 double money = Math.log(level) * 500;
                 instance.getEconomy().depositPlayer(player, money);
+                message.append(", and ");
                 message.append(instance.getEconomy().format(money));
 
                 player.sendMessage(message.toString());
-                //Give random crate (needs to be updated as new crate series are added)
-                executeCommand("newcrate " + String.valueOf(instance.r4nd0m(1, 5)) + " 1 " + player.getName());
-                //Also give key if level is divisible by 5
-                if (level % 5 == 0)
-                    executeCommand("newkey 1 " + player.getName());
                 player.playSound(player.getLocation(), "fortress.levelup", SoundCategory.PLAYERS, 3000000f, 1.0f);
         }
         instance.getTitleManager().sendTitle(player, 10, title.build());

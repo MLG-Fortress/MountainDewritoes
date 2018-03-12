@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Rewards;
 
+import com.robomwm.grandioseapi.player.GrandPlayer;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,17 +13,19 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created on 8/14/2017.
@@ -32,25 +35,30 @@ import java.util.Map;
 public class LevelingProgression implements Listener
 {
     private LodsOfEmone lodsOfEmone;
-    private MountainDewritoes instance;
-    private Map<Player, Integer> recordedPlayerLevel = new HashMap<>();
+    private MountainDewritoes plugin;
+    private Set<Player> playersToCheck = new HashSet<>();
 
     public LevelingProgression(MountainDewritoes plugin, LodsOfEmone lodsOfEmone)
     {
-        this.instance = plugin;
+        this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.lodsOfEmone = lodsOfEmone;
-        for (Player player : plugin.getServer().getOnlinePlayers())
-            recordedPlayerLevel.put(player, player.getLevel());
     }
 
     //How many times did the player level up (compared to when we last checked)?
     private int getLevelUpAmount(Player player)
     {
-        final int timesToLevelUp = player.getLevel() - recordedPlayerLevel.get(player); //Current level - last seen level
+        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
+        Integer lastRecordedLevel = grandPlayer.getYaml().getInt("expLevel");
+        if (lastRecordedLevel == 0)
+        {
+            plugin.getLogger().severe(player.getName() + " had no prior expLevel!");
+            return 0;
+        }
+        final int timesToLevelUp = player.getLevel() - lastRecordedLevel; //Current level - last seen level
         if (timesToLevelUp > 0)
         {
-            recordedPlayerLevel.put(player, player.getLevel());
+            grandPlayer.getYaml().set("expLevel", player.getLevel());
             return timesToLevelUp;
         }
         return 0;
@@ -59,7 +67,7 @@ public class LevelingProgression implements Listener
     @EventHandler(ignoreCancelled = true)
     private void levelChangeEvent(PlayerExpChangeEvent event) //We only want to fire on naturally-collected XP.
     {
-        if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
+        if (!plugin.isSurvivalWorld(event.getPlayer().getWorld()))
             return;
 
         Player player = event.getPlayer();
@@ -77,7 +85,7 @@ public class LevelingProgression implements Listener
                     lodsOfEmone.rewardPlayer(player, player.getLevel() - timesToLevelUp, RewardType.XP_LEVELUP);
                 }
             }
-        }.runTask(instance);
+        }.runTask(plugin);
 
         //[11:42:40] RoboMWM: so it seems that xp orbs can be more precise values than ints
         //[11:43:14] RoboMWM: yet we're only given an int from the API? Did xp used to be an int, and now it stays that way for compatibility?
@@ -97,25 +105,43 @@ public class LevelingProgression implements Listener
 //        }
     }
 
+    //Save player's experience level, in case they somehow "spend" it.
     @EventHandler
     private void onJoin(PlayerJoinEvent event)
     {
-        recordedPlayerLevel.put(event.getPlayer(), event.getPlayer().getLevel());
+        if (!plugin.isSurvivalWorld(event.getPlayer().getWorld()))
+        {
+            playersToCheck.add(event.getPlayer());
+            return;
+        }
+        registerPlayerLevel(event.getPlayer());
     }
-
     @EventHandler(priority = EventPriority.MONITOR)
     private void onQuit(PlayerQuitEvent event)
     {
-        Player player = event.getPlayer();
-        int level = recordedPlayerLevel.remove(event.getPlayer());
-        if (level < player.getLevel())
+        playersToCheck.remove(event.getPlayer());
+    }
+    @EventHandler
+    private void onPlayerChangesWorld(PlayerChangedWorldEvent event)
+    {
+        if (!plugin.isSurvivalWorld(event.getPlayer().getWorld()))
+            return;
+        if (playersToCheck.contains(event.getPlayer()))
+            registerPlayerLevel(event.getPlayer());
+    }
+    private void registerPlayerLevel(Player player)
+    {
+        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
+        Integer lastRecordedLevel = grandPlayer.getYaml().getInt("expLevel");
+        if (lastRecordedLevel == 0)
         {
-            instance.getLogger().info("Fixing " + player + " who had level " + player.getLevel() + " but should be at least " + level);
-            player.setLevel(level);
+            grandPlayer.getYaml().set("expLevel", player.getLevel());
+            grandPlayer.saveYaml();
         }
+        playersToCheck.remove(player);
     }
 
-    /**
+    /*
      * Deny use of enchantment table. Make anything else require no levels to "enchant."
      */
     @EventHandler(ignoreCancelled = true)
