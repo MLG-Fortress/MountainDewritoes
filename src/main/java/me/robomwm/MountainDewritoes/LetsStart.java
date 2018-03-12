@@ -35,6 +35,7 @@ public class LetsStart implements Listener, CommandExecutor
                 "\n\n\n\n",
                 LazyUtil.getClickableCommand("        Minigames hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
+                LazyUtil.getClickableCommand("            Items+Recipes       \n", "", "Not implemented yet"),
                 LazyUtil.getClickableCommand("           Emoticons         \n", "/emote"),
                 LazyUtil.getClickableCommand("                Tips jar         \n", "/tip"),
                 LazyUtil.getClickableCommand("          Claim Posts       \n", "/help post", "/help post"),

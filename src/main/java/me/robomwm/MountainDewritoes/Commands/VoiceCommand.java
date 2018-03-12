@@ -70,17 +70,17 @@ public class VoiceCommand implements CommandExecutor
         switch (voiceCommand)
         {
             case "hello":
-                broadcastMessageNearby(player, 16, "says hello");
+                broadcastMessageNearby(player, 16, "says hello!");
                 break;
             case "overhere":
-                broadcastMessageNearby(player, 32, "over here");
+                broadcastMessageNearby(player, 32, "says over here!");
                 flashPlayer(player);
                 volume = 2f;
                 break;
             case "thx":
             case "thank":
             case "thanks":
-                broadcastMessageNearby(player, 16, "Thanks!");
+                broadcastMessageNearby(player, 16, "says Thanks!");
                 break;
         }
 
