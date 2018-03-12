@@ -33,13 +33,22 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
                 "\n\n\n\n",
-                LazyUtil.getClickableCommand("       Minigames hub      \n", "/minigames"),
+                LazyUtil.getClickableCommand("        Minigames hub      \n", "/minigames"),
+                LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
                 LazyUtil.getClickableCommand("           Emoticons         \n", "/emote"),
-                LazyUtil.getClickableCommand("                TP             \n", "/tp", "/tp>"),
+                LazyUtil.getClickableCommand("                Tips jar         \n", "/tip"),
                 LazyUtil.getClickableCommand("          Claim Posts       \n", "/help post", "/help post"),
-                LazyUtil.getClickableCommand("             Warps           \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("        Voice callouts      \n", "/v"),
-                LazyUtil.getClickableCommand("           Get a tip         \n", "/tip")));
+                LazyUtil.getClickableCommand("           tp ", "/tp"),
+                ChatColor.BLACK + "and",
+                LazyUtil.getClickableCommand(" tppost      \n", "/tppost"),
+                ChatColor.BLACK + "Callouts:\n",
+                LazyUtil.getClickableCommand(" Hello! ", "/v hello"),
+                LazyUtil.getClickableCommand(" Thanks! ", "/v thanks"),
+                LazyUtil.getClickableCommand(" Ok! ", "/v okay"),
+                LazyUtil.getClickableCommand(" Lol! \n", "/v haha"),
+                LazyUtil.getClickableCommand(" Over here! ", "/v overhere"),
+                LazyUtil.getClickableCommand(" Help! ", "/v help"),
+                LazyUtil.getClickableCommand(" More... ", "/voice")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
                 LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
@@ -56,19 +65,20 @@ public class LetsStart implements Listener, CommandExecutor
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 "There's a lot more...\nSo uh yea pls /apply cuz uh this is a lot to do but um yea??dsf"));
         book.setItemMeta(bookMeta);
+
+        //claim posts
         BookMeta postMeta = LazyUtil.getBookMeta();
-        postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Claim posts\n(aka Capture points)\n\n",
-                "Claim posts can be found in known worlds with an unblockable beacon.\n",
-                "Capture a post via breaking it.\n",
+        postMeta.spigot().addPage(LazyUtil.buildPage(
+                "Claim posts exist in known worlds with a beacon.\n",
                 "Captured posts provide ",
-                LazyUtil.getHoverable("protection", "- Cannot build\n-Can only break blocks with tools\n-Tools+armor take more damage.\n-Teleportation is restricted."),
+                LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage.\n- Teleportation is restricted."),
                 ChatColor.BLACK + " and ",
-                LazyUtil.getClickableCommand(" teleportation", "/tppoint"),
-                "\nClaim posts are shared amongst clan members and allies."));
+                LazyUtil.getClickableCommand("teleportation\n", "/tppoint"),
+                "\nclan members and allies share claim posts."));
         postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Upgrading claim posts\n\n",
                 "Right-click the beacon to add upgrades:\n",
                 LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),
-                LazyUtil.getHoverable("Diamond Blocks\n", "Decrease vulnerability time\n(Less time given to capture)\nMinimum of 5 minutes."),
+                LazyUtil.getHoverable("Diamond Blocks\n", "Decreases vulnerability time\nMinimum of 5 minutes.\n(Less time given to capture)"),
                 LazyUtil.getHoverable("Iron Blocks\n", "Not implemented"),
                 LazyUtil.getHoverable("Gold Blocks\n", "Not implemented\nMaybe recruits mobs to help defend??"),
                 LazyUtil.getHoverable("Redstone Blocks", "Not implemented")));
