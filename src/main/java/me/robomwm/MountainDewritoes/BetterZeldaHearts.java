@@ -199,21 +199,6 @@ public class BetterZeldaHearts implements Listener
         player.playSound(player.getLocation(), "fortress.healthcanister", 3000000f, 1.0f);
     }
 
-    //Set new player's health to 3 hearts
-    @EventHandler(priority = EventPriority.LOWEST)
-    void onNewJoin(PlayerJoinEvent event)
-    {
-        Player player = event.getPlayer();
-        if (!event.getPlayer().hasPlayedBefore())
-        {
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2D);
-            event.getPlayer().setLevel(1);
-        }
-        int level = player.getLevel();
-        level = Math.min(level, 5);
-        event.getPlayer().setMaximumAir(level * 10);
-    }
-
     //Don't allow mobs to pick this up
     @EventHandler(ignoreCancelled = true)
     void onNonPlayerPickup(EntityPickupItemEvent event)

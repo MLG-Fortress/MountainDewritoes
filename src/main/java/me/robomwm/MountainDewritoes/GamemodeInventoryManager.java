@@ -53,7 +53,7 @@ public class GamemodeInventoryManager implements Listener
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
             //If player is in a survival world (except prison) and is not op, deny creative gamemode
-            if (instance.isSurvivalWorld(world) && instance.getServer().getWorld("prison") != world && !event.getPlayer().isOp())
+            if (instance.isSurvivalWorld(world) && !event.getPlayer().hasPermission("md.develop"))
             {
                 event.setCancelled(true);
                 return;
