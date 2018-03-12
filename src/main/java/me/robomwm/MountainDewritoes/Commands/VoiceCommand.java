@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,31 +59,53 @@ public class VoiceCommand implements CommandExecutor
         if (args.length <= 0)
         {
             plugin.getBookUtil().openBook(player, getBook());
-            sender.sendMessage(ChatColor.GOLD + "/v <voiceline>");
-            sender.sendMessage("Voicelines: hello, over here");
             return false;
         }
 
-        float volume = 1;
+        float volume = 1f;
         String voiceCommand = String.join("", args).toLowerCase();
+        String voiceline = null;
 
         //If it's a known/common voice line, also send an actionbar message to nearby players
         switch (voiceCommand)
         {
             case "hello":
-                broadcastMessageNearby(player, 16, "says hello!");
+                voiceline = "sez hello!";
+                volume = 2f;
+                break;
+            case "thisway":
+                voiceline = "sez this way!";
+                volume = 3f;
+                flashPlayer(player);
                 break;
             case "overhere":
-                broadcastMessageNearby(player, 32, "says over here!");
+                voiceline = "sez over here!";
                 flashPlayer(player);
-                volume = 2f;
+                volume = 3f;
                 break;
             case "thx":
             case "thank":
             case "thanks":
-                broadcastMessageNearby(player, 16, "says Thanks!");
+                voiceline = "sez thanks!";
+                volume = 2f;
+                voiceCommand = "thanks";
                 break;
+            case "help":
+                voiceline = "requests assistance!";
+                volume = 2f;
+                break;
+            case "ok":
+            case "okay":
+            case "acknowledge":
+            case "acknowledges":
+            case "acknowledged":
+                voiceline = "sez okay";
+                volume = 2f;
+                voiceCommand = "okay";
         }
+
+        if (voiceline != null)
+            broadcastMessageNearby(player, volume, voiceline);
 
         String sound;
 
@@ -102,16 +125,31 @@ public class VoiceCommand implements CommandExecutor
 
     private void flashPlayer(Player player)
     {
+        if (player.isGlowing())
+            return;
 
+        new BukkitRunnable()
+        {
+            int i = -1;
+            @Override
+            public void run()
+            {
+                player.setGlowing(++i % 2 == 0);
+                if (i >= 3)
+                    cancel();
+            }
+        }.runTaskTimer(plugin, 0L, 10L);
     }
 
-    private void broadcastMessageNearby(Player player, int distance, String message)
+    private void broadcastMessageNearby(Player player, float volume, String message)
     {
-        message = player.getDisplayName() + ChatColor.AQUA + message;
+        volume = volume * 16f;
+        volume = volume * volume;
+        message = player.getDisplayName() + " " + ChatColor.AQUA + message;
         Location location = player.getLocation();
         for (Player target : player.getWorld().getPlayers())
         {
-            if (location.distanceSquared(target.getLocation()) < distance * distance)
+            if (location.distanceSquared(target.getLocation()) < volume)
                 plugin.timedActionBar(target, 0, message);
         }
     }
