@@ -34,21 +34,21 @@ public class LetsStart implements Listener, CommandExecutor
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n\n",
                 LazyUtil.getClickableCommand("        Minigames hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("     Items+Recipes   \n", "", "Not implemented yet"),
+                LazyUtil.getClickableCommand("        Items+Recipes   \n", "", "Not implemented yet"),
                 LazyUtil.getClickableCommand("           Emoticons         \n", "/emote"),
-                LazyUtil.getClickableCommand("           Tips jar         \n", "/tip"),
+                LazyUtil.getClickableCommand("            Tips jar         \n", "/tip"),
                 LazyUtil.getClickableCommand("          Claim Posts       \n", "/help post", "/help post"),
                 LazyUtil.getClickableCommand("        tp ", "/tp"),
                 ChatColor.BLACK + "and",
                 LazyUtil.getClickableCommand(" tppost      \n", "/tppost"),
-                ChatColor.BLACK + "Vocal Callouts:\n",
+                ChatColor.BLACK + "        Vocal Callouts:\n",
                 LazyUtil.getClickableCommand(" Hello! ", "/v hello"),
                 LazyUtil.getClickableCommand(" Thanks! ", "/v thanks"),
                 LazyUtil.getClickableCommand(" Ok! ", "/v okay"),
                 LazyUtil.getClickableCommand(" Lol! \n", "/v haha"),
                 LazyUtil.getClickableCommand(" Over here! ", "/v overhere"),
                 LazyUtil.getClickableCommand(" Help! ", "/v help"),
-                LazyUtil.getClickableCommand(" More... ", "/voice")));
+                LazyUtil.getClickableCommand(" More...", "/voice")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
                 LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
@@ -101,6 +101,12 @@ public class LetsStart implements Listener, CommandExecutor
             case "tppoint":
                 plugin.getBookUtil().openBook(player, post);
                 break;
+            case "give":
+                if (player.isOp())
+                {
+                    player.getInventory().addItem(book.clone());
+                    return true;
+                }
             default:
                 return openStartBook(player);
         }
