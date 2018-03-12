@@ -31,8 +31,7 @@ public class LetsStart implements Listener, CommandExecutor
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
-                "\n\n\n\n",
+        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n\n",
                 LazyUtil.getClickableCommand("        Minigames hub      \n", "/minigames"),
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
                 LazyUtil.getClickableCommand("            Items+Recipes       \n", "", "Not implemented yet"),
