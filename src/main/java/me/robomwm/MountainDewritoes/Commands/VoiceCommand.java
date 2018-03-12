@@ -150,7 +150,7 @@ public class VoiceCommand implements CommandExecutor
         for (Player target : player.getWorld().getPlayers())
         {
             if (location.distanceSquared(target.getLocation()) < volume)
-                plugin.timedActionBar(target, 0, message);
+                plugin.getTitleManager().timedActionBar(target, 3, message);
         }
     }
 }

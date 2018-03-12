@@ -49,7 +49,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -480,35 +479,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         if (!serverDoneLoading)
             event.setMotd(ChatColor.RED + "ayyyyy we r laodin de_memes just w8 a foow sekondz b4 konnekting thx!!");
-    }
-
-    /**
-     * Send an actionbar with a customizable duration
-     * @param player
-     * @param seconds
-     * @param message
-     */
-    public void timedActionBar(Player player, int seconds, String message)
-    {
-        if (seconds <= 0)
-        {
-            player.sendActionBar(message);
-            return;
-        }
-
-        if (message == null || player == null)
-            return;
-        new BukkitRunnable()
-        {
-            int secondsRemaining = seconds * 2;
-            public void run()
-            {
-                player.sendActionBar(message);
-                secondsRemaining--;
-                if (secondsRemaining <= 0 || Bukkit.getServer().getOnlinePlayers().contains(player))
-                    this.cancel();
-            }
-        }.runTaskTimer(this, 0L, 10L);
     }
 
     /**

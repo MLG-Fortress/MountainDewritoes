@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.Title;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,7 @@ public class TitleManager implements Listener
 {
     private MountainDewritoes instance;
     private Map<Player, TitleMeta> usingTitlePlayers = new HashMap<>();
+    private Map<Player, TitleMeta> usingActionPlayers = new HashMap<>();
     private Title blankTitle;
 
     public TitleManager(MountainDewritoes plugin)
@@ -53,7 +55,7 @@ public class TitleManager implements Listener
                 return false;
         }
 
-        long duration = title.getFadeIn() + title.getStay() + title.getFadeOut();
+        long duration = title.getFadeIn() + title.getStay();
         usingTitlePlayers.put(player, new TitleMeta(priority, instance.getCurrentTick() + duration));
         player.sendTitle(title);
         return true;
@@ -81,6 +83,63 @@ public class TitleManager implements Listener
     private void onPlayerQuit(PlayerQuitEvent event)
     {
         usingTitlePlayers.remove(event.getPlayer());
+    }
+
+    public boolean timedActionBar(Player player, int seconds, String message, int priority)
+    {
+        if (message == null || player == null)
+            return true;
+
+        //Deny if priority is lesser than existing action message's priority and is currently active
+        if (usingActionPlayers.containsKey(player))
+        {
+            TitleMeta actionMeta = usingActionPlayers.get(player);
+            if (actionMeta.getDuration() > instance.getCurrentTick() && actionMeta.getPriority() > priority)
+                return false;
+        }
+
+        if (seconds <= 0)
+        {
+            player.sendActionBar(message);
+            return true;
+        }
+
+        TitleMeta actionMeta = new TitleMeta(priority, instance.getCurrentTick() + (seconds * 20));
+        usingActionPlayers.put(player, actionMeta);
+
+        new BukkitRunnable()
+        {
+            int secondsRemaining = seconds * 2;
+            public void run()
+            {
+                if (actionMeta != usingActionPlayers.get(player))
+                {
+                    this.cancel();
+                    return;
+                }
+
+                player.sendActionBar(message);
+                secondsRemaining--;
+                if (secondsRemaining <= 0 || !instance.getServer().getOnlinePlayers().contains(player))
+                {
+                    this.cancel();
+                    usingActionPlayers.remove(player);
+                }
+            }
+        }.runTaskTimer(instance, 0L, 10L);
+
+        return true;
+    }
+
+    /**
+     * Send an actionbar with a customizable duration
+     * @param player
+     * @param seconds
+     * @param message
+     */
+    public boolean timedActionBar(Player player, int seconds, String message)
+    {
+        return timedActionBar(player, seconds, message, 0);
     }
 }
 

@@ -93,7 +93,7 @@ public class TeleportingEffects implements Listener
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)
-            instance.timedActionBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
+            instance.getTitleManager().timedActionBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
     }
 
     void playTeleportEffect(Player player)
