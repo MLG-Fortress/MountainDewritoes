@@ -135,7 +135,7 @@ public class VoiceCommand implements CommandExecutor
             public void run()
             {
                 player.setGlowing(++i % 2 == 0);
-                if (i >= 3)
+                if (i >= 5)
                     cancel();
             }
         }.runTaskTimer(plugin, 0L, 10L);

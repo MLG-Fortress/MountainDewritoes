@@ -342,7 +342,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     /*Convenience methods that rely on soft dependencies*/
     public boolean isLatest(Player player)
     {
-        if (getServer().getPluginManager().isPluginEnabled("ProtocolSupport"))
+        if (!getServer().getPluginManager().isPluginEnabled("ProtocolSupport"))
             return true;
         return ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC);
     }
