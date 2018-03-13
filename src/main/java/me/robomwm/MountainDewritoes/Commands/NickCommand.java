@@ -56,8 +56,8 @@ public class NickCommand implements CommandExecutor, Listener
             builder.append(ok);
             builder.append(ok.name().toLowerCase());
             builder.append(", ");
-            if (++i % 4 == 0)
-                builder.append("\n");
+            //if (++i % 4 == 0)
+            //    builder.append("\n");
         }
         acceptableColors = builder.toString().substring(0, builder.length() - 2);
     }
@@ -71,7 +71,7 @@ public class NickCommand implements CommandExecutor, Listener
 
         if (args.length < 1)
         {
-            player.sendMessage("/nick <color>");
+            player.sendMessage("/name <color>");
             player.sendMessage("colors: " + acceptableColors);
             return true;
         }

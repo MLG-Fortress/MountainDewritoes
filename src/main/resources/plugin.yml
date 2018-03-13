@@ -25,7 +25,7 @@ loadbefore:
 - AbsorptionShields
 commands:
   nick:
-    aliases: [color, name, nickname, changecolor]
+    aliases: [color, name, nickname, changecolor, namecolor, nickcolor]
   warp: {}
   mdebug: {}
   restart:

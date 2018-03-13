@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import com.robomwm.grandioseapi.player.GrandPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -11,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import pw.valaria.bookutil.BookUtil;
 
 /**
  * Created on 3/10/2018.
@@ -36,7 +38,7 @@ public class LetsStart implements Listener, CommandExecutor
                         "Everything in " + ChatColor.DARK_AQUA + "dark aqua" + ChatColor.RESET +
                                 " is hoverable\n" +
                         "Everything in " + ChatColor.AQUA + "aqua" + ChatColor.RESET + " is clickable."),
-                LazyUtil.getClickableCommand(" ⚙ ", "","Settings\nNot implemented... yet"),
+                LazyUtil.getClickableCommand(" ⚙ ", "/help settings","Settings"),
                 LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
                         "and IRC chatroom"),
                 "\n",
@@ -99,6 +101,9 @@ public class LetsStart implements Listener, CommandExecutor
 
         switch (args[0].toLowerCase())
         {
+            case "settings":
+                openSettings(player);
+                return true;
             case "post":
             case "point":
             case "claim":
@@ -131,5 +136,21 @@ public class LetsStart implements Listener, CommandExecutor
         if (event.getPlayer().isSneaking())
             return;
         event.setCancelled(openStartBook(event.getPlayer()));
+    }
+
+    private void openSettings(Player player)
+    {
+        BookMeta bookMeta = LazyUtil.getBookMeta();
+        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
+
+        bookMeta.spigot().addPage(LazyUtil.buildPage(
+                player.getDisplayName() + "'s settings\n",
+                LazyUtil.getClickableCommand("View Distance: " + grandPlayer.getYaml().getInt("viewDistance", 8), "/view"),
+                "\n",
+                LazyUtil.getClickableCommand("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name(), "/name"),
+                "\n",
+                LazyUtil.getClickableCommand("Music: on" + grandPlayer.getNameColor() + grandPlayer.getNameColor().name(), "", "Not implemented yet")));
+
+        plugin.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
     }
 }
