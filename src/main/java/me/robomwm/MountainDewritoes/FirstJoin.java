@@ -30,7 +30,7 @@ public class FirstJoin implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
-        new Location(plugin.getServer().getWorld("firstjoin"), -1.5, 26.5, -3.5, 180, 20);
+        firstJoinLocation = new Location(plugin.getServer().getWorld("firstjoin"), -1.5, 26.5, -3.5, 180, 20);
 //        new BukkitRunnable()
 //        {
 //            Location location = new Location(WORLD, -1, 70, -4);
