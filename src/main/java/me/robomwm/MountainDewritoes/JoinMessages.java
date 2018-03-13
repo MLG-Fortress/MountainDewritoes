@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.Title;
+import com.robomwm.grandioseapi.player.GrandPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -148,6 +149,9 @@ public class JoinMessages implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     private void statusOfPack(PlayerResourcePackStatusEvent event)
     {
+        Player player = event.getPlayer();
+        GrandPlayer grandPlayer = instance.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
+
         switch(event.getStatus())
         {
             case ACCEPTED:
@@ -158,7 +162,7 @@ public class JoinMessages implements Listener
                     return;
                 event.getPlayer().setMetadata("MD_DECLINED", new FixedMetadataValue(instance, true));
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
-                event.getPlayer().setViewDistance(8);
+                event.getPlayer().setViewDistance(grandPlayer.getYaml().getInt("viewDistance", 8));
                 break;
             case SUCCESSFULLY_LOADED:
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
@@ -170,7 +174,7 @@ public class JoinMessages implements Listener
                     @Override
                     public void run()
                     {
-                        event.getPlayer().setViewDistance(8);
+                        player.setViewDistance(grandPlayer.getYaml().getInt("viewDistance", 8));
                     }
                 }.runTaskLater(instance, 20L);
                 break;
