@@ -45,7 +45,6 @@ public class AtmosphericManager implements Listener, CommandExecutor
     private MountainDewritoes instance;
     //MemeBox memeBox;
     private MemePack memePack;
-    private long lastScheduled;
 
     public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
@@ -83,53 +82,43 @@ public class AtmosphericManager implements Listener, CommandExecutor
 
     public void playSound(final MusicThing song, int priority, Player player, Location location, SoundCategory soundCategory, float volume)
     {
-        //long whenToPlay = lastScheduled++; //Client will ignore multiple playSounds sent too close together?
+        SongMeta songMeta = new SongMeta(song, priority);
+        //Skip if not in same world
+        if (location.getWorld() != player.getWorld())
+            return;
+        //Skip player if they're dead
+        if (player.hasMetadata("DEAD") || player.isDead() || player.hasMetadata("MD_JOINING"))
+            return;
+        //If player is already listening to music...
+        if (player.hasMetadata("MD_LISTENING"))
+        {
+            SongMeta otherSongMeta = (SongMeta)player.getMetadata("MD_LISTENING").get(0).value();
+            switch(songMeta.getPriority(otherSongMeta))
+            {
+                case HIGHER: //Override
+                    player.stopSound("", soundCategory);
+                case CONCURRENT: //Play concurrently
+                    break;
+                case EQUAL_OR_LOWER: //Skip
+                    return;
+            }
+        }
 
+        player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, songMeta));
+        player.playSound(location, song.getSoundName(), soundCategory, volume, 1.0f);
+
+        //Schedule removal of metadata
         new BukkitRunnable()
         {
-            @Override
             public void run()
             {
-                //lastScheduled--;
-                SongMeta songMeta = new SongMeta(song, priority);
-                //Skip if not in same world
-                if (location.getWorld() != player.getWorld())
+                if (!player.hasMetadata("MD_LISTENING"))
                     return;
-                //Skip player if they're dead
-                if (player.hasMetadata("DEAD") || player.isDead() || player.hasMetadata("MD_JOINING"))
-                    return;
-                //If player is already listening to music...
-                if (player.hasMetadata("MD_LISTENING"))
-                {
-                    SongMeta otherSongMeta = (SongMeta)player.getMetadata("MD_LISTENING").get(0).value();
-                    switch(songMeta.getPriority(otherSongMeta))
-                    {
-                        case HIGHER: //Override
-                            player.stopSound("", soundCategory);
-                        case CONCURRENT: //Play concurrently
-                            break;
-                        case EQUAL_OR_LOWER: //Skip
-                            return;
-                    }
-                }
 
-                player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, songMeta));
-                player.playSound(location, song.getSoundName(), soundCategory, volume, 1.0f);
-
-                //Schedule removal of metadata
-                new BukkitRunnable()
-                {
-                    public void run()
-                    {
-                        if (!player.hasMetadata("MD_LISTENING"))
-                            return;
-
-                        if ((songMeta.equals(player.getMetadata("MD_LISTENING").get(0).value())))
-                            player.removeMetadata("MD_LISTENING", instance);
-                    }
-                }.runTaskLater(instance, song.getLength());
+                if ((songMeta.equals(player.getMetadata("MD_LISTENING").get(0).value())))
+                    player.removeMetadata("MD_LISTENING", instance);
             }
-        }.runTaskLater(instance, 0);
+        }.runTaskLater(instance, song.getLength());
     }
 
     /**

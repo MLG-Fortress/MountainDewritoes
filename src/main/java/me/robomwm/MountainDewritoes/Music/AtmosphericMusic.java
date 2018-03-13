@@ -52,9 +52,9 @@ public class AtmosphericMusic implements Listener
         //normalAmbiance(instance.getSurvivalWorlds());
 
         //Mall
-        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 4, 298), 14f);
-        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 74), 8.0f);
-        playLocalizedSongs(musicPackManager.getSongs("malljob"), new Location(mall, -45, 5, 74), 8.0f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
+        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 74), 3f);
+        playLocalizedSongs(musicPackManager.getSongs("malljob"), new Location(mall, -45, 5, 74), 3f);
     }
 
     private void playLocalizedSongs(List<MusicThing> songs, Location location, float volume)
