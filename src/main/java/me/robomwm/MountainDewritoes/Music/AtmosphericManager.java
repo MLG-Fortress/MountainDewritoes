@@ -9,6 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Jukebox;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,7 +29,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -34,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * It's not just a manager, it contains it all!
  * No way am I gonna split this into classes (at least not now)
  */
-public class AtmosphericManager implements Listener
+public class AtmosphericManager implements Listener, CommandExecutor
 {
     MountainDewritoes instance;
     //MemeBox memeBox;
@@ -43,10 +49,19 @@ public class AtmosphericManager implements Listener
     public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        //memeBox = new MemeBox(mountainDewritoes);
         memePack = new MemePack();
         new AtmosphericMusic(mountainDewritoes, this);
         instance.registerListener(this);
+    }
+
+    //TODO: finish, someday
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+    {
+        Player player = (Player)sender;
+
+        SongMeta songMeta = (SongMeta)player.getMetadata("MD_LISTENING").get(0).value();
+
+        return true;
     }
 
     public void stopMusic(Player player)
@@ -65,57 +80,56 @@ public class AtmosphericManager implements Listener
         }
     }
 
-    /**
-     * Plays sound to players, unless they're already listening to something else
-     * "Thread-safe"
-     * @param song Sound to play
-     * @param delay How long to wait in seconds before playing the sound
-     * @param players
-     */
-    public void playSound(final MusicThing song, int delay, Collection<? extends Player> players)
+    public void playSound(final MusicThing song, int priority, Player player, Location location, SoundCategory soundCategory, float volume)
     {
+        SongMeta songMeta = new SongMeta(song, priority);
+        //Skip if not in same world
+        if (location.getWorld() != player.getWorld())
+            return;
+        //Skip player if they're dead
+        if (player.hasMetadata("DEAD") || player.isDead() || player.hasMetadata("MD_JOINING"))
+            return;
+        //If player is already listening to music...
+        if (player.hasMetadata("MD_LISTENING"))
+        {
+            switch(((SongMeta)player.getMetadata("MD_LISTENING").get(0).value()).getPriority(songMeta))
+            {
+                case HIGHER: //Override
+                    stopMusic(player);
+                case EQUAL: //Play concurrently
+                    break;
+                case LOWER: //Skip
+                    return;
+            }
+        }
+
+        player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, songMeta));
+        player.playSound(location, song.getSoundName(), soundCategory, volume, 1.0f);
+
+        //Schedule removal of metadata
         new BukkitRunnable()
         {
             public void run()
             {
-                for (Player player : players)
-                {
-                    //Skip player if they're dead
-                    if (player.hasMetadata("DEAD") || player.isDead() || player.hasMetadata("MD_JOINING"))
-                        continue;
-                    //Skip player if already listening to music
-                    if (player.hasMetadata("MD_LISTENING"))
-                    {
-                        //except if priority is higher.
-                        if (song.hasHigherPriority((MusicThing)player.getMetadata("MD_LISTENING").get(0).value()))
-                            stopMusic(player);
-                        else
-                            continue;
-                    }
+                if (!player.hasMetadata("MD_LISTENING"))
+                    return;
 
-                    player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, song));
-
-                    //Is this playing via the /memebox or the MLG pack?
-                    if (song.getSoundName() != null)
-                        memePack.playSound(player, song);
-//                    else
-//                        memeBox.playSound(player, song);
-
-                    //Schedule removal of metadata
-                    new BukkitRunnable()
-                    {
-                        public void run()
-                        {
-                            if (!player.hasMetadata("MD_LISTENING"))
-                                return;
-
-                            if (song == (player.getMetadata("MD_LISTENING").get(0).value()))
-                                player.removeMetadata("MD_LISTENING", instance);
-                        }
-                    }.runTaskLater(instance, song.getLength());
-                }
+                if ((songMeta.equals(player.getMetadata("MD_LISTENING").get(0).value())))
+                    player.removeMetadata("MD_LISTENING", instance);
             }
-        }.runTaskLater(instance, delay * 20L);
+        }.runTaskLater(instance, song.getLength());
+    }
+
+    /**
+     * Plays sound to players, unless they're already listening to something else
+     * @param song Sound to play
+     * @param delay Unused
+     * @param players
+     */
+    public void playSound(final MusicThing song, int delay, Collection<? extends Player> players)
+    {
+        for (Player player : players)
+            playSound(song, 1, player, player.getLocation(), SoundCategory.WEATHER, 3000000f);
     }
 
     /* Helper methods */
@@ -201,3 +215,45 @@ public class AtmosphericManager implements Listener
     }
 }
 
+class SongMeta
+{
+    private MusicThing musicThing;
+    private int priority;
+    private long startTime;
+
+    SongMeta(MusicThing musicThing, int priority)
+    {
+        this.musicThing = musicThing;
+        this.priority = priority;
+        this.startTime = System.currentTimeMillis();
+    }
+
+    public MusicThing getSong()
+    {
+        return musicThing;
+    }
+
+    @Override
+    public boolean equals(Object song)
+    {
+        return this.startTime == ((SongMeta)song).startTime;
+    }
+
+    public Priority getPriority(SongMeta songMeta)
+    {
+        if (this.priority == songMeta.priority)
+            return Priority.EQUAL;
+        if (this.priority > songMeta.priority)
+            return Priority.HIGHER;
+        if (this.priority < songMeta.priority)
+            return Priority.LOWER;
+        return null;
+    }
+}
+
+enum Priority
+{
+    LOWER,
+    EQUAL,
+    HIGHER
+}

@@ -23,6 +23,8 @@ softdepend:
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields
+#Wenu2lazy2command.yml
+#- icJukeBox
 commands:
   nick:
     aliases: [color, name, nickname, changecolor, namecolor, nickcolor]
@@ -41,6 +43,8 @@ commands:
     aliases: [emoji, emote, emotes, emojimovie]
   start:
       aliases: [menu, book, gui, ui, main, mainmenu, help, info, page]
+  music:
+      aliases: [song, sound]
   shrug: {}
   lejail: {}
   reset: {}

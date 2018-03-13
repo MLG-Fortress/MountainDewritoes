@@ -56,6 +56,10 @@ public class MusicThing
     {
         return this.soundName;
     }
+
+    /**
+     * @return length of song in ticks
+     */
     public long getLength()
     {
         return this.length;
@@ -69,11 +73,21 @@ public class MusicThing
         return priority;
     }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
     public boolean equals(MusicThing song)
     {
         return song.getStartTime() == this.startTime;
     }
     public boolean hasHigherPriority(MusicThing song)
+    {
+        return this.priority > song.getPriority();
+    }
+
+    public boolean hasEqualOrHigherPriority(MusicThing song)
     {
         return this.priority > song.getPriority();
     }

@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 7/26/2017.
@@ -26,28 +27,34 @@ import java.util.UUID;
 public class VoiceCommand implements CommandExecutor
 {
     private MountainDewritoes plugin;
-    private Map<UUID, String> UUIDtoName = new HashMap<>();
+    private ItemStack book;
 
     public VoiceCommand(MountainDewritoes mountainDewritoes)
     {
         this.plugin = mountainDewritoes;
-        UUIDtoName.put(UUID.fromString("35b16e81-5df0-494b-b057-7fb77b0b6a85"), "xkitty");
+        book = new ItemStack(Material.WRITTEN_BOOK);
+        BookMeta bookMeta = (BookMeta)book.getItemMeta();
+
+        bookMeta.spigot().addPage(LazyUtil.buildPage(
+                LazyUtil.getClickableCommand("⬅ ","/help","Go back to /menu"),
+                "Voicelines:\n",
+                "Greetings:\n",
+                LazyUtil.getClickableCommand("Hello ", "/v hello", "say Hi"),
+                LazyUtil.getClickableCommand("Thanks ", "/v thanks", "thx"),
+                "\nCallouts:\n",
+                LazyUtil.getClickableCommand("Over here! ", "/v overhere"),
+                LazyUtil.getClickableCommand("Dis wae! ", "/v followme"),
+                LazyUtil.getClickableCommand("Ok ", "/v okay"),
+                "\nMemes+Others:\n",
+                LazyUtil.getClickableCommand("#1 ", "/v wano"),
+                LazyUtil.getClickableCommand("dawae ", "/v dounodawae"),
+                LazyUtil.getClickableCommand("no ", "/v no")));
+
+        book.setItemMeta(bookMeta);
     }
 
     private ItemStack getBook()
     {
-        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-        BookMeta bookMeta = (BookMeta)book.getItemMeta();
-
-        bookMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableCommand("⬅Back                       \n","/help","Back to /menu"),
-                "Voicelines:\n",
-                "Greetings:\n",
-                LazyUtil.getClickableCommand("Hello,", "/v hello", "say Hi"),
-                LazyUtil.getClickableCommand(" Thanks", "/v thanks", "thx"),
-                "\nCallouts:\n",
-                LazyUtil.getClickableCommand("Over here!", "/v overhere", null)));
-        book.setItemMeta(bookMeta);
         return book;
     }
 
@@ -66,34 +73,37 @@ public class VoiceCommand implements CommandExecutor
 
         float volume = 1f;
         String voiceCommand = String.join("", args).toLowerCase();
-        String voiceline = null;
+        String voiceLine = null;
 
         //If it's a known/common voice line, also send an actionbar message to nearby players
         switch (voiceCommand)
         {
             case "hello":
-                voiceline = "sez hello!";
+                voiceLine = "sez hello!";
+                voiceCommand = getSound(voiceCommand, 6);
                 volume = 2f;
                 break;
-            case "thisway":
-                voiceline = "sez this way!";
+            case "followme":
+                voiceLine = "sez follow me!";
+                voiceCommand = getSound(voiceCommand, 2);
                 volume = 3f;
                 flashPlayer(player);
                 break;
             case "overhere":
-                voiceline = "sez over here!";
+                voiceLine = "sez over here!";
+                voiceCommand = getSound(voiceCommand, 2);
                 flashPlayer(player);
                 volume = 3f;
                 break;
             case "thx":
             case "thank":
             case "thanks":
-                voiceline = "sez thanks!";
+                voiceLine = "sez thanks!";
                 volume = 2f;
-                voiceCommand = "thanks";
+                voiceCommand = getSound("thanks", 1);
                 break;
             case "help":
-                voiceline = "requests assistance!";
+                voiceLine = "requests assistance!";
                 volume = 2f;
                 break;
             case "ok":
@@ -101,28 +111,48 @@ public class VoiceCommand implements CommandExecutor
             case "acknowledge":
             case "acknowledges":
             case "acknowledged":
-                voiceline = "sez okay";
+                voiceLine = "sez okay";
                 volume = 2f;
                 voiceCommand = "okay";
+                break;
+            case "haha":
+            case "ha":
+            case "lol":
+            case "lulz":
+            case "lul":
+                voiceCommand = getSound("haha", 4);
+                break;
+            case "wano":
+            case "wearenumberone":
+            case "numberone":
+            case "wearenumber1":
+            case "number1":
+            case "#1":
+            case "1":
+                voiceCommand = getSound("wano", 2);
+                break;
+            case "dounodawae":
+            case "dawae":
+                voiceCommand = getSound("dounodawae", 1);
+                break;
+            case "no":
+                voiceCommand = getSound("no", 1);
+                break;
         }
 
-        if (voiceline != null)
-            broadcastMessageNearby(player, volume, voiceline);
+        if (voiceLine != null)
+            broadcastMessageNearby(player, volume, voiceLine);
 
-        String sound;
-
-        if (UUIDtoName.containsKey(player.getUniqueId()))
-        {
-            sound = UUIDtoName.get(player.getUniqueId()) + "." + voiceCommand;
-        }
-        else
-        {
-            sound = "tts." + voiceCommand;
-        }
+        String sound = "tts." + voiceCommand;
 
         player.getWorld().playSound(player.getLocation(), sound, SoundCategory.VOICE, volume, 1.0f);
 
         return true;
+    }
+
+    private String getSound(String sound, int variations)
+    {
+        return sound + ThreadLocalRandom.current().nextInt(1, variations + 1);
     }
 
     private void flashPlayer(Player player)

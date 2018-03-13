@@ -4,7 +4,9 @@ import me.robomwm.MountainDewritoes.Events.JukeboxInteractEvent;
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Player;
@@ -17,7 +19,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.block.Block;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -28,10 +32,10 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class AtmosphericMusic implements Listener
 {
-    MountainDewritoes instance;
-    AtmosphericManager atmosphericManager;
-    MusicManager musicManager;
-    MusicPackManager musicPackManager;
+    private MountainDewritoes instance;
+    private AtmosphericManager atmosphericManager;
+    private MusicManager musicManager;
+    private MusicPackManager musicPackManager;
 
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
@@ -41,10 +45,51 @@ public class AtmosphericMusic implements Listener
         this.atmosphericManager = atmosphericManager;
         instance.registerListener(this);
 
-        startAmbiance(instance.getServer().getWorld("mall"), 1200L);
+        World mall = instance.getServer().getWorld("mall");
+
         startAmbiance(instance.getServer().getWorld("spawn"), 300L);
         startAmbiance(instance.getServer().getWorld("prison"), 12000L);
         //normalAmbiance(instance.getSurvivalWorlds());
+
+        //Mall
+        Map<Location, Float> locations = new HashMap<>();
+        locations.put(new Location(mall, 2, 13, 88), 1.5f);
+        locations.put(new Location(mall, 2, 13, 116), 1.5f);
+        locations.put(new Location(mall, 2, 4, 298), 10f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new HashMap<>(locations));
+
+        locations.clear();
+        locations.put(new Location(mall, 50, 5, 101), 1.5f);
+        locations.put(new Location(mall, 50, 5, 74), 1.5f);
+        locations.put(new Location(mall, 50, 5, 128), 1.5f);
+        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new HashMap<>(locations));
+
+        locations.clear();
+        locations.put(new Location(mall, -45, 5, 101), 1.5f);
+        locations.put(new Location(mall, -45, 5, 74), 1.5f);
+        locations.put(new Location(mall, -45, 5, 128), 1.5f);
+        playLocalizedSongs(musicPackManager.getSongs("malljob"), new HashMap<>(locations));
+
+        locations.clear();
+
+    }
+
+    private void playLocalizedSongs(List<MusicThing> songs, Map<Location, Float> locations)
+    {
+        MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
+        List<Player> players = locations.keySet().iterator().next().getWorld().getPlayers();
+        for (Player player : players)
+            for (Location location : locations.keySet())
+                atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, locations.get(location));
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                playLocalizedSongs(songs, locations);
+            }
+        }.runTaskLater(instance, song.getLength());
     }
 
     private void startAmbiance(World world, long interval)

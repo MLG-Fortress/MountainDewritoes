@@ -16,12 +16,27 @@ import java.util.concurrent.ThreadLocalRandom;
 class MusicPackManager
 {
     private Map<String, List<MusicThing>> master = new HashMap<>();
-    String category = "";
+    String category;
 
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("mall", 60*4+6, "Dead Bird Studio Reception - A Hat In Time by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
+        //add("mall", 60*4+6, "Dead Bird Studio Reception - A Hat In Time by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
+        add("elevatorjam", 120+43);
+        add("hhstar", 180+20);
+        add("killingmiisoftly", 51);
+        add("litdog", 43);
+        add("miifavoritethings", 120+17);
+        add("nyanjazz", 180+30);
+        add("rare1976", 60+40);
+        add("skrillevator", 34);
+        add("wiibopchannel", 60+60+60+60+32);
+        add("animals", 46);
+        category = "mallfood";
+        add("smokeoddity", 57);
+        add("doinitwell", 30);
+        category = "malljob";
+        add("alliwannado", 18);
 
         category = "spawn";
         add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
@@ -38,6 +53,10 @@ class MusicPackManager
         add("house", 180+10, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
     }
 
+    private void add(String soundName, long seconds)
+    {
+        add(soundName, seconds, "");
+    }
     private void add(String soundName, long durationInSeconds, String description)
     {
         if (!master.containsKey(category))
@@ -62,5 +81,10 @@ class MusicPackManager
     public MusicThing getSong(String category)
     {
         return new MusicThing(randomizer(master.get(category)));
+    }
+
+    public List<MusicThing> getSongs(String category)
+    {
+        return master.get(category);
     }
 }
