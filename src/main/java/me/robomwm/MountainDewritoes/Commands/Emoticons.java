@@ -123,7 +123,7 @@ public class Emoticons implements CommandExecutor, Listener
         for (Pattern pattern : emojiMovie.keySet())
         {
             Matcher matcher = pattern.matcher(message);
-            message = matcher.replaceAll(" " + Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))) + " ");
+            message = matcher.replaceAll(Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))));
         }
         return message;
     }
