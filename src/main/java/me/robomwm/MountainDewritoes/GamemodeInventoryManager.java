@@ -78,27 +78,23 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onPlayerPreTeleport(PlayerTeleportEvent event)
     {
-        World from = event.getFrom().getWorld();
-        World to = event.getTo().getWorld();
-
-        //If teleporting within same world/world type, no need to save/restore
-        if (instance.isSurvivalWorld(from) == instance.isSurvivalWorld(to))
-            return;
-        if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
+        //Do nothing if no world change
+        if (!changedWorlds(event.getTo().getWorld(), event.getPlayer()))
             return;
 
-        //Save if exiting survival world (and not in creative)
-        if (!instance.isSurvivalWorld(to))
+        //Save if exiting survival world
+        if (!instance.isSurvivalWorld(event.getTo().getWorld()))
         {
             storeAndClearInventory(event.getPlayer());
             saveExperience(event.getPlayer());
         }
-        //Restore if entering a survival world (and isn't in creative)
-        else
-        {
-            restoreInventory(event.getPlayer());
-            restoreExperience(event.getPlayer());
-        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    private void onPlayerPostWorldChange(PlayerChangedWorldEvent event)
+    {
+        restoreInventory(event.getPlayer());
+        restoreExperience(event.getPlayer());
     }
 
     //Recover inventory on join (e.g. player was in creative while in a "survival"-classed world)
@@ -108,6 +104,12 @@ public class GamemodeInventoryManager implements Listener
         restoreInventory(event.getPlayer());
         restoreExperience(event.getPlayer());
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + event.getPlayer().getName() + " parent removetemp webuilder");
+    }
+
+    //If teleporting within same world/world type and not in creative, no need to save/restore
+    private boolean changedWorlds(World world, Player player)
+    {
+        return instance.isSurvivalWorld(world) != instance.isSurvivalWorld(player.getWorld()) && player.getGameMode() != GameMode.CREATIVE;
     }
 
 
