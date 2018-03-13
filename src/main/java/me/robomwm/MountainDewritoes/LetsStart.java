@@ -47,9 +47,9 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getClickableCommand("              Warps           \n", "/warp <warp>"),
                 LazyUtil.getClickableCommand("       Items+Recipes   \n", "", "Not implemented yet"),
                 LazyUtil.getClickableCommand("           Emoticons         \n", "/emote"),
-                LazyUtil.getClickableCommand("             Tip Jar         \n", "/tip"),
+                LazyUtil.getClickableCommand("              Tip Jar         \n", "/tip"),
                 LazyUtil.getClickableCommand("          Claim Posts       \n", "/help post", "/help post"),
-                LazyUtil.getClickableCommand("         tp ", "/tp"),
+                LazyUtil.getClickableCommand("        tp ", "/tp"),
                 ChatColor.BLACK + "and",
                 LazyUtil.getClickableCommand(" tppost      \n", "/tppost"),
                 ChatColor.BLACK + "\n        Vocal Callouts:\n",
@@ -78,7 +78,7 @@ public class LetsStart implements Listener, CommandExecutor
         //claim posts
         BookMeta postMeta = LazyUtil.getBookMeta();
         postMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableCommand("←                           \n","/help","Back to /menu"),
+                LazyUtil.getClickableCommand("⬅Back                        \n","/help","Back to /menu"),
                 "Claim posts exist in known worlds with a beacon.\n",
                 "\nCaptured posts provide ",
                 LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage\n- Teleportation is restricted"),
@@ -145,7 +145,7 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = LazyUtil.getBookMeta();
         GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
 
-        bookMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("←                           ","/help","Back to /menu"),
+        bookMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅Back                      ","/help","Back to /menu"),
                 LazyUtil.getClickableURL(" ◶ \n", "http://mlg.robomwm.com:28500/player/" + player.getName(),"My Stats"),
                 player.getDisplayName() + "'s settings\n",
                 LazyUtil.getClickableCommand("View distance: " + player.getViewDistance(), "/view"),

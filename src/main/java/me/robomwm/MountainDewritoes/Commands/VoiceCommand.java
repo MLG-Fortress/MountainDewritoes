@@ -40,7 +40,8 @@ public class VoiceCommand implements CommandExecutor
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
 
         bookMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableCommand("←                           \n","/help","Back to /menu"),"Voicelines:\n",
+                LazyUtil.getClickableCommand("⬅Back                       \n","/help","Back to /menu"),
+                "Voicelines:\n",
                 "Greetings:\n",
                 LazyUtil.getClickableCommand("Hello,", "/v hello", "say Hi"),
                 LazyUtil.getClickableCommand(" Thanks", "/v thanks", "thx"),
