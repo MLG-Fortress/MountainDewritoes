@@ -78,6 +78,7 @@ public class LetsStart implements Listener, CommandExecutor
         //claim posts
         BookMeta postMeta = LazyUtil.getBookMeta();
         postMeta.spigot().addPage(LazyUtil.buildPage(
+                LazyUtil.getClickableCommand("←                           \n","/help","Back to /menu"),
                 "Claim posts exist in known worlds with a beacon.\n",
                 "\nCaptured posts provide ",
                 LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage\n- Teleportation is restricted"),
@@ -144,9 +145,10 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = LazyUtil.getBookMeta();
         GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
 
-        bookMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableURL("                           ◶ ", "http://mlg.robomwm.com:28500/player/" + player.getName(),"My Stats"),
-                LazyUtil.getClickableCommand("View Distance: " + grandPlayer.getYaml().getInt("viewDistance", 8), "/view"),
+        bookMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("←                           ","/help","Back to /menu"),
+                LazyUtil.getClickableURL(" ◶ \n", "http://mlg.robomwm.com:28500/player/" + player.getName(),"My Stats"),
+                player.getDisplayName() + "'s settings\n",
+                LazyUtil.getClickableCommand("View distance: " + player.getViewDistance(), "/view"),
                 "\n",
                 LazyUtil.getClickableCommand("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"),
                 "\n",
