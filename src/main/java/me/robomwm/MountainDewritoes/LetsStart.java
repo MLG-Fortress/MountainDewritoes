@@ -146,9 +146,9 @@ public class LetsStart implements Listener, CommandExecutor
         BookMeta bookMeta = LazyUtil.getBookMeta();
         GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
 
-        bookMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅Back                      ","/help","Back to /menu"),
+        bookMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅ ","/help","Back to /menu"),
+                player.getDisplayName() + ChatColor.BLACK + "'s settings\n",
                 LazyUtil.getClickableURL(" ◶ \n", "http://mlg.robomwm.com:28500/player/" + player.getName(),"My Stats"),
-                player.getDisplayName() + "'s settings\n",
                 LazyUtil.getClickableCommand("View distance: " + player.getViewDistance(), "/view"),
                 "\n",
                 LazyUtil.getClickableCommand("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"),

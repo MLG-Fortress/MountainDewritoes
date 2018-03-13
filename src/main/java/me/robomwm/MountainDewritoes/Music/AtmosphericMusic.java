@@ -52,44 +52,26 @@ public class AtmosphericMusic implements Listener
         //normalAmbiance(instance.getSurvivalWorlds());
 
         //Mall
-        Map<Location, Float> locations = new HashMap<>();
-        locations.put(new Location(mall, 2, 13, 88), 1.5f);
-        locations.put(new Location(mall, 2, 13, 116), 1.5f);
-        locations.put(new Location(mall, 2, 4, 298), 10f);
-        playLocalizedSongs(musicPackManager.getSongs("mall"), new HashMap<>(locations));
-
-        locations.clear();
-        locations.put(new Location(mall, 50, 5, 101), 1.5f);
-        locations.put(new Location(mall, 50, 5, 74), 1.5f);
-        locations.put(new Location(mall, 50, 5, 128), 1.5f);
-        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new HashMap<>(locations));
-
-        locations.clear();
-        locations.put(new Location(mall, -45, 5, 101), 1.5f);
-        locations.put(new Location(mall, -45, 5, 74), 1.5f);
-        locations.put(new Location(mall, -45, 5, 128), 1.5f);
-        playLocalizedSongs(musicPackManager.getSongs("malljob"), new HashMap<>(locations));
-
-        locations.clear();
-
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 4, 298), 14f);
+        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 74), 8.0f);
+        playLocalizedSongs(musicPackManager.getSongs("malljob"), new Location(mall, -45, 5, 74), 8.0f);
     }
 
-    private void playLocalizedSongs(List<MusicThing> songs, Map<Location, Float> locations)
+    private void playLocalizedSongs(List<MusicThing> songs, Location location, float volume)
     {
         MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
-        List<Player> players = locations.keySet().iterator().next().getWorld().getPlayers();
+        List<Player> players = location.getWorld().getPlayers();
         for (Player player : players)
-            for (Location location : locations.keySet())
-                atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, locations.get(location));
+                atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, volume);
 
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                playLocalizedSongs(songs, locations);
+                playLocalizedSongs(songs, location, volume);
             }
-        }.runTaskLater(instance, song.getLength());
+        }.runTaskLater(instance, song.getLength() + 20);
     }
 
     private void startAmbiance(World world, long interval)
@@ -194,3 +176,43 @@ public class AtmosphericMusic implements Listener
             atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer);
     }
 }
+
+//    Map<Location, Float> locations = new HashMap<>();
+//        locations.put(new Location(mall, 2, 13, 88), 2.0f);
+//                locations.put(new Location(mall, 2, 13, 116), 2.0f);
+//                locations.put(new Location(mall, 2, 4, 298), 10f);
+//                playLocalizedSongs(musicPackManager.getSongs("mall"), new HashMap<>(locations));
+//
+//        locations.clear();
+//        locations.put(new Location(mall, 50, 5, 101), 1.5f);
+//        locations.put(new Location(mall, 50, 5, 74), 1.5f);
+//        locations.put(new Location(mall, 50, 5, 128), 1.5f);
+//        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new HashMap<>(locations));
+//
+//        locations.clear();
+//        locations.put(new Location(mall, -45, 5, 101), 1.5f);
+//        locations.put(new Location(mall, -45, 5, 74), 1.5f);
+//        locations.put(new Location(mall, -45, 5, 128), 1.5f);
+//        playLocalizedSongs(musicPackManager.getSongs("malljob"), new HashMap<>(locations));
+//
+//        locations.clear();
+
+//Minecraft client cannot support more than 4 songs playing in a single channel! (2 channels afaik, stream true, stream false
+
+//    private void playLocalizedSongs(List<MusicThing> songs, Map<Location, Float> locations)
+//    {
+//        MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
+//        List<Player> players = locations.keySet().iterator().next().getWorld().getPlayers();
+//        for (Player player : players)
+//            for (Location location : locations.keySet())
+//                atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, locations.get(location));
+//
+//        new BukkitRunnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                playLocalizedSongs(songs, locations);
+//            }
+//        }.runTaskLater(instance, song.getLength());
+//    }
