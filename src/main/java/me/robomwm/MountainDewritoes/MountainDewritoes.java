@@ -320,7 +320,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("watchwinreward").setExecutor(debugCommand);
         getCommand("md").setExecutor(debugCommand);
         getCommand("voice").setExecutor(new VoiceCommand(this));
-        getCommand("view").setExecutor(new ViewDistanceCommand());
+        getCommand("view").setExecutor(new ViewDistanceCommand(this));
         getCommand("reset").setExecutor(new ResetCommands(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand());
         getCommand("emoticons").setExecutor(new Emoticons(this));
