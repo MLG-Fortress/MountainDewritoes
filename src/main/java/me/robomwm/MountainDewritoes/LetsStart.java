@@ -34,11 +34,12 @@ public class LetsStart implements Listener, CommandExecutor
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getHoverable("                         ? ",
+                LazyUtil.getHoverable("                       ? ",
                         "Everything in " + ChatColor.DARK_AQUA + "dark aqua" + ChatColor.RESET +
                                 " is hoverable\n" +
                         "Everything in " + ChatColor.AQUA + "aqua" + ChatColor.RESET + " is clickable."),
                 LazyUtil.getClickableCommand(" ⚙ ", "/help settings","Settings"),
+                LazyUtil.getClickableCommand(" ℹ ", "/help about","About+Info (not implemented)"),
                 LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
                         "and IRC chatroom"),
                 "\n",
@@ -144,12 +145,12 @@ public class LetsStart implements Listener, CommandExecutor
         GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
 
         bookMeta.spigot().addPage(LazyUtil.buildPage(
-                player.getDisplayName() + "'s settings\n",
+                LazyUtil.getClickableURL("                           ◶ ", "http://mlg.robomwm.com:28500/player/" + player.getName(),"My Stats"),
                 LazyUtil.getClickableCommand("View Distance: " + grandPlayer.getYaml().getInt("viewDistance", 8), "/view"),
                 "\n",
-                LazyUtil.getClickableCommand("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name(), "/name"),
+                LazyUtil.getClickableCommand("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"),
                 "\n",
-                LazyUtil.getClickableCommand("Music: on" + grandPlayer.getNameColor() + grandPlayer.getNameColor().name(), "", "Not implemented yet")));
+                LazyUtil.getClickableCommand("Music: on", "", "Not implemented yet")));
 
         plugin.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
     }
