@@ -53,8 +53,8 @@ public class AtmosphericMusic implements Listener
 
         //Mall
         playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
-        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 74), 3f);
-        playLocalizedSongs(musicPackManager.getSongs("malljob"), new Location(mall, -45, 5, 74), 3f);
+        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 4f);
+        playLocalizedSongs(musicPackManager.getSongs("malljob"), new Location(mall, -45, 5, 102), 4f);
     }
 
     private void playLocalizedSongs(List<MusicThing> songs, Location location, float volume)
@@ -71,7 +71,7 @@ public class AtmosphericMusic implements Listener
             {
                 playLocalizedSongs(songs, location, volume);
             }
-        }.runTaskLater(instance, song.getLength() + 20);
+        }.runTaskLater(instance, song.getLength() + 40);
     }
 
     private void startAmbiance(World world, long interval)
@@ -198,6 +198,9 @@ public class AtmosphericMusic implements Listener
 //        locations.clear();
 
 //Minecraft client cannot support more than 4 songs playing in a single channel! (2 channels afaik, stream true, stream false
+//If a 5th song comes in, the following occurs:
+//- If multiple playSounds are sent in the same (tick?), it will only accept the first (or last?) one.
+//- A random sound (seems to be the one furthest down the list in sounds.json) stops playing.
 
 //    private void playLocalizedSongs(List<MusicThing> songs, Map<Location, Float> locations)
 //    {
