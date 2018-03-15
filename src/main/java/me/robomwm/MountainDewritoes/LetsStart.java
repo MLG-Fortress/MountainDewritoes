@@ -40,7 +40,7 @@ public class LetsStart implements Listener, CommandExecutor
                                 "By the way, you can open this /menu by pressing F.\n" +
                                 "You can swap items by holding sneak when pressing F\n"),
                 LazyUtil.getClickableCommand(" ⚙ ", "/help settings","Settings"),
-                LazyUtil.getClickableCommand(" ℹ ", "/help about","About+Info (not implemented)"),
+                LazyUtil.getClickableCommand(" ℹ ", "/help about","About+Stats"),
                 LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
                         "and IRC chatroom"),
                 "\n",
@@ -109,6 +109,9 @@ public class LetsStart implements Listener, CommandExecutor
             case "settings":
                 openSettings(player);
                 return true;
+            case "about":
+                openAbout(player);
+                return true;
             case "post":
             case "point":
             case "claim":
@@ -119,10 +122,7 @@ public class LetsStart implements Listener, CommandExecutor
                 break;
             case "give":
                 if (player.isOp())
-                {
                     player.getInventory().addItem(book.clone());
-                    return true;
-                }
             default:
                 return openStartBook(player);
         }

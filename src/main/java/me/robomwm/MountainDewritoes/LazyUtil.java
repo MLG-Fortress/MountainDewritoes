@@ -60,7 +60,7 @@ public class LazyUtil
     public static TextComponent getClickableCommand(String message, String command, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
-        textComponent.setColor(ChatColor.AQUA);
+        textComponent.setColor(ChatColor.DARK_AQUA);
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
         if (hover != null)
             textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
