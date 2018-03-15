@@ -37,8 +37,8 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getHoverable("                       ? ",
                         ChatColor.AQUA + "Aqua" + ChatColor.RESET + " is hoverable (like this one!).\n" +
                         ChatColor.DARK_AQUA + "Dark aqua" + ChatColor.RESET + " is clickable.\n" +
-                                "By the way, you can open this /menu by pressing F.\n" +
-                                "You can swap items by holding sneak when pressing F\n"),
+                                "FYI, you can open this /menu by pressing F.\n" +
+                                "Swap items by holding sneak when pressing F\n"),
                 LazyUtil.getClickableCommand(" ⚙ ", "/help settings","Settings"),
                 LazyUtil.getClickableCommand(" ℹ ", "/help about","About+Stats"),
                 LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
@@ -166,19 +166,20 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getClickableCommand("⬅Back   ","/help","Back to /menu"),
                 ChatColor.DARK_PURPLE + "About+Info\n",
                 ChatColor.BLACK + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getClickableURL("Website\n", "http://techfortress.robomwm.com/p/mlg-base.html", "Fancy."),
-                LazyUtil.getClickableURL("Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy"),
-                "Dis started out as Trash Tech back in 2015, except the first guy I opped built a spawn. Then it was " +
-                        "Mini Fortress as Minigames took the focus. Then it finally rested on MLG Fortress 4 da memez."));
+                LazyUtil.getClickableURL("- Website\n", "http://techfortress.robomwm.com/p/mlg-base.html", "Fancy."),
+                LazyUtil.getClickableURL("- Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy"), ChatColor.BLACK +
+                "Dis started as Trash Tech back in 2015, except the first guy I opped built a spawn. Then wuz " +
+                        "Mini Fortress as Minigames took focus. Then it now b MLG Fortress 4 da memez."));
         aboutMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅Back   ","/help","Back to /menu"),
                 ChatColor.DARK_PURPLE + "About+Info\n",
                 "Credits:\n",
-                LazyUtil.getHoverable("Yoreni,", "Built and setup prison\nCreated 2 plugins just for this server\nImplemented my requests :o\nBasically an \"actual\" developer (like me)"),
-                LazyUtil.getHoverable(" Gamewalkerz,", "Built the /minigames hub\nSetup AreaShop (rentable shops)\nOther stuff idk he's inactive"),
-                LazyUtil.getHoverable(" xKittyTheKillerx,", "Built tutorial\nSetup dumcord"),
-                LazyUtil.getHoverable(" MMM10,", "Who even knows\nRandom Fish\nRandom blocks\nBroke the server a few times by installing random, poorly-made plugins\nThinks his mobcatcher is kewl."),
-                LazyUtil.getHoverable(" Etanarvazac,", "Tweaked plugins\nSetup dumcord\nuh can't recall it's been _a while_"),
-                LazyUtil.getHoverable(" MakisMigee123,", "Augmented element bending\nInstructed players on element bending\nAttempted to resolve bugs/console spam\n(Seriously I usually end up wasting a lot of time fixing that stuff)"),
+                LazyUtil.getHoverable("Yoreni, ", "Built and setup prison\nCreated 2 plugins just for this server\nImplemented my requests :o\nBasically an \"actual\" developer (like me)"),
+                LazyUtil.getHoverable("TheDogeGamer, ", "A ton o stuff\nSome guns\nAll dem trading cardz\nA lot of quotes on \nda server list ping motd.\nEssentials messages (blame him)\nBasically all around helpful \nand now all around inactive."),
+                LazyUtil.getHoverable("Gamewalkerz, ", "Built the /minigames hub\nSetup AreaShop (rentable shops)\nOther stuff idk he's inactive"),
+                LazyUtil.getHoverable("xKittyTheKillerx, ", "Built tutorial\nSetup dumcord"),
+                LazyUtil.getHoverable("MMM10, ", "Who even knows\nRandom Fish\nRandom blocks\nBroke the server a few times by installing random, poorly-made plugins\nThinks his mobcatcher is kewl."),
+                LazyUtil.getHoverable("Etanarvazac, ", "Tweaked plugins\nSetup dumcord\nuh can't recall it's been _a while_"),
+                LazyUtil.getHoverable("MakisMigee123, ", "Augmented element bending\nInstructed players on element bending\nAttempted to resolve bugs/console spam\n(Seriously I usually end up wasting a lot of time fixing that stuff)"),
                 " and others but idk right now, you should PR and add urself here or something."));
         aboutMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅Back   ","/help","Back to /menu"),
                 ChatColor.DARK_PURPLE + "About+Info\n",
