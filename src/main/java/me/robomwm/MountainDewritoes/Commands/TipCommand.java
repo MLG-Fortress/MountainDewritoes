@@ -71,7 +71,7 @@ public class TipCommand implements CommandExecutor
         randomTips.add("Don't keel dee endermins");
         randomTips.add("Find loot quick, mobs r hard");
         randomTips.add("Git sum cool stoof wit slamphun!! Lern how in da " + ChatColor.GOLD + "/sf guide");
-        add("Build and fly a Minecraft-sized airship! &6/help autocraft");
+        add("Build and fly a Minecraft-sized airship! Look for AutoCraft in /help to find out how to build one!");
         add("Try some /voice commands!");
         add("Hmm, I've been finding these random portal-like things... maybe you should find one and check it out?");
         add("Nether portals aren't just portals to the nether...");
@@ -80,6 +80,7 @@ public class TipCommand implements CommandExecutor
         add("Press F (swap items button) to open the /menu. (Hold sneak if you wish to swap items.)");
         add("Can't play but want to ensure nobody's raiding your claims? Check out da LIVE /map");
         add("Leveling up increases ur swag, lungs, increases chance of saving items on death, and even grants u some kewl rewards! Go get those experience orbs!");
+        add("/emoticons also work in signs too!");
     }
 
     public boolean add(String tip)
