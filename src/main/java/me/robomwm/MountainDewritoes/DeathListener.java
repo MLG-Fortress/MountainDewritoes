@@ -1,11 +1,15 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +29,7 @@ public class DeathListener implements Listener
 {
     private MountainDewritoes instance;
     private HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
+    private List<String> deathWords = new ArrayList<>();
     private Map<Player, Location> playersDesiredRespawnLocation = new HashMap<>();
     private Location defaultRespawnLocation;
 
@@ -32,12 +37,29 @@ public class DeathListener implements Listener
     {
         instance = yayNoMain;
         defaultRespawnLocation = new Location(instance.getServer().getWorld("mall"), 2.488, 5, -7.305, 0f, 0f);
+        deathWords.add("rekt");
+        deathWords.add("wasted");
+        deathWords.add("eliminated");
+        deathWords.add("pwnd");
+    }
+
+    public String getDeathWord()
+    {
+        return deathWords.get(ThreadLocalRandom.current().nextInt(deathWords.size()));
+    }
+
+    public static String getItemName(ItemStack item)
+    {
+        if (item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+            return item.getItemMeta().getDisplayName();
+        return item.getI18NDisplayName();
     }
 
     @EventHandler
     void onPlayerSadness(PlayerDeathEvent event)
     {
         final Player player = event.getEntity();
+        final Location location = player.getLocation();
 
         //Only drop some items (randomly determined)
         if (instance.isSurvivalWorld(player.getWorld()))
@@ -48,12 +70,50 @@ public class DeathListener implements Listener
             while (iterator.hasNext())
             {
                 ItemStack itemStack = iterator.next();
-                if (ThreadLocalRandom.current().nextInt(4) == 0)
+                if (ThreadLocalRandom.current().nextInt(player.getLevel()) == 0)
                     continue;
                 dropsToReturn.add(itemStack);
                 iterator.remove();
             }
             deathItems.put(player, dropsToReturn);
+            EntityDamageEvent damageEvent = player.getLastDamageCause();
+            StringBuilder message = new StringBuilder("umail text ");
+            message.append(player.getName());
+            message.append(" U wer ");
+            message.append(getDeathWord());
+            message.append(" at ");
+            message.append(location.getWorld());
+            message.append(" ");
+            message.append(location.getBlockX());
+            message.append(", ");
+            message.append(location.getBlockY());
+            message.append(", ");
+            message.append(location.getBlockZ());
+            message.append("\n");
+            if (damageEvent == null)
+                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString() + "But uh we dont no how???!?!? spoopy...");
+            else
+            {
+                message.append("via ");
+                message.append(damageEvent.getCause().toString().toLowerCase());
+                message.append("\n");
+                Entity killer = UsefulUtil.getKiller(event);
+                if (killer != null)
+                {
+                    message.append("Final blow: ");
+                    message.append(killer);
+                    message.append("\n");
+                }
+                message.append("U lost deez items:\n");
+                for (ItemStack drop : drops)
+                {
+                    message.append(drop.getAmount());
+                    message.append(" ");
+                    message.append(getItemName(drop));
+                    message.append(", ");
+                }
+                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
+            }
         }
 
         //Only lose 8 levels of XP (vs. all XP on death)

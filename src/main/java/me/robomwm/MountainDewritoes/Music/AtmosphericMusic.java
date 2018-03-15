@@ -52,9 +52,9 @@ public class AtmosphericMusic implements Listener
         //normalAmbiance(instance.getSurvivalWorlds());
 
         //Mall
-        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
-        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 4f);
-        playLocalizedSongs(musicPackManager.getSongs("malljob"), new Location(mall, -45, 5, 102), 4f);
+        //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
+        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.5f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 4.5f);
     }
 
     private void playLocalizedSongs(List<MusicThing> songs, Location location, float volume)
@@ -66,12 +66,17 @@ public class AtmosphericMusic implements Listener
 
         new BukkitRunnable()
         {
+            long timeToExpire = System.currentTimeMillis() + song.getLength() * 50;
             @Override
             public void run()
             {
-                playLocalizedSongs(songs, location, volume);
+                if (System.currentTimeMillis() > timeToExpire)
+                {
+                    playLocalizedSongs(songs, location, volume);
+                    cancel();
+                }
             }
-        }.runTaskLater(instance, song.getLength() + 40);
+        }.runTaskTimer(instance, song.getLength() + 10, 10L);
     }
 
     private void startAmbiance(World world, long interval)

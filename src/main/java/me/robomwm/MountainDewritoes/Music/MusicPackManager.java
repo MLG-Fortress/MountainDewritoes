@@ -35,7 +35,6 @@ class MusicPackManager
         category = "mallfood";
         add("smokeoddity", 57);
         add("doinitwell", 30);
-        category = "malljob";
         add("alliwannado", 18);
 
         category = "spawn";

@@ -41,8 +41,8 @@ public class ViewDistanceCommand implements CommandExecutor
         if (distance < 3 || distance > 16) //Pretty sure even at 16 chunks out you ain't gonna see anything. Unless you're a MC professional photographer
             return false;
         player.setViewDistance(distance);
-        player.sendMessage("Set view distance to " + distance + " chunk radius.");
-        player.sendMessage("Check Options > Video Settings > Render Distance and set it to " + distance + " or higher.");
+        player.sendMessage("Set view distance to " + distance + " chunks.");
+        player.sendMessage("Check Options > Video Settings > Render Distance \nSet it to " + distance + " or higher.");
         GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
         grandPlayer.getYaml().set("viewDistance", distance);
         return true;
