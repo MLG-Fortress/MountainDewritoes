@@ -73,9 +73,8 @@ public class FirstJoin implements Listener
             event.getPlayer().setLevel(1);
             //TODO: give gold boots, etc.
         }
-        int level = player.getLevel();
-        level = Math.min(level, 5);
-        event.getPlayer().setMaximumAir(level * 10);
+        
+        event.getPlayer().setMaximumAir(event.getPlayer().getMaximumAir() + player.getLevel()); //Lol idk the default
 
         new BukkitRunnable()
         {
