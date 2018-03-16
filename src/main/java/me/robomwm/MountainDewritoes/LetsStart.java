@@ -92,6 +92,7 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),
                 LazyUtil.getHoverable("Redstone Blocks", "Not implemented\nFuel\nIncreases lockout time\nLockout occurs on failed captures,\nmaking the post invulnerable to capture.\n10% of the fuel is consumed per lockout."),
                 LazyUtil.getHoverable("Prismarine", "Not implemented\nChance of applying mining haste when enemy players break blocks.\nChance of applying, effectiveness, and duration increase when closer to the post.\nConsumed only when applying a strong effect."),
+                LazyUtil.getHoverable("Arrows", "Not implemented\nSentry ammo.\n- 4 rapid-fire sentries spawn upon post attack.\n- Sentries fire at the last attacker to attack the post.\n- Arrows apply minor knockback.\n- Sentries can be disabled until end of attack.\nNote: special arrows are converted\ninto regular sentry arrows."),
                 LazyUtil.getHoverable("Diamond Blocks\n", "Not implemented\nIdeas??"),
                 LazyUtil.getHoverable("Iron Blocks\n", "Not implemented\nRecruit Iron Golems (3 blocks per golem)"),
                 LazyUtil.getHoverable("Gold Blocks\n", "Not implemented\nBuy zomblings")));
@@ -174,7 +175,7 @@ public class LetsStart implements Listener, CommandExecutor
                 ChatColor.DARK_PURPLE + "About+Info\n",
                 "Credits:\n",
                 LazyUtil.getHoverable("Yoreni, ", "Built and setup prison\nCreated 2 plugins just for this server\nImplemented my requests :o\nBasically an \"actual\" developer (like me)"),
-                LazyUtil.getHoverable("TheDogeGamer, ", "A ton o stuff\nSome guns\nAll dem trading cardz\nA lot of quotes on \nda server list ping motd.\nEssentials messages (blame him)\nBasically all around helpful \nand now all around inactive."),
+                LazyUtil.getHoverable("TheDogeGamer, ", "A ded m3m3\nA ton o stuff\nSome guns\nAll dem trading cardz\nA lot of quotes on \nda server list ping motd.\nEssentials messages (blame him)\nBasically all around helpful \nand now all around inactive."),
                 LazyUtil.getHoverable("Gamewalkerz, ", "Built the /minigames hub\nSetup AreaShop (rentable shops)\nOther stuff idk he's inactive"),
                 LazyUtil.getHoverable("xKittyTheKillerx, ", "Built tutorial\nSetup dumcord"),
                 LazyUtil.getHoverable("MMM10, ", "Who even knows\nRandom Fish\nRandom blocks\nBroke the server a few times by installing random, poorly-made plugins\nThinks his mobcatcher is kewl."),
