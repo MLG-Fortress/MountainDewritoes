@@ -91,9 +91,9 @@ public class LetsStart implements Listener, CommandExecutor
         postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Upgrading claim posts\n\n",
                 "Right-click the beacon to add upgrades:\n",
                 LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),
-                LazyUtil.getHoverable("Redstone Blocks", "Not implemented\nFuel\nIncreases lockout time\nLockout occurs on failed captures,\nmaking the post invulnerable to capture.\n10% of the fuel is consumed per lockout."),
-                LazyUtil.getHoverable("Prismarine", "Not implemented\nChance of applying mining haste when enemy players break blocks.\nChance of applying, effectiveness, and duration increase when closer to the post.\nConsumed only when applying a strong effect."),
-                LazyUtil.getHoverable("Arrows", "Not implemented\nSentry ammo.\n- 4 rapid-fire sentries spawn upon post attack.\n- Sentries fire at the last attacker to attack the post.\n- Arrows apply minor knockback.\n- Sentries can be disabled until end of attack.\nNote: special arrows are converted\ninto regular sentry arrows."),
+                LazyUtil.getHoverable("Redstone Blocks\n", "Not implemented\nFuel\nIncreases lockout time\nLockout occurs on failed captures,\nmaking the post invulnerable to capture.\n10% of the fuel is consumed per lockout."),
+                LazyUtil.getHoverable("Prismarine\n", "Not implemented\nChance of applying mining haste when enemy players break blocks.\nChance of applying, effectiveness, and duration increase when closer to the post.\nConsumed only when applying a strong effect."),
+                LazyUtil.getHoverable("Arrows\n", "Not implemented\nSentry ammo.\n- Spawns 4 rapid-fire sentries upon attack.\n- Arrows apply minor knockback.\n- Sentries can be disabled until end of attack.\nNote: special arrows are converted\ninto regular sentry arrows."),
                 LazyUtil.getHoverable("Diamond Blocks\n", "Not implemented\nIdeas??"),
                 LazyUtil.getHoverable("Iron Blocks\n", "Not implemented\nRecruit Iron Golems (3 blocks per golem)"),
                 LazyUtil.getHoverable("Gold Blocks\n", "Not implemented\nBuy zomblings")));
