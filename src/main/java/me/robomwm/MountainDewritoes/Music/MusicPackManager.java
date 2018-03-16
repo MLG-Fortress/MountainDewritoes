@@ -31,7 +31,6 @@ class MusicPackManager
         add("rare1976", 60+40);
         add("wiibopchannel", 60+60+60+60+32);
         add("animallobby", 46);
-        add("wiidumtale", 60+51);
         category = "mallfood";
         add("smokeoddity", 57);
         add("krabbypower", 60+47);

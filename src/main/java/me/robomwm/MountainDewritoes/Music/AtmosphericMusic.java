@@ -38,7 +38,7 @@ public class AtmosphericMusic implements Listener
     private AtmosphericManager atmosphericManager;
     private MusicManager musicManager;
     private MusicPackManager musicPackManager;
-    private Map<Player, BukkitRunnable> introTasks = new HashMap<>();
+    private Map<Player, BukkitTask> introTasks = new HashMap<>();
     private World MALL;
     private Location MALL_INTRO_LOCATION;
 
@@ -61,7 +61,7 @@ public class AtmosphericMusic implements Listener
         //Mall
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
         playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.5f);
-        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 4.5f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 5f);
     }
 
     private void playLocalizedSongs(List<MusicThing> songs, Location location, float volume)
@@ -104,7 +104,7 @@ public class AtmosphericMusic implements Listener
                                     player, MALL_INTRO_LOCATION, SoundCategory.RECORDS, 4f);
                             introTasks.remove(player);
                         }
-                    }).runTaskLater(instance, 100L);
+                    }.runTaskLater(instance, 100L));
 
     }
 
