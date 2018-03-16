@@ -86,6 +86,9 @@ public class AtmosphericManager implements Listener, CommandExecutor
         //Skip if not in same world
         if (location.getWorld() != player.getWorld())
             return;
+        //Skip if not online
+        if (!instance.getServer().getOnlinePlayers().contains(player))
+            return;
         //Skip player if they're dead
         if (player.hasMetadata("DEAD") || player.isDead() || player.hasMetadata("MD_JOINING"))
             return;

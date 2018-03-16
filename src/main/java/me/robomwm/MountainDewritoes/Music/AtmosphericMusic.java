@@ -14,10 +14,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.block.Block;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +38,9 @@ public class AtmosphericMusic implements Listener
     private AtmosphericManager atmosphericManager;
     private MusicManager musicManager;
     private MusicPackManager musicPackManager;
+    private Map<Player, BukkitRunnable> introTasks = new HashMap<>();
+    private World MALL;
+    private Location MALL_INTRO_LOCATION;
 
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
@@ -46,6 +51,8 @@ public class AtmosphericMusic implements Listener
         instance.registerListener(this);
 
         World mall = instance.getServer().getWorld("mall");
+        this.MALL = mall;
+        this.MALL_INTRO_LOCATION = new Location(mall, 2, 5, 36);
 
         startAmbiance(instance.getServer().getWorld("spawn"), 300L);
         startAmbiance(instance.getServer().getWorld("prison"), 12000L);
@@ -77,6 +84,28 @@ public class AtmosphericMusic implements Listener
                 }
             }
         }.runTaskTimer(instance, song.getLength() + 10, 10L);
+    }
+
+    @EventHandler
+    private void onEnterWorldIntro(PlayerChangedWorldEvent event)
+    {
+        Player player = event.getPlayer();
+        if (introTasks.containsKey(player))
+            introTasks.remove(player).cancel();
+        if (event.getPlayer().getWorld() == MALL)
+            introTasks.put(player,
+                    new BukkitRunnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            atmosphericManager.playSound(
+                                    musicPackManager.getSong("mall.intro"), 0,
+                                    player, MALL_INTRO_LOCATION, SoundCategory.RECORDS, 4f);
+                            introTasks.remove(player);
+                        }
+                    }).runTaskLater(instance, 100L);
+
     }
 
     private void startAmbiance(World world, long interval)
