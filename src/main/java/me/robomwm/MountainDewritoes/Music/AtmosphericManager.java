@@ -118,7 +118,7 @@ public class AtmosphericManager implements Listener, CommandExecutor
                 if ((songMeta.equals(player.getMetadata("MD_LISTENING").get(0).value())))
                     player.removeMetadata("MD_LISTENING", instance);
             }
-        }.runTaskLater(instance, song.getLength());
+        }.runTaskLater(instance, song.getLength() + 20);
     }
 
     /**

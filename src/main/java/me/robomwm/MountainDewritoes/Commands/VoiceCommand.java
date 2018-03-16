@@ -37,7 +37,7 @@ public class VoiceCommand implements CommandExecutor
 
         bookMeta.spigot().addPage(LazyUtil.buildPage(
                 LazyUtil.getClickableCommand("⬅ ","/help","Go back to /menu"),
-                "Voicelines:\n",
+                ChatColor.BLACK + "Voicelines:\n",
                 "Greetings:\n",
                 LazyUtil.getClickableCommand("Hello ", "/v hello", "say Hi"),
                 LazyUtil.getClickableCommand("Thanks ", "/v thanks", "thx"),
@@ -120,7 +120,7 @@ public class VoiceCommand implements CommandExecutor
             case "lol":
             case "lulz":
             case "lul":
-                voiceCommand = getSound("haha", 4);
+                voiceCommand = getSound("haha", 5);
                 break;
             case "wano":
             case "wearenumberone":
@@ -129,14 +129,23 @@ public class VoiceCommand implements CommandExecutor
             case "number1":
             case "#1":
             case "1":
-                voiceCommand = getSound("wano", 2);
+                voiceCommand = getSound("wano", 3);
+                voiceLine = "is #1";
                 break;
             case "dounodawae":
             case "dawae":
                 voiceCommand = getSound("dounodawae", 1);
                 break;
             case "no":
-                voiceCommand = getSound("no", 1);
+                voiceCommand = getSound("no", 9);
+                break;
+            case "lookatme":
+                voiceCommand = getSound("lookatme", 2);
+                voiceLine = "wants ur attention!!11!";
+                flashPlayer(player);
+                break;
+            case "bruh":
+                voiceCommand = getSound("bruh", 3);
                 break;
         }
 

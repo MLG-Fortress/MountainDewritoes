@@ -29,13 +29,22 @@ class MusicPackManager
         add("miifavoritethings", 120+17);
         add("nyanjazz", 180+30);
         add("rare1976", 60+40);
-        add("skrillevator", 34);
         add("wiibopchannel", 60+60+60+60+32);
-        add("animals", 46);
+        add("animallobby", 46);
+        add("wiidumtale", 60+51);
         category = "mallfood";
         add("smokeoddity", 57);
-        add("doinitwell", 30);
+        add("krabbypower", 60+47);
+        add("noodlescantbebeat", 60+15);
+        add("startrekpausecafe", 120+31);
+        add("steamedhamsbutallstar", 120+18);
+        category = "mall.intro";
+        add("skrillevator", 34);
+        add("sale", 16);
         add("alliwannado", 18);
+        add("doinitwell", 30);
+        add("beattakeshi", 18);
+        add("combonumber5", 22);
 
         category = "spawn";
         add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");

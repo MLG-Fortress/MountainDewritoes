@@ -61,6 +61,7 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getClickableCommand(" Over here! ", "/v overhere"),
                 LazyUtil.getClickableCommand(" Dis wae! \n", "/v followme"),
                 LazyUtil.getClickableCommand(" Help! ", "/v help"),
+                LazyUtil.getClickableCommand(" No ", "/v no"),
                 LazyUtil.getClickableCommand(" More...", "/voice")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 LazyUtil.getClickableURL("IRC (chatroom)\n", "http://r.robomwm.com/mememap", "/irc"),
