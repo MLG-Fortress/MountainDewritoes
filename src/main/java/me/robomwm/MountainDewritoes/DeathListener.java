@@ -82,7 +82,7 @@ public class DeathListener implements Listener
             message.append(" U wer ");
             message.append(getDeathWord());
             message.append(" at ");
-            message.append(location.getWorld());
+            message.append(location.getWorld().getName());
             message.append(" ");
             message.append(location.getBlockX());
             message.append(", ");
@@ -94,16 +94,17 @@ public class DeathListener implements Listener
                 instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString() + "But uh we dont no how???!?!? spoopy...");
             else
             {
-                message.append("via ");
-                message.append(damageEvent.getCause().toString().toLowerCase());
-                message.append("\n");
                 Entity killer = UsefulUtil.getKiller(event);
+
                 if (killer != null)
                 {
                     message.append("Final blow: ");
-                    message.append(killer);
+                    message.append(killer.getName());
                     message.append("\n");
                 }
+                message.append("via ");
+                message.append(damageEvent.getCause().toString().toLowerCase());
+                message.append("\n");
                 message.append("U lost deez items:\n");
                 for (ItemStack drop : drops)
                 {

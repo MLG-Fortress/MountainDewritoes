@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,9 @@ import java.util.regex.Pattern;
  */
 public class Emoticons implements CommandExecutor, Listener
 {
-    private MountainDewritoes plugin;
     private Map<Pattern, List<String>> emojiMovie = new HashMap<>();
     public Emoticons(MountainDewritoes plugin)
     {
-        this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         put(":shrug:", "\u00AF\\_(\u30C4)_/\u00AF");
         put(":shrug:", " ┐('～`)┌");
@@ -100,7 +99,8 @@ public class Emoticons implements CommandExecutor, Listener
         put("<3", "♥");
         put(":relaxed:", "☺");
         put(":)", "☻");
-        put("$", "Ð");
+        //put("$", "Ð"); //We want to always replace this char.
+        emojiMovie.put(Pattern.compile("\\$"), Collections.singletonList("Ð"));
         put(">:(", "Ò╭╮Ó");
         put(":(", "☹");
     }
