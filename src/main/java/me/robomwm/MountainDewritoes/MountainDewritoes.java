@@ -323,7 +323,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("view").setExecutor(new ViewDistanceCommand(this));
         getCommand("reset").setExecutor(new ResetCommands(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand());
-        getCommand("emoticons").setExecutor(new Emoticons(this));
+        new Emoticons(this);
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);

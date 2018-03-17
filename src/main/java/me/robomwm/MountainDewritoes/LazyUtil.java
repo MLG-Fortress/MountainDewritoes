@@ -77,6 +77,11 @@ public class LazyUtil
         return textComponent;
     }
 
+    public static TextComponent getClickableSuggestion(String message, String suggestion)
+    {
+        return getClickableSuggestion(message, suggestion, suggestion);
+    }
+
     public static TextComponent getClickableSuggestion(String message, String suggestion, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
