@@ -69,7 +69,7 @@ public class FirstJoin implements Listener
         Player player = event.getPlayer();
         if (!event.getPlayer().hasPlayedBefore())
         {
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2D);
+            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
             event.getPlayer().setLevel(1);
             //TODO: give gold boots, etc.
         }

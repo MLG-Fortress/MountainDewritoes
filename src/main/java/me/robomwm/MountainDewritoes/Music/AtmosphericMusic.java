@@ -60,7 +60,7 @@ public class AtmosphericMusic implements Listener
 
         //Mall
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
-        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.5f);
+        playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.2f);
         playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 5f);
     }
 

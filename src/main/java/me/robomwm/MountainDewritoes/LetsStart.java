@@ -177,6 +177,7 @@ public class LetsStart implements Listener, CommandExecutor
                 "Credits:\n",
                 LazyUtil.getHoverable("Yoreni, ", "Built and setup prison\nCreated 2 plugins just for this server\nImplemented my requests :o\nBasically an \"actual\" developer (like me)"),
                 LazyUtil.getHoverable("TheDogeGamer, ", "A ded m3m3\nA ton o stuff\nSome guns\nAll dem trading cardz\nA lot of quotes on \nda server list ping motd.\nEssentials messages (blame him)\nBasically all around helpful \nand now all around inactive."),
+                LazyUtil.getHoverable("Lazybannan, ", "Built /warp jail\nBuilt a lot of other spawns\nidk where some of them are."),
                 LazyUtil.getHoverable("Gamewalkerz, ", "Built the /minigames hub\nSetup AreaShop (rentable shops)\nOther stuff idk he's inactive"),
                 LazyUtil.getHoverable("xKittyTheKillerx, ", "Built tutorial\nSetup dumcord"),
                 LazyUtil.getHoverable("MMM10, ", "Who even knows\nRandom Fish\nRandom blocks\nBroke the server a few times by installing random, poorly-made plugins\nThinks his mobcatcher is kewl."),
