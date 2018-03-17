@@ -100,7 +100,7 @@ public class Emoticons implements CommandExecutor, Listener
         put(":relaxed:", "☺");
         put(":)", "☻");
         //put("$", "Ð"); //We want to always replace this char.
-        emojiMovie.put(Pattern.compile("\\$"), Collections.singletonList("Ð"));
+        //emojiMovie.put(Pattern.compile("\\$"), Collections.singletonList("Ð")); //This breaks the /emote printer
         put(">:(", "Ò╭╮Ó");
         put(":(", "☹");
     }
@@ -118,13 +118,18 @@ public class Emoticons implements CommandExecutor, Listener
             event.setLine(i++, playEmojiMovie(line));
     }
 
+    private Pattern money = Pattern.compile("\\$");
+
     private String playEmojiMovie(String message)
     {
+        Matcher matcher;
         for (Pattern pattern : emojiMovie.keySet())
         {
-            Matcher matcher = pattern.matcher(message);
+            matcher = pattern.matcher(message);
             message = matcher.replaceAll(Matcher.quoteReplacement(emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()))));
         }
+        matcher = money.matcher(message);
+        message = matcher.replaceAll("Ð");
         return message;
     }
 
