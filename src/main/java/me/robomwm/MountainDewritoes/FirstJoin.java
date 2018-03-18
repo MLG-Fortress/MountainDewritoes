@@ -123,6 +123,7 @@ public class FirstJoin implements Listener
                         LazyUtil.buildPage("Hey " + player.getDisplayName() + ChatColor.BLACK +
                         ",\nThanks for helpin out. Hopefully u got a bit more experience! Btw, check out your /pda by pressing F.\nEnjoy!")
                 );
+                break;
                 default:
                     return;
         }
