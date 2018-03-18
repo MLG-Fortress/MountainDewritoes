@@ -39,10 +39,8 @@ commands:
     aliases: [getatip, betafish, beta, tips]
   voice:
     aliases: [v, voiceline, callout, voicelines, voices]
-  emoticons:
-    aliases: [emoji, emote, emotes, emojimovie]
   start:
-      aliases: [menu, book, gui, ui, main, mainmenu, help, info, page]
+      aliases: [menu, book, gui, ui, main, mainmenu, help, info, page, pda]
   music:
       aliases: [song, sound]
   shrug: {}

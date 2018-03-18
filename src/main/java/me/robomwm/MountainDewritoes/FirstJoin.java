@@ -1,19 +1,20 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.MountainDewritoes.NSA;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -23,14 +24,16 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class FirstJoin implements Listener
 {
-    private JavaPlugin plugin;
+    private MountainDewritoes plugin;
     private Location firstJoinLocation;
+    private Location cellar;
 
-    public FirstJoin(JavaPlugin plugin)
+    public FirstJoin(MountainDewritoes plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
         firstJoinLocation = new Location(plugin.getServer().getWorld("firstjoin"), -1.5, 26.5, -3.5, 180, 20);
+        cellar = new Location(plugin.getServer().getWorld("firstjoin"), -5, 26, 25);
 //        new BukkitRunnable()
 //        {
 //            Location location = new Location(WORLD, -1, 70, -4);
@@ -94,4 +97,44 @@ public class FirstJoin implements Listener
             onJoinWorld(event.getPlayer());
     }
 
+    @EventHandler(ignoreCancelled = true)
+    private void onPlayerTerminal(PlayerInteractEvent event)
+    {
+        if (event.getPlayer().getWorld() != firstJoinLocation.getWorld())
+            return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.LEFT_CLICK_BLOCK)
+            return;
+
+        Player player = event.getPlayer();
+        BookMeta bookMeta;
+
+        switch (event.getClickedBlock().getType())
+        {
+            case COMMAND_REPEATING:
+                bookMeta = LazyUtil.getBookMeta();
+                bookMeta.spigot().addPage(
+                        LazyUtil.buildPage("Deer " + player.getDisplayName() + ChatColor.BLACK +
+                                ",\nSorry 4 missin ur arrival, but I c ur quite an inexperienced adventure anyways.\u00AF\\_(\u30C4)_/\u00AF\nHow about u go to the cellar and clean up those annoying paper-eaters."),
+                        LazyUtil.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. Plus, dat chestplate of urs should keep u safe and cozy."));
+                break;
+            case COMMAND_CHAIN:
+                bookMeta = LazyUtil.getBookMeta();
+                bookMeta.spigot().addPage(
+                        LazyUtil.buildPage("Hey " + player.getDisplayName() + ChatColor.BLACK +
+                        ",\nThanks for helpin out. Hopefully u got a bit more experience! Btw, check out your /pda by pressing F.\nEnjoy!")
+                );
+                default:
+                    return;
+        }
+
+        plugin.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
+        for (Entity entity : cellar.getChunk().getEntities())
+            if (entity.getType() == EntityType.SILVERFISH)
+                return;
+        ((Monster)cellar.getWorld().spawnEntity(cellar, EntityType.SILVERFISH)).setAI(false);
+        ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,1), EntityType.SILVERFISH)).setAI(false);
+        ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,-1), EntityType.SILVERFISH)).setAI(false);
+        ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,-1), EntityType.SILVERFISH)).setAI(false);
+        ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,1), EntityType.SILVERFISH)).setAI(false);
+    }
 }
