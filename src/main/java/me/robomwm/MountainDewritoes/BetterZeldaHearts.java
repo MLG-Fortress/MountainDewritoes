@@ -83,7 +83,7 @@ public class BetterZeldaHearts implements Listener
         if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
             return;
 
-        if (!UsefulUtil.isMonster(event.getEntity()))
+        if (!event.getEntity().hasAI() || !UsefulUtil.isMonster(event.getEntity()))
             return;
         LivingEntity entity = event.getEntity();
         if (entity.getKiller() == null)
@@ -117,9 +117,7 @@ public class BetterZeldaHearts implements Listener
         moneyToDrop *= Math.log(entity.getTicksLived());
 
         if (moneyToDrop > 1)
-        {
             dropMobMoney(location, moneyToDrop);
-        }
     }
 
     //yes

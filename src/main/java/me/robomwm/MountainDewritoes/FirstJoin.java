@@ -33,7 +33,7 @@ public class FirstJoin implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
         firstJoinLocation = new Location(plugin.getServer().getWorld("firstjoin"), -1.5, 26.5, -3.5, 180, 20);
-        cellar = new Location(plugin.getServer().getWorld("firstjoin"), -5, 26, 25);
+        cellar = new Location(plugin.getServer().getWorld("firstjoin"), -5, 25, 25);
 //        new BukkitRunnable()
 //        {
 //            Location location = new Location(WORLD, -1, 70, -4);
@@ -75,6 +75,16 @@ public class FirstJoin implements Listener
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
             event.getPlayer().setLevel(1);
             //TODO: give gold boots, etc.
+
+            //Spawn mobs in cellar, if none exists in it.
+            for (Entity entity : cellar.getChunk().getEntities())
+                if (entity.getType() == EntityType.SILVERFISH)
+                    return;
+            ((Monster)cellar.getWorld().spawnEntity(cellar, EntityType.SILVERFISH)).setAI(false);
+            ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,1), EntityType.SILVERFISH)).setAI(false);
+            ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,-1), EntityType.SILVERFISH)).setAI(false);
+            ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,-1), EntityType.SILVERFISH)).setAI(false);
+            ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,1), EntityType.SILVERFISH)).setAI(false);
         }
 
         event.getPlayer().setMaximumAir(event.getPlayer().getMaximumAir() + player.getLevel()); //Lol idk the default
@@ -97,7 +107,7 @@ public class FirstJoin implements Listener
             onJoinWorld(event.getPlayer());
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     private void onPlayerTerminal(PlayerInteractEvent event)
     {
         if (event.getPlayer().getWorld() != firstJoinLocation.getWorld())
@@ -129,13 +139,5 @@ public class FirstJoin implements Listener
         }
 
         plugin.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
-        for (Entity entity : cellar.getChunk().getEntities())
-            if (entity.getType() == EntityType.SILVERFISH)
-                return;
-        ((Monster)cellar.getWorld().spawnEntity(cellar, EntityType.SILVERFISH)).setAI(false);
-        ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,1), EntityType.SILVERFISH)).setAI(false);
-        ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,-1), EntityType.SILVERFISH)).setAI(false);
-        ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,-1), EntityType.SILVERFISH)).setAI(false);
-        ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,1), EntityType.SILVERFISH)).setAI(false);
     }
 }
