@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import pw.valaria.bookutil.BookUtil;
 
 /**
  * Created on 3/10/2018.
@@ -34,11 +33,12 @@ public class LetsStart implements Listener, CommandExecutor
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getHoverable("                       ? ",
+                LazyUtil.getHoverable("                     ? ",
                         ChatColor.AQUA + "Aqua" + ChatColor.RESET + " is hoverable (like this one!).\n" +
                         ChatColor.DARK_AQUA + "Dark aqua" + ChatColor.RESET + " is clickable.\n" +
                                 "FYI, you can open this /menu by pressing F.\n" +
                                 "Swap items by holding sneak when pressing F\n"),
+                LazyUtil.getClickableCommand(" ✉ ", "/mail"),
                 LazyUtil.getClickableCommand(" ⚙ ", "/help settings","Settings"),
                 LazyUtil.getClickableCommand(" ℹ ", "/help about","About+Stats"),
                 LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
@@ -91,8 +91,8 @@ public class LetsStart implements Listener, CommandExecutor
         postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Upgrading claim posts\n\n",
                 "Right-click the beacon to add upgrades:\n",
                 LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),
-                LazyUtil.getHoverable("Redstone Blocks\n", "Not implemented\nFuel\nIncreases lockout time\nLockout occurs on failed captures,\nmaking the post invulnerable to capture.\n10% of the fuel is consumed per lockout."),
-                LazyUtil.getHoverable("Prismarine\n", "Not implemented\nChance of applying mining haste when enemy players break blocks.\nChance of applying, effectiveness, and duration increase when closer to the post.\nConsumed only when applying a strong effect."),
+                LazyUtil.getHoverable("Redstone Blocks\n", "Fuel\nIncreases lockout time\n- Lockout occurs on failed captures,\nmaking the post invulnerable to capture.\n- 10% of the fuel is consumed per lockout."),
+                LazyUtil.getHoverable("Prismarine\n", "Not implemented\nChance of applying mining haste when enemy players break blocks.\n- Chance, effectiveness, and duration increase when closer to the post.\n- Consumed only when applying a strong effect."),
                 LazyUtil.getHoverable("Arrows\n", "Not implemented\nSentry ammo.\n- Spawns 4 rapid-fire sentries upon attack.\n- Arrows apply minor knockback.\n- Sentries can be disabled until end of attack.\nNote: special arrows are converted\ninto regular sentry arrows."),
                 LazyUtil.getHoverable("Diamond Blocks\n", "Not implemented\nIdeas??"),
                 LazyUtil.getHoverable("Iron Blocks\n", "Not implemented\nRecruit Iron Golems (3 blocks per golem)"),

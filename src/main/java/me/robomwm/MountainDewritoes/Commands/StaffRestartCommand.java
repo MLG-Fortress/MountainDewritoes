@@ -43,7 +43,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             {
                 for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
                 {
-                    if (!onlinePlayer.hasPermission("mlgstaff") && onlinePlayer.hasPermission("chester.log"))
+                    if (!onlinePlayer.hasPermission("mlgstaff"))
                         return;
                 }
                 shutdown(name, scheduledRestart);
