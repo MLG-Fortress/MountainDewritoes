@@ -2,31 +2,21 @@ package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.Title;
 import com.robomwm.grandioseapi.player.GrandPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/27/2016.
@@ -115,6 +105,7 @@ public class JoinMessages implements Listener
         {
             event.getPlayer().sendMessage("Seems u timed out while attempting 2 load de memepack. Try restarting Minecraft?\nWe'll resend it 2 u da next time u join.");
             event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
+            return;
         }
         else
         {
