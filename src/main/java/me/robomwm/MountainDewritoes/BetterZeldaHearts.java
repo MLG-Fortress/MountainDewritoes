@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by RoboMWM on 5/25/2016.
@@ -72,7 +73,7 @@ public class BetterZeldaHearts implements Listener
         customItems.registerItem(new ItemStack(Material.GOLD_INGOT), "mobMoney");
     }
 
-    Random random = new Random();
+    private Random random = ThreadLocalRandom.current();
     /**
      * Chance of a "heart canister" dropping upon killing a hostile mob
      * and other stuff I add in the future like healthHearts
@@ -91,7 +92,7 @@ public class BetterZeldaHearts implements Listener
         Location location = event.getEntity().getLocation();
 
         //Should we spawn a heart (heals on pickup)
-        if (random.nextInt(3) == 1)
+        if (random.nextInt(3) != 1) //66%
         {
             Item heartItem = location.getWorld().dropItem(location, customItems.getItem("healthHeart"));
             heartItem.setCustomName(ChatColor.RED + "SwagPack");
@@ -101,7 +102,7 @@ public class BetterZeldaHearts implements Listener
 
         //Otherwise, check if we should spawn a health canister
         //Now a fixed value to encourage using health canisters
-        else if (random.nextInt(10) == 1)
+        else if (random.nextInt(10) == 1) //10%
         {
             //Prepare a new health canister
             event.getDrops().add(customItems.getItem("healthCanister"));
@@ -132,7 +133,7 @@ public class BetterZeldaHearts implements Listener
         /*Taxes*/
         if (economy != null)
         {
-            double moneyToDrop = Math.round(economy.getBalance(player) * 0.07);
+            double moneyToDrop = Math.round(economy.getBalance(player) * 0.07); //7%
 
             if (moneyToDrop > 1)
             {
@@ -236,13 +237,13 @@ public class BetterZeldaHearts implements Listener
         }
     }
 
-    boolean isHealthHeart(ItemStack item)
+    private boolean isHealthHeart(ItemStack item)
     {
-        return item.getType() == Material.INK_SACK && customItems.isItem("healthHeart", item);
+        return customItems.isItem("healthHeart", item);
     }
-    boolean isMobMoney(ItemStack item)
+    private boolean isMobMoney(ItemStack item)
     {
-        return item.getType() == Material.GOLD_INGOT && customItems.isItem("mobMoney", item);
+        return customItems.isItem("mobMoney", item);
     }
 
     boolean healPlayer(Player player)

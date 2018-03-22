@@ -107,13 +107,11 @@ public class JoinMessages implements Listener
             event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
             return;
         }
-        else
-        {
-            //loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size())));
-            //loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size())));
-            //instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
-            event.getPlayer().setResourcePack(pack);
-        }
+        //loadingPackTitleBuilder.title(randomTitles.get(ThreadLocalRandom.current().nextInt(randomTitles.size())));
+        //loadingPackTitleBuilder.subtitle(randomSubTitles.get(ThreadLocalRandom.current().nextInt(randomSubTitles.size())));
+        //instance.getTitleManager().sendTitle(event.getPlayer(), 0, loadingPackTitleBuilder.build());
+        event.getPlayer().setResourcePack(pack);
+
         //Prompt again if no response (sometimes prompt disappears on teleport and etc.)
         new BukkitRunnable()
         {

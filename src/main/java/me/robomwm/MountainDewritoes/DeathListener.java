@@ -1,14 +1,15 @@
 package me.robomwm.MountainDewritoes;
 
 import me.robomwm.usefulutil.UsefulUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -99,22 +100,30 @@ public class DeathListener implements Listener
                 if (killer != null)
                 {
                     message.append("Final blow: ");
-                    message.append(killer.getName());
+                    if (killer.getType() == EntityType.PLAYER)
+                        message.append(killer.getName());
+                    else
+                        message.append(killer.getType().name().toLowerCase());
                     message.append("\n");
                 }
                 message.append("via ");
                 message.append(damageEvent.getCause().toString().toLowerCase());
                 message.append("\n");
-                message.append("U lost deez items:\n");
-                for (ItemStack drop : drops)
+                if (!drops.isEmpty())
                 {
-                    message.append(drop.getAmount());
-                    message.append(" ");
-                    message.append(getItemName(drop));
-                    message.append(", ");
+                    message.append("U lost deez items:\n");
+                    for (ItemStack drop : drops)
+                    {
+                        message.append(drop.getAmount());
+                        message.append(" ");
+                        message.append(getItemName(drop));
+                        message.append(ChatColor.RESET); 
+                        message.append(", ");
+                    }
+                    message.delete(message.length() - 2, message.length());
                 }
-                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
             }
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
         }
 
         //Only lose 8 levels of XP (vs. all XP on death)
