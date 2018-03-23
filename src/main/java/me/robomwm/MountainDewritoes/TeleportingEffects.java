@@ -71,7 +71,7 @@ public class TeleportingEffects implements Listener
     private boolean toOrFromUnknownWorld(Location location)
     {
         World world = location.getWorld();
-        return plugin.isSurvivalWorld(world) && !knownWorlds.contains(world);
+        return !plugin.isSafeWorld(world) && plugin.isSurvivalWorld(world) && !knownWorlds.contains(world);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
