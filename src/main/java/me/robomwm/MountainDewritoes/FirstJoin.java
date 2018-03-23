@@ -74,7 +74,7 @@ public class FirstJoin implements Listener
         {
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
             event.getPlayer().setLevel(1);
-            //TODO: give gold boots, etc.
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLD_BOOTS"));
 
             //Spawn mobs in cellar, if none exist in it.
             for (Entity entity : cellar.getChunk().getEntities())
