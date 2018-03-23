@@ -109,20 +109,22 @@ public class DeathListener implements Listener
                 message.append("via ");
                 message.append(damageEvent.getCause().toString().toLowerCase());
                 message.append("\n");
-                if (!drops.isEmpty())
-                {
-                    message.append("U lost deez items:\n");
-                    for (ItemStack drop : drops)
-                    {
-                        message.append(drop.getAmount());
-                        message.append(" ");
-                        message.append(getItemName(drop));
-                        message.append(ChatColor.RESET); 
-                        message.append(", ");
-                    }
-                    message.delete(message.length() - 2, message.length());
-                }
             }
+
+            if (!drops.isEmpty())
+            {
+                message.append("U lost deez items:\n");
+                for (ItemStack drop : drops)
+                {
+                    message.append(drop.getAmount());
+                    message.append(" ");
+                    message.append(getItemName(drop));
+                    message.append(ChatColor.RESET);
+                    message.append(", ");
+                }
+                message.delete(message.length() - 2, message.length());
+            }
+
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
         }
 

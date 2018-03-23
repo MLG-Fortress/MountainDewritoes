@@ -76,7 +76,7 @@ public class FirstJoin implements Listener
             event.getPlayer().setLevel(1);
             //TODO: give gold boots, etc.
 
-            //Spawn mobs in cellar, if none exists in it.
+            //Spawn mobs in cellar, if none exist in it.
             for (Entity entity : cellar.getChunk().getEntities())
                 if (entity.getType() == EntityType.SILVERFISH)
                     return;
@@ -131,7 +131,7 @@ public class FirstJoin implements Listener
                 bookMeta = LazyUtil.getBookMeta();
                 bookMeta.spigot().addPage(
                         LazyUtil.buildPage("Hey " + player.getDisplayName() + ChatColor.BLACK +
-                        ",\nThanks for helpin out. Hopefully u got a bit more experience! Btw, check out your /pda by pressing F.\nEnjoy!")
+                        ",\nThanks for helpin out. Hopefully u got a bit more experience! Btw, Press F to open the menu, or do /menu if ur on lameo 1.8-o.\nEnjoy de /minigames or da memetastic /wild !")
                 );
                 break;
                 default:
