@@ -51,12 +51,14 @@ public class TeleportingEffects implements Listener
             event.setReason(ChatColor.GRAY.toString() + ChatColor.ITALIC + "***Static noises***");
             event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.static", SoundCategory.AMBIENT, 3000000f, 1.0f);
             event.setCancelled(true);
+            return;
         }
 
         if (toOrFromUnknownWorld(event.getTargetLocation()))
         {
             event.setReason("We can't locate " + event.getTarget().getDisplayName() + ", perhaps they're in another dimension?");
             event.setCancelled(true);
+            return;
         }
 
         if (event.getTargetLocation().getWorld().getEnvironment() == World.Environment.NETHER ||
