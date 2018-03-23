@@ -16,7 +16,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by RoboMWM on 9/16/2016.
@@ -27,13 +29,47 @@ import java.util.Map;
  */
 public class TeleportingEffects implements Listener
 {
-    Map<Player, Location> preTeleportingPlayers = new HashMap<>();
-    Map<Player, BukkitTask> taskThingy = new HashMap<>();
-    MountainDewritoes instance;
+    private Set<World> knownWorlds = new HashSet<>();
+    private Map<Player, Location> preTeleportingPlayers = new HashMap<>();
+    private Map<Player, BukkitTask> taskThingy = new HashMap<>();
+    private MountainDewritoes plugin;
 
-    TeleportingEffects(MountainDewritoes mountainDewritoes)
+    TeleportingEffects(MountainDewritoes plugin)
     {
-        instance = mountainDewritoes;
+        this.plugin = plugin;
+        knownWorlds.add(plugin.getServer().getWorld("world"));
+        knownWorlds.add(plugin.getServer().getWorld("world_nether"));
+        knownWorlds.add(plugin.getServer().getWorld("cityworld"));
+        knownWorlds.add(plugin.getServer().getWorld("cityworld_nether"));
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onPlayerPreTPA(PreTPATeleportEvent event)
+    {
+        if (toOrFromUnknownWorld(event.getPlayer().getLocation()))
+        {
+            event.setReason(ChatColor.GRAY.toString() + ChatColor.ITALIC + "***Static noises***");
+            event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.static", SoundCategory.AMBIENT, 3000000f, 1.0f);
+            event.setCancelled(true);
+        }
+
+        if (toOrFromUnknownWorld(event.getTargetLocation()))
+        {
+            event.setReason("We can't locate " + event.getTarget().getDisplayName() + ", perhaps they're in another dimension?");
+            event.setCancelled(true);
+        }
+
+        if (event.getTargetLocation().getWorld().getEnvironment() == World.Environment.NETHER ||
+                event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER)
+        {
+            event.setWarmup(400L);
+        }
+    }
+
+    private boolean toOrFromUnknownWorld(Location location)
+    {
+        World world = location.getWorld();
+        return plugin.isSurvivalWorld(world) && !knownWorlds.contains(world);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -50,7 +86,7 @@ public class TeleportingEffects implements Listener
             }
             else if (target.getGameMode() == GameMode.CREATIVE || target.getGameMode() == GameMode.SPECTATOR)
             {
-                event.setReason(target.getDisplayName() + " is not able to be teleported to at this time.");
+                event.setReason(target.getDisplayName() + " is busy and not able to be teleported to at this time.");
                 event.setCancelled(true);
             }
         }
@@ -93,7 +129,7 @@ public class TeleportingEffects implements Listener
         location.getWorld().playEffect(location.add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
         //TODO: sound effect
         if (event.getTarget() != null)
-            instance.getTitleManager().timedActionBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
+            plugin.getTitleManager().timedActionBar(event.getTarget(), 5, player.getDisplayName() + ChatColor.AQUA + " teleported to you.");
     }
 
     void playTeleportEffect(Player player)
@@ -112,11 +148,11 @@ public class TeleportingEffects implements Listener
                 location.add(0.0d, -2.0d, 0.0d);
                 if (times-- < 0)
                 {
-                    instance.getLogger().warning("Had to time out effect. " + player.getName() + " at " + location.toString());
+                    plugin.getLogger().warning("Had to time out effect. " + player.getName() + " at " + location.toString());
                     cancel();
                 }
             }
-        }.runTaskTimer(instance, 10L, 10L);
+        }.runTaskTimer(plugin, 10L, 10L);
         taskThingy.put(player, task);
     }
 }
