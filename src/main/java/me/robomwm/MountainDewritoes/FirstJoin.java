@@ -75,6 +75,7 @@ public class FirstJoin implements Listener
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
             event.getPlayer().setLevel(1);
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLD_BOOTS"));
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLD_CHESTPLATE"));
 
             //Spawn mobs in cellar, if none exist in it.
             for (Entity entity : cellar.getChunk().getEntities())
@@ -125,7 +126,7 @@ public class FirstJoin implements Listener
                 bookMeta.spigot().addPage(
                         LazyUtil.buildPage("Deer " + player.getDisplayName() + ChatColor.BLACK +
                                 ",\nSorry 4 missin ur arrival, but I c ur quite an inexperienced adventure anyways.\u00AF\\_(\u30C4)_/\u00AF\nHow about u go to the cellar and clean up those annoying paper-eaters."),
-                        LazyUtil.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. Plus, dat chestplate of urs should keep u safe and cozy."));
+                        LazyUtil.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. And u got a shirt and shoes. So ur gud."));
                 break;
             case COMMAND_CHAIN:
                 bookMeta = LazyUtil.getBookMeta();
