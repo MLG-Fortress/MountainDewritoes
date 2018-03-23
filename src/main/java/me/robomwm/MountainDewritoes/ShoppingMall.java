@@ -1,13 +1,17 @@
 package me.robomwm.MountainDewritoes;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -61,5 +65,32 @@ public class ShoppingMall implements Listener
                     player.setWalkSpeed(0.5f);
             }
         }.runTaskLater(instance, 2L);
+    }
+
+    @EventHandler
+    private void onPlayerTerminal(PlayerInteractEvent event)
+    {
+        if (event.getPlayer().getWorld() != mallWorld)
+            return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.LEFT_CLICK_BLOCK)
+            return;
+
+        Player player = event.getPlayer();
+        BookMeta bookMeta;
+
+        switch (event.getClickedBlock().getType())
+        {
+            case COMMAND:
+                bookMeta = LazyUtil.getBookMeta();
+                bookMeta.spigot().addPage(
+                        LazyUtil.buildPage("Ayyy " + player.getDisplayName() + ChatColor.BLACK +
+                                "\nWelcome 2 da /mall. U can do ur usual shopping stuff like buying kewl neu items. U can also setup a /shop and git rich quik, if ur gud.",
+                                "\n\nDon't forget dat u can press F to open da menu at any time!"));
+                break;
+            default:
+                return;
+        }
+
+        instance.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
     }
 }
