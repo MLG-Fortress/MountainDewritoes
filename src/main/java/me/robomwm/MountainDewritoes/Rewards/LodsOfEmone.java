@@ -50,9 +50,6 @@ public class LodsOfEmone
 
                 player.setMaximumAir(level * 5);
 
-                //Give random crate (needs to be updated as new crate series are added)
-                executeCommand("newcrate " + String.valueOf(instance.r4nd0m(1, 5)) + " 1 " + player.getName());
-                message.append(", a Steve Co. Supply Crate");
                 //Also give key if level is divisible by 5
                 if (level % 5 == 0)
                 {

@@ -56,6 +56,13 @@ public class LevelingProgression implements Listener
             return 0;
         }
         final int timesToLevelUp = player.getLevel() - lastRecordedLevel; //Current level - last seen level
+        if (timesToLevelUp < 0)
+        {
+            player.sendMessage("Somehow your level dropped. Was " + player.getLevel() + ", corrected to " + lastRecordedLevel);
+            plugin.getLogger().warning("Player level mismatch. " + player.getName() + player.getLevel() + ", corrected to " + lastRecordedLevel);
+            player.setLevel(lastRecordedLevel);
+            player.setExp(0);
+        }
         if (timesToLevelUp > 0)
         {
             grandPlayer.getYaml().set("expLevel", player.getLevel());
