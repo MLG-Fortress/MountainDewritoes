@@ -33,7 +33,7 @@ public class LetsStart implements Listener, CommandExecutor
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getHoverable("                   ? ",
+                LazyUtil.getHoverable("            ? ",
                         ChatColor.AQUA + "Aqua" + ChatColor.RESET + " is hoverable (like this one!).\n" +
                         ChatColor.DARK_AQUA + "Dark aqua" + ChatColor.RESET + " is clickable.\n" +
                                 "FYI, you can open this /menu by pressing F.\n" +
