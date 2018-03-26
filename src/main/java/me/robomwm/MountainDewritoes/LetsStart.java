@@ -56,11 +56,11 @@ public class LetsStart implements Listener, CommandExecutor
                 ChatColor.BLACK + "      Vocal Callouts:\n",
                 LazyUtil.getClickableCommand(" Hello! ", "/v hello"),
                 LazyUtil.getClickableCommand(" Thanks! ", "/v thanks"),
-                LazyUtil.getClickableCommand(" Ok! ", "/v okay"),
-                LazyUtil.getClickableCommand(" Lol! \n", "/v haha"),
+                LazyUtil.getClickableCommand(" Ok! \n", "/v okay"),
                 LazyUtil.getClickableCommand(" Over here! ", "/v overhere"),
                 LazyUtil.getClickableCommand(" Dis wae! \n", "/v followme"),
                 LazyUtil.getClickableCommand(" Help! ", "/v help"),
+                LazyUtil.getClickableCommand(" Lol! ", "/v haha"),
                 LazyUtil.getClickableCommand(" No ", "/v no"),
                 LazyUtil.getClickableCommand(" More...", "/voice")));
         bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",

@@ -26,6 +26,9 @@ import java.util.Set;
 /**
  * Created on 1/30/2018.
  *
+ * Leggings: "Long Leap." Leap in the direction you are looking.
+ * Boots: "Magnetic Boots." Hover/fly for a short duration. Consumes around three doritos a second.
+ *
  * @author RoboMWM
  */
 public class IronArmor implements Listener
@@ -119,6 +122,6 @@ public class IronArmor implements Listener
 
         }
         player.setVelocity(player.getLocation().getDirection().multiply(2));
-        player.setFoodLevel(10);
+        player.setFoodLevel(8);
     }
 }

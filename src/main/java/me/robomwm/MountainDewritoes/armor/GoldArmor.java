@@ -9,12 +9,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
  * Created on 1/3/2018.
+ *
+ * Chestplate: Grants jump boost 2
+ * Leggings: "Super Sprint." Quickly dash for a second (speed boost 30). Consumes 8 doritos
+ * Boots: Double jump. Sneak again to air-dive.
  *
  * @author RoboMWM
  */
@@ -26,6 +32,21 @@ public class GoldArmor implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.armorAugmentation = armorAugmentation;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (Player player : plugin.getServer().getOnlinePlayers())
+                {
+                    ItemStack chestplate = player.getInventory().getChestplate();
+                    if (chestplate == null)
+                        continue;
+                    if (chestplate.getType() == Material.GOLD_CHESTPLATE)
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 80, 2, true, false));
+                }
+            }
+        }.runTaskTimer(plugin, 40L, 40L);
     }
 
     /* GOLD BOOTS */
@@ -46,7 +67,7 @@ public class GoldArmor implements Listener
         {
             NSA.getMidairMap().put(player, 1);
             Vector vector = player.getLocation().toVector();
-            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(2.5D).setY(0.7D));
+            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(2.3D).setY(0.7D));
         }
         else
         {
