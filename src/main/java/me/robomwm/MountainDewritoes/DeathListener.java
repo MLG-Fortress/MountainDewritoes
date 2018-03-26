@@ -70,8 +70,10 @@ public class DeathListener implements Listener
             List<ItemStack> dropsToReturn = new ArrayList<>();
             while (iterator.hasNext())
             {
+                if (dropsToReturn.size() > 36) //afaik this is playerinventory#size
+                    break;
                 ItemStack itemStack = iterator.next();
-                if (ThreadLocalRandom.current().nextInt(player.getLevel()) == 0)
+                if (ThreadLocalRandom.current().nextInt(10) == 0)
                     continue;
                 dropsToReturn.add(itemStack);
                 iterator.remove();
