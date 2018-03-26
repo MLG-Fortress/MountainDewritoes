@@ -71,7 +71,10 @@ public class DeathListener implements Listener
             while (iterator.hasNext())
             {
                 if (dropsToReturn.size() > 36) //afaik this is playerinventory#size
+                {
+                    instance.getLogger().info("Hit the limit");
                     break;
+                }
                 ItemStack itemStack = iterator.next();
                 if (ThreadLocalRandom.current().nextInt(10) == 0)
                     continue;
