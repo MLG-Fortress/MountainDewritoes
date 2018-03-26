@@ -43,6 +43,10 @@ public class JoinMessages implements Listener
         blah.getServer().getPluginManager().registerEvents(this, blah);
         instance = blah;
 
+        //For plugin reloads
+        for (Player player : blah.getServer().getOnlinePlayers())
+            NSA.setTempdata(player, "chatted");
+
         //Tip of the day
 //        randomTips.add("Mobs may drop a health canister; use these to add an extra heart.");
 //        randomTips.add("Long fall boots (iron boots) prevent " + ChatColor.BOLD + ChatColor.AQUA + "ALL fall damage!");
