@@ -459,7 +459,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         List<Entity> newEntities = new ArrayList<>();
         for (Entity nearbyEntity : event.getAffectedEntities())
         {
-            if (nearbyEntity.getType() != EntityType.DROPPED_ITEM)
+            if (nearbyEntity.getType() != EntityType.DROPPED_ITEM || !nearbyEntity.hasMetadata("NO_PICKUP"))
             {
                 newEntities.add(nearbyEntity);
             }
