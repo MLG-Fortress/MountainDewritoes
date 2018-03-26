@@ -60,7 +60,8 @@ public class FirstJoin implements Listener
 
     private void onJoinWorld(Player player)
     {
-        player.teleport(firstJoinLocation);
+        if (player.getWorld() == firstJoinLocation.getWorld())
+            player.teleport(firstJoinLocation);
         //player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.SUGAR_CANE_BLOCK, (byte)0);
         //player.sendBlockChange(new Location(WORLD, -2, 70, -4), Material.SUGAR_CANE_BLOCK, (byte)0);
         //NSA.setTempdata(player, "firstjoin");
@@ -95,10 +96,9 @@ public class FirstJoin implements Listener
             @Override
             public void run()
             {
-                if (player.getWorld() == firstJoinLocation.getWorld())
-                    onJoinWorld(player);
+                onJoinWorld(player);
             }
-        }.runTaskLater(plugin, 1L);
+        }.runTaskLater(plugin, 2L);
     }
 
     @EventHandler
