@@ -40,11 +40,15 @@ public class Emoticons implements Listener
     }
 
     private Pattern money = Pattern.compile("\\$");
+    private Pattern serverAdvertisin = Pattern.compile("\\b[a-zA-z0-9]+\\.us\\.to\\b");
 
     private String playEmojiMovie(String message)
     {
         Matcher matcher = money.matcher(message);
         message = matcher.replaceAll("Ð");
+        matcher = serverAdvertisin.matcher(message);
+        message = matcher.replaceAll("Tech Fortress tf.robomwm.com");
+
         return message;
     }
 }
