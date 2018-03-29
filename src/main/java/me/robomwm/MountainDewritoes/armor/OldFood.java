@@ -50,14 +50,17 @@ public class OldFood implements Listener
         double health = player.getHealth();
         double healthToAdd;
 
+        healthToAdd = getFood(event.getItem());
+
+        if (healthToAdd == 0)
+            return;
+
         if (health >= maxHealth)
         {
             player.sendActionBar(player.getDisplayName() + " says I'm stuffed.");
             event.setCancelled(true);
             return;
         }
-
-        healthToAdd = getFood(event.getItem());
 
         if (health + healthToAdd >= maxHealth)
             healthToAdd = maxHealth - health;
