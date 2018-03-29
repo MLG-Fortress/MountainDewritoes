@@ -77,6 +77,7 @@ public class FirstJoin implements Listener
             event.getPlayer().setLevel(1);
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLD_BOOTS"));
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("The_Gold_Plate"));
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("Coal_Pickaxe"));
 
             //Spawn mobs in cellar, if none exist in it.
             for (Entity entity : cellar.getChunk().getEntities())

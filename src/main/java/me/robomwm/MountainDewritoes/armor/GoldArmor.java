@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
  * Created on 1/3/2018.
  *
  * Chestplate: Grants jump boost 2
- * Leggings: "Super Sprint." Quickly dash for a second (speed boost 30). Consumes 8 doritos
+ * Leggings: "Super Sprint." Quickly dash for a second (speed boost 30). Consumes 10 doritos
  * Boots: Double jump. Sneak again to air-dive.
  *
  * @author RoboMWM
@@ -72,7 +72,7 @@ public class GoldArmor implements Listener
         {
             NSA.getMidairMap().put(player, 1);
             Vector vector = player.getLocation().toVector();
-            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(2.1D).setY(0.7D));
+            player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).multiply(1.7D).setY(0.7D));
         }
         else
         {
@@ -98,7 +98,7 @@ public class GoldArmor implements Listener
         if (!armorAugmentation.isFullPower(event, Material.GOLD_LEGGINGS) || player.hasPotionEffect(PotionEffectType.SPEED))
             return;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 30, true, false));
-        player.setFoodLevel(12);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 10, true, false));
+        player.setFoodLevel(10);
     }
 }

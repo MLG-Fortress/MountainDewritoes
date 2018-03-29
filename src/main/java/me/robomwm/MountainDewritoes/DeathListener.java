@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -29,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DeathListener implements Listener
 {
     private MountainDewritoes instance;
-    private HashMap<Player, List<ItemStack>> deathItems = new HashMap<>();
+    private HashMap<UUID, List<ItemStack>> deathItems = new HashMap<>();
     private List<String> deathWords = new ArrayList<>();
     private Map<Player, Location> playersDesiredRespawnLocation = new HashMap<>();
     private Location defaultRespawnLocation;
@@ -62,6 +63,13 @@ public class DeathListener implements Listener
         final Player player = event.getEntity();
         final Location location = player.getLocation();
 
+        if (deathItems.containsKey(player.getUniqueId()))
+        {
+            player.sendMessage("Alert - somehow you've been killed twice! Let us know what you were doing/how you were killed so we can determine what evil plugin is doing this!");
+            instance.getLogger().severe(player.getName() + "was killed twice!");
+            return;
+        }
+
         //Only drop some items (randomly determined)
         if (instance.isSurvivalWorld(player.getWorld()))
         {
@@ -81,7 +89,7 @@ public class DeathListener implements Listener
                 dropsToReturn.add(itemStack);
                 iterator.remove();
             }
-            deathItems.put(player, dropsToReturn);
+            deathItems.put(player.getUniqueId(), dropsToReturn);
             EntityDamageEvent damageEvent = player.getLastDamageCause();
             StringBuilder message = new StringBuilder("umail text ");
             message.append(player.getName());
@@ -166,14 +174,14 @@ public class DeathListener implements Listener
         event.setRespawnLocation(respawnLocation);
 
         //Return items
-        if (deathItems.containsKey(player))
+        if (deathItems.containsKey(player.getUniqueId()))
         {
-            for (ItemStack drop : deathItems.get(player))
+            for (ItemStack drop : deathItems.get(player.getUniqueId()))
             {
                 player.getInventory().addItem(drop);
             }
-            player.sendMessage("Saved " + String.valueOf(deathItems.get(player).size()) + " item stacks from your inventory when you died.");
-            deathItems.remove(player);
+            player.sendMessage("Saved " + String.valueOf(deathItems.get(player.getUniqueId()).size()) + " item stacks from your inventory when you died.");
+            deathItems.remove(player.getUniqueId());
         }
     }
 }
