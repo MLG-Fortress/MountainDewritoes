@@ -274,6 +274,9 @@ public class GamemodeInventoryManager implements Listener
         for (PotionEffect potionEffect : player.getActivePotionEffects())
             player.removePotionEffect(potionEffect.getType());
 
+        player.sendMessage(ChatColor.DARK_GRAY + "Inventory saved and cleared.");
+        instance.getLogger().info(player.getName() + ": inventory saved.");
+
         return true;
     }
 
@@ -326,6 +329,8 @@ public class GamemodeInventoryManager implements Listener
                 }
 
                 deletePlayerInventorySnapshotSection(player);
+                player.sendMessage(ChatColor.DARK_GRAY + "Inventory restored.");
+                instance.getLogger().info(player.getName() + ": inventory restored.");
             }
         }.runTask(instance);
     }
@@ -346,6 +351,8 @@ public class GamemodeInventoryManager implements Listener
 
         snapshotSection.set("expLevel", player.getLevel()); //int
         snapshotSection.set("expProgress", player.getExp()); //float
+        player.sendMessage(ChatColor.DARK_GRAY + "Experience level and progress saved.");
+        instance.getLogger().info(player.getName() + ": exp saved.");
 
         return true;
     }
@@ -383,6 +390,8 @@ public class GamemodeInventoryManager implements Listener
                     player.sendMessage(ChatColor.RED + "Error occurred in attempting to restore your experience :c Please report this!");
                     return;
                 }
+                player.sendMessage(ChatColor.DARK_GRAY + "Experience level and progress restored.");
+                instance.getLogger().info(player.getName() + ": exp restored.");
                 deletePlayerExperienceSnapshotSection(player);
             }
         }.runTask(instance);
