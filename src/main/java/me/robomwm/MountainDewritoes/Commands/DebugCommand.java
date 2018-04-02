@@ -76,14 +76,15 @@ public class DebugCommand implements CommandExecutor
             case "refreshBlocks":
                 assert player != null;
                 Location location = player.getLocation();
+                location.add(-1, -2, -1);
 
-                for (int x = 0; x <= 10; x++)
+                for (int x = 0; x <= 2; x++) // to x == 1
                 {
                     location.add(x, 0, 0);
-                    for (int y = 0; y <= 10; y++)
+                    for (int y = 0; y <= 4; y++) // to y == 2
                     {
                         location.add(0, y, 0);
-                        for (int z = 0; z <= 10; z++)
+                        for (int z = 0; z <= 2; z++) // to z == 1
                         {
                             location.add(0, 0, z);
                             Block block = location.getBlock();

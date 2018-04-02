@@ -90,7 +90,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private Set<World> noModifyWorld = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
-    private boolean serverDoneLoading = false;
 
     public long getCurrentTick()
     {
@@ -295,13 +294,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         {
             public void run()
             {
-                serverDoneLoading = true;
-            }
-        }.runTask(this);
-        new BukkitRunnable()
-        {
-            public void run()
-            {
                 currentTick++;
             }
         }.runTaskTimer(this, 1L, 1L);
@@ -475,16 +467,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         Player player = event.getPlayer();
         player.setHealthScaled(false);
-    }
-
-    /**
-     * Don't let serverlistplus send messages when server isn't done loading up yet
-     */
-    @EventHandler(priority = EventPriority.MONITOR)
-    private void onServerPing(ServerListPingEvent event)
-    {
-        if (!serverDoneLoading)
-            event.setMotd(ChatColor.RED + "ayyyyy we r laodin de_memes just w8 a foow sekondz b4 konnekting thx!!");
     }
 
     /**
