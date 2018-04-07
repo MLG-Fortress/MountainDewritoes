@@ -109,11 +109,9 @@ public class GamemodeInventoryManager implements Listener
     //If teleporting within same world/world type and not in creative, no need to save/restore
     private boolean changedWorlds(World world, Player player)
     {
-        return instance.isSurvivalWorld(world) != instance.isSurvivalWorld(player.getWorld()) && player.getGameMode() != GameMode.CREATIVE;
+        return instance.isSurvivalWorld(world) != instance.isSurvivalWorld(player.getWorld())
+                && player.getGameMode() != GameMode.CREATIVE;
     }
-
-
-
 
 
     //"Security"
@@ -360,7 +358,7 @@ public class GamemodeInventoryManager implements Listener
     private void restoreExperience(Player player)
     {
         ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
-        if (snapshotSection.getList("expLevel") == null) //nothing to restore
+        if (snapshotSection.get("expLevel") == null) //nothing to restore
             return;
         new BukkitRunnable()
         {
@@ -376,7 +374,7 @@ public class GamemodeInventoryManager implements Listener
                     return;
 
                 ConfigurationSection snapshotSection = getPlayerExperienceSnapshotSection(player);
-                if (snapshotSection.getList("expLevel") == null) //nothing to restore
+                if (snapshotSection.get("expLevel") == null) //nothing to restore
                     return;
 
                 try
