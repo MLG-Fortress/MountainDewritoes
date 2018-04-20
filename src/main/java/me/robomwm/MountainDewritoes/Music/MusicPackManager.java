@@ -1,8 +1,6 @@
 package me.robomwm.MountainDewritoes.Music;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,6 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        //add("mall", 60*4+6, "Dead Bird Studio Reception - A Hat In Time by Pascal Michael Stiefel.\nhttp://store.steampowered.com/app/253230/");
         add("elevatorjam", 120+43);
         add("hhstar", 180+20);
         add("killingmiisoftly", 51);
@@ -30,30 +27,34 @@ class MusicPackManager
         add("nyanjazz", 180+30);
         add("rare1976", 60+40);
         add("wiibopchannel", 60+60+60+60+32);
-        add("animallobby", 46);
+        add("teeosupdate", 66);
+        add("beautifulmiis", 120+22);
+        add("whosthatdeadhomeappliance", 66);
+        add("miichannel", 124);
         category = "mallfood";
         add("smokeoddity", 57);
         add("krabbypower", 60+47);
         add("noodlescantbebeat", 60+15);
+        add("noodlescantbebeat2", 60+43);
+        add("noodlescantbebeat3", 63);
+        add("portacorobinson", 63);
         add("startrekpausecafe", 120+31);
         add("steamedhamsbutallstar", 120+18);
-        category = "mall.intro";
-        add("skrillevator", 34);
-        add("sale", 16);
-        add("alliwannado", 18);
-        add("doinitwell", 30);
-        add("beattakeshi", 18);
-        add("combonumber5", 22);
+        add("bigsmokegetshurt", 49);
+        add("totinos", 120+24);
+        add("brokensmokes", 60+31);
 
         category = "spawn";
         add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
+        add("wiisports", 125, "https://soundcloud.com/videogameremixes/wii-sports-remix");
+        add("wirelessplaymenu", 68);
 
         category = "prison";
         add("oddity", 180+38, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("silverbells", 120+28, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("oceanman", 120+9, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("september", 180+41, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
-        add("minediamonds", 180+47, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
+        add("minediamonds", 60+60+60+60+8);
         add("tragic", 120+55, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("fireflies", 180+4, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("road", 120+29, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
@@ -66,6 +67,7 @@ class MusicPackManager
     }
     private void add(String soundName, long durationInSeconds, String description)
     {
+        durationInSeconds += 2; //account for lag and etc.
         if (!master.containsKey(category))
             master.put(category, new ArrayList<>());
         master.get(category).add(new MusicThing("music." + category + "." + soundName, durationInSeconds, true, description));

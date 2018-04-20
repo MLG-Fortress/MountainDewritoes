@@ -14,9 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -44,11 +41,15 @@ public class VoiceCommand implements CommandExecutor
                 "\nCallouts:\n",
                 LazyUtil.getClickableCommand("Over here! ", "/v overhere"),
                 LazyUtil.getClickableCommand("Dis wae! ", "/v followme"),
-                LazyUtil.getClickableCommand("Ok ", "/v okay"),
+                LazyUtil.getClickableCommand("Look at me! ", "/v lookatme"),
+                LazyUtil.getClickableCommand("Look at this! ", "/v lookatthis"),
+
                 "\nMemes+Others:\n",
                 LazyUtil.getClickableCommand("#1 ", "/v wano"),
                 LazyUtil.getClickableCommand("dawae ", "/v dounodawae"),
-                LazyUtil.getClickableCommand("no ", "/v no")));
+                LazyUtil.getClickableCommand("be quiet ", "/v quiet"),
+                LazyUtil.getClickableCommand("no ", "/v no"),
+                LazyUtil.getClickableCommand("Ok ", "/v okay")));
 
         book.setItemMeta(bookMeta);
     }
@@ -80,7 +81,7 @@ public class VoiceCommand implements CommandExecutor
         {
             case "hello":
                 voiceLine = "sez hello!";
-                voiceCommand = getSound(voiceCommand, 6);
+                voiceCommand = getSound(voiceCommand, 7);
                 volume = 2f;
                 break;
             case "followme":
@@ -144,8 +145,16 @@ public class VoiceCommand implements CommandExecutor
                 voiceLine = "wants ur attention!!11!";
                 flashPlayer(player);
                 break;
+            case "lookatthis":
+            case "see":
+                voiceCommand = getSound("lookatthis", 3);
+                break;
             case "bruh":
                 voiceCommand = getSound("bruh", 3);
+                break;
+            case "quiet":
+            case "shh":
+                voiceCommand = getSound("quiet", 2);
                 break;
         }
 

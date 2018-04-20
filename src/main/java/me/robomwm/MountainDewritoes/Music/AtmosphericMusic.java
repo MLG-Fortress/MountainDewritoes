@@ -96,9 +96,7 @@ public class AtmosphericMusic implements Listener
                         @Override
                         public void run()
                         {
-                            atmosphericManager.playSound(
-                                    musicPackManager.getSong("mall.intro"), 0,
-                                    player, MALL_INTRO_LOCATION, SoundCategory.RECORDS, 4f);
+                            player.playSound(MALL_INTRO_LOCATION, "music.mall.intro", SoundCategory.RECORDS, 4f, 1f);
                             introTasks.remove(player);
                         }
                     }.runTaskLater(instance, 100L));
