@@ -53,12 +53,10 @@ class MusicPackManager
         add("oddity", 180+38, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("silverbells", 120+28, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("oceanman", 120+9, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
-        add("september", 180+41, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("minediamonds", 60+60+60+60+8);
         add("tragic", 120+55, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("fireflies", 180+4, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
         add("road", 120+29, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
-        add("house", 180+10, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");
     }
 
     private void add(String soundName, long seconds)
