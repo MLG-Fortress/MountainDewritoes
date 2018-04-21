@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +72,9 @@ public class AntiLag implements Listener
 
         Player player = event.getPlayer();
 
+        if (!player.isOp())
+            return;
+
         Location location = player.getLocation();
         location.add(-1, -2, -1);
 
@@ -85,7 +88,7 @@ public class AntiLag implements Listener
                 {
                     location.add(0, 0, z);
                     Block block = location.getBlock();
-                    player.sendBlockChange(location, block.getType(), block.getData());
+                    player.sendBlockChange(location, Material.GLASS, (byte)1);
                 }
             }
         }
