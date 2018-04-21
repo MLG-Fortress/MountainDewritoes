@@ -31,6 +31,7 @@ class MusicPackManager
         add("beautifulmiis", 120+22);
         add("whosthatdeadhomeappliance", 66);
         add("miichannel", 124);
+        add("splatoonbooyahbaseshopping", 90);
         category = "mallfood";
         add("smokeoddity", 57);
         add("krabbypower", 60+47);
@@ -43,6 +44,7 @@ class MusicPackManager
         add("bigsmokegetshurt", 49);
         add("totinos", 120+24);
         add("brokensmokes", 60+31);
+        add("frostedflakes", 51);
 
         category = "spawn";
         add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
