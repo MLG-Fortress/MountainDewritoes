@@ -348,7 +348,7 @@ public class GamemodeInventoryManager implements Listener
             return false;
 
         snapshotSection.set("expLevel", player.getLevel()); //int
-        snapshotSection.set("expProgress", player.getExp()); //float
+        snapshotSection.set("expProgress", player.getExp()); //float, but stored as Double I guess
         player.sendMessage(ChatColor.DARK_GRAY + "Experience level and progress saved.");
         instance.getLogger().info(player.getName() + ": exp saved.");
 
@@ -380,7 +380,7 @@ public class GamemodeInventoryManager implements Listener
                 try
                 {
                     player.setLevel(snapshotSection.getInt("expLevel"));
-                    player.setExp((float)snapshotSection.get("expProgress"));
+                    player.setExp((float)snapshotSection.getDouble("expProgress"));
                 }
                 catch (Exception e)
                 {
