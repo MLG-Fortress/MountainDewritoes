@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -71,6 +72,18 @@ public class FirstJoin implements Listener
     private void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                onJoinWorld(player);
+            }
+        }.runTaskLater(plugin, 2L);
+        event.getPlayer().setMaximumAir(event.getPlayer().getMaximumAir() + player.getLevel()); //Lol idk the default
+
+
         if (!event.getPlayer().hasPlayedBefore())
         {
             event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
@@ -89,17 +102,6 @@ public class FirstJoin implements Listener
             ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,-1), EntityType.SILVERFISH)).setAI(false);
             ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,1), EntityType.SILVERFISH)).setAI(false);
         }
-
-        event.getPlayer().setMaximumAir(event.getPlayer().getMaximumAir() + player.getLevel()); //Lol idk the default
-
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                onJoinWorld(player);
-            }
-        }.runTaskLater(plugin, 2L);
     }
 
     @EventHandler
@@ -115,6 +117,8 @@ public class FirstJoin implements Listener
         if (event.getPlayer().getWorld() != firstJoinLocation.getWorld())
             return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.LEFT_CLICK_BLOCK)
+            return;
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
 
         Player player = event.getPlayer();
