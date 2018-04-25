@@ -80,15 +80,13 @@ public class AntiLag implements Listener
 
         for (int x = 0; x <= 2; x++) // to x == 1
         {
-            location.add(x, 0, 0);
             for (int y = 0; y <= 4; y++) // to y == 2
             {
-                location.add(0, y, 0);
                 for (int z = 0; z <= 2; z++) // to z == 1
                 {
-                    location.add(0, 0, z);
-                    Block block = location.getBlock();
-                    player.sendBlockChange(location, Material.GLASS, (byte)1);
+                    Location blockLocation = location.clone().add(x, y, z);
+                    Block block = blockLocation.getBlock();
+                    player.sendBlockChange(blockLocation, Material.GLASS, (byte)0);
                 }
             }
         }
