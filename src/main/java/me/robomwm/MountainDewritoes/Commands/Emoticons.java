@@ -48,7 +48,7 @@ public class Emoticons implements Listener
 
     private Pattern money = Pattern.compile("\\$");
     private Pattern serverAdvertisin = Pattern.compile("\\b[a-zA-z0-9]+\\.us\\.to\\b");
-    private Pattern pickle = Pattern.compile("\\bhypixel|relm|realm\\b");
+    private Pattern pickle = Pattern.compile("\\bhypixel|re?a?lms?\\b");
 
     private String playEmojiMovie(String message)
     {
