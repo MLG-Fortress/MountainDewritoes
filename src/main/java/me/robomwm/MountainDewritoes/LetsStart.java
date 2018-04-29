@@ -93,7 +93,7 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),
                 LazyUtil.getHoverable("Redstone Blocks\n", "Fuel\nIncreases lockout time\n- Lockout occurs on failed captures,\nmaking the post invulnerable to capture.\n- 10% of the fuel is consumed per lockout."),
                 LazyUtil.getHoverable("Prismarine\n", "Not implemented\nChance of applying mining haste when enemy players break blocks.\n- Chance, effectiveness, and duration increase when closer to the post.\n- Consumed only when applying a strong effect."),
-                LazyUtil.getHoverable("Arrows\n", "Not implemented\nSentry ammo.\n- Spawns 4 rapid-fire sentries upon attack.\n- Arrows apply minor knockback.\n- Sentries can be disabled until end of attack.\nNote: special arrows are converted\ninto regular sentry arrows."),
+                LazyUtil.getHoverable("Arrows\n", "Sentry ammo.\n- Spawns 2 rapid-fire sentries upon attack.\n- Arrows apply minor knockback.\nNote: special arrows are converted\ninto regular sentry arrows."),
                 LazyUtil.getHoverable("Diamond Blocks\n", "Not implemented\nIdeas??"),
                 LazyUtil.getHoverable("Iron Blocks\n", "Not implemented\nRecruit Iron Golems (3 blocks per golem)"),
                 LazyUtil.getHoverable("Gold Blocks\n", "Not implemented\nBuy zomblings")));

@@ -1,13 +1,11 @@
 package me.robomwm.MountainDewritoes;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,34 +27,36 @@ public class AntiLag implements Listener
     }
 
 
-    /*
-    Reduce client lag due to loading chunks from a teleport via temporarily reducing view distance
-     */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    private void onPlayerChangesWorldSetViewDistance(PlayerTeleportEvent event)
-    {
-        if (event.getCause() != PlayerTeleportEvent.TeleportCause.PLUGIN)
-            return;
-        if (event.getFrom().getWorld() == event.getTo().getWorld() && event.getFrom().distanceSquared(event.getTo()) < 1024)
-            return;
-
-        Player player = event.getPlayer();
-
-        if (player.hasMetadata("DEAD") || player.getViewDistance() == 3)
-            return;
-
-        viewDistance.put(player, player.getViewDistance());
-
-        player.setViewDistance(3);
-    }
-    //If the client is sending movements, we assume the chunks have loaded for them, so we'll reset their original view distance.
-    @EventHandler(ignoreCancelled = true)
-    private void onPlayerMove(PlayerMoveEvent event)
-    {
-        Player player = event.getPlayer();
-        if (viewDistance.containsKey(player) && player.isOnGround())
-            player.setViewDistance(viewDistance.remove(player));
-    }
+    //Seems to cause issues with the client. Unsure if it's because view distance changes too quickly or wat.
+    //Either way, causes more issues than it solves.
+//    /*
+//    Reduce client lag due to loading chunks from a teleport via temporarily reducing view distance
+//     */
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+//    private void onPlayerChangesWorldSetViewDistance(PlayerTeleportEvent event)
+//    {
+//        if (event.getCause() != PlayerTeleportEvent.TeleportCause.PLUGIN)
+//            return;
+//        if (event.getFrom().getWorld() == event.getTo().getWorld() && event.getFrom().distanceSquared(event.getTo()) < 1024)
+//            return;
+//
+//        Player player = event.getPlayer();
+//
+//        if (player.hasMetadata("DEAD") || player.getViewDistance() == 3)
+//            return;
+//
+//        viewDistance.put(player, player.getViewDistance());
+//
+//        player.setViewDistance(3);
+//    }
+//    //If the client is sending movements, we assume the chunks have loaded for them, so we'll reset their original view distance.
+//    @EventHandler(ignoreCancelled = true)
+//    private void onPlayerMove(PlayerMoveEvent event)
+//    {
+//        Player player = event.getPlayer();
+//        if (viewDistance.containsKey(player) && player.isOnGround())
+//            player.setViewDistance(viewDistance.remove(player));
+//    }
 
     /*
     Send block updates to the client to resolve "ghost blocks" created from high efficiency pickaxes.
@@ -72,9 +72,6 @@ public class AntiLag implements Listener
 
         Player player = event.getPlayer();
 
-        if (!player.isOp())
-            return;
-
         Location location = player.getLocation();
         location.add(-1, -2, -1);
 
@@ -86,14 +83,9 @@ public class AntiLag implements Listener
                 {
                     Location blockLocation = location.clone().add(x, y, z);
                     Block block = blockLocation.getBlock();
-                    player.sendBlockChange(blockLocation, Material.GLASS, (byte)0);
+                    player.sendBlockChange(blockLocation, block.getType(), block.getData());
                 }
             }
-        }
-        //TODO: remove
-        if (player.isOp())
-        {
-            player.sendMessage("Refreshed blocks.");
         }
     }
 }
