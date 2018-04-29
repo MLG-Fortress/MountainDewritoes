@@ -4,17 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,7 +24,7 @@ public class TipCommand implements CommandExecutor
     private JavaPlugin instance;
     //YamlConfiguration storage;
     private List<String> randomTips = new ArrayList<>();
-    private List<ChatColor> color = new ArrayList<>();
+    private static List<ChatColor> color = new ArrayList<>();
     //File storageFile;
 
     public TipCommand(JavaPlugin plugin)
@@ -148,7 +143,7 @@ public class TipCommand implements CommandExecutor
         return tips.get(ThreadLocalRandom.current().nextInt(tips.size()));
     }
 
-    public ChatColor getRandomColor()
+    public static ChatColor getRandomColor()
     {
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));
     }

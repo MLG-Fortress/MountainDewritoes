@@ -20,6 +20,7 @@ softdepend:
 - MCJukebox
 - WorldBorder
 - NoMyStuff
+- ServerListPlus
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields

@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemrecipes.CustomItemRecipes;
 import com.robomwm.grandioseapi.GrandioseAPI;
+import info.gomeow.chester.Chester;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
@@ -24,6 +25,10 @@ import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
 import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
 import net.milkbowl.vault.economy.Economy;
+import net.minecrell.serverlistplus.core.ServerListPlusCore;
+import net.minecrell.serverlistplus.core.replacement.LiteralPlaceholder;
+import net.minecrell.serverlistplus.core.replacement.ReplacementManager;
+import net.minecrell.serverlistplus.core.status.StatusResponse;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
@@ -42,13 +47,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jibble.jmegahal.JMegaHal;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -90,6 +95,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private Set<World> noModifyWorld = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
+    private boolean serverDoneLoading = false;
 
     public long getCurrentTick()
     {
@@ -201,6 +207,45 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }
         economy = rsp.getProvider();
         return economy != null;
+    }
+
+    public void onLoad()
+    {
+        try
+        {
+            ReplacementManager.getDynamic().add(new LiteralPlaceholder("%bot%")
+            {
+                private JMegaHal brain;
+
+                @Override
+                public String replace(ServerListPlusCore core, String s)
+                {
+                    if (!serverDoneLoading)
+                        return ChatColor.RED + "still brewing memes, pls w8.";
+                    if (brain == null)
+                        brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
+                    ChatColor color = TipCommand.getRandomColor();
+                    return "U_W0T_B0T: " + color + brain.getSentence();
+                }
+
+                @Override
+                public String replace(StatusResponse response, String s)
+                {
+                    if (!serverDoneLoading)
+                        return ChatColor.RED + "still brewing memes, pls w8.";
+                    if (brain == null)
+                        brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
+                    ChatColor color = TipCommand.getRandomColor();
+                    if (response.getRequest().getIdentity() != null)
+                        return "U_WOT_BOT: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
+                    return "U_W0T_B0T: " + color + brain.getSentence();
+                }
+            });
+        }
+        catch (Throwable rock)
+        {
+            this.getLogger().warning("ServerListPlus must not exist or something.");
+        }
     }
 
     public void onEnable()
@@ -322,6 +367,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         getCommand("start").setExecutor(new LetsStart(this));
         saveConfig();
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                serverDoneLoading = true;
+            }
+        }.runTask(this);
     }
 
     public void onDisable()

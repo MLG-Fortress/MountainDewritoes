@@ -34,6 +34,10 @@
             <id>valaria</id>
             <url>https://repo.valaria.pw/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>minecrell</id>
+            <url>https://repo.minecrell.net/snapshots</url>
+        </repository>
     </repositories>
     <build>
         <finalName>${project.name}</finalName>
@@ -52,6 +56,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
                             <include>com.github.RoboMWM:UsefulUtil</include>
@@ -185,6 +190,16 @@
             <artifactId>bookutil</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.minecrell</groupId>
+            <artifactId>ServerListPlus</artifactId>
+            <version>3.4.9-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MLG-Fortress</groupId>
+            <artifactId>ChesterPlugin</artifactId>
+            <version>2.7.1</version>
         </dependency>
 
     </dependencies>
