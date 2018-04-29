@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
@@ -49,7 +50,7 @@ public class ChatListener implements Listener
         filterThingy.add(Pattern.compile("\\bass\\b"));
         filterThingy.add(Pattern.compile("\\bcum\\b"));
         filterThingy.add(Pattern.compile("f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+|f+u+c+"));
-        filterThingy.add(Pattern.compile("cunt|whore|fag|slut|queer|bitch|bastard|damn|damm|\\bcrap|shit"));
+        filterThingy.add(Pattern.compile("cunt|whore|fag|slut|queer|bit?ch|bi(c|s)h|bastard|damn|damm|danm|\\bcrap|shit"));
         filterThingy.add(Pattern.compile("\\bd\\s*i\\s*c?\\s*k\\b|\\bp\\s*e\\s*n(\\s|\\.)*i\\s*s\\b"));
         filterThingy.add(Pattern.compile("\\bb\\s*o\\s*o\\s*b\\b|\\bb\\s*r\\s*e\\s*a\\s*s\\s*t(\\s*s)?\\b|\\st\\s*i\\s*t(\\s*s|\\s*t\\s*y|\\s*t\\s*i\\s*e\\s*s)?\\b"));
         filterThingy.add(Pattern.compile("\\bn\\s*i\\s*g\\s*(g\\s*)?(a|a\\s*h|e\\s*r)?\\b"));
@@ -57,12 +58,10 @@ public class ChatListener implements Listener
         replacements.add("wut");
         replacements.add("cool");
         replacements.add("mlg");
-        replacements.add("hmm");
+        replacements.add("oops");
         replacements.add("oh");
         replacements.add("meme");
         replacements.add("nice");
-        replacements.add("n0sc0p3");
-        replacements.add("w0t");
         replacements.add("");
     }
 
@@ -263,7 +262,15 @@ public class ChatListener implements Listener
                 public void run()
                 {
                     if (player.hasPermission("chester.log"))
-                        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + player.getName() + " parent set scrub");
+                    {
+                        if (player.hasMetadata("MD_WARNED"))
+                            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "lp user " + player.getName() + " parent set scrub");
+                        else
+                        {
+                            player.setMetadata("MD_WARNED", new FixedMetadataValue(instance, true));
+                            instance.getTitleManager().timedActionBar(player, 10, "Avoid profanity! Try gud memes instead!", 100);
+                        }
+                    }
                 }
             }.runTask(instance);
         }

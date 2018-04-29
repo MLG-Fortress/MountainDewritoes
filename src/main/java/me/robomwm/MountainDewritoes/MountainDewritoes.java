@@ -26,6 +26,7 @@ import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
 import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
 import net.milkbowl.vault.economy.Economy;
 import net.minecrell.serverlistplus.core.ServerListPlusCore;
+import net.minecrell.serverlistplus.core.player.PlayerIdentity;
 import net.minecrell.serverlistplus.core.replacement.LiteralPlaceholder;
 import net.minecrell.serverlistplus.core.replacement.ReplacementManager;
 import net.minecrell.serverlistplus.core.status.StatusResponse;
@@ -236,9 +237,22 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     if (brain == null)
                         brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
                     ChatColor color = TipCommand.getRandomColor();
-                    if (response.getRequest().getIdentity() != null)
-                        return "U_WOT_BOT: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
-                    return "U_W0T_B0T: " + color + brain.getSentence();
+                    if (response.getRequest().getIdentity() == null)
+                        return "U_W0T_B0T: " + color + brain.getSentence();
+
+                    PlayerIdentity identity = response.getRequest().getIdentity();
+
+                    switch (ThreadLocalRandom.current().nextInt(10))
+                    {
+                        case 0:
+                            return color + getEconomy().format(getEconomy().getBalance(getServer().getOfflinePlayer(identity.getUuid())));
+                        case 1:
+                            if (getServer().getOnlinePlayers().size() > 0)
+                                return "U shuld join " + getServer().getOnlinePlayers().iterator().next().getDisplayName();
+                            break;
+                    }
+                    return "U_WOT_BOT: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
+
                 }
             });
         }
