@@ -250,6 +250,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                             if (getServer().getOnlinePlayers().size() > 0)
                                 return "U shuld join " + getServer().getOnlinePlayers().iterator().next().getDisplayName();
                             break;
+                        case 2:
+                            return color + brain.getSentence("robo");
                     }
                     return "U_WOT_BOT: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
 
