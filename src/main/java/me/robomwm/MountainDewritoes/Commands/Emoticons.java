@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,13 +29,13 @@ public class Emoticons implements Listener
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void chatter(AsyncPlayerChatEvent event)
     {
-        event.setMessage(playEmojiMovie(event.getMessage()));
+        event.setMessage(playEmojiMovie(event.getPlayer(), event.getMessage()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void commands(PlayerCommandPreprocessEvent event)
     {
-        event.setMessage(playEmojiMovie(event.getMessage()));
+        event.setMessage(playEmojiMovie(event.getPlayer(), event.getMessage()));
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -47,10 +48,11 @@ public class Emoticons implements Listener
     }
 
     private Pattern money = Pattern.compile("\\$");
-    private Pattern serverAdvertisin = Pattern.compile("\\b[a-zA-z0-9]+\\.us\\.to\\b");
-    private Pattern pickle = Pattern.compile("\\b(hypixel|re*a*lms?)\\b");
+    private Pattern serverAdvertisin = Pattern.compile("(?i)\\b[a-zA-z0-9]+\\.us\\.to\\b");
+    private Pattern pickle = Pattern.compile("(?i)\\b(h+y+p+i+x+e+l+|re*a*lms?)\\b");
+    private Pattern vain = Pattern.compile("(?i)\\bgod\\b");
 
-    private String playEmojiMovie(String message)
+    private String playEmojiMovie(Player player, String message)
     {
         Matcher matcher = money.matcher(message);
         message = matcher.replaceAll("Ð");
@@ -58,6 +60,8 @@ public class Emoticons implements Listener
         message = matcher.replaceAll("Tech Fortress tf.robomwm.com");
         matcher = pickle.matcher(message);
         message = matcher.replaceAll("/minigames");
+        matcher = vain.matcher(message);
+        message = matcher.replaceAll(player.getName());
 
         return message;
     }
