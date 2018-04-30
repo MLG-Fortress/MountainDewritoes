@@ -117,7 +117,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         if (pendingShutdown)
             return;
         pendingShutdown = true;
-        ProcessBuilder processBuilder = new ProcessBuilder("./test.sh");
+        ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
         Process process;
         try
