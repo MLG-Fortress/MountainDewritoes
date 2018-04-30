@@ -30,6 +30,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
 
     private String name = null;
     private String scheduledRestart = null;
+    private boolean pendingShutdown = false;
 
     @EventHandler(priority = EventPriority.MONITOR)
     private void onPlayerLeave(PlayerQuitEvent event)
@@ -113,6 +114,9 @@ public class StaffRestartCommand implements CommandExecutor, Listener
 
     private void shutdown(String playerName, String reason)
     {
+        if (pendingShutdown)
+            return;
+        pendingShutdown = true;
         ProcessBuilder processBuilder = new ProcessBuilder("test.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
         Process process;
