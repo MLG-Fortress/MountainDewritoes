@@ -65,7 +65,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                 sender.sendMessage("Restart scheduled");
             }
             else
-                shutdown(null, reason);
+            {
+                if (shutdown(null, reason))
+                    sender.sendMessage("Restart process initialized. Will restart as soon as plugins finish updating.");
+            }
             return true;
         }
 
@@ -112,10 +115,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         return true;
     }
 
-    private void shutdown(String playerName, String reason)
+    private boolean shutdown(String playerName, String reason)
     {
         if (pendingShutdown)
-            return;
+            return false;
         pendingShutdown = true;
         ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
@@ -143,6 +146,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             actuallyShutdown(playerName, reason);
         }
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "broadcast Server restart process initialized. Restart will occur shortly after plugin updates have been compiled.");
+        return true;
     }
 
     private void actuallyShutdown(String playerName, String reason)
