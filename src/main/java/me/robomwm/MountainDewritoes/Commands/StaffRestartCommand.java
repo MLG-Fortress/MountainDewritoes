@@ -113,6 +113,36 @@ public class StaffRestartCommand implements CommandExecutor, Listener
 
     private void shutdown(String playerName, String reason)
     {
+        ProcessBuilder processBuilder = new ProcessBuilder("test.sh");
+        processBuilder.directory(instance.getServer().getWorldContainer());
+        Process process;
+        try
+        {
+            process = processBuilder.start();
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (!process.isAlive())
+                    {
+                        cancel();
+                        actuallyShutdown(playerName, reason);
+                    }
+                }
+            }.runTaskTimer(instance, 200L, 20L);
+        }
+        catch (Exception e)
+        {
+            instance.getLogger().warning("Unable to run updater");
+            e.printStackTrace();
+            actuallyShutdown(playerName, reason);
+        }
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "broadcast Server restart process initialized. Restart will occur shortly after plugin updates have been compiled.");
+    }
+
+    private void actuallyShutdown(String playerName, String reason)
+    {
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
             if (playerName != null)
