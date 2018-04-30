@@ -44,7 +44,7 @@ public class Emoticons implements Listener
         String[] lines = event.getLines();
         int i = 0;
         for (String line : lines)
-            event.setLine(i++, playEmojiMovie(line));
+            event.setLine(i++, playEmojiMovie(event.getPlayer(), line));
     }
 
     private Pattern money = Pattern.compile("\\$");
