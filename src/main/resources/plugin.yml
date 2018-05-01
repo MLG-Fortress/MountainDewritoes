@@ -33,7 +33,8 @@ commands:
   mdebug: {}
   restart:
     aliases: [stop]
-  schedulerestart: {}
+  restartnow: {}
+  update: {}
   clearchat:
     aliases: [chatclear]
   tip:

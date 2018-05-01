@@ -29,13 +29,15 @@ public class StaffRestartCommand implements CommandExecutor, Listener
     }
 
     private String name = null;
-    private String scheduledRestart = null;
+    private String reason = null;
     private boolean pendingShutdown = false;
+    private boolean updateComplete = false;
+    private Process updateProcess;
 
     @EventHandler(priority = EventPriority.MONITOR)
     private void onPlayerLeave(PlayerQuitEvent event)
     {
-        if (scheduledRestart == null)
+        if (reason == null || pendingShutdown)
             return;
         new BukkitRunnable()
         {
@@ -47,94 +49,124 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                     if (!onlinePlayer.hasPermission("mlgstaff"))
                         return;
                 }
-                shutdown(name, scheduledRestart);
+                shutdown();
             }
         }.runTaskLater(instance, 1L);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!(sender instanceof Player))
-        {
-            String reason = "";
-            if (args.length > 0)
-                reason = String.join(" ", args);
-            if (cmd.getName().equalsIgnoreCase("schedulerestart"))
-            {
-                this.scheduledRestart = reason;
-                sender.sendMessage("Restart scheduled");
-            }
-            else
-            {
-                if (shutdown(null, reason))
-                    sender.sendMessage("Restart process initialized. Will restart as soon as plugins finish updating.");
-            }
-            return true;
-        }
-
-        Player player = (Player)sender;
-
-        if (args.length < 1)
+        if (args.length < 1 && sender instanceof Player)
         {
             sender.sendMessage("/restart <reason...>");
             return false;
-        }
-        if (args[0].equalsIgnoreCase("cancel"))
-        {
-            name = null;
-            scheduledRestart = null;
-            sender.sendMessage("Canceled scheduled restart.");
-            return true;
         }
 
         String reason = String.join(" ", args);
 
         if (!sender.hasPermission("mlgstaff"))
         {
-            player.kickPlayer(reason); //kek
+            ((Player)sender).kickPlayer(reason); //kek
             return true;
         }
 
-        if (!player.isOp())
+        if (args[0].equalsIgnoreCase("abort"))
+        {
+            abortShutdown();
+            sender.sendMessage("Restart aborted.");
+            return true;
+        }
+
+        if (!sender.isOp())
         {
             for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
             {
                 if (!onlinePlayer.hasPermission("mlgstaff"))
                 {
-                    player.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use " + ChatColor.GOLD + "/restart cancel " + ChatColor.RESET + "to cancel.");
-                    scheduledRestart = reason;
-                    name = player.getDisplayName();
+                    sender.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use " + ChatColor.GOLD + "/restart abort " + ChatColor.RESET + "to cancel.");
+                    scheduleShutdown(sender.getName(), reason);
                     return true;
                 }
             }
         }
+        else if (cmd.getName().equalsIgnoreCase("update"))
+        {
+            update(true);
+            sender.sendMessage("Updating plugins...");
+            return true;
+        }
+        else if (cmd.getName().equalsIgnoreCase("restartnow"))
+        {
+            this.name = sender.getName();
+            this.reason = reason;
+            this.updateComplete = true;
+            abortUpdate();
+            actuallyShutdown();
+            return true;
+        }
 
-        shutdown(player.getDisplayName(), reason);
+        sender.sendMessage("Restart process initialized. Will restart as soon as plugins finish updating.");
+        scheduleShutdown(sender.getName(), reason);
+        shutdown();
 
 
         return true;
     }
 
-    private boolean shutdown(String playerName, String reason)
+
+    private void scheduleShutdown(String name, String reason)
+    {
+        this.name = name;
+        this.reason = reason;
+    }
+
+    private boolean shutdown()
     {
         if (pendingShutdown)
             return false;
         pendingShutdown = true;
+
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "broadcast Server restart process initialized. Restart will occur as soon as the plugins finish updating.");
+        update(false);
+        return true;
+    }
+
+    private void abortShutdown()
+    {
+        this.pendingShutdown = false;
+        this.name = null;
+        this.reason = null;
+    }
+
+    private void abortUpdate()
+    {
+        if (this.updateProcess != null && this.updateProcess.isAlive())
+            this.updateProcess.destroy();
+    }
+
+    private boolean update(boolean force)
+    {
+        if (updateComplete && !force)
+            return true;
+        if (updateProcess != null)
+            return false;
         ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
-        Process process;
         try
         {
-            process = processBuilder.start();
+            updateProcess = processBuilder.start();
             new BukkitRunnable()
             {
                 @Override
                 public void run()
                 {
-                    if (!process.isAlive())
+                    if (!updateProcess.isAlive())
                     {
                         cancel();
-                        actuallyShutdown(playerName, reason);
+                        updateComplete = true;
+                        updateProcess = null;
+                        instance.getServer().broadcastMessage(ChatColor.GRAY + "Update complete.");
+                        actuallyShutdown();
                     }
                 }
             }.runTaskTimer(instance, 200L, 20L);
@@ -143,31 +175,28 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         {
             instance.getLogger().warning("Unable to run updater");
             e.printStackTrace();
-            actuallyShutdown(playerName, reason);
+            return false;
         }
-        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "broadcast Server restart process initialized. Restart will occur shortly after plugin updates have been compiled.");
         return true;
     }
 
-    private void actuallyShutdown(String playerName, String reason)
+    private void actuallyShutdown()
     {
+        if (!pendingShutdown || reason == null || !updateComplete)
+            return;
+        pendingShutdown = false;
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
-            if (playerName != null)
-                onlinePlayer.kickPlayer("Serbur restartin cuz " + playerName + " sez " + reason);
+            if (name != null)
+                onlinePlayer.kickPlayer("Serbur restartin cuz " + name + " sez " + reason);
             else
                 onlinePlayer.kickPlayer("Serbur restartin: " + reason);
         }
 
-        instance.getServer().savePlayers(); //Probably dumb since I'm kickin 'em anyways
-
         //In case some dum plugin freezes the serbur onDisable...
         for (World world : instance.getServer().getWorlds())
-        {
             world.save();
-        }
 
-        //plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "minecraft:stop");
         instance.getServer().shutdown();
     }
 }
