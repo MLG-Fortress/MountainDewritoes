@@ -1,22 +1,15 @@
 package me.robomwm.MountainDewritoes.armor;
 
-import me.robomwm.MountainDewritoes.Events.PlayerLandEvent;
-import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created on 2/21/2018.
@@ -34,36 +27,15 @@ public class DiamondArmor implements Listener
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onSneak(PlayerToggleSneakEvent event)
+    public void onVelocityApplied(PlayerVelocityEvent event)
     {
-//        Player player = event.getPlayer();
-//
-//        if (!event.isSneaking() || event.getPlayer().isOnGround())
-//            return;
-//        if (!armorAugmentation.isEquipped(player, Material.DIAMOND_BOOTS))
-//            return;
-//
-//        if (!NSA.getMidairMap().containsKey(player))
-//        {
-//            NSA.getMidairMap().put(player, -1);
-//            Vector vector = player.getLocation().getDirection();
-//            if (vector.getY() > 0)
-//            {
-//                player.setVelocity(vector.setY(0));
-//            }
-//        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void onEntityDamaged(EntityDamageByEntityEvent event)
-    {
-        if (event.getDamager().getType() != EntityType.PLAYER)
+        Player player = event.getPlayer();
+        if (!player.isSneaking() || player.isOnGround())
             return;
-        Player damager = (Player)event.getDamager();
-        if (!damager.isSprinting() || !armorAugmentation.isEquipped(damager, Material.DIAMOND_LEGGINGS))
+        if (!armorAugmentation.isEquipped(player, Material.DIAMOND_BOOTS))
             return;
-
-        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(0.02));
+        event.setCancelled(true);
+        //TODO: sound, effect
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -80,5 +52,6 @@ public class DiamondArmor implements Listener
         Vector ministun = new Vector(0, 0.01, 0);
         for (Entity entity : player.getNearbyEntities(3, 1, 3))
             entity.setVelocity(ministun);
+        //TODO sound, effect
     }
 }

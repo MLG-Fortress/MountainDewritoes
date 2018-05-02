@@ -1,26 +1,15 @@
-package me.robomwm.MountainDewritoes;
+package me.robomwm.MountainDewritoes.combat;
 
 import com.projectkorra.projectkorra.event.AbilityDamageEntityEvent;
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 /**
  * Created by RoboMWM on 10/25/2016.

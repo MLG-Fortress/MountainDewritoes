@@ -5,7 +5,6 @@ import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -90,15 +89,13 @@ public class GoldArmor implements Listener
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    @EventHandler(ignoreCancelled = true)
     public void onSprint(PlayerToggleSprintEvent event)
     {
         Player player = event.getPlayer();
-
-        if (!armorAugmentation.isFullPower(event, Material.GOLD_LEGGINGS) || player.hasPotionEffect(PotionEffectType.SPEED))
+        if (!armorAugmentation.isFullPower(event, Material.GOLD_LEGGINGS))
             return;
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 10, true, false));
-        player.setFoodLevel(10);
+        player.setVelocity(player.getLocation().getDirection().multiply(2));
+        player.setFoodLevel(8);
     }
 }

@@ -1,27 +1,24 @@
 package me.robomwm.MountainDewritoes.armor;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created on 1/30/2018.
@@ -110,18 +107,16 @@ public class IronArmor implements Listener
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onSprint(PlayerToggleSprintEvent event)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onAttack(EntityDamageByEntityEvent event)
     {
-        Player player = event.getPlayer();
-        if (!armorAugmentation.isFullPower(event, Material.IRON_LEGGINGS))
+        if (event.getDamager().getType() != EntityType.PLAYER)
             return;
-        Vector velocity = player.getLocation().getDirection();
-        if (velocity.getY() < 0.1)
-        {
+        Player player = (Player)event.getDamager();
 
-        }
-        player.setVelocity(player.getLocation().getDirection().multiply(2));
-        player.setFoodLevel(8);
+        if (!player.isSprinting() || !armorAugmentation.isEquipped(player, Material.IRON_LEGGINGS))
+            return;
+
+        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(player.getLocation().toVector()).normalize().setY(0.3));
     }
 }

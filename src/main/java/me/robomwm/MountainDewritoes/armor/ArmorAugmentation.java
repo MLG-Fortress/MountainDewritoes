@@ -15,9 +15,6 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 /**
  * Created on 1/3/2018.
  *
@@ -134,6 +131,7 @@ public class ArmorAugmentation implements Listener
     }
 
     //Refill energy bar gradually, unless sprinting
+    //iron leggings are exempt
     private void ATPgeneration()
     {
         new BukkitRunnable()
@@ -145,7 +143,7 @@ public class ArmorAugmentation implements Listener
                 {
                     if (player.getFoodLevel() >= 20 || instance.isNoModifyWorld(player.getWorld()))
                         continue;
-                    if (!player.isSprinting())
+                    if (!player.isSprinting() || isEquipped(player, Material.IRON_LEGGINGS) )
                         player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }

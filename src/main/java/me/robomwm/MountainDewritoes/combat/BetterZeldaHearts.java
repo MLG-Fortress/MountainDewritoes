@@ -1,6 +1,7 @@
-package me.robomwm.MountainDewritoes;
+package me.robomwm.MountainDewritoes.combat;
 
 import com.robomwm.customitemrecipes.CustomItemRecipes;
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.usefulutil.UsefulUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -133,7 +134,7 @@ public class BetterZeldaHearts implements Listener
         /*Taxes*/
         if (economy != null)
         {
-            double moneyToDrop = Math.round(economy.getBalance(player) * 0.07); //7%
+            double moneyToDrop = Math.round(economy.getBalance(player) * 0.03);
 
             if (moneyToDrop > 1)
             {

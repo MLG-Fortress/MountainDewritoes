@@ -84,7 +84,7 @@ public class DeathListener implements Listener
                     break;
                 }
                 ItemStack itemStack = iterator.next();
-                if (ThreadLocalRandom.current().nextInt(10) == 0)
+                if (ThreadLocalRandom.current().nextInt(4) == 0)
                     continue;
                 dropsToReturn.add(itemStack);
                 iterator.remove();
