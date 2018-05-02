@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
@@ -38,7 +39,7 @@ public class DiamondArmor implements Listener
         //TODO: sound, effect
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onLand(EntityDamageEvent event)
     {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
@@ -46,12 +47,13 @@ public class DiamondArmor implements Listener
 
         Player player = (Player)event.getEntity();
 
-        if (armorAugmentation.isEquipped(player, Material.DIAMOND_CHESTPLATE))
+        if (armorAugmentation.isEquipped(player, Material.DIAMOND_BOOTS))
             return;
 
-        Vector ministun = new Vector(0, 0.01, 0);
+        Vector ministun = new Vector(0, 0.1, 0);
         for (Entity entity : player.getNearbyEntities(3, 1, 3))
             entity.setVelocity(ministun);
+        //TODO short potion effect
         //TODO sound, effect
     }
 }
