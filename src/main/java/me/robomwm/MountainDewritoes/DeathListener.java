@@ -70,21 +70,35 @@ public class DeathListener implements Listener
             return;
         }
 
-        //Only drop some items (randomly determined)
+        //Only lose 8 levels of XP (vs. all XP on death)
+        //if (player.getLevel() > 8)
+        //    event.setNewLevel(player.getLevel() - 8);
+
+        //Don't drop any exp
+        event.setKeepLevel(true);
+        event.setDroppedExp(0);
+
+        //Stop all playing sounds, if any.
+        player.stopSound("");
+
+        player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
+
+        //Save some items (randomly determined)
         if (instance.isSurvivalWorld(player.getWorld()))
         {
+            if (player.getKiller() == null) //TODO: replace with "combattag" check instead
+            {
+                event.setKeepInventory(true);
+                return;
+            }
+
             List<ItemStack> drops = event.getDrops();
             Iterator<ItemStack> iterator = drops.iterator();
             List<ItemStack> dropsToReturn = new ArrayList<>();
             while (iterator.hasNext())
             {
-                if (dropsToReturn.size() > 36) //afaik this is playerinventory#size
-                {
-                    instance.getLogger().info("Hit the limit");
-                    break;
-                }
                 ItemStack itemStack = iterator.next();
-                if (ThreadLocalRandom.current().nextInt(4) == 0)
+                if (ThreadLocalRandom.current().nextInt(3) == 0)
                     continue;
                 dropsToReturn.add(itemStack);
                 iterator.remove();
@@ -140,21 +154,6 @@ public class DeathListener implements Listener
 
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
         }
-
-        //Only lose 8 levels of XP (vs. all XP on death)
-        //if (player.getLevel() > 8)
-        //    event.setNewLevel(player.getLevel() - 8);
-
-        //Don't drop any exp
-        event.setKeepLevel(true);
-        event.setDroppedExp(0);
-
-        //Stop all playing sounds, if any.
-        player.stopSound("");
-
-        //Believe it or not, the Minecraft client does not even trigger this sound on player death,
-        //it does trigger it for other players though, just not the player who died
-        player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
     }
 
     /**

@@ -20,7 +20,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -122,28 +121,28 @@ public class BetterZeldaHearts implements Listener
             dropMobMoney(location, moneyToDrop);
     }
 
-    //yes
-    @EventHandler
-    private void onPlayerKilled(PlayerDeathEvent event)
-    {
-        Player player = event.getEntity();
-        Location location = player.getLocation();
-        if (!instance.isSurvivalWorld(location.getWorld()))
-            return;
-
-        /*Taxes*/
-        if (economy != null)
-        {
-            double moneyToDrop = Math.round(economy.getBalance(player) * 0.03);
-
-            if (moneyToDrop > 1)
-            {
-                economy.withdrawPlayer(player, moneyToDrop);
-                player.sendMessage(ChatColor.RED + "Death tax: " + economy.format(moneyToDrop));
-                dropMobMoney(location, moneyToDrop);
-            }
-        }
-    }
+//    //yes
+//    @EventHandler
+//    private void onPlayerKilled(PlayerDeathEvent event)
+//    {
+//        Player player = event.getEntity();
+//        Location location = player.getLocation();
+//        if (!instance.isSurvivalWorld(location.getWorld()))
+//            return;
+//
+//        /*Taxes*/
+//        if (economy != null)
+//        {
+//            double moneyToDrop = Math.round(economy.getBalance(player) * 0.03);
+//
+//            if (moneyToDrop > 1)
+//            {
+//                economy.withdrawPlayer(player, moneyToDrop);
+//                player.sendMessage(ChatColor.RED + "Death tax: " + economy.format(moneyToDrop));
+//                dropMobMoney(location, moneyToDrop);
+//            }
+//        }
+//    }
 
     private void dropMobMoney(Location location, double amount)
     {
