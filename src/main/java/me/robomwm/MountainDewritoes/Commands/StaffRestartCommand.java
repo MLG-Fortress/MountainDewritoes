@@ -147,7 +147,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
     private boolean update(boolean force)
     {
         if (updateComplete && !force)
+        {
+            actuallyShutdown();
             return true;
+        }
         if (updateProcess != null)
             return false;
         ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
