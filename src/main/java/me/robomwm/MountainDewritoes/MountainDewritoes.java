@@ -26,6 +26,7 @@ import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
 import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
 import me.robomwm.MountainDewritoes.combat.BetterNoDamageTicks;
 import me.robomwm.MountainDewritoes.combat.BetterZeldaHearts;
+import me.robomwm.MountainDewritoes.combat.DummerEnderman;
 import me.robomwm.MountainDewritoes.combat.NoKnockback;
 import net.milkbowl.vault.economy.Economy;
 import net.minecrell.serverlistplus.core.ServerListPlusCore;
@@ -347,6 +348,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ArmorAugmentation(this);
         new AntiLag(this);
         new FirstJoin(this);
+        new DummerEnderman(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())

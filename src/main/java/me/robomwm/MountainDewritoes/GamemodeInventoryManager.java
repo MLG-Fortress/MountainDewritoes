@@ -318,6 +318,9 @@ public class GamemodeInventoryManager implements Listener
                     for (PotionEffect potionEffect : player.getActivePotionEffects())
                         player.removePotionEffect(potionEffect.getType());
                     player.addPotionEffects((List<PotionEffect>)snapshotSection.getList("activePotionEffects"));
+                    player.setWalkSpeed(0.2f);
+                    player.setFlySpeed(0.1f);
+                    player.resetPlayerTime();
                 }
                 catch (Exception e)
                 {
