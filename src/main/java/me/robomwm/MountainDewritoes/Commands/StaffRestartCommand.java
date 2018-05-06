@@ -100,6 +100,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             this.name = sender.getName();
             this.reason = reason;
             this.updateComplete = true;
+            this.pendingShutdown = true;
             abortUpdate();
             actuallyShutdown();
             return true;
