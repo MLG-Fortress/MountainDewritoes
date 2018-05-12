@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -134,6 +135,12 @@ public class GamemodeInventoryManager implements Listener
         //If in creative mode while in a survival world, also deny all inventory access
         if (player.getGameMode() == GameMode.CREATIVE && instance.isSurvivalWorld(event.getPlayer().getWorld()) && event.getInventory().getType() != InventoryType.CRAFTING)
             event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onItemSpawn(EntityTeleportEvent event)
+    {
+            event.setCancelled(instance.isSurvivalWorld(event.getFrom().getWorld()) != instance.isSurvivalWorld(event.getTo().getWorld()));
     }
 
     //Drop item in creative = delete item

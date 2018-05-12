@@ -143,7 +143,7 @@ public class ArmorAugmentation implements Listener
                 {
                     if (player.getFoodLevel() >= 20 || instance.isNoModifyWorld(player.getWorld()))
                         continue;
-                    if (!player.isSprinting() || isEquipped(player, Material.IRON_LEGGINGS) )
+                    if ((!player.isSprinting() && player.isOnGround()) || isEquipped(player, Material.IRON_LEGGINGS))
                         player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }

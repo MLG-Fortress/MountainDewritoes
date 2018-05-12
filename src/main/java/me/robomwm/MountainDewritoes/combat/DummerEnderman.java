@@ -16,7 +16,7 @@ public class DummerEnderman implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
-    
+
     @EventHandler
     private void onEndermanAttemptingToEscape(EndermanEscapeEvent event)
     {
