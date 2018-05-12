@@ -57,7 +57,7 @@ public class Emoticons implements Listener
         Matcher matcher = money.matcher(message);
         message = matcher.replaceAll("Ð");
         matcher = serverAdvertisin.matcher(message);
-        message = matcher.replaceAll("Tech Fortress tf.robomwm.com");
+        message = matcher.replaceAll("MLG.ROBOMWM.COM");
         matcher = pickle.matcher(message);
         message = matcher.replaceAll("/minigames");
         matcher = vain.matcher(message);

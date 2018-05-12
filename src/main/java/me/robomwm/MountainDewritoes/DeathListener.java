@@ -89,6 +89,7 @@ public class DeathListener implements Listener
             if (player.getKiller() == null) //TODO: replace with "combattag" check instead
             {
                 event.setKeepInventory(true);
+                event.getDrops().clear();
                 return;
             }
 

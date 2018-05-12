@@ -126,14 +126,16 @@ public class GamemodeInventoryManager implements Listener
         if (event.getPlayer().isOp())
             return;
 
+        //deny opening ender chest in non-survival worlds
         if (!instance.isSurvivalWorld(player.getWorld()) && event.getInventory().getType() == InventoryType.ENDER_CHEST)
         {
             event.setCancelled(true);
-            return;
         }
 
-        //If in creative mode while in a survival world, also deny all inventory access
-        if (player.getGameMode() == GameMode.CREATIVE && instance.isSurvivalWorld(event.getPlayer().getWorld()) && event.getInventory().getType() != InventoryType.CRAFTING)
+        //deny all inventory access in creative, unless the player is staff and is in a non-survival world
+        else if (player.getGameMode() == GameMode.CREATIVE
+                && event.getInventory().getType() != InventoryType.CRAFTING
+                && (!player.hasPermission("mlgstaff") && !instance.isSurvivalWorld(event.getPlayer().getWorld())))
             event.setCancelled(true);
     }
 
