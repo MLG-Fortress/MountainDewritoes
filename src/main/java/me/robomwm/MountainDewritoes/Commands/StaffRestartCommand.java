@@ -91,8 +91,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         }
         else if (cmd.getName().equalsIgnoreCase("update"))
         {
-            update(true);
-            sender.sendMessage("Updating plugins...");
+            if (update(true))
+                sender.sendMessage("Updating plugins...");
+            else
+                sender.sendMessage("Plugin update already in progress...");
             return true;
         }
         else if (cmd.getName().equalsIgnoreCase("restartnow"))
