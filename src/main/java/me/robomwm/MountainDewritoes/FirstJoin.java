@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -104,6 +105,16 @@ public class FirstJoin implements Listener
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    private void onMobsSpawn(CreatureSpawnEvent event)
+    {
+        if (event.getEntity().getWorld() != firstJoinLocation.getWorld())
+            return;
+        if (event.getEntityType() == EntityType.SILVERFISH)
+            return;
+        event.setCancelled(true);
+    }
+
     @EventHandler
     private void onWorldChange(PlayerChangedWorldEvent event)
     {
@@ -130,7 +141,7 @@ public class FirstJoin implements Listener
                 bookMeta = LazyUtil.getBookMeta();
                 bookMeta.spigot().addPage(
                         LazyUtil.buildPage("Deer " + player.getDisplayName() + ChatColor.BLACK +
-                                ",\nSorry 4 missin ur arrival, but I c ur quite an inexperienced adventure anyways.\u00AF\\_(\u30C4)_/\u00AF\nHow about u go to the cellar and clean up those annoying paper-eaters."),
+                                ",\nSorry 4 missin ur arrival, but I c ur quite an inexperienced adventurer anyways.\u00AF\\_(\u30C4)_/\u00AF\nHow about u go to the cellar and clean up those annoying paper-eaters."),
                         LazyUtil.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. And u got a shirt and shoes. So ur gud."));
                 break;
             case COMMAND_CHAIN:
