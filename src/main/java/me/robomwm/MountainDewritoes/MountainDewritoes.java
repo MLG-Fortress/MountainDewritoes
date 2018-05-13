@@ -257,7 +257,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         case 2:
                             return color + brain.getSentence("robo");
                     }
-                    return "U_WOT_BOT: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
+                    return "U_W0T_B0T: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
 
                 }
             });
