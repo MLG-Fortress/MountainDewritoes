@@ -194,7 +194,7 @@ public class Emoticons implements CommandExecutor, Listener
 //        {
 //            String code = pattern.pattern().substring(4, pattern.pattern().length() - 4);
 //            String example = emojiMovie.get(pattern).get(ThreadLocalRandom.current().nextInt(emojiMovie.get(pattern).size()));
-//            baseComponents.add(LazyUtil.getClickableSuggestion(code + "\n", code, example));
+//            baseComponents.add(LazyText.suggest(code + "\n", code, example));
 //            if (++i >= 14)
 //            {
 //                bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[0]));

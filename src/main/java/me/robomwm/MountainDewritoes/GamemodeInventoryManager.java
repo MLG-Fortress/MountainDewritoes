@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -135,7 +136,7 @@ public class GamemodeInventoryManager implements Listener
         //deny all inventory access in creative, unless the player is staff and is in a non-survival world
         else if (player.getGameMode() == GameMode.CREATIVE
                 && event.getInventory().getType() != InventoryType.CRAFTING
-                && (!player.hasPermission("mlgstaff") && !instance.isSurvivalWorld(event.getPlayer().getWorld())))
+                && (!player.hasPermission("mlgstaff") || !instance.isSurvivalWorld(event.getPlayer().getWorld())))
             event.setCancelled(true);
     }
 
@@ -153,6 +154,21 @@ public class GamemodeInventoryManager implements Listener
         {
             event.setCancelled(true);
             event.getPlayer().getInventory().setItemInMainHand(null);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onItemFrameBreak(HangingBreakEvent event)
+    {
+        if (instance.isSurvivalWorld(event.getEntity().getWorld()))
+            return;
+
+        switch (event.getCause())
+        {
+            case PHYSICS:
+            case OBSTRUCTION:
+                event.setCancelled(true);
+                event.getEntity().remove();
         }
     }
 

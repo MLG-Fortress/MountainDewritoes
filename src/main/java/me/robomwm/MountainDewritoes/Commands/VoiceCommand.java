@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes.Commands;
 
-import me.robomwm.MountainDewritoes.LazyUtil;
+import me.robomwm.MountainDewritoes.LazyText;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,24 +32,24 @@ public class VoiceCommand implements CommandExecutor
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
 
-        bookMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableCommand("⬅ ","/help","Go back to /menu"),
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                LazyText.command("⬅ ","/help","Go back to /menu"),
                 ChatColor.BLACK + "Voicelines:\n",
                 "Greetings:\n",
-                LazyUtil.getClickableCommand("Hello ", "/v hello", "say Hi"),
-                LazyUtil.getClickableCommand("Thanks ", "/v thanks", "thx"),
+                LazyText.command("Hello ", "/v hello", "say Hi"),
+                LazyText.command("Thanks ", "/v thanks", "thx"),
                 "\nCallouts:\n",
-                LazyUtil.getClickableCommand("Over here! ", "/v overhere"),
-                LazyUtil.getClickableCommand("Dis wae! ", "/v followme"),
-                LazyUtil.getClickableCommand("Look at me! ", "/v lookatme"),
-                LazyUtil.getClickableCommand("Look at this! ", "/v lookatthis"),
+                LazyText.command("Over here! ", "/v overhere"),
+                LazyText.command("Dis wae! ", "/v followme"),
+                LazyText.command("Look at me! ", "/v lookatme"),
+                LazyText.command("Look at this! ", "/v lookatthis"),
 
                 "\nMemes+Others:\n",
-                LazyUtil.getClickableCommand("#1 ", "/v wano"),
-                LazyUtil.getClickableCommand("dawae ", "/v dounodawae"),
-                LazyUtil.getClickableCommand("be quiet ", "/v quiet"),
-                LazyUtil.getClickableCommand("no ", "/v no"),
-                LazyUtil.getClickableCommand("Ok ", "/v okay")));
+                LazyText.command("#1 ", "/v wano"),
+                LazyText.command("dawae ", "/v dounodawae"),
+                LazyText.command("be quiet ", "/v quiet"),
+                LazyText.command("no ", "/v no"),
+                LazyText.command("Ok ", "/v okay")));
 
         book.setItemMeta(bookMeta);
     }

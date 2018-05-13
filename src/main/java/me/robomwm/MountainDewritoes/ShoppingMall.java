@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -81,9 +80,9 @@ public class ShoppingMall implements Listener
         switch (event.getClickedBlock().getType())
         {
             case COMMAND:
-                bookMeta = LazyUtil.getBookMeta();
+                bookMeta = LazyText.getBookMeta();
                 bookMeta.spigot().addPage(
-                        LazyUtil.buildPage("Ayyy " + player.getDisplayName() + ChatColor.BLACK +
+                        LazyText.buildPage("Ayyy " + player.getDisplayName() + ChatColor.BLACK +
                                 "\nWelcome 2 da /mall. U can do ur usual shopping stuff like buying kewl neu items. U can also setup a /shop and git rich quik, if ur gud.",
                                 "\n\nDon't forget dat u can press F to open da menu at any time!"));
                 break;
@@ -91,6 +90,6 @@ public class ShoppingMall implements Listener
                 return;
         }
 
-        instance.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
+        instance.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
     }
 }

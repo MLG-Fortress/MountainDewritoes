@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.armor;
 
-import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -83,7 +82,7 @@ public class OldFood implements Listener
             case POTION:
                 return 0;
             default:
-                return 1D;
+                return 6D;
         }
     }
 }

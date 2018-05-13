@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author RoboMWM
  */
-public class LazyUtil
+public class LazyText
 {
     public static BookMeta getBookMeta()
     {
@@ -52,12 +52,12 @@ public class LazyUtil
         return baseComponents;
     }
 
-    public static TextComponent getClickableCommand(String message, String command)
+    public static TextComponent command(String message, String command)
     {
-        return getClickableCommand(message, command, command);
+        return command(message, command, command);
     }
 
-    public static TextComponent getClickableCommand(String message, String command, String hover)
+    public static TextComponent command(String message, String command, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
         textComponent.setColor(ChatColor.DARK_AQUA);
@@ -67,7 +67,7 @@ public class LazyUtil
         return textComponent;
     }
 
-    public static TextComponent getClickableURL(String message, String URL, String hover)
+    public static TextComponent url(String message, String URL, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
         textComponent.setColor(ChatColor.DARK_AQUA);
@@ -77,12 +77,12 @@ public class LazyUtil
         return textComponent;
     }
 
-    public static TextComponent getClickableSuggestion(String message, String suggestion)
+    public static TextComponent suggest(String message, String suggestion)
     {
-        return getClickableSuggestion(message, suggestion, suggestion);
+        return suggest(message, suggestion, suggestion);
     }
 
-    public static TextComponent getClickableSuggestion(String message, String suggestion, String hover)
+    public static TextComponent suggest(String message, String suggestion, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
         textComponent.setColor(ChatColor.DARK_AQUA);
@@ -92,7 +92,7 @@ public class LazyUtil
         return textComponent;
     }
 
-    public static TextComponent getHoverable(String message, String hover)
+    public static TextComponent hover(String message, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
         textComponent.setColor(ChatColor.AQUA);

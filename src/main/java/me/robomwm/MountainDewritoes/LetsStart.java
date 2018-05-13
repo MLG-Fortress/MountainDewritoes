@@ -25,6 +25,9 @@ public class LetsStart implements Listener, CommandExecutor
     private MountainDewritoes plugin;
     private ItemStack book;
     private ItemStack post;
+    private ItemStack minigames;
+    private ItemStack creativeParkour;
+    private ItemStack prison;
 
     public LetsStart(MountainDewritoes plugin)
     {
@@ -32,72 +35,83 @@ public class LetsStart implements Listener, CommandExecutor
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta)book.getItemMeta();
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getHoverable("            ? ",
+        bookMeta.spigot().addPage(LazyText.buildPage(ChatColor.DARK_PURPLE + "IP: MLG.ROBOMWM.COM\n",
+                LazyText.hover("            ? ",
                         ChatColor.AQUA + "Aqua" + ChatColor.RESET + " is hoverable (like this one!).\n" +
                         ChatColor.DARK_AQUA + "Dark aqua" + ChatColor.RESET + " is clickable.\n" +
                                 "FYI, you can open this /menu by pressing F.\n" +
                                 "Swap items by holding sneak when pressing F\n"),
-                LazyUtil.getClickableCommand(" ✉ ", "/mail"),
-                LazyUtil.getClickableCommand(" ⚙ ", "/help settings","Settings"),
-                LazyUtil.getClickableCommand(" ℹ ", "/help about","About+Stats"),
-                LazyUtil.getClickableURL(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
+                LazyText.command(" ✉ ", "/mail"),
+                LazyText.command(" ⚙ ", "/help settings","Settings"),
+                LazyText.command(" ℹ ", "/help about","About+Stats"),
+                LazyText.url(" # ", "http://r.robomwm.com/mememap","Open the LIVE Map\n" +
                         "and IRC chatroom"),
                 "\n",
-                LazyUtil.getClickableCommand("  Minigames Hub \n", "/minigames"),
-                LazyUtil.getClickableCommand("  Warps \n", "/warp <warp>"),
-                LazyUtil.getClickableCommand("  Items+Recipes \n", "", "Not implemented yet"),
-                LazyUtil.getClickableCommand("  Emoticons \n", "/emote"),
-                LazyUtil.getClickableCommand("  Tip Jar \n", "/tip"),
-                LazyUtil.getClickableCommand("  Claim Posts \n", "/help post", "/help post"),
-                LazyUtil.getClickableCommand("  tp ", "/tp"),
+                LazyText.command("  Minigames Hub \n", "/minigames"),
+                LazyText.command("  Warps \n", "/warp <warp>"),
+                LazyText.command("  Items+Recipes \n", "", "Not implemented yet"),
+                LazyText.command("  Emoticons \n", "/emote"),
+                LazyText.command("  Tip Jar \n", "/tip"),
+                LazyText.command("  Claim Posts \n", "/help post", "/help post"),
+                LazyText.command("  tp ", "/tp"),
                 ChatColor.BLACK + "and",
-                LazyUtil.getClickableCommand(" tppost \n", "/tppost"),
+                LazyText.command(" tppost \n", "/tppost"),
                 ChatColor.BLACK + "      Vocal Callouts:\n",
-                LazyUtil.getClickableCommand(" Hello! ", "/v hello"),
-                LazyUtil.getClickableCommand(" Thanks! ", "/v thanks"),
-                LazyUtil.getClickableCommand(" Ok! \n", "/v okay"),
-                LazyUtil.getClickableCommand(" Over here! ", "/v overhere"),
-                LazyUtil.getClickableCommand(" Dis wae! \n", "/v followme"),
-                LazyUtil.getClickableCommand(" Help! ", "/v help"),
-                LazyUtil.getClickableCommand(" Lol! ", "/v haha"),
-                LazyUtil.getClickableCommand(" No ", "/v no"),
-                LazyUtil.getClickableCommand(" More...", "/voice")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
-                LazyUtil.getClickableURL("IRC (chatroom)\n", "http://r.robomwm.com/mememap", "/irc"),
-                LazyUtil.getClickableURL("Live Map\n", "http://r.robomwm.com/mememap", "/map"),
-                LazyUtil.getClickableURL("Dumcord\n", "https://discord.gg/3TXnkfa", "/dumcord"),
-                LazyUtil.getClickableCommand("Clan commands\n", "/clan"),
-                LazyUtil.getClickableCommand("Tacos\n", "/taco", "/taco <player>"),
-                LazyUtil.getClickableCommand("Shops\n", "/shop")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
-                LazyUtil.getClickableCommand("AutoCraft Airships\n", "/einfo autocraft", "/ac"),
-                LazyUtil.getClickableCommand("Element Bending\n", "/einfo bending"),
-                LazyUtil.getClickableCommand("Slimefun Guide\n", "/sf guide")));
-        bookMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.RED + "     MLG Fortress\n",
+                LazyText.command(" Hello! ", "/v hello"),
+                LazyText.command(" Thanks! ", "/v thanks"),
+                LazyText.command(" Ok! \n", "/v okay"),
+                LazyText.command(" Over here! ", "/v overhere"),
+                LazyText.command(" Dis wae! \n", "/v followme"),
+                LazyText.command(" Help! ", "/v help"),
+                LazyText.command(" Lol! ", "/v haha"),
+                LazyText.command(" No ", "/v no"),
+                LazyText.command(" More...", "/voice")));
+        bookMeta.spigot().addPage(LazyText.buildPage(ChatColor.RED + "     MLG Fortress\n",
+                LazyText.url("IRC (chatroom)\n", "http://r.robomwm.com/mememap", "/irc"),
+                LazyText.url("Live Map\n", "http://r.robomwm.com/mememap", "/map"),
+                LazyText.url("Dumcord\n", "https://discord.gg/3TXnkfa", "/dumcord"),
+                LazyText.command("Clan commands\n", "/clan"),
+                LazyText.command("Tacos\n", "/taco", "/taco <player>"),
+                LazyText.command("Shops\n", "/shop")));
+        bookMeta.spigot().addPage(LazyText.buildPage(ChatColor.RED + "     MLG Fortress\n",
+                LazyText.command("AutoCraft Airships\n", "/einfo autocraft", "/ac"),
+                LazyText.command("Element Bending\n", "/einfo bending"),
+                LazyText.command("Slimefun Guide\n", "/sf guide")));
+        bookMeta.spigot().addPage(LazyText.buildPage(ChatColor.RED + "     MLG Fortress\n",
                 "There's a lot more... I means there's like 150+ plugins...\nSo uh yea pls /apply cuz uh this is a lot to do but um yea??"));
         book.setItemMeta(bookMeta);
 
-        //claim posts
-        BookMeta postMeta = LazyUtil.getBookMeta();
-        postMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableCommand("⬅Back                        \n","/help","Back to /menu"),
-                "Claim posts exist in known worlds with a beacon.\n",
-                "\nCaptured posts provide ",
-                LazyUtil.getHoverable("protection", "- Cannot build\n- Can only break blocks with tools\n- Tools+armor take more damage\n- Teleportation is restricted"),
-                ChatColor.BLACK + " and ",
-                LazyUtil.getClickableCommand("teleportation.\n", "/tppoint"),
-                "\nClan members and allies share claim posts."));
-        postMeta.spigot().addPage(LazyUtil.buildPage(ChatColor.DARK_BLUE + "Upgrading claim posts\n\n",
-                "Right-click the beacon to add upgrades:\n",
-                LazyUtil.getHoverable("Emerald Blocks\n", "Increases post health\n(More breaks required to capture)"),
-                LazyUtil.getHoverable("Redstone Blocks\n", "Fuel\nIncreases lockout time\n- Lockout occurs on failed captures,\nmaking the post invulnerable to capture.\n- 10% of the fuel is consumed per lockout."),
-                LazyUtil.getHoverable("Prismarine\n", "Not implemented\nChance of applying mining haste when enemy players break blocks.\n- Chance, effectiveness, and duration increase when closer to the post.\n- Consumed only when applying a strong effect."),
-                LazyUtil.getHoverable("Arrows\n", "Sentry ammo.\n- Spawns 2 rapid-fire sentries upon attack.\n- Arrows apply minor knockback.\nNote: special arrows are converted\ninto regular sentry arrows."),
-                LazyUtil.getHoverable("Diamond Blocks\n", "Not implemented\nIdeas??"),
-                LazyUtil.getHoverable("Iron Blocks\n", "Not implemented\nRecruit Iron Golems (3 blocks per golem)"),
-                LazyUtil.getHoverable("Gold Blocks\n", "Not implemented\nBuy zomblings")));
-        post = LazyUtil.getBook(postMeta);
+        //minigames
+        bookMeta = LazyText.getBookMeta();
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                LazyText.command("⬅Back                        \n","/help","Back to /menu"),
+                "\nTo take a break from the custom survival you can take a visit to",
+                LazyText.command(" /minigames! ", "/minigames"),
+                "Play games like cookie clicker and create parkours!"));
+        minigames = LazyText.getBook(bookMeta);
+
+        bookMeta = LazyText.getBookMeta();
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                LazyText.command("⬅Back                        \n","/help","Back to /menu"),
+                "Creative Parkour allows you to express you creativity as minecrafter. Doing /cp create takes you to a personal plot that allows you to build whatever parkour you want! Let your friends help you using /cp invite. You can utilize red sandstone (speed) and lapis blocks (repel) to give special abilities to players playing your map! You can use /cp test to make your map publishable and /cp publish (name) to put out your map to the world."));
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                "When playing parkours in the Creative Parkour World you can play any map published by any player! Want to spectate a fellow friend playing a parkour with you? Just do /cp spec. You can return to start using the lime green dye and go to a checkpoint using the purple dye."
+        ));
+        creativeParkour = LazyText.getBook(bookMeta);
+
+        bookMeta = LazyText.getBookMeta();
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                LazyText.command("⬅Back                        \n","/help","Back to /menu"),
+                "You can go to the prison world (/warp prison) to play the classic prison. Doing /pwarp a will get you to your first mine where you can mine items and make money using /sellall. After you gather enough money you can do /rankup. To get a better pickaxe for more efficiency you can look at the crafting recipes at /warp prison."));
+        prison = LazyText.getBook(bookMeta);
+
+        bookMeta = LazyText.getBookMeta();
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                LazyText.command("⬅Back                        \n","/help","Back to /menu"),
+                "The Mall otherwise known as the Spawn can be reached using /spawn or /mall. The mall is an alternative way to make money and is very helpful to us lazy folks. Just rename a chest \"shop\" in an anvil, then rent a shop area, place the chest in the shop, place items you want to sell in the chest, do /setprice (amount) and you're sent on making money by doing virtually nothing."));
+        bookMeta.spigot().addPage(LazyText.buildPage(
+                "When shopping at the mall you can click a sellers' chest to see how many items are in a stock. You can do /buy (amount) to buy items from the seller."));
+        prison = LazyText.getBook(bookMeta);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -121,6 +135,15 @@ public class LetsStart implements Listener, CommandExecutor
             case "claimpoint":
             case "tppoint":
                 plugin.getBookUtil().openBook(player, post);
+                break;
+            case "prison":
+                plugin.getBookUtil().openBook(player, prison);
+                break;
+            case "minigames":
+                plugin.getBookUtil().openBook(player, minigames);
+                break;
+            case "parkour":
+                plugin.getBookUtil().openBook(player, creativeParkour);
                 break;
             case "give":
                 if (player.isOp())
@@ -147,50 +170,50 @@ public class LetsStart implements Listener, CommandExecutor
 
     private void openSettings(Player player)
     {
-        BookMeta bookMeta = LazyUtil.getBookMeta();
+        BookMeta bookMeta = LazyText.getBookMeta();
         GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
 
-        bookMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅ ","/help","Back to /menu"),
+        bookMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅ ","/help","Back to /menu"),
                 player.getDisplayName() + ChatColor.BLACK + "'s settings\n",
-                LazyUtil.getClickableCommand("View distance: " + player.getViewDistance(), "/view"), "\n",
-                LazyUtil.getClickableCommand("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"), "\n",
-                LazyUtil.getClickableCommand("Music: on", "", "Not implemented yet"), "\n",
-                LazyUtil.getClickableCommand("SneakPickup: " + getOnOff(player.hasMetadata("SNEAKPICKUP")), "/sneakpickup", "/sneakpickup\nPick up items only when sneaking."), "\n"
+                LazyText.command("View distance: " + player.getViewDistance(), "/view"), "\n",
+                LazyText.command("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"), "\n",
+                LazyText.command("Music: on", "", "Not implemented yet"), "\n",
+                LazyText.command("SneakPickup: " + getOnOff(player.hasMetadata("SNEAKPICKUP")), "/sneakpickup", "/sneakpickup\nPick up items only when sneaking."), "\n"
                 ));
 
-        plugin.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
+        plugin.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
     }
 
     private void openAbout(Player player)
     {
-        BookMeta aboutMeta = LazyUtil.getBookMeta();
-        aboutMeta.spigot().addPage(LazyUtil.buildPage(
-                LazyUtil.getClickableCommand("⬅Back   ","/help","Back to /menu"),
+        BookMeta aboutMeta = LazyText.getBookMeta();
+        aboutMeta.spigot().addPage(LazyText.buildPage(
+                LazyText.command("⬅Back   ","/help","Back to /menu"),
                 ChatColor.DARK_PURPLE + "About+Info\n",
                 ChatColor.BLACK + "IP: MLG.ROBOMWM.COM\n",
-                LazyUtil.getClickableURL("- Website\n", "http://techfortress.robomwm.com/p/mlg-base.html", "Fancy."),
-                LazyUtil.getClickableURL("- Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy"), ChatColor.BLACK +
+                LazyText.url("- Website\n", "http://techfortress.robomwm.com/p/mlg-base.html", "Fancy."),
+                LazyText.url("- Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy"), ChatColor.BLACK +
                 "Dis started as Trash Tech back in 2015, except the first guy I opped built a spawn. Then wuz " +
                         "Mini Fortress as Minigames took focus. Then it now b MLG Fortress 4 da memez."));
-        aboutMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅Back   ","/help","Back to /menu"),
+        aboutMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅Back   ","/help","Back to /menu"),
                 ChatColor.DARK_PURPLE + "About+Info\n",
                 "Credits:\n",
-                LazyUtil.getHoverable("Yoreni, ", "Built and setup prison\nCreated 2 plugins just for this server\nImplemented my requests :o\nBasically an \"actual\" developer (like me)"),
-                LazyUtil.getHoverable("TheDogeGamer, ", "A ded m3m3\nA ton o stuff\nSome guns\nAll dem trading cardz\nA lot of quotes on \nda server list ping motd.\nEssentials messages (blame him)\nBasically all around helpful \nand now all around inactive."),
-                LazyUtil.getHoverable("Lazybannan, ", "Built /warp jail\nBuilt a lot of other spawns\nidk where some of them are."),
-                LazyUtil.getHoverable("Gamewalkerz, ", "Built the /minigames hub\nSetup AreaShop (rentable shops)\nOther stuff idk he's inactive"),
-                LazyUtil.getHoverable("xKittyTheKillerx, ", "Built tutorial\nSetup dumcord"),
-                LazyUtil.getHoverable("MMM10, ", "Who even knows\nRandom Fish\nRandom blocks\nBroke the server a few times by installing random, poorly-made plugins\nThinks his mobcatcher is kewl."),
-                LazyUtil.getHoverable("Etanarvazac, ", "Tweaked plugins\nSetup dumcord\nuh can't recall it's been _a while_"),
-                LazyUtil.getHoverable("MakisMigee123, ", "Augmented element bending\nInstructed players on element bending\nAttempted to resolve bugs/console spam\n(Seriously I usually end up wasting a lot of time fixing that stuff)"),
+                LazyText.hover("Yoreni, ", "Built and setup prison\nCreated 2 plugins just for this server\nImplemented my requests :o\nBasically an \"actual\" developer (like me)"),
+                LazyText.hover("TheDogeGamer, ", "A ded m3m3\nA ton o stuff\nSome guns\nAll dem trading cardz\nA lot of quotes on \nda server list ping motd.\nEssentials messages (blame him)\nBasically all around helpful \nand now all around inactive."),
+                LazyText.hover("Lazybannan, ", "Built /warp jail\nBuilt a lot of other spawns\nidk where some of them are."),
+                LazyText.hover("Gamewalkerz, ", "Built the /minigames hub\nSetup AreaShop (rentable shops)\nOther stuff idk he's inactive"),
+                LazyText.hover("xKittyTheKillerx, ", "Built tutorial\nSetup dumcord"),
+                LazyText.hover("MMM10, ", "Who even knows\nRandom Fish\nRandom blocks\nBroke the server a few times by installing random, poorly-made plugins\nThinks his mobcatcher is kewl."),
+                LazyText.hover("Etanarvazac, ", "Tweaked plugins\nSetup dumcord\nuh can't recall it's been _a while_"),
+                LazyText.hover("MakisMigee123, ", "Augmented element bending\nInstructed players on element bending\nAttempted to resolve bugs/console spam\n(Seriously I usually end up wasting a lot of time fixing that stuff)"),
                 " and others but idk right now, you should PR and add urself here or something."));
-        aboutMeta.spigot().addPage(LazyUtil.buildPage(LazyUtil.getClickableCommand("⬅Back   ","/help","Back to /menu"),
+        aboutMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅Back   ","/help","Back to /menu"),
                 ChatColor.DARK_PURPLE + "About+Info\n",
-                LazyUtil.getClickableURL("Github: All dem custom codez\n", "https://github.com/MLG-Fortress/", "Too much wasted time."),
-                LazyUtil.getClickableURL("Serbur Stats\n", "http://mlg.robomwm.com:28500/server/MLG_Fortress", "Serbur Stalkin"),
-                LazyUtil.getClickableURL("Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy")
+                LazyText.url("Github: All dem custom codez\n", "https://github.com/MLG-Fortress/", "Too much wasted time."),
+                LazyText.url("Serbur Stats\n", "http://mlg.robomwm.com:28500/server/MLG_Fortress", "Serbur Stalkin"),
+                LazyText.url("Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy")
                 ));
-        plugin.getBookUtil().openBook(player, LazyUtil.getBook(aboutMeta));
+        plugin.getBookUtil().openBook(player, LazyText.getBook(aboutMeta));
     }
 
     private String getOnOff(boolean bool)

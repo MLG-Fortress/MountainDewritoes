@@ -1,7 +1,7 @@
 package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.BetterTPA.BetterTPA;
-import me.robomwm.MountainDewritoes.LazyUtil;
+import me.robomwm.MountainDewritoes.LazyText;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
@@ -150,13 +150,13 @@ public class WarpCommand implements CommandExecutor
 
     private void sendWarps(Player player)
     {
-        BookMeta bookMeta = LazyUtil.getBookMeta();
+        BookMeta bookMeta = LazyText.getBookMeta();
         List<BaseComponent> baseComponents = new ArrayList<>();
-        LazyUtil.addLegacyText(ChatColor.DARK_BLUE + "Warps:\n\n", baseComponents);
+        LazyText.addLegacyText(ChatColor.DARK_BLUE + "Warps:\n\n", baseComponents);
         for (String warp : warps.keySet())
-            baseComponents.add(LazyUtil.getClickableCommand("  " + warp + "     \n", "/warp " + warp));
+            baseComponents.add(LazyText.command("  " + warp + "     \n", "/warp " + warp));
         bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[baseComponents.size()]));
-        instance.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
+        instance.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
     }
 
     //old String method

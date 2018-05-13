@@ -138,16 +138,16 @@ public class FirstJoin implements Listener
         switch (event.getClickedBlock().getType())
         {
             case COMMAND_REPEATING:
-                bookMeta = LazyUtil.getBookMeta();
+                bookMeta = LazyText.getBookMeta();
                 bookMeta.spigot().addPage(
-                        LazyUtil.buildPage("Deer " + player.getDisplayName() + ChatColor.BLACK +
+                        LazyText.buildPage("Deer " + player.getDisplayName() + ChatColor.BLACK +
                                 ",\nSorry 4 missin ur arrival, but I c ur quite an inexperienced adventurer anyways.\u00AF\\_(\u30C4)_/\u00AF\nHow about u go to the cellar and clean up those annoying paper-eaters."),
-                        LazyUtil.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. And u got a shirt and shoes. So ur gud."));
+                        LazyText.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. And u got a shirt and shoes. So ur gud."));
                 break;
             case COMMAND_CHAIN:
-                bookMeta = LazyUtil.getBookMeta();
+                bookMeta = LazyText.getBookMeta();
                 bookMeta.spigot().addPage(
-                        LazyUtil.buildPage("Hey " + player.getDisplayName() + ChatColor.BLACK +
+                        LazyText.buildPage("Hey " + player.getDisplayName() + ChatColor.BLACK +
                         ",\nThanks for helpin out. Hopefully u got a bit more experience! Btw, Press F to open the menu, or do /menu if ur on lameo 1.8-o.\nEnjoy de /minigames or da memetastic /wild !")
                 );
                 break;
@@ -155,6 +155,6 @@ public class FirstJoin implements Listener
                     return;
         }
 
-        plugin.getBookUtil().openBook(player, LazyUtil.getBook(bookMeta));
+        plugin.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
     }
 }
