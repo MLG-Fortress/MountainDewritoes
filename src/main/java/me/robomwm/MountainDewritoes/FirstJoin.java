@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import com.destroystokyo.paper.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -67,6 +68,15 @@ public class FirstJoin implements Listener
         //player.sendBlockChange(new Location(WORLD, -2, 69, -4), Material.SUGAR_CANE_BLOCK, (byte)0);
         //player.sendBlockChange(new Location(WORLD, -2, 70, -4), Material.SUGAR_CANE_BLOCK, (byte)0);
         //NSA.setTempdata(player, "firstjoin");
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onPlayerJoinBeforeJoin(PlayerInitialSpawnEvent event)
+    {
+        if (event.getPlayer().hasPlayedBefore())
+            return;
+        if (event.getSpawnLocation().getWorld() == firstJoinLocation.getWorld())
+            event.setSpawnLocation(firstJoinLocation);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
