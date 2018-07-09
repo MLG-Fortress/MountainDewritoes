@@ -28,7 +28,6 @@ class MusicPackManager
         add("beautifulmiis", 120+22);
         add("whosthatdeadhomeappliance", 66);
         add("miichannel", 124);
-        add("splatoonbooyahbaseshopping", 90);
         add("greenhiillzhop", 120+11);
         category = "mallfood";
         add("smokeoddity", 57);
