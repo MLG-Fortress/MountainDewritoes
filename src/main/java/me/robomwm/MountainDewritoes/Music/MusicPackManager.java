@@ -21,11 +21,8 @@ class MusicPackManager
         category = "mall";
         add("elevatorjam", 120+43);
         add("hhstar", 180+20);
-        add("killingmiisoftly", 51);
-        add("litdog", 43);
         add("miifavoritethings", 120+17);
         add("nyanjazz", 180+30);
-        add("rare1976", 60+40);
         add("wiibopchannel", 60+60+60+60+32);
         add("teeosupdate", 66);
         add("beautifulmiis", 120+22);
@@ -36,14 +33,11 @@ class MusicPackManager
         category = "mallfood";
         add("smokeoddity", 57);
         add("krabbypower", 60+47);
-        add("noodlescantbebeat", 60+15);
+        add("noodlescantbebeat", 50);
         add("noodlescantbebeat2", 60+43);
-        add("noodlescantbebeat3", 63);
         add("portacorobinson", 63);
-        add("startrekpausecafe", 120+31);
         add("steamedhamsbutallstar", 120+18);
         add("bigsmokegetshurt", 49);
-        add("totinos", 120+24);
         add("brokensmokes", 60+31);
         add("frostedflakes", 51);
 

@@ -70,7 +70,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("abort"))
+        if (args[0].equalsIgnoreCase("abort") || args[0].equalsIgnoreCase("cancel"))
         {
             abortShutdown();
             sender.sendMessage("Restart aborted.");
