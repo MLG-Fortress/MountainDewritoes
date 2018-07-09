@@ -96,32 +96,35 @@ public class AtmosphericManager implements Listener, CommandExecutor
         if (player.hasMetadata("MD_LISTENING"))
         {
             SongMeta otherSongMeta = (SongMeta)player.getMetadata("MD_LISTENING").get(0).value();
-            switch(songMeta.getPriority(otherSongMeta))
+            if (!otherSongMeta.isEnded()) //ignore if song ended
             {
-                case HIGHER: //Override
-                    player.stopSound("", soundCategory);
-                case CONCURRENT: //Play concurrently
-                    break;
-                case EQUAL_OR_LOWER: //Skip
-                    return;
+                switch(songMeta.getPriority(otherSongMeta))
+                {
+                    case HIGHER: //Override
+                        player.stopSound("", soundCategory);
+                    case CONCURRENT: //Play concurrently
+                        break;
+                    case EQUAL_OR_LOWER: //Skip
+                        return;
+                }
             }
         }
 
         player.setMetadata("MD_LISTENING", new FixedMetadataValue(instance, songMeta));
         player.playSound(location, song.getSoundName(), soundCategory, volume, 1.0f);
 
-        //Schedule removal of metadata
-        new BukkitRunnable()
-        {
-            public void run()
-            {
-                if (!player.hasMetadata("MD_LISTENING"))
-                    return;
-
-                if ((songMeta.equals(player.getMetadata("MD_LISTENING").get(0).value())))
-                    player.removeMetadata("MD_LISTENING", instance);
-            }
-        }.runTaskLater(instance, song.getLength() + 20);
+//        //Schedule removal of metadata
+//        new BukkitRunnable()
+//        {
+//            public void run()
+//            {
+//                if (!player.hasMetadata("MD_LISTENING"))
+//                    return;
+//
+//                if ((songMeta.equals(player.getMetadata("MD_LISTENING").get(0).value())))
+//                    player.removeMetadata("MD_LISTENING", instance);
+//            }
+//        }.runTaskLater(instance, song.getLength());
     }
 
     /**
@@ -230,6 +233,11 @@ class SongMeta
         this.musicThing = musicThing;
         this.priority = priority;
         this.startTime = System.currentTimeMillis();
+    }
+
+    public boolean isEnded()
+    {
+        return System.currentTimeMillis() + (musicThing.getLength() * 50) > startTime;
     }
 
     public MusicThing getSong()
