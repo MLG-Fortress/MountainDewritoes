@@ -25,7 +25,10 @@ class MusicPackManager
         add("nyanjazz", 180+30);
         add("wiibopchannel", 60+60+60+60+32);
         add("teeosupdate", 66);
-        add("beautifulmiis", 120+22);
+        add("despitowiishop",60+34);
+        add("despacitotel", 41);
+        add("pumpedupjam", 120+44);
+        add("wantmii", 60+43);
         add("whosthatdeadhomeappliance", 66);
         add("miichannel", 124);
         add("greenhiillzhop", 120+11);
