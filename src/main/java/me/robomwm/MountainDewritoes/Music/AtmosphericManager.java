@@ -208,7 +208,7 @@ public class AtmosphericManager implements Listener, CommandExecutor
     }
 
     /*Music always stops when player dies*/
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void onPlayerDeath(PlayerDeathEvent event)
     {
         stopMusic(event.getEntity());
@@ -237,7 +237,7 @@ class SongMeta
 
     public boolean isEnded()
     {
-        return System.currentTimeMillis() + (musicThing.getLength() * 50) > startTime;
+        return System.currentTimeMillis() > startTime + (musicThing.getLength() * 50);
     }
 
     public MusicThing getSong()
