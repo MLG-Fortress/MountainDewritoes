@@ -1,8 +1,12 @@
 package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +18,10 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created on 1/3/2018.
@@ -60,13 +68,19 @@ public class ArmorAugmentation implements Listener
     }
 
     //Used by sprint ability usually
-    public boolean isFullPower(PlayerToggleSprintEvent event, Material leggings)
+    public boolean usePowerAbility(PlayerToggleSprintEvent event, Material leggings, int power)
     {
         Player player = event.getPlayer();
-        if (!event.isSprinting() || player.getFoodLevel() < 20)
+        if (!event.isSprinting())
             return false;
         if (!this.isEquipped(player, leggings))
             return false;
+        if (player.getFoodLevel() < power)
+        {
+            player.sendActionBar("Insufficient power, requires " + power + " doritos.");
+            return false;
+        }
+        player.setFoodLevel(player.getFoodLevel() - power);
         return true;
     }
 
@@ -143,8 +157,7 @@ public class ArmorAugmentation implements Listener
                 {
                     if (player.getFoodLevel() >= 20 || instance.isNoModifyWorld(player.getWorld()))
                         continue;
-                    if ((!player.isSprinting() && player.isOnGround()) || isEquipped(player, Material.IRON_LEGGINGS))
-                        player.setFoodLevel(player.getFoodLevel() + 1);
+                    player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
         }.runTaskTimer(instance, 20L, 20L);
@@ -159,6 +172,26 @@ public class ArmorAugmentation implements Listener
         if (event.getDamage() < 5.0)
             event.setCancelled(true);
         //TODO: goomba stomp
+        Player player = (Player)event.getEntity();
+        Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
+        if (entities.size() == 0)
+            return;
+        FishHook hook = (FishHook)player.getWorld().spawnEntity(player.getLocation(), EntityType.FISHING_HOOK);
+        //TODO: possible to make invisible? Yes? No?
+        hook.setShooter(player);
+        Vector vector = new Vector(0, -4, 0);
+        for (LivingEntity entity : entities)
+        {
+            entity.damage(20, hook); //TODO: damage resist for wearing an armored hat??
+            entity.setVelocity(vector);
+            if (entity.getType() == EntityType.PLAYER)
+                ((Player)entity).sendTitle(ChatColor.RED + "GOOMBA STOMPED!", "", 0, 40, 20);
+            //TODO: tag entity, monitor deathEvent to alter death message
+        }
+        player.getWorld().playSound(player.getLocation(), "fortress.goombastoped", SoundCategory.PLAYERS, 1.0f, 1.0f);
+        vector.setY(0.5);
+        player.setVelocity(player.getVelocity().add(vector));
+        player.sendMessage("Goomba Stomped!");
     }
 
 }

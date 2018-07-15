@@ -74,7 +74,7 @@ public class IronArmor implements Listener
                         cancel();
                         return;
                     }
-                    int velocity = 1;
+                    int velocity = 2;
                     //Compensate for falling velocity //No longer needed since we reduced power cost.
 //                    int velocity = (int)(-player.getVelocity().getY() * 15);
 //                    if (velocity < 1)

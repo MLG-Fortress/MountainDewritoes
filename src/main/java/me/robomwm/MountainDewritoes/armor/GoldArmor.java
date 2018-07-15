@@ -93,9 +93,11 @@ public class GoldArmor implements Listener
     public void onSprint(PlayerToggleSprintEvent event)
     {
         Player player = event.getPlayer();
-        if (!armorAugmentation.isFullPower(event, Material.GOLD_LEGGINGS))
+        if (!armorAugmentation.usePowerAbility(event, Material.GOLD_LEGGINGS, 10))
             return;
-        player.setVelocity(player.getLocation().getDirection().multiply(2));
-        player.setFoodLevel(8);
+        Vector direction = player.getLocation().getDirection().multiply(2);
+        if (direction.getY() < 0.2)
+            direction.setY(0.2);
+        player.setVelocity(direction);
     }
 }
