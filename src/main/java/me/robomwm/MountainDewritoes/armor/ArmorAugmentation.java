@@ -167,31 +167,31 @@ public class ArmorAugmentation implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onHardlyAnyFalling(EntityDamageEvent event)
     {
-        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
-            return;
-        if (event.getDamage() < 5.0)
-            event.setCancelled(true);
-        //TODO: goomba stomp
-        Player player = (Player)event.getEntity();
-        Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
-        if (entities.size() == 0)
-            return;
-        FishHook hook = (FishHook)player.getWorld().spawnEntity(player.getLocation(), EntityType.FISHING_HOOK);
-        //TODO: possible to make invisible? Yes? No?
-        hook.setShooter(player);
-        Vector vector = new Vector(0, -4, 0);
-        for (LivingEntity entity : entities)
-        {
-            entity.damage(20, hook); //TODO: damage resist for wearing an armored hat??
-            entity.setVelocity(vector);
-            if (entity.getType() == EntityType.PLAYER)
-                ((Player)entity).sendTitle(ChatColor.RED + "GOOMBA STOMPED!", "", 0, 40, 20);
-            //TODO: tag entity, monitor deathEvent to alter death message
-        }
-        player.getWorld().playSound(player.getLocation(), "fortress.goombastoped", SoundCategory.PLAYERS, 1.0f, 1.0f);
-        vector.setY(0.5);
-        player.setVelocity(player.getVelocity().add(vector));
-        player.sendMessage("Goomba Stomped!");
+//        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
+//            return;
+//        if (event.getDamage() < 5.0)
+//            event.setCancelled(true);
+//        //TODO: goomba stomp
+//        Player player = (Player)event.getEntity();
+//        Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
+//        if (entities.size() == 0)
+//            return;
+//        FishHook hook = (FishHook)player.getWorld().spawnEntity(player.getLocation(), EntityType.FISHING_HOOK);
+//        //TODO: possible to make invisible? Yes? No?
+//        hook.setShooter(player);
+//        Vector vector = new Vector(0, -4, 0);
+//        for (LivingEntity entity : entities)
+//        {
+//            entity.damage(20, hook); //TODO: damage resist for wearing an armored hat??
+//            entity.setVelocity(vector);
+//            if (entity.getType() == EntityType.PLAYER)
+//                ((Player)entity).sendTitle(ChatColor.RED + "GOOMBA STOMPED!", "", 0, 40, 20);
+//            //TODO: tag entity, monitor deathEvent to alter death message
+//        }
+//        player.getWorld().playSound(player.getLocation(), "fortress.goombastoped", SoundCategory.PLAYERS, 1.0f, 1.0f);
+//        vector.setY(0.5);
+//        player.setVelocity(player.getVelocity().add(vector));
+//        player.sendMessage("Goomba Stomped!");
     }
 
 }
