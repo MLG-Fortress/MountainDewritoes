@@ -42,6 +42,7 @@ public class ScoreboardStuff implements Listener
 
     public ScoreboardStuff(JavaPlugin plugin)
     {
+        if (true) return; //TODO: Await scoreboardstats update to 1.13
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
 
