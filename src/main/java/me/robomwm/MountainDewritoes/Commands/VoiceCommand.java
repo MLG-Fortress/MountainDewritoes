@@ -68,7 +68,7 @@ public class VoiceCommand implements CommandExecutor
 
         if (args.length <= 0)
         {
-            plugin.getBookUtil().openBook(player, getBook());
+            plugin.openBook(player, getBook());
             return false;
         }
 

@@ -134,16 +134,16 @@ public class LetsStart implements Listener, CommandExecutor
             case "claimpost":
             case "claimpoint":
             case "tppoint":
-                plugin.getBookUtil().openBook(player, post);
+                plugin.openBook(player, post);
                 break;
             case "prison":
-                plugin.getBookUtil().openBook(player, prison);
+                plugin.openBook(player, prison);
                 break;
             case "minigames":
-                plugin.getBookUtil().openBook(player, minigames);
+                plugin.openBook(player, minigames);
                 break;
             case "parkour":
-                plugin.getBookUtil().openBook(player, creativeParkour);
+                plugin.openBook(player, creativeParkour);
                 break;
             case "give":
                 if (player.isOp())
@@ -156,7 +156,7 @@ public class LetsStart implements Listener, CommandExecutor
 
     private boolean openStartBook(Player player)
     {
-        plugin.getBookUtil().openBook(player, book);
+        plugin.openBook(player, book);
         return true;
     }
 
@@ -181,7 +181,7 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyText.command("SneakPickup: " + getOnOff(player.hasMetadata("SNEAKPICKUP")), "/sneakpickup", "/sneakpickup\nPick up items only when sneaking."), "\n"
                 ));
 
-        plugin.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
+        plugin.openBook(player, LazyText.getBook(bookMeta));
     }
 
     private void openAbout(Player player)
@@ -213,7 +213,7 @@ public class LetsStart implements Listener, CommandExecutor
                 LazyText.url("Serbur Stats\n", "http://mlg.robomwm.com:28500/server/MLG_Fortress", "Serbur Stalkin"),
                 LazyText.url("Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy")
                 ));
-        plugin.getBookUtil().openBook(player, LazyText.getBook(aboutMeta));
+        plugin.openBook(player, LazyText.getBook(aboutMeta));
     }
 
     private String getOnOff(boolean bool)

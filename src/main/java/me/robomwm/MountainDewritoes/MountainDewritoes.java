@@ -52,6 +52,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.PluginManager;
@@ -147,9 +148,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         return (GrandioseAPI)getServer().getPluginManager().getPlugin("GrandioseAPI");
     }
 
-    public BookUtil getBookUtil()
+    public void openBook(Player player, ItemStack book)
     {
-        return bookUtil;
+        //bookUtil.openBook(player, book);
     }
 
     public CustomItemRecipes getCustomItemRecipes()
