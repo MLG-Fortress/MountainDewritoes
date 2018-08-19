@@ -90,6 +90,6 @@ public class ShoppingMall implements Listener
                 return;
         }
 
-        instance.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
+        instance.openBook(player, LazyText.getBook(bookMeta));
     }
 }

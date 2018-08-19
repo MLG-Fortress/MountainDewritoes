@@ -150,7 +150,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void openBook(Player player, ItemStack book)
     {
-        //bookUtil.openBook(player, book);
+        if (bookUtil != null)
+            bookUtil.openBook(player, book);
     }
 
     public CustomItemRecipes getCustomItemRecipes()
@@ -274,7 +275,15 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         setupEconomy(this);
         tipCommand = new TipCommand(this);
         customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
-        bookUtil = new BookUtil(this);
+        try
+        {
+            bookUtil = new BookUtil(this);
+        }
+        catch (Throwable rock)
+        {
+            getLogger().severe("BookUtil is out of date.");
+            rock.printStackTrace();
+        }
 
         //Initialize commonly-used sets
         safeWorlds.add(getServer().getWorld("mall"));

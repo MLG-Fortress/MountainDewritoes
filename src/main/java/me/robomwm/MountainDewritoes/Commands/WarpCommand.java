@@ -156,7 +156,7 @@ public class WarpCommand implements CommandExecutor
         for (String warp : warps.keySet())
             baseComponents.add(LazyText.command("  " + warp + "     \n", "/warp " + warp));
         bookMeta.spigot().addPage(baseComponents.toArray(new BaseComponent[baseComponents.size()]));
-        instance.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
+        instance.openBook(player, LazyText.getBook(bookMeta));
     }
 
     //old String method
