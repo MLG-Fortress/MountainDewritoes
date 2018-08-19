@@ -165,6 +165,6 @@ public class FirstJoin implements Listener
                     return;
         }
 
-        plugin.getBookUtil().openBook(player, LazyText.getBook(bookMeta));
+        plugin.openBook(player, LazyText.getBook(bookMeta));
     }
 }
