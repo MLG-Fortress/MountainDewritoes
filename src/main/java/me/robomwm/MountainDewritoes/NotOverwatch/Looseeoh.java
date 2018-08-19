@@ -73,7 +73,7 @@ public class Looseeoh implements Listener
         if (block.isLiquid())
             return false;
 
-        //Near an adjacent, solid block? //TODO: we have to fix this. This is stupid.
+        //Near an adjacent, solid block? //This is stupid. //And so is this feature in general.
         if (!block.getRelative(BlockFace.NORTH).getType().isSolid()
                 && !block.getRelative(BlockFace.SOUTH).getType().isSolid()
                 && !block.getRelative(BlockFace.EAST).getType().isSolid()

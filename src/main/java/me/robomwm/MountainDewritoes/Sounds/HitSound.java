@@ -56,7 +56,7 @@ public class HitSound implements Listener
 
         attacker.playSound(attacker.getLocation(), Sound.UI_BUTTON_CLICK, 3000000f, 1f);
 
-        instance.getTitleManager().sendTitle(attacker, 0, largeHitMarker); //TODO: critical damage color modifier
+        instance.getTitleManager().sendTitle(attacker, 0, largeHitMarker);
     }
 
     @EventHandler

@@ -35,7 +35,6 @@ public class ReplacementSoundEffects implements Listener
         switch (event.getCause())
         {
             case FALL:
-                //TODO: handle these
             case FIRE_TICK:
             case DROWNING:
                 return;
@@ -47,10 +46,9 @@ public class ReplacementSoundEffects implements Listener
         Location location = player.getLocation();
 
         //Play sound to others
-        //TODO: distance checks? (Only for hacked clients)
         for (Player p : player.getWorld().getPlayers())
         {
-            if (p == player)
+            if (p == player || p.getLocation().distanceSquared(player.getLocation()) > 400) //20 blocks, prevents flooding channel for those not in range
                 continue;
             p.playSound(location, "fortress.roblox", SoundCategory.PLAYERS, 1.0f, pitch);
         }

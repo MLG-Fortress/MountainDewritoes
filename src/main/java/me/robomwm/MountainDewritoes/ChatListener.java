@@ -73,8 +73,6 @@ public class ChatListener implements Listener
     and b) weighting in what I use, I'd get a net of 4 more characters.
     Probably would be better to use holograms, but most players stare at the
     chat window anyways...
-
-    TODO: Handle /me command
     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event)
@@ -118,7 +116,6 @@ public class ChatListener implements Listener
             {
                 public void run()
                 {
-                    //TODO: Figure out how to cancel tasks if team ever equals null
                     Team team = sb.getTeam(player.getName());
                     if (team == null)
                         return;
@@ -179,7 +176,6 @@ public class ChatListener implements Listener
         {
             public void run()
             {
-                //TODO: are the 3 lines below thread-safe?
                 Team team = sb.getTeam(player.getName());
                 if (team == null)
                     return;

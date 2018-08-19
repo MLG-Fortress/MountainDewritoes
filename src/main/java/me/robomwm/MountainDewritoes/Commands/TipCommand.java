@@ -97,7 +97,6 @@ public class TipCommand implements CommandExecutor
 
                 player.sendMessage(formatTip(tip));
 
-                //TODO: thread safe to modify YamlConfiguration object?
 //                if (store)
 //                {
 //                    new BukkitRunnable()
@@ -125,7 +124,6 @@ public class TipCommand implements CommandExecutor
         return getRandomColor() + "" + ChatColor.BOLD + "/TIP: " + getRandomColor() + tip; //┃\u2503
     }
 
-    //TODO: word wrapping
     private String getTip(@Nullable Player player, List<String> tips)
     {
 //        List<String> shuffledTips = new ArrayList<>(tips);

@@ -291,7 +291,7 @@ public class GamemodeInventoryManager implements Listener
         snapshotSection.set("foodLevel", player.getFoodLevel()); //int
         snapshotSection.set("activePotionEffects", new ArrayList<>(player.getActivePotionEffects())); //List<PotionEffect> - no idea what collection type CB uses, but I'm pretty sure it'll also be stored and read as ArrayList.
 
-        saveInventorySnapshots(); //TODO: schedule in a runnable instead (performance)?
+        saveInventorySnapshots();
 
         player.getInventory().clear();
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20D);
