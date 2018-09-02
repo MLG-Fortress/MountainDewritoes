@@ -7,9 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
@@ -50,10 +54,55 @@ public class DiamondArmor implements Listener
         if (armorAugmentation.isEquipped(player, Material.DIAMOND_BOOTS))
             return;
 
-        Vector ministun = new Vector(0, 0.1, 0);
+        Vector ministun = new Vector(0, 0.2, 0);
         for (Entity entity : player.getNearbyEntities(3, 1, 3))
             entity.setVelocity(ministun);
         //TODO short potion effect
         //TODO sound, effect
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onAttack(EntityDamageByEntityEvent event)
+    {
+        if (event.getDamager().getType() != EntityType.PLAYER)
+            return;
+        Player player = (Player)event.getDamager();
+
+        if (!player.isSprinting() || !armorAugmentation.isEquipped(player, Material.IRON_LEGGINGS))
+            return;
+
+        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(player.getLocation().toVector()).normalize().setY(0.3));
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onSneak(PlayerToggleSneakEvent event)
+    {
+        if (!event.isSneaking())
+            return;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (event.getPlayer().isSneaking() && !event.getPlayer().isOnGround())
+                    event.getPlayer().setVelocity(new Vector(0, -4, 0));
+                else
+                    cancel();
+            }
+        }.runTaskTimer(armorAugmentation.getPlugin(), 1L, 1L);
+
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onSprint(PlayerToggleSprintEvent event)
+    {
+        Player player = event.getPlayer();
+        int power = armorAugmentation.usePowerAbility(event, Material.DIAMOND_LEGGINGS);
+        if (power == 0)
+            return;
+        Vector direction = player.getLocation().getDirection().multiply(power / 6);
+        if (direction.getY() < 0.2)
+            direction.setY(0.2);
+        player.setVelocity(direction);
     }
 }

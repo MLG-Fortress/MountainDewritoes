@@ -1,21 +1,16 @@
 package me.robomwm.MountainDewritoes.armor;
 
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,7 +69,7 @@ public class IronArmor implements Listener
                         cancel();
                         return;
                     }
-                    int velocity = 2;
+                    final int velocity = 1 + player.getFoodLevel() / 6;
                     //Compensate for falling velocity //No longer needed since we reduced power cost.
 //                    int velocity = (int)(-player.getVelocity().getY() * 15);
 //                    if (velocity < 1)
@@ -92,13 +87,13 @@ public class IronArmor implements Listener
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
-                    try
-                    {
-                        if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
-                            return;
-                    }
-                    catch (Throwable ignored){}
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
+//                    try
+//                    {
+//                        if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
+//                            return;
+//                    }
+//                    catch (Throwable ignored){}
+//                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
 
                 }
             };
@@ -107,16 +102,11 @@ public class IronArmor implements Listener
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onAttack(EntityDamageByEntityEvent event)
+    @EventHandler(ignoreCancelled = true)
+    public void onSprint(PlayerToggleSprintEvent event)
     {
-        if (event.getDamager().getType() != EntityType.PLAYER)
-            return;
-        Player player = (Player)event.getDamager();
 
-        if (!player.isSprinting() || !armorAugmentation.isEquipped(player, Material.IRON_LEGGINGS))
-            return;
-
-        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(player.getLocation().toVector()).normalize().setY(0.3));
     }
+
+
 }

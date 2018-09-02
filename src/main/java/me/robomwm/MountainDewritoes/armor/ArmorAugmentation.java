@@ -1,12 +1,8 @@
 package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.SoundCategory;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,10 +14,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created on 1/3/2018.
@@ -32,18 +24,23 @@ import java.util.List;
  */
 public class ArmorAugmentation implements Listener
 {
-    private MountainDewritoes instance;
+    private MountainDewritoes plugin;
 
     public ArmorAugmentation(MountainDewritoes plugin)
     {
-        instance = plugin;
+        this.plugin = plugin;
         //plugin.getCustomItemRecipes().removeRecipe(new HashSet<>(Arrays.asList(Material.BARRIER, Material.BEDROCK))); //todo fill
-        new GoldArmor(instance, this);
-        new IronArmor(instance, this);
-        new DiamondArmor(instance, this);
+        new GoldArmor(this.plugin, this);
+        new IronArmor(this.plugin, this);
+        new DiamondArmor(this.plugin, this);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        new OldFood(instance);
+        new OldFood(this.plugin);
         ATPgeneration();
+    }
+
+    public MountainDewritoes getPlugin()
+    {
+        return plugin;
     }
 
     public boolean isEquipped(Player player, Material armorToMatch)
@@ -82,6 +79,18 @@ public class ArmorAugmentation implements Listener
         }
         player.setFoodLevel(player.getFoodLevel() - power);
         return true;
+    }
+
+    public int usePowerAbility(PlayerToggleSprintEvent event, Material leggings)
+    {
+        Player player = event.getPlayer();
+        if (!event.isSprinting())
+            return 0;
+        if (!this.isEquipped(player, leggings))
+            return 0;
+        final int foodlevel = player.getFoodLevel();
+        player.setFoodLevel(0);
+        return foodlevel;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -138,7 +147,7 @@ public class ArmorAugmentation implements Listener
     private void onSprint(PlayerToggleSprintEvent event)
     {
         Player player = event.getPlayer();
-        if (instance.isNoModifyWorld(player.getWorld()))
+        if (plugin.isNoModifyWorld(player.getWorld()))
             return;
         if (event.isSprinting() && player.getFoodLevel() > 1)
             player.setFoodLevel(player.getFoodLevel() - 1);
@@ -153,24 +162,24 @@ public class ArmorAugmentation implements Listener
             @Override
             public void run()
             {
-                for (Player player : instance.getServer().getOnlinePlayers())
+                for (Player player : plugin.getServer().getOnlinePlayers())
                 {
-                    if (player.getFoodLevel() >= 20 || instance.isNoModifyWorld(player.getWorld()))
+                    if (player.getFoodLevel() >= 20 || plugin.isNoModifyWorld(player.getWorld()))
                         continue;
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
-        }.runTaskTimer(instance, 20L, 20L);
+        }.runTaskTimer(plugin, 20L, 20L);
     }
 
     //Cancel minute falling damage, do goomba stomp
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onHardlyAnyFalling(EntityDamageEvent event)
     {
-//        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
-//            return;
-//        if (event.getDamage() < 5.0)
-//            event.setCancelled(true);
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
+            return;
+        if (event.getDamage() < 5.0)
+            event.setCancelled(true);
 //        //TODO: goomba stomp
 //        Player player = (Player)event.getEntity();
 //        Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
@@ -210,7 +219,7 @@ public class ArmorAugmentation implements Listener
 //            player.setSaturation(20f);
 //            return;
 //        }
-//        if (player.getFoodLevel() < 1 || instance.isNoModifyWorld(player.getWorld()))
+//        if (player.getFoodLevel() < 1 || plugin.isNoModifyWorld(player.getWorld()))
 //            return;
 //
 //        final long time = System.currentTimeMillis();
@@ -230,7 +239,7 @@ public class ArmorAugmentation implements Listener
 //                else
 //                    cancel();
 //            }
-//        }.runTaskTimer(instance, 10L, 10L);
+//        }.runTaskTimer(plugin, 10L, 10L);
 //    }
 //    //Loreize items
 //    private boolean realHolder(InventoryHolder holder)

@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,25 +32,25 @@ public class GoldArmor implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.armorAugmentation = armorAugmentation;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                for (Player player : plugin.getServer().getOnlinePlayers())
-                {
-                    ItemStack chestplate = player.getInventory().getChestplate();
-                    if (chestplate == null)
-                        continue;
-                    if (chestplate.getType() == Material.GOLD_CHESTPLATE &&
-                            (!player.hasPotionEffect(PotionEffectType.JUMP) || player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() <= 2))
-                    {
-                        player.removePotionEffect(PotionEffectType.JUMP);
-                        player.addPotionEffect(chestplateEffect);
-                    }
-                }
-            }
-        }.runTaskTimer(plugin, 40L, 40L);
+//        new BukkitRunnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                for (Player player : plugin.getServer().getOnlinePlayers())
+//                {
+//                    ItemStack chestplate = player.getInventory().getChestplate();
+//                    if (chestplate == null)
+//                        continue;
+//                    if (chestplate.getType() == Material.GOLD_CHESTPLATE &&
+//                            (!player.hasPotionEffect(PotionEffectType.JUMP) || player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() <= 2))
+//                    {
+//                        player.removePotionEffect(PotionEffectType.JUMP);
+//                        player.addPotionEffect(chestplateEffect);
+//                    }
+//                }
+//            }
+//        }.runTaskTimer(plugin, 40L, 40L);
     }
 
     /* GOLD BOOTS */
@@ -93,11 +93,20 @@ public class GoldArmor implements Listener
     public void onSprint(PlayerToggleSprintEvent event)
     {
         Player player = event.getPlayer();
-        if (!armorAugmentation.usePowerAbility(event, Material.GOLD_LEGGINGS, 10))
+        if (player.hasPotionEffect(PotionEffectType.SPEED))
             return;
-        Vector direction = player.getLocation().getDirection().multiply(2);
-        if (direction.getY() < 0.2)
-            direction.setY(0.2);
-        player.setVelocity(direction);
+        int length = armorAugmentation.usePowerAbility(event, Material.GOLD_LEGGINGS) * 2;
+        if (length == 0)
+            return;
+        player.setMetadata("nocheatplus.checks.moving.survivalfly", new FixedMetadataValue(armorAugmentation.getPlugin(), true));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, length, 10, true, false));
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                player.removeMetadata("nocheatplus.checks.moving.survivalfly", armorAugmentation.getPlugin());
+            }
+        }.runTaskLater(armorAugmentation.getPlugin(), length);
     }
 }
