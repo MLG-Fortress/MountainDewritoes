@@ -3,6 +3,7 @@ version: ${project.version}
 website: https://robomwm.com
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
+api-version: 1.13
 depend:
 - CustomItemRecipes
 - GrandioseAPI
