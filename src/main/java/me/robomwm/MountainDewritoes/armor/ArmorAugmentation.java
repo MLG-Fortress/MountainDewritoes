@@ -48,13 +48,13 @@ public class ArmorAugmentation implements Listener
         ItemStack equippedArmor = null;
         switch (armorToMatch)
         {
-            case GOLD_LEGGINGS:
+            case GOLDEN_LEGGINGS:
             case IRON_LEGGINGS:
             case DIAMOND_LEGGINGS:
             case CHAINMAIL_LEGGINGS:
                 equippedArmor = player.getInventory().getLeggings();
                 break;
-            case GOLD_BOOTS:
+            case GOLDEN_BOOTS:
             case IRON_BOOTS:
             case DIAMOND_BOOTS:
             case CHAINMAIL_BOOTS:
@@ -108,7 +108,7 @@ public class ArmorAugmentation implements Listener
 
         switch(entity.getEquipment().getBoots().getType())
         {
-            case GOLD_BOOTS:
+            case GOLDEN_BOOTS:
             case IRON_BOOTS:
             case DIAMOND_BOOTS:
                 entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);

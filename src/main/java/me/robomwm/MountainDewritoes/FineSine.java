@@ -47,7 +47,7 @@ public class FineSine implements Listener
             return;
         if (event.getClickedBlock() == null)
             return;
-        if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN_POST)
+        if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN)
             return;
         Sign sine = (Sign)event.getClickedBlock().getState();
         if (!sine.getLine(0).equals(FINE_SINE_LABEL))

@@ -62,7 +62,7 @@ public class GoldArmor implements Listener
 
         if (!event.isSneaking() || event.getPlayer().isOnGround())
             return;
-        if (!armorAugmentation.isEquipped(player, Material.GOLD_BOOTS))
+        if (!armorAugmentation.isEquipped(player, Material.GOLDEN_BOOTS))
             return;
 
         Integer jump = NSA.getMidairMap().get(player);
@@ -95,7 +95,7 @@ public class GoldArmor implements Listener
         Player player = event.getPlayer();
         if (player.hasPotionEffect(PotionEffectType.SPEED))
             return;
-        int length = armorAugmentation.usePowerAbility(event, Material.GOLD_LEGGINGS) * 2;
+        int length = armorAugmentation.usePowerAbility(event, Material.GOLDEN_LEGGINGS) * 2;
         if (length == 0)
             return;
         player.setMetadata("nocheatplus.checks.moving.survivalfly", new FixedMetadataValue(armorAugmentation.getPlugin(), true));

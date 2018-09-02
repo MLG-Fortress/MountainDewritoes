@@ -147,14 +147,14 @@ public class FirstJoin implements Listener
 
         switch (event.getClickedBlock().getType())
         {
-            case COMMAND_REPEATING:
+            case REPEATING_COMMAND_BLOCK:
                 bookMeta = LazyText.getBookMeta();
                 bookMeta.spigot().addPage(
                         LazyText.buildPage("Deer " + player.getDisplayName() + ChatColor.BLACK +
                                 ",\nSorry 4 missin ur arrival, but I c ur quite an inexperienced adventurer anyways.\u00AF\\_(\u30C4)_/\u00AF\nHow about u go to the cellar and clean up those annoying paper-eaters."),
                         LazyText.buildPage("The cellar is behind you and to the right. Don't worry, your hands should do the trick. And u got a shirt and shoes. So ur gud."));
                 break;
-            case COMMAND_CHAIN:
+            case CHAIN_COMMAND_BLOCK:
                 bookMeta = LazyText.getBookMeta();
                 bookMeta.spigot().addPage(
                         LazyText.buildPage("Hey " + player.getDisplayName() + ChatColor.BLACK +

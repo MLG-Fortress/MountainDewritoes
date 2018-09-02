@@ -66,7 +66,7 @@ public class DebugCommand implements CommandExecutor
                 while (recipeIterator.hasNext())
                 {
                     Recipe recipe = recipeIterator.next();
-                    if (recipe.getResult().getType() != Material.GOLD_BOOTS)
+                    if (recipe.getResult().getType() != Material.GOLDEN_BOOTS)
                         existingRecipes.add(recipe);
                 }
                 plugin.getServer().clearRecipes();

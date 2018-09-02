@@ -83,7 +83,7 @@ public class AntiLag implements Listener
                 {
                     Location blockLocation = location.clone().add(x, y, z);
                     Block block = blockLocation.getBlock();
-                    player.sendBlockChange(blockLocation, block.getType(), block.getData());
+                    player.sendBlockChange(blockLocation, block.getBlockData());
                 }
             }
         }

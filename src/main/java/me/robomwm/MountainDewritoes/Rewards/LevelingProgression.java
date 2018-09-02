@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -157,7 +156,7 @@ public class LevelingProgression implements Listener
         if (event.getExpLevelCost() <= 0)
             return;
 
-        if (event.getEnchantBlock().getType() == Material.ENCHANTMENT_TABLE)
+        if (event.getEnchantBlock().getType() == Material.ENCHANTING_TABLE)
         {
             event.setCancelled(true);
             event.getEnchanter().closeInventory();

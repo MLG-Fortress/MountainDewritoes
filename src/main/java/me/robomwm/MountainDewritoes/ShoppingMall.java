@@ -79,7 +79,7 @@ public class ShoppingMall implements Listener
 
         switch (event.getClickedBlock().getType())
         {
-            case COMMAND:
+            case COMMAND_BLOCK:
                 bookMeta = LazyText.getBookMeta();
                 bookMeta.spigot().addPage(
                         LazyText.buildPage("Ayyy " + player.getDisplayName() + ChatColor.BLACK +

@@ -1,13 +1,8 @@
 package me.robomwm.MountainDewritoes;
 
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import to.us.mlgfort.NoMyStuff.NoMyStuff;
 
@@ -55,6 +50,6 @@ public class TabList implements Listener
                         instance.getTipCommand().getRandomColor() + instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
                         instance.getTipCommand().getRandomColor() + "TPS: " + df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
                         instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms"),
-                TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "IP" + ChatColor.AQUA + ": MLG.ROBOMWM.COM"));
+                TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "IP: " + instance.getTipCommand().getRandomColor() + "MLG.ROBOMWM.COM"));
     }
 }

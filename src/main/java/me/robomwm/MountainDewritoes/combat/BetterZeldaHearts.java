@@ -53,8 +53,7 @@ public class BetterZeldaHearts implements Listener
         this.economy = economy;
         customItems = plugin.getCustomItemRecipes();
 
-        ItemStack heart = new ItemStack(Material.INK_SACK);
-        heart.setDurability((short)1);
+        ItemStack heart = new ItemStack(Material.ROSE_RED);
         ItemMeta heartMeta = heart.getItemMeta();
         heartMeta.setDisplayName("healthHeart");
         heart.setItemMeta(heartMeta);
