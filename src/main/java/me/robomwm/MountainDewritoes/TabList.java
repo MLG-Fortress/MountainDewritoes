@@ -38,19 +38,27 @@ public class TabList implements Listener
         }.runTaskTimer(instance, 20L, 20L);
     }
 
+    boolean lol = true;
+
     private void setTabList(Player player)
     {
-        String ping = "over 9000";
-        if (noMyStuff != null)
-            ping = String.valueOf(noMyStuff.getPingCommand().getPing(player));
+        if (lol)
+        {
+            String ping = "over 9000";
+            if (noMyStuff != null)
+                ping = String.valueOf(noMyStuff.getPingCommand().getPing(player));
+            player.setPlayerListHeader(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
+                    instance.getTipCommand().getRandomColor() +
+                    instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
+                    instance.getTipCommand().getRandomColor() + "TPS: " +
+                    df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
+                    instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms");
 
-        player.setPlayerListHeader(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
-                instance.getTipCommand().getRandomColor() +
-                instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
-                instance.getTipCommand().getRandomColor() + "TPS: " +
-                df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
-                instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms");
-        player.setPlayerListFooter(instance.getTipCommand().getRandomColor() + "IP: " +
+        }
+        else
+            player.setPlayerListFooter(instance.getTipCommand().getRandomColor() + "IP: " +
                 instance.getTipCommand().getRandomColor() + "MLG.ROBOMWM.COM");
+
+        lol = !lol;
     }
 }
