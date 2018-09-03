@@ -74,7 +74,7 @@ public class ArmorAugmentation implements Listener
             return false;
         if (player.getFoodLevel() < power)
         {
-            player.sendActionBar("Insufficient power, requires " + power + " doritos.");
+            //player.sendActionBar("Insufficient power, requires " + power + " doritos.");
             return false;
         }
         player.setFoodLevel(player.getFoodLevel() - power);

@@ -28,6 +28,7 @@ public class IronArmor implements Listener
     private JavaPlugin instance;
     private ArmorAugmentation armorAugmentation;
     private final Map<Player, BukkitRunnable> floaters = new HashMap<>();
+    private final Map<Player, BukkitRunnable> flyers = new HashMap<>();
 
     IronArmor(JavaPlugin plugin, ArmorAugmentation armorAugmentation)
     {
@@ -64,12 +65,12 @@ public class IronArmor implements Listener
                 @Override
                 public void run()
                 {
-                    if (player.getFoodLevel() <= 0 || !armorAugmentation.isEquipped(player, Material.IRON_BOOTS))
+                    if (!armorAugmentation.isEquipped(player, Material.IRON_BOOTS) || player.isOnGround())
                     {
                         cancel();
                         return;
                     }
-                    final int velocity = 1 + player.getFoodLevel() / 6;
+//                    final int velocity = 1 + player.getFoodLevel() / 6;
                     //Compensate for falling velocity //No longer needed since we reduced power cost.
 //                    int velocity = (int)(-player.getVelocity().getY() * 15);
 //                    if (velocity < 1)
@@ -77,8 +78,8 @@ public class IronArmor implements Listener
 //                    else if (velocity > 100)
 //                        velocity = 100;
                     player.removePotionEffect(PotionEffectType.LEVITATION);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, velocity, true, false));
-                    player.setFoodLevel(player.getFoodLevel() - 1);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 40, 255, true, false));
+                    //player.setFoodLevel(player.getFoodLevel() - 1);
                 }
 
                 @Override
@@ -105,7 +106,32 @@ public class IronArmor implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onSprint(PlayerToggleSprintEvent event)
     {
+        Player player = event.getPlayer();
 
+        if (flyers.containsKey(player))
+            flyers.remove(player).cancel();
+
+        if (!armorAugmentation.usePowerAbility(event, Material.IRON_LEGGINGS, 1))
+            return;
+
+        new BukkitRunnable()
+        {
+            int time = 0;
+            @Override
+            public void run()
+            {
+                if (!armorAugmentation.isEquipped(player, Material.IRON_LEGGINGS)
+                || !player.isSprinting() || player.getFoodLevel() == 0)
+                {
+                    cancel();
+                    return;
+                }
+
+                player.setVelocity(player.getLocation().getDirection().multiply(0.5));
+                if (++time % 3 == 0)
+                    player.setFoodLevel(player.getFoodLevel() - 1);
+            }
+        }.runTaskTimer(armorAugmentation.getPlugin(), 1L, 1L);
     }
 
 
