@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes;
 
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -45,11 +44,13 @@ public class TabList implements Listener
         if (noMyStuff != null)
             ping = String.valueOf(noMyStuff.getPingCommand().getPing(player));
 
-        player.setPlayerListHeaderFooter(
-                TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
-                        instance.getTipCommand().getRandomColor() + instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
-                        instance.getTipCommand().getRandomColor() + "TPS: " + df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
-                        instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms"),
-                TextComponent.fromLegacyText(instance.getTipCommand().getRandomColor() + "IP: " + instance.getTipCommand().getRandomColor() + "MLG.ROBOMWM.COM"));
+        player.setPlayerListHeader(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
+                instance.getTipCommand().getRandomColor() +
+                instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
+                instance.getTipCommand().getRandomColor() + "TPS: " +
+                df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
+                instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms");
+        player.setPlayerListFooter(instance.getTipCommand().getRandomColor() + "IP: " +
+                instance.getTipCommand().getRandomColor() + "MLG.ROBOMWM.COM");
     }
 }

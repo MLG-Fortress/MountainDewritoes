@@ -133,6 +133,4 @@ public class IronArmor implements Listener
             }
         }.runTaskTimer(armorAugmentation.getPlugin(), 1L, 1L);
     }
-
-
 }

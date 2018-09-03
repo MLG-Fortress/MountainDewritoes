@@ -26,7 +26,7 @@ import org.bukkit.util.Vector;
 public class GoldArmor implements Listener
 {
     private ArmorAugmentation armorAugmentation;
-    private final PotionEffect chestplateEffect = new PotionEffect(PotionEffectType.JUMP, 80, 2, true, false);
+    //private final PotionEffect chestplateEffect = new PotionEffect(PotionEffectType.JUMP, 80, 2, true, false);
 
     GoldArmor(MountainDewritoes plugin, ArmorAugmentation armorAugmentation)
     {

@@ -33,6 +33,7 @@ public class ArmorAugmentation implements Listener
         new GoldArmor(this.plugin, this);
         new IronArmor(this.plugin, this);
         new DiamondArmor(this.plugin, this);
+        new ChainmailArmor(this.plugin, this);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         new OldFood(this.plugin);
         ATPgeneration();
