@@ -40,11 +40,11 @@ public class ChainmailArmor implements Listener
 
         if (!event.isSneaking() || !event.getPlayer().isOnGround())
             return;
-        if (!armorAugmentation.isEquipped(player, Material.GOLDEN_BOOTS))
+        if (!armorAugmentation.isEquipped(player, Material.CHAINMAIL_BOOTS))
             return;
         Vector vector = player.getLocation().toVector();
 
-        player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector().multiply(1.3).setY(0D))); //TODO: adjust
+        player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector().setY(0D))); //TODO: adjust
 
         Integer jump = NSA.getMidairMap().get(player);
     }
