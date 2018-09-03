@@ -77,7 +77,7 @@ public class DiamondArmor implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onSneak(PlayerToggleSneakEvent event)
     {
-        if (!event.isSneaking())
+        if (!event.isSneaking() || armorAugmentation.isEquipped(event.getPlayer(), Material.DIAMOND_BOOTS))
             return;
         new BukkitRunnable()
         {
