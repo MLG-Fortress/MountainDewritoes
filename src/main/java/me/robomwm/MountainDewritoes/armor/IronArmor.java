@@ -11,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolVersion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +72,8 @@ public class IronArmor implements Listener
                         cancel();
                         return;
                     }
-//                    final int velocity = 1 + player.getFoodLevel() / 6;
+                    //final int velocity = 1 + player.getFoodLevel() / 6;
+                    final int velocity = 1;
                     //Compensate for falling velocity //No longer needed since we reduced power cost.
 //                    int velocity = (int)(-player.getVelocity().getY() * 15);
 //                    if (velocity < 1)
@@ -78,8 +81,8 @@ public class IronArmor implements Listener
 //                    else if (velocity > 100)
 //                        velocity = 100;
                     player.removePotionEffect(PotionEffectType.LEVITATION);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 40, 254, true, false));
-                    //player.setFoodLevel(player.getFoodLevel() - 1);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 30, velocity, true, false));
+                    player.setFoodLevel(player.getFoodLevel() - 1);
                 }
 
                 @Override
@@ -88,18 +91,17 @@ public class IronArmor implements Listener
                     super.cancel();
                     player.removePotionEffect(PotionEffectType.LEVITATION);
                     floaters.remove(player);
-//                    try
-//                    {
-//                        if (ProtocolSupportAPI.getProtocolVersion(player) != ProtocolVersion.getLatest(ProtocolType.PC))
-//                            return;
-//                    }
-//                    catch (Throwable ignored){}
-//                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
-
+                    try
+                    {
+                        if (ProtocolSupportAPI.getProtocolVersion(player).isBefore(ProtocolVersion.MINECRAFT_1_9))
+                            return;
+                    }
+                    catch (Throwable ignored){}
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
                 }
             };
             floaters.put(player, runnable);
-            runnable.runTaskTimer(instance, 0L, 7L);
+            runnable.runTaskTimer(instance, 0L, 10L);
         }
     }
 

@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -51,7 +50,7 @@ public class DiamondArmor implements Listener
 
         Player player = (Player)event.getEntity();
 
-        if (armorAugmentation.isEquipped(player, Material.DIAMOND_BOOTS))
+        if (!armorAugmentation.isEquipped(player, Material.DIAMOND_BOOTS))
             return;
 
         Vector ministun = new Vector(0, 0.2, 0);
@@ -59,19 +58,6 @@ public class DiamondArmor implements Listener
             entity.setVelocity(ministun);
         //TODO short potion effect
         //TODO sound, effect
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onAttack(EntityDamageByEntityEvent event)
-    {
-        if (event.getDamager().getType() != EntityType.PLAYER)
-            return;
-        Player player = (Player)event.getDamager();
-
-        if (!player.isSprinting() || !armorAugmentation.isEquipped(player, Material.IRON_LEGGINGS))
-            return;
-
-        event.getEntity().setVelocity(event.getEntity().getLocation().toVector().subtract(player.getLocation().toVector()).normalize().setY(0.3));
     }
 
     @EventHandler(ignoreCancelled = true)

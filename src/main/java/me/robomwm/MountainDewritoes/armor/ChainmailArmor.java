@@ -44,7 +44,7 @@ public class ChainmailArmor implements Listener
             return;
         Vector vector = player.getLocation().toVector();
 
-        player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).setY(0D)); //TODO: adjust
+        player.setVelocity(vector.subtract(NSA.getLastLocation(player).toVector()).setY(0D).multiply(2D)); //TODO: adjust
 
         Integer jump = NSA.getMidairMap().get(player);
     }
