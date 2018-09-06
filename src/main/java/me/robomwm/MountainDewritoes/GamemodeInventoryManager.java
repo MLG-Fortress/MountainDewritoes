@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -74,6 +75,20 @@ public class GamemodeInventoryManager implements Listener
             event.getPlayer().getInventory().clear();
             restoreInventory(event.getPlayer());
             restoreExperience(event.getPlayer());
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    private void onCqrrot(BlockBreakEvent event)
+    {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
+            return;
+        switch (event.getBlock().getType())
+        {
+            case BEDROCK:
+            case BARRIER:
+                event.setCancelled(true);
+                instance.getLogger().info(event.getPlayer().getName() + " is a haxor with " + event.getBlock().getType().name());
         }
     }
 
