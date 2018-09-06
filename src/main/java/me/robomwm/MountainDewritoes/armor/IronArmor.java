@@ -83,6 +83,7 @@ public class IronArmor implements Listener
 
                 player.removePotionEffect(PotionEffectType.LEVITATION);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 30, velocity, true, false));
+                player.sendActionBar(Integer.toString(velocity));
             }
 
             @Override

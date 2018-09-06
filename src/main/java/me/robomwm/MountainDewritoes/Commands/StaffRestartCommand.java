@@ -13,6 +13,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Created on 6/30/2017.
  *
@@ -147,20 +151,40 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             this.updateProcess.destroy();
     }
 
-    private boolean update(boolean force)
+    private boolean update(boolean noShutdown)
     {
-        if (updateComplete && !force)
+        if (updateComplete && !noShutdown)
         {
             actuallyShutdown();
             return true;
         }
-        if (updateProcess != null)
+        if (updateProcess != null && updateProcess.isAlive())
             return false;
         ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
         try
         {
             updateProcess = processBuilder.start();
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    try
+                    {
+                        BufferedReader output = new BufferedReader(new InputStreamReader(updateProcess.getInputStream()));
+                        String outputLine;
+                        while ((outputLine = output.readLine()) != null)
+                        {
+                            instance.getLogger().info("U: " + outputLine);
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }.runTaskAsynchronously(instance);
             new BukkitRunnable()
             {
                 @Override
