@@ -174,7 +174,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                     {
                         BufferedReader output = new BufferedReader(new InputStreamReader(updateProcess.getInputStream()));
                         String outputLine;
-                        while ((outputLine = output.readLine()) != null)
+                        while ((outputLine = output.readLine()) != null || updateProcess != null)
                         {
                             instance.getLogger().info("U: " + outputLine);
                         }
