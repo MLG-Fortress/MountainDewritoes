@@ -32,7 +32,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    private String name = null;
+    private CommandSender name = null;
     private String reason = null;
     private boolean pendingShutdown = false;
     private boolean updateComplete = false;
@@ -103,7 +103,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         }
         else if (cmd.getName().equalsIgnoreCase("restartnow"))
         {
-            this.name = sender.getName();
+            this.name = sender;
             this.reason = reason;
             this.updateComplete = true;
             this.pendingShutdown = true;
@@ -113,7 +113,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         }
 
         sender.sendMessage("Restart process initialized. Will restart as soon as plugins finish updating.");
-        scheduleShutdown(sender.getName(), reason);
+        scheduleShutdown(sender, reason);
         shutdown();
 
 
@@ -121,7 +121,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
     }
 
 
-    private void scheduleShutdown(String name, String reason)
+    private void scheduleShutdown(CommandSender name, String reason)
     {
         this.name = name;
         this.reason = reason;
@@ -178,9 +178,9 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                         String outputLine;
                         while ((outputLine = output.readLine()) != null)
                         {
-                            instance.getLogger().info("U: " + outputLine);
+                            name.sendMessage("U: " + outputLine);
                         }
-                        instance.getLogger().info("U: update complete");
+                        name.sendMessage("U: update complete");
                     }
                     catch (IOException e)
                     {
