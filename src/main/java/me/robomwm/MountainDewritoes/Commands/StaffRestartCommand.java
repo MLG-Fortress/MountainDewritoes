@@ -88,7 +88,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                 if (!onlinePlayer.hasPermission("mlgstaff"))
                 {
                     sender.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use " + ChatColor.GOLD + "/restart abort " + ChatColor.RESET + "to cancel.");
-                    scheduleShutdown(sender.getName(), reason);
+                    scheduleShutdown(sender, reason);
                     return true;
                 }
             }
