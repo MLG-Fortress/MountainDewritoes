@@ -162,6 +162,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             return false;
         ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
+        processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         try
         {
             updateProcess = processBuilder.start();
