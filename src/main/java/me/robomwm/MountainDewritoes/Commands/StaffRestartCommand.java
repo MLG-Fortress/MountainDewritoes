@@ -163,6 +163,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         ProcessBuilder processBuilder = new ProcessBuilder("./updatething.sh");
         processBuilder.directory(instance.getServer().getWorldContainer());
         processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
+        processBuilder.redirectErrorStream(true);
         try
         {
             updateProcess = processBuilder.start();
@@ -175,10 +176,11 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                     {
                         BufferedReader output = new BufferedReader(new InputStreamReader(updateProcess.getInputStream()));
                         String outputLine;
-                        while ((outputLine = output.readLine()) != null || updateProcess != null)
+                        while ((outputLine = output.readLine()) != null)
                         {
                             instance.getLogger().info("U: " + outputLine);
                         }
+                        instance.getLogger().info("U: update complete");
                     }
                     catch (IOException e)
                     {
