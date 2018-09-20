@@ -19,29 +19,13 @@ class MusicPackManager
     public MusicPackManager(MountainDewritoes instance)
     {
         category = "mall";
-        add("elevatorjam", 120+43);
-        add("hhstar", 180+20);
         add("miifavoritethings", 120+17);
-        add("nyanjazz", 180+30);
-        add("wiibopchannel", 60+60+60+60+32);
-        add("teeosupdate", 66);
         add("despitowiishop",60+34);
-        add("despacitotel", 41);
-        add("pumpedupjam", 120+44);
-        add("wantmii", 60+43);
-        add("whosthatdeadhomeappliance", 66);
-        add("miichannel", 124);
-        add("greenhiillzhop", 120+11);
-        category = "mallfood";
-        add("smokeoddity", 57);
-        add("krabbypower", 60+47);
-        add("noodlescantbebeat", 50);
-        add("noodlescantbebeat2", 60+43);
-        add("portacorobinson", 63);
-        add("steamedhamsbutallstar", 120+18);
-        add("bigsmokegetshurt", 49);
-        add("brokensmokes", 60+31);
-        add("frostedflakes", 51);
+        add("dsiishopchannel",120+3);
+        add("elevatorjambutitspumpedupkicks",120+44);
+        add("alex-aufderheide",180+46);
+        add("beautifulshopchannel",60+20);
+
 
         category = "spawn";
         add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
@@ -94,3 +78,27 @@ class MusicPackManager
         return master.get(category);
     }
 }
+
+
+/*
+        add("despacitotel", 41);
+        add("pumpedupjam", 120+44);
+        add("wantmii", 60+43);
+        add("whosthatdeadhomeappliance", 66);
+        add("miichannel", 124);
+        add("greenhiillzhop", 120+11);
+        add("nyanjazz", 180+30);
+        add("wiibopchannel", 60+60+60+60+32);
+        add("teeosupdate", 66);
+        add("elevatorjam", 120+43);
+        add("hhstar", 180+20);
+        add("smokeoddity", 57);
+        add("krabbypower", 60+47);
+        add("noodlescantbebeat", 50);
+        add("noodlescantbebeat2", 60+43);
+        add("portacorobinson", 63);
+        add("steamedhamsbutallstar", 120+18);
+        add("bigsmokegetshurt", 49);
+        add("brokensmokes", 60+31);
+        add("frostedflakes", 51);
+ */

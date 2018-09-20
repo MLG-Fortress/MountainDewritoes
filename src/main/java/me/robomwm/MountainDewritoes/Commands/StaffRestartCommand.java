@@ -96,7 +96,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         else if (cmd.getName().equalsIgnoreCase("update"))
         {
             if (update(true))
+            {
                 sender.sendMessage("Updating plugins...");
+                name = sender;
+            }
             else
                 sender.sendMessage("Plugin update already in progress...");
             return true;
@@ -178,7 +181,10 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                         String outputLine;
                         while ((outputLine = output.readLine()) != null)
                         {
-                            name.sendMessage("U: " + outputLine);
+                            if (name.getName().equals("CONSOLE"))
+                                instance.getLogger().info("U: " + outputLine);
+                            else
+                                name.sendMessage("U: " + outputLine);
                         }
                         name.sendMessage("U: update complete");
                     }
@@ -220,10 +226,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         pendingShutdown = false;
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
-            if (name != null)
-                onlinePlayer.kickPlayer("Serbur restartin cuz " + name + " sez " + reason);
-            else
-                onlinePlayer.kickPlayer("Serbur restartin: " + reason);
+            onlinePlayer.kickPlayer("Serbur restartin cuz " + name.getName() + " sez " + reason);
         }
 
         //In case some dum plugin freezes the serbur onDisable...
