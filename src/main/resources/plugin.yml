@@ -1,5 +1,5 @@
 name: MountainDewritoes
-version: ${project.version}
+version: ${git.commit.id.describe-short}
 website: https://robomwm.com
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
@@ -18,7 +18,6 @@ softdepend:
 - EssentialsChat
 - HolographicDisplays
 - BetterTPA
-- MCJukebox
 - WorldBorder
 - NoMyStuff
 - ServerListPlus

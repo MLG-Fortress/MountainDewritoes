@@ -1,14 +1,9 @@
 package me.robomwm.MountainDewritoes.Music;
 
-import me.robomwm.MountainDewritoes.Events.JukeboxInteractEvent;
-import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
-import org.bukkit.block.Jukebox;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,18 +17,12 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by RoboMWM on 10/8/2016.
@@ -43,13 +32,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AtmosphericManager implements Listener, CommandExecutor
 {
     private MountainDewritoes instance;
-    //MemeBox memeBox;
-    private MemePack memePack;
 
     public AtmosphericManager(MountainDewritoes mountainDewritoes)
     {
         instance = mountainDewritoes;
-        memePack = new MemePack();
         new AtmosphericMusic(mountainDewritoes, this);
         instance.registerListener(this);
     }
@@ -67,8 +53,6 @@ public class AtmosphericManager implements Listener, CommandExecutor
     public void stopMusic(Player player)
     {
         player.removeMetadata("MD_LISTENING", instance);
-        //memeBox.stopSound(player);
-        memePack.stopSound(player);
     }
 
     public void stopMusic(Player player, double radius)
@@ -171,10 +155,6 @@ public class AtmosphericManager implements Listener, CommandExecutor
         }
         players.add(player); //it seems Entity#getNearbyEntities does not include the entity in question. Haven't specifically tested though.
         playSound(song, 0, players);
-//        for (Player player1 : players) //eeeeh
-//        {
-//            memeBox.tellPlayerToOpenMemeBox(player1, true);
-//        }
     }
 
     /**
@@ -186,7 +166,7 @@ public class AtmosphericManager implements Listener, CommandExecutor
      */
     public void playSoundNearPlayer(MusicThing song, Player player, float radius)
     {
-        memePack.playSound(player, song, radius);
+        //memePack.playSound(player, song, radius);
     }
 
     /**

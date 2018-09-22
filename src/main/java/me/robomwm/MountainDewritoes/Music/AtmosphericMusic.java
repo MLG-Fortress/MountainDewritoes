@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes.Music;
 
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
@@ -29,7 +28,6 @@ public class AtmosphericMusic implements Listener
 {
     private MountainDewritoes instance;
     private AtmosphericManager atmosphericManager;
-    private MusicManager musicManager;
     private MusicPackManager musicPackManager;
     private Map<Player, BukkitTask> introTasks = new HashMap<>();
     private World MALL;
@@ -38,7 +36,6 @@ public class AtmosphericMusic implements Listener
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
         instance = mountainDewritoes;
-        musicManager = new MusicManager(instance);
         musicPackManager = new MusicPackManager(instance);
         this.atmosphericManager = atmosphericManager;
         instance.registerListener(this);
@@ -185,8 +182,8 @@ public class AtmosphericMusic implements Listener
     {
         if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
             return;
-        if (NSA.howManyTargetingPlayer(event.getPlayer()) > 3)
-            atmosphericManager.playSound(musicManager.getSong("battle").setPriority(10), 0, event.getPlayer());
+        //if (NSA.howManyTargetingPlayer(event.getPlayer()) > 3)
+
     }
 
     //Player on killing spree
@@ -197,8 +194,7 @@ public class AtmosphericMusic implements Listener
         if (killer == null)
             return;
 
-        if (NSA.getSpreePoints(killer) >= 20)
-            atmosphericManager.playSound(musicManager.getSong("spree").setPriority(50), 0, killer);
+        //if (NSA.getSpreePoints(killer) >= 20)
     }
 }
 
