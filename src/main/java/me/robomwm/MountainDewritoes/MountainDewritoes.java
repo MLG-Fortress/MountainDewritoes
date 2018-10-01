@@ -95,10 +95,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     //Set<Player> usedEC = new HashSet<>();
     //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     private long currentTick = 0L; //"Server time in ticks"
-    private Set<World> safeWorlds = new HashSet<>();
-    private Set<World> survivalWorlds = new HashSet<>();
     private Set<World> minigameWorlds = new HashSet<>();
-    private Set<World> noModifyWorld = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
     private boolean serverDoneLoading = false;
@@ -110,23 +107,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public boolean isSurvivalWorld(World world)
     {
-        return survivalWorlds.contains(world);
-    }
-
-    //Currently only used to bypass teleport warmup
-    public boolean isSafeWorld(World world)
-    {
-        return safeWorlds.contains(world);
-    }
-
-    public boolean isMinigameWorld(World world)
-    {
-        return minigameWorlds.contains(world);
-    }
-
-    public boolean isNoModifyWorld(World world)
-    {
-        return noModifyWorld.contains(world);
+        return !minigameWorlds.contains(world);
     }
 
     public void registerListener(Listener listener)
@@ -286,34 +267,30 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }
 
         //Initialize commonly-used sets
+
+        Set<World> safeWorlds = new HashSet<>();
         safeWorlds.add(getServer().getWorld("mall"));
         safeWorlds.add(getServer().getWorld("spawn"));
         safeWorlds.add(getServer().getWorld("prison"));
         safeWorlds.add(getServer().getWorld("firstjoin"));
+        safeWorlds.add(getServer().getWorld("CreativeParkourMaps"));
 
-        survivalWorlds.add(getServer().getWorld("mall"));
-        survivalWorlds.add(getServer().getWorld("prison"));
-        survivalWorlds.add(getServer().getWorld("firstjoin"));
-        survivalWorlds.add(getServer().getWorld("world"));
-        survivalWorlds.add(getServer().getWorld("world_nether"));
-        survivalWorlds.add(getServer().getWorld("world_the_end"));
-        survivalWorlds.add(getServer().getWorld("cityworld"));
-        survivalWorlds.add(getServer().getWorld("cityworld_nether"));
-        survivalWorlds.add(getServer().getWorld("maxiworld"));
-        survivalWorlds.add(getServer().getWorld("wellworld"));
-
-        //Set border on survival worlds
-        for (World world : survivalWorlds)
+        for (World world : safeWorlds)
         {
-            if (!safeWorlds.contains(world))
-                world.getWorldBorder().setSize(20000);
+            if (world != null)
+                world.setPVP(false);
         }
 
-        //Don't keep spawn chunks in memory
-        for (World world : getServer().getWorlds())
-        {
-            world.setKeepSpawnInMemory(false);
-        }
+//        survivalWorlds.add(getServer().getWorld("mall"));
+//        survivalWorlds.add(getServer().getWorld("prison"));
+//        survivalWorlds.add(getServer().getWorld("firstjoin"));
+//        survivalWorlds.add(getServer().getWorld("world"));
+//        survivalWorlds.add(getServer().getWorld("world_nether"));
+//        survivalWorlds.add(getServer().getWorld("world_the_end"));
+//        survivalWorlds.add(getServer().getWorld("cityworld"));
+//        survivalWorlds.add(getServer().getWorld("cityworld_nether"));
+//        survivalWorlds.add(getServer().getWorld("maxiworld"));
+//        survivalWorlds.add(getServer().getWorld("wellworld"));
 
         minigameWorlds.add(getServer().getWorld("spawn"));
         minigameWorlds.add(getServer().getWorld("minigames"));
@@ -322,7 +299,18 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
         minigameWorlds.add(getServer().getWorld("dogepvp"));
 
-        noModifyWorld.add(getServer().getWorld("CreativeParkourMaps"));
+        for (World world : getServer().getWorlds())
+        {
+            //Don't keep spawn chunks in memory
+            world.setKeepSpawnInMemory(false);
+
+            //Set border on survival worlds
+            if (world.getPVP() && !minigameWorlds.contains(world))
+                world.getWorldBorder().setSize(5000);
+        }
+
+        if (getServer().getWorld("wellworld") != null)
+            getServer().getWorld("wellworld").getWorldBorder().setSize(10000);
 
         //Classes other classes might want to use
         new NSA(this);
@@ -494,7 +482,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     void onExplosionDestroyPainting(HangingBreakEvent event)
     {
         Entity entity = event.getEntity();
-        if (!safeWorlds.contains(entity.getWorld()))
+        if (entity.getWorld().getPVP())
             return;
         if (event.getCause() != HangingBreakEvent.RemoveCause.EXPLOSION)
             return;
@@ -508,7 +496,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     void onExplosionPushesItems(EntityExplodeEvent event)
     {
         Entity entity = event.getEntity();
-        if (!safeWorlds.contains(entity.getWorld()))
+        if (entity.getWorld().getPVP())
             return;
         double yield = event.getYield();
         for (Entity nearbyEntity : entity.getNearbyEntities(yield, yield, yield))
@@ -530,7 +518,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     void onExplosionPushesItemsButNotViaATNTEntity(ShoutAreaOfEffectEvent event)
     {
         event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), "fortress.fusrodah", SoundCategory.PLAYERS, 1.5f, 1.0f);
-        if (!safeWorlds.contains(event.getPlayer().getWorld()) && !event.getPlayer().hasMetadata("DEAD"))
+        if (event.getPlayer().getWorld().getPVP() && !event.getPlayer().hasMetadata("DEAD"))
             return;
 
         List<Entity> newEntities = new ArrayList<>();

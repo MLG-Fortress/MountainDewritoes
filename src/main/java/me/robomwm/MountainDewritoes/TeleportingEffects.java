@@ -46,20 +46,20 @@ public class TeleportingEffects implements Listener
     @EventHandler(ignoreCancelled = true)
     private void onPlayerPreTPA(PreTPATeleportEvent event)
     {
-        if (toOrFromUnknownWorld(event.getPlayer().getLocation()))
-        {
-            event.setReason(ChatColor.GRAY.toString() + ChatColor.ITALIC + "***Static noises***");
-            event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.static", SoundCategory.AMBIENT, 3000000f, 1.0f);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (toOrFromUnknownWorld(event.getTargetLocation()))
-        {
-            event.setReason("We can't locate " + event.getTarget().getDisplayName() + ", perhaps they're in another dimension?");
-            event.setCancelled(true);
-            return;
-        }
+//        if (toOrFromUnknownWorld(event.getPlayer().getLocation()))
+//        {
+//            event.setReason(ChatColor.GRAY.toString() + ChatColor.ITALIC + "***Static noises***");
+//            event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.static", SoundCategory.AMBIENT, 3000000f, 1.0f);
+//            event.setCancelled(true);
+//            return;
+//        }
+//
+//        if (toOrFromUnknownWorld(event.getTargetLocation()))
+//        {
+//            event.setReason("We can't locate " + event.getTarget().getDisplayName() + ", perhaps they're in another dimension?");
+//            event.setCancelled(true);
+//            return;
+//        }
 
         if (event.getTargetLocation().getWorld().getEnvironment() == World.Environment.NETHER ||
                 event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER)
@@ -68,11 +68,11 @@ public class TeleportingEffects implements Listener
         }
     }
 
-    private boolean toOrFromUnknownWorld(Location location)
-    {
-        World world = location.getWorld();
-        return !plugin.isSafeWorld(world) && plugin.isSurvivalWorld(world) && !knownWorlds.contains(world);
-    }
+//    private boolean toOrFromUnknownWorld(Location location)
+//    {
+//        World world = location.getWorld();
+//        return !plugin.isSafeWorld(world) && plugin.isSurvivalWorld(world) && !knownWorlds.contains(world);
+//    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onPlayerTPA(PreTPATeleportEvent event)

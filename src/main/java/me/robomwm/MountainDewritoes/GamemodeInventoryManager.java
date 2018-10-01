@@ -52,12 +52,11 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onChangeGamemode(PlayerGameModeChangeEvent event)
     {
-        World world = event.getPlayer().getWorld();
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
             //If player is in a survival world (except prison) and is not op, deny creative gamemode
-            if (instance.isSurvivalWorld(world) && !event.getPlayer().hasPermission("md.develop")
-                    || world.getName().equals("minigames") || world.getName().equals("spawn"))
+            //TODO: tag and check for publicly-available creative worlds
+            if (!event.getPlayer().hasPermission("md.develop"))
             {
                 event.setCancelled(true);
                 return;
@@ -83,12 +82,11 @@ public class GamemodeInventoryManager implements Listener
     {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
-        switch (event.getBlock().getType())
+
+        if (event.getBlock().getType().getHardness() < 0)
         {
-            case BEDROCK:
-            case BARRIER:
-                event.setCancelled(true);
-                instance.getLogger().info(event.getPlayer().getName() + " is a haxor with " + event.getBlock().getType().name());
+            event.setCancelled(true);
+            instance.getLogger().info(event.getPlayer().getName() + " is a haxor with " + event.getBlock().getType().name());
         }
     }
 

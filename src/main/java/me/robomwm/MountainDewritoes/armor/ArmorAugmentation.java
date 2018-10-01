@@ -144,16 +144,6 @@ public class ArmorAugmentation implements Listener
         event.setCancelled(true);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    private void onSprint(PlayerToggleSprintEvent event)
-    {
-        Player player = event.getPlayer();
-        if (plugin.isNoModifyWorld(player.getWorld()))
-            return;
-        if (event.isSprinting() && player.getFoodLevel() > 1)
-            player.setFoodLevel(player.getFoodLevel() - 1);
-    }
-
     //Refill energy bar gradually, unless sprinting
     //iron leggings are exempt
     private void ATPgeneration()
@@ -165,7 +155,7 @@ public class ArmorAugmentation implements Listener
             {
                 for (Player player : plugin.getServer().getOnlinePlayers())
                 {
-                    if (player.getFoodLevel() >= 20 || plugin.isNoModifyWorld(player.getWorld()))
+                    if (player.getFoodLevel() >= 20)
                         continue;
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }

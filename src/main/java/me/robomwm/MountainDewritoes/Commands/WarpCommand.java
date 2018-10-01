@@ -144,7 +144,7 @@ public class WarpCommand implements CommandExecutor
         if (location == null)
             sendWarps(player);
         else
-            betterTPA.teleportPlayer(player, desiredWarp, location, !(instance.isSafeWorld(player.getWorld()) && instance.isSafeWorld(location.getWorld())), null);
+            betterTPA.teleportPlayer(player, desiredWarp, location, (player.getWorld().getPVP() || location.getWorld().getPVP()), null);
         return true;
     }
 

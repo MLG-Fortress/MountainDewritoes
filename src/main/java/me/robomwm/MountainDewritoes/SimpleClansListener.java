@@ -2,9 +2,6 @@ package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import me.robomwm.BetterTPA.BetterTPA;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.milkbowl.vault.chat.Chat;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -16,11 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
@@ -56,8 +50,6 @@ public class SimpleClansListener implements Listener
             {
                 for (Player player : instance.getServer().getOnlinePlayers())
                 {
-                    if (instance.isMinigameWorld(player.getWorld()))
-                        continue;
                     //setDisplayName(player);
                     setClanPrefix(player);
                 }
