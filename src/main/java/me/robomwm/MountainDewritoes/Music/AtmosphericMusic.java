@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes.Music;
 
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
+import me.robomwm.MountainDewritoes.Events.PlayerLoadedWorldEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
@@ -11,9 +12,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,14 @@ public class AtmosphericMusic implements Listener
     private World MALL;
     private Location MALL_INTRO_LOCATION;
 
+    @EventHandler(ignoreCancelled = true)
+    private void onQuit(PlayerQuitEvent event)
+    {
+        Player player = event.getPlayer();
+        if (introTasks.containsKey(player))
+            introTasks.remove(player).cancel();
+    }
+
     public AtmosphericMusic(MountainDewritoes mountainDewritoes, AtmosphericManager atmosphericManager)
     {
         instance = mountainDewritoes;
@@ -44,17 +55,18 @@ public class AtmosphericMusic implements Listener
         this.MALL = mall;
         this.MALL_INTRO_LOCATION = new Location(mall, 2, 5, 36);
 
-        startAmbiance(instance.getServer().getWorld("spawn"), 300L);
-        startAmbiance(instance.getServer().getWorld("prison"), 12000L);
+        //startAmbiance(instance.getServer().getWorld("spawn"), 300L);
+        //startAmbiance(instance.getServer().getWorld("prison"), 12000L);
         //normalAmbiance(instance.getSurvivalWorlds());
 
         //Mall
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
         //playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.2f);
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 5f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 276), 16.25f);
     }
 
-    private void playLocalizedSongs(List<MusicThing> songs, Location location, float volume)
+    private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume)
     {
         MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
         List<Player> players = location.getWorld().getPlayers();
@@ -74,6 +86,48 @@ public class AtmosphericMusic implements Listener
                 }
             }
         }.runTaskTimer(instance, song.getLength() + 10, 10L);
+    }
+
+    private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume, Player player)
+    {
+        MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
+        atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, volume);
+
+        introTasks.put(player, new BukkitRunnable()
+        {
+            final World world = player.getWorld();
+            long timeToExpire = System.currentTimeMillis() + song.getLength() * 50;
+            @Override
+            public void run()
+            {
+                if (player.getWorld() != world)
+                {
+                    cancel();
+                    return;
+                }
+                if (System.currentTimeMillis() > timeToExpire)
+                {
+                    playLocalizedSongs(songs, location, volume, player);
+                    cancel();
+                }
+            }
+        }.runTaskTimer(instance, song.getLength() + 10, 10L));
+    }
+
+    @EventHandler
+    private void playLocalizedSongsPlayer(PlayerLoadedWorldEvent event)
+    {
+        Player player = event.getPlayer();
+        World world = event.getPlayer().getWorld();
+
+        if (introTasks.containsKey(player))
+            introTasks.remove(player).cancel();
+
+        switch(world.getName())
+        {
+            case "spawn":
+                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 2f, player);
+        }
     }
 
     @EventHandler

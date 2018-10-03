@@ -26,11 +26,16 @@ class MusicPackManager
         add("alex-aufderheide",180+46);
         add("beautifulshopchannel",60+20);
 
-
         category = "spawn";
         add("kahoot", 60*4+41, "The Kahoot Lobby - remixed by xDEFCONx on Soundcloud.\nhttps://soundcloud.com/xdefconx/the-kahoot-lobby-xdefconx-synthesia-remakeremix-link-in-desc");
-        add("wiisports", 125, "https://soundcloud.com/videogameremixes/wii-sports-remix");
-        add("wirelessplaymenu", 68);
+
+        category = "arcade";
+        add("accessremix", 60+16);
+        add("captainviridianinternet", 120+48);
+        add("gargamelnuggetinbiscuit", 62);
+        add("myfingers", 120+39);
+        add("rocksliderumble", 120+41);
+        add("africalr35902", 180+60+35);
 
         category = "prison";
         add("oddity", 180+38, "https://www.youtube.com/channel/UCPT7fE_u4Q-ioN49Bi2G74Q");

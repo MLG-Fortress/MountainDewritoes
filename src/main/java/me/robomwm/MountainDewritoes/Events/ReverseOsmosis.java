@@ -1,10 +1,8 @@
 package me.robomwm.MountainDewritoes.Events;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.MountainDewritoes.NSA;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Creature;
@@ -17,13 +15,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created on 2/13/2017.
@@ -32,9 +31,10 @@ import java.util.Set;
  */
 public class ReverseOsmosis implements Listener
 {
-    MountainDewritoes instance;
+    private MountainDewritoes instance;
 
     private Map<Player, Double> oldBalances = new HashMap<>();
+    private Map<Player, World> changedWorld = new HashMap<>();
 
     public ReverseOsmosis(MountainDewritoes plugin)
     {
@@ -72,6 +72,7 @@ public class ReverseOsmosis implements Listener
     private void onQuit(PlayerQuitEvent event)
     {
         oldBalances.remove(event.getPlayer());
+        changedWorld.remove(event.getPlayer());
     }
 
     /**
@@ -143,5 +144,17 @@ public class ReverseOsmosis implements Listener
         instance.getServer().getPluginManager().callEvent(new JukeboxInteractEvent(player, jukebox, disc));
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onWorldChange(PlayerChangedWorldEvent event)
+    {
+        changedWorld.put(event.getPlayer(), event.getPlayer().getWorld());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    void onPlayerMovedAfterChangingWorlds(PlayerMoveEvent event)
+    {
+        if (changedWorld.remove(event.getPlayer()) == event.getPlayer().getWorld())
+            instance.getServer().getPluginManager().callEvent(new PlayerLoadedWorldEvent(event.getPlayer()));
+    }
 
 }
