@@ -56,7 +56,7 @@ public class FineSine implements Listener
             return;
 
         //I'd String.join but gotta get rid of the first line somehow
-        StringBuilder command = new StringBuilder(sine.getLine(1).substring(1));
+        StringBuilder command = new StringBuilder(sine.getLine(1));
         if (!sine.getLine(2).isEmpty())
             command.append(" " + sine.getLine(2));
         if (!sine.getLine(3).isEmpty())
