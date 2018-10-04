@@ -4,10 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,7 +56,7 @@ public class FineSine implements Listener
             return;
 
         //I'd String.join but gotta get rid of the first line somehow
-        StringBuilder command = new StringBuilder(sine.getLine(1));
+        StringBuilder command = new StringBuilder(sine.getLine(1).substring(1));
         if (!sine.getLine(2).isEmpty())
             command.append(" " + sine.getLine(2));
         if (!sine.getLine(3).isEmpty())
@@ -65,8 +67,16 @@ public class FineSine implements Listener
             @Override
             public void run()
             {
-                event.getPlayer().chat(command.toString());
+                firePlayerCommand(event.getPlayer(), command.toString());
             }
         }.runTask(instance);
+    }
+
+    public void firePlayerCommand(Player player, String command)
+    {
+        PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, command);
+        instance.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled())
+            player.performCommand(command);
     }
 }
