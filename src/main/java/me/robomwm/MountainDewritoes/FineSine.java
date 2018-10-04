@@ -4,12 +4,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,16 +65,8 @@ public class FineSine implements Listener
             @Override
             public void run()
             {
-                firePlayerCommand(event.getPlayer(), command.toString());
+                event.getPlayer().chat(command.toString());
             }
         }.runTask(instance);
-    }
-
-    public void firePlayerCommand(Player player, String command)
-    {
-        PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, command);
-        instance.getServer().getPluginManager().callEvent(event);
-        if (!event.isCancelled())
-            player.performCommand(command);
     }
 }
