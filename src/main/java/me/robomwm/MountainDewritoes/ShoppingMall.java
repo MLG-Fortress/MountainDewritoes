@@ -31,7 +31,7 @@ public class ShoppingMall implements Listener
      * Set walking speed when entering or leaving mall
      * @param event
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onWorldChange(PlayerChangedWorldEvent event)
     {
         Player player = event.getPlayer();

@@ -63,7 +63,7 @@ public class AtmosphericMusic implements Listener
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
         //playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.2f);
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 5f);
-        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 276), 16.25f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 12, 101), 6f);
     }
 
     private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume)
@@ -126,7 +126,7 @@ public class AtmosphericMusic implements Listener
         switch(world.getName())
         {
             case "spawn":
-                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 2f, player);
+                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 3f, player);
         }
     }
 
