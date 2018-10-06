@@ -52,6 +52,16 @@ public class AtmosphericManager implements Listener, CommandExecutor
 
     public void stopMusic(Player player)
     {
+        try
+        {
+            if (player.hasMetadata("MD_LISTENING"))
+                player.stopSound(((SongMeta)player.getMetadata("MD_LISTENING").get(0).value()).getSong().getSoundName());
+        }
+        catch (Throwable rock)
+        {
+            rock.printStackTrace();
+        }
+
         player.removeMetadata("MD_LISTENING", instance);
     }
 

@@ -17,10 +17,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 3/3/2017.
@@ -63,16 +63,23 @@ public class AtmosphericMusic implements Listener
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 5, 36), 4f);
         //playLocalizedSongs(musicPackManager.getSongs("mallfood"), new Location(mall, 50, 5, 102), 3.2f);
         //playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, -45, 5, 102), 5f);
-        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 12, 101), 8f);
+        playLocalizedSongs(musicPackManager.getSongs("mall"), new Location(mall, 2, 12, 101), 8f, -1);
     }
 
-    private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume)
+    private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume, int index)
     {
-        MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
+        if (index < 0 || index >= songs.size())
+        {
+            Collections.shuffle(songs);
+            index = 0;
+        }
+
+        MusicThing song = songs.get(index++);
         List<Player> players = location.getWorld().getPlayers();
         for (Player player : players)
                 atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, volume);
 
+        final int finalIndex = index;
         new BukkitRunnable()
         {
             long timeToExpire = System.currentTimeMillis() + song.getLength() * 50;
@@ -81,18 +88,24 @@ public class AtmosphericMusic implements Listener
             {
                 if (System.currentTimeMillis() > timeToExpire)
                 {
-                    playLocalizedSongs(songs, location, volume);
+                    playLocalizedSongs(songs, location, volume, finalIndex);
                     cancel();
                 }
             }
         }.runTaskTimer(instance, song.getLength() + 10, 10L);
     }
 
-    private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume, Player player)
+    private void playLocalizedSongs(@Nonnull List<MusicThing> songs, Location location, float volume, Player player, int index)
     {
-        MusicThing song = songs.get(ThreadLocalRandom.current().nextInt(songs.size()));
+        if (index < 0 || index >= songs.size())
+        {
+            Collections.shuffle(songs);
+            index = 0;
+        }
+        MusicThing song = songs.get(index++);
         atmosphericManager.playSound(song, 0, player, location, SoundCategory.RECORDS, volume);
 
+        final int finalIndex = index;
         introTasks.put(player, new BukkitRunnable()
         {
             final World world = player.getWorld();
@@ -107,7 +120,7 @@ public class AtmosphericMusic implements Listener
                 }
                 if (System.currentTimeMillis() > timeToExpire)
                 {
-                    playLocalizedSongs(songs, location, volume, player);
+                    playLocalizedSongs(songs, location, volume, player, finalIndex);
                     cancel();
                 }
             }
@@ -126,7 +139,7 @@ public class AtmosphericMusic implements Listener
         switch(world.getName())
         {
             case "spawn":
-                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 5f, player);
+                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 5f, player, -1);
         }
     }
 
