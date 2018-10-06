@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -146,6 +147,11 @@ public class ReverseOsmosis implements Listener
 
     @EventHandler(priority = EventPriority.MONITOR)
     private void onWorldChange(PlayerChangedWorldEvent event)
+    {
+        changedWorld.put(event.getPlayer(), event.getPlayer().getWorld());
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onJoin(PlayerJoinEvent event)
     {
         changedWorld.put(event.getPlayer(), event.getPlayer().getWorld());
     }
