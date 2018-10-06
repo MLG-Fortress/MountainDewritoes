@@ -139,7 +139,7 @@ public class AtmosphericMusic implements Listener
         switch(world.getName())
         {
             case "spawn":
-                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 5f, player, -1);
+                playLocalizedSongs(musicPackManager.getSongs("arcade"), new Location(world, -453, 9, -123), 4.5f, player, -1);
         }
     }
 
