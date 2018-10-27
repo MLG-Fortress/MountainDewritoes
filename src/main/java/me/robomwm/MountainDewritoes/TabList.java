@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,17 +48,17 @@ public class TabList implements Listener
             String ping = "over 9000";
             if (noMyStuff != null)
                 ping = String.valueOf(noMyStuff.getPingCommand().getPing(player));
-            player.setPlayerListHeader(instance.getTipCommand().getRandomColor() + "MLG Fortress\n" +
-                    instance.getTipCommand().getRandomColor() +
+            player.setPlayerListHeader(TipCommand.getRandomColor() + "MLG Fortress\n" +
+                    TipCommand.getRandomColor() +
                     instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
-                    instance.getTipCommand().getRandomColor() + "TPS: " +
+                    TipCommand.getRandomColor() + "TPS: " +
                     df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
-                    instance.getTipCommand().getRandomColor() + "Ping: " + ping + "ms");
+                    TipCommand.getRandomColor() + "Ping: " + ping + "ms");
 
         }
         else
-            player.setPlayerListFooter(instance.getTipCommand().getRandomColor() + "IP: " +
-                instance.getTipCommand().getRandomColor() + "MLG.ROBOMWM.COM");
+            player.setPlayerListFooter(TipCommand.getRandomColor() + "IP: " +
+                TipCommand.getRandomColor() + "MLG.ROBOMWM.COM");
 
         lol = !lol;
     }

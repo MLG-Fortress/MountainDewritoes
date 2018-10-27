@@ -4,13 +4,11 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -27,9 +25,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class TheMidnightPortalToAnywhere implements Listener
 {
-    MountainDewritoes instance;
-    List<World> enabledWorlds = new ArrayList<>();
-    YamlConfiguration storedPortals;
+    private MountainDewritoes instance;
+    private List<World> enabledWorlds = new ArrayList<>();
+    private YamlConfiguration storedPortals;
 
     public TheMidnightPortalToAnywhere(MountainDewritoes plugin)
     {

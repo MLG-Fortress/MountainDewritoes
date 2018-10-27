@@ -140,11 +140,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         return customItemRecipes;
     }
 
-    public TipCommand getTipCommand()
-    {
-        return tipCommand;
-    }
-
     public TitleManager getTitleManager()
     {
         return titleManager;
