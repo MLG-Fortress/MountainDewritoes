@@ -17,11 +17,6 @@
             <id>paper-repo</id>
             <url>https://repo.destroystokyo.com/repository/maven-public/</url>
         </repository>
-        <!--PreciousStones, SimpleClans-->
-        <repository>
-            <id>remote-repos</id>
-            <url>http://104.236.246.108:8081/artifactory/remote-repos</url>
-        </repository>
         <repository>
             <id>worldedit-worldguard-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
@@ -107,18 +102,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.sacredlabyrinth.Phaed</groupId>
-            <artifactId>PreciousStones</artifactId>
-            <version>10.1.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sacredlabyrinth.phaed.simpleclans</groupId>
-            <artifactId>SimpleClans</artifactId>
-            <version>2.7.11</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>fr.mrsheepsheep</groupId>
             <artifactId>tinthealth</artifactId>
             <version>1.4.6</version>
@@ -128,7 +111,7 @@
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.5.1</version>
+            <version>16.10</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -202,6 +185,11 @@
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>ChesterPlugin</artifactId>
             <version>2.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MLG-Fortress</groupId>
+            <artifactId>SimpleClans</artifactId>
+            <version>253bebd6a3</version>
         </dependency>
 
     </dependencies>
