@@ -33,6 +33,10 @@
             <id>minecrell</id>
             <url>https://repo.minecrell.net/snapshots</url>
         </repository>
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+        </repository>
     </repositories>
     <build>
         <finalName>${project.name}</finalName>
@@ -190,6 +194,12 @@
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>SimpleClans</artifactId>
             <version>253bebd6a3</version>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

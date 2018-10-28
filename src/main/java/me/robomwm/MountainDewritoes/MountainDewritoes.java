@@ -300,12 +300,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             world.setKeepSpawnInMemory(false);
 
             //Set border on survival worlds
+            //Border is a "hard stop", most worlds are generated to a much smaller radius.
             if (world.getPVP() && !minigameWorlds.contains(world))
-                world.getWorldBorder().setSize(5000);
+                world.getWorldBorder().setSize(20000);
         }
 
-        if (getServer().getWorld("wellworld") != null)
-            getServer().getWorld("wellworld").getWorldBorder().setSize(10000);
+//        if (getServer().getWorld("wellworld") != null)
+//            getServer().getWorld("wellworld").getWorldBorder().setSize(10000);
         if (getServer().getWorld("mall") != null)
             getServer().getWorld("mall").setKeepSpawnInMemory(true);
 
