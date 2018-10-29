@@ -32,10 +32,8 @@ public class SleepManagement implements Listener
                 {
                     if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE))
                         continue;
-                    plugin.getLogger().info(world.getName() + world.getFullTime());
-                    plugin.getLogger().info(String.valueOf(WORLD.getFullTime()));
                     if (WORLD.getFullTime() == world.getFullTime())
-                        return;
+                        continue;
                     world.setFullTime(WORLD.getFullTime());
                 }
             }
