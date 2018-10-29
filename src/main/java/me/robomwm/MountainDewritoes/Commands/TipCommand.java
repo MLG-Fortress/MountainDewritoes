@@ -24,7 +24,7 @@ public class TipCommand implements CommandExecutor
     private JavaPlugin instance;
     //YamlConfiguration storage;
     private List<String> randomTips = new ArrayList<>();
-    private static List<ChatColor> color = new ArrayList<>();
+    private static List<ChatColor> color = new ArrayList<>(); //only written once, so _should_ be thread safe
     //File storageFile;
 
     public TipCommand(JavaPlugin plugin)
@@ -141,6 +141,10 @@ public class TipCommand implements CommandExecutor
         return tips.get(ThreadLocalRandom.current().nextInt(tips.size()));
     }
 
+    /**
+     * Should be thread safe...
+     * @return
+     */
     public static ChatColor getRandomColor()
     {
         return color.get(ThreadLocalRandom.current().nextInt(color.size()));

@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -7,8 +8,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import to.us.mlgfort.NoMyStuff.NoMyStuff;
 
 import java.text.DecimalFormat;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created on 8/28/2017.
@@ -21,22 +20,33 @@ public class TabList implements Listener
     private MountainDewritoes instance;
     private NoMyStuff noMyStuff;
     private DecimalFormat df = new DecimalFormat("#.##");
-    private Set<Player> onlinePlayers = ConcurrentHashMap.newKeySet();
-
     public TabList(MountainDewritoes plugin)
     {
         this.instance = plugin;
         noMyStuff = (NoMyStuff)plugin.getServer().getPluginManager().getPlugin("NoMyStuff");
-        onlinePlayers.addAll(instance.getServer().getOnlinePlayers());
         new BukkitRunnable() //premature optimization is the root of all evils... or rather, a waste of time
-        {
+        { //I.e. I could probably do something where I get the data sync that I need sync, then set tab async
             @Override
             public void run()
             {
+                //for each online player, update tablist 1 tick apart
+                //updates "slower" (in perspective of player) as more players come online
+                int i = 1;
                 for (Player player : instance.getServer().getOnlinePlayers())
-                    setTabList(player);
+                {
+                    new BukkitRunnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            setTabList(player);
+                        }
+                    }.runTaskLater(instance, i++);
+                }
+                //one tick breather before doing it all again!
+                this.runTaskLater(instance, ++i);
             }
-        }.runTaskTimer(instance, 20L, 20L);
+        }.run();
     }
 
     boolean lol = true;
@@ -44,21 +54,15 @@ public class TabList implements Listener
     private void setTabList(Player player)
     {
         if (lol)
-        {
-            String ping = "over 9000";
-            if (noMyStuff != null)
-                ping = String.valueOf(noMyStuff.getPingCommand().getPing(player));
             player.setPlayerListHeader(TipCommand.getRandomColor() + "MLG Fortress\n" +
                     TipCommand.getRandomColor() +
                     instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
-                    TipCommand.getRandomColor() + "TPS: " +
-                    df.format(instance.getServer().getTPS()[0] * 2D) + TAB +
-                    TipCommand.getRandomColor() + "Ping: " + ping + "ms");
-
-        }
+                    TipCommand.getRandomColor() + "Ping: " + PseudoCommands.getPing(player));
         else
             player.setPlayerListFooter(TipCommand.getRandomColor() + "IP: " +
-                TipCommand.getRandomColor() + "MLG.ROBOMWM.COM");
+                TipCommand.getRandomColor() + "MLG.ROBOMWM.COM" + TAB +
+                    TipCommand.getRandomColor() + "TPS: " +
+                    df.format(instance.getServer().getTPS()[0] * 2D));
 
         lol = !lol;
     }
