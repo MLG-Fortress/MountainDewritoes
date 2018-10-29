@@ -201,6 +201,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             ReplacementManager.getDynamic().add(new LiteralPlaceholder("%bot%")
             {
                 private JMegaHal brain;
+                private boolean colorized = false;
                 String[] quotes = {
                         "&b        such seber       &6many meme\n    &c%player%      &amuch plogenz       &eWow",
                         "&b        such plogin       &6many %player%\n    &cspooky      &astale       &ewow",
@@ -263,6 +264,13 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         return ChatColor.RED + "still brewing memes, pls w8.";
                     if (brain == null)
                         brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
+                    if (!colorized)
+                    {
+                        for (int i = 0; i < quotes.length; i++)
+                            quotes[i] = ChatColor.translateAlternateColorCodes('&', quotes[i]);
+                        colorized = true;
+                    }
+
                     String name = "u";
                     UUID uuid = null;
                     ChatColor color = TipCommand.getRandomColor();
@@ -275,7 +283,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
                     if (ThreadLocalRandom.current().nextBoolean())
                     {
-                        String quote = quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
+                        String quote = color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
                         return quote.replaceAll("%player%", name);
                     }
 

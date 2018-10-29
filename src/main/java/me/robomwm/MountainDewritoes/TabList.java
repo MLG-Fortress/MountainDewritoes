@@ -5,7 +5,6 @@ import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
-import to.us.mlgfort.NoMyStuff.NoMyStuff;
 
 import java.text.DecimalFormat;
 
@@ -18,12 +17,15 @@ public class TabList implements Listener
 {
     private String TAB = "    ";
     private MountainDewritoes instance;
-    private NoMyStuff noMyStuff;
     private DecimalFormat df = new DecimalFormat("#.##");
     public TabList(MountainDewritoes plugin)
     {
         this.instance = plugin;
-        noMyStuff = (NoMyStuff)plugin.getServer().getPluginManager().getPlugin("NoMyStuff");
+        task(20);
+    }
+
+    private void task(int delay)
+    {
         new BukkitRunnable() //premature optimization is the root of all evils... or rather, a waste of time
         { //I.e. I could probably do something where I get the data sync that I need sync, then set tab async
             @Override
@@ -44,9 +46,9 @@ public class TabList implements Listener
                     }.runTaskLater(instance, i++);
                 }
                 //one tick breather before doing it all again!
-                this.runTaskLater(instance, ++i);
+                task(++i);
             }
-        }.run();
+        }.runTaskLater(instance, delay);
     }
 
     boolean lol = true;
