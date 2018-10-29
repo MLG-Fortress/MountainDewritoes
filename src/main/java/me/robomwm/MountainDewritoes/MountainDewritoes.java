@@ -379,8 +379,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
 //        if (getServer().getWorld("wellworld") != null)
 //            getServer().getWorld("wellworld").getWorldBorder().setSize(10000);
-        if (getServer().getWorld("mall") != null)
-            getServer().getWorld("mall").setKeepSpawnInMemory(true);
+        getServer().getWorld("firstjoin").setKeepSpawnInMemory(true);
 
         //Classes other classes might want to use
         new NSA(this);

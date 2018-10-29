@@ -1,7 +1,6 @@
 package me.robomwm.MountainDewritoes.Commands;
 
 import com.destroystokyo.paper.Title;
-import com.wimbli.WorldBorder.BorderData;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
@@ -11,23 +10,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created on 7/26/2017.
@@ -102,19 +95,19 @@ public class DebugCommand implements CommandExecutor
 
         if (args[0].equalsIgnoreCase("wb"))
         {
-            World world = plugin.getServer().getWorld(args[1]);
-            if (world == null || !plugin.isSurvivalWorld(world))
-                return false;
-
-            BorderData borderData = com.wimbli.WorldBorder.WorldBorder.plugin.getWorldBorder(world.getName());
-            WorldBorder border = world.getWorldBorder();
-
-            border.setCenter(new Location(world, 0, 0, 0));
-            border.setWarningDistance(0);
-            border.setSize((borderData.getRadiusX() * 2) - 20);
-
-            sender.sendMessage(world.getName());
-            sender.sendMessage("Center: " + border.getCenter().toString() + "\nSize: " + border.getSize());
+//            World world = plugin.getServer().getWorld(args[1]);
+//            if (world == null || !plugin.isSurvivalWorld(world))
+//                return false;
+//
+//            BorderData borderData = com.wimbli.WorldBorder.WorldBorder.plugin.getWorldBorder(world.getName());
+//            WorldBorder border = world.getWorldBorder();
+//
+//            border.setCenter(new Location(world, 0, 0, 0));
+//            border.setWarningDistance(0);
+//            border.setSize((borderData.getRadiusX() * 2) - 20);
+//
+//            sender.sendMessage(world.getName());
+//            sender.sendMessage("Center: " + border.getCenter().toString() + "\nSize: " + border.getSize());
             return true;
         }
         else if (args[0].equalsIgnoreCase("music"))
