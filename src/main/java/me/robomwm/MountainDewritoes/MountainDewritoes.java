@@ -75,6 +75,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
@@ -200,6 +201,49 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             ReplacementManager.getDynamic().add(new LiteralPlaceholder("%bot%")
             {
                 private JMegaHal brain;
+                String[] quotes = {
+                        "&b        such seber       &6many meme\n    &c%player%      &amuch plogenz       &eWow",
+                        "&b        such plogin       &6many %player%\n    &cspooky      &astale       &ewow",
+                        "&b        such word       &6many tri\n    &c%player%      &aplz joyn       &eso dispare",
+                        "&f/op %player%\n&7&o[Server: Opped %player%]",
+                        "&7&o[Server: Opped %player%]",
+                        "&c&lU HAV BEN SPOOKED BY SPOOKY SKILENTON\n&aJOYN OR SKELINTONS WILL EAT &d%player%",
+                        "&eThe quick brown &d%player% &egot ran over by a double rainbow",
+                        "&eThe quick brown fox got ran over by a double &d%player%",
+                        "&aBorn 2 L8 2 explore da Earth, born 2 s00n 2 explore da Galaxy. Born just in time 2 post &dℳℰℳℰS └( ° ͜ʖ͡°)┐",
+                        "&b┻━┻ ︵ ¯\\ (ツ)/¯ ︵ ┻━┻",
+                        "&9Can i be a staff member on your server let me be an staff member Please %player% Please Please Please Please",
+                        "&6My favorite number is %player%",
+                        "&6hollo %player% u r authroaize 2 win vacay pls credit card info",
+                        "&6Hello valued customer. Would you like dog pictures to clog your computer",
+                        "&exDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+                        "&eAccordion to a recent survey, replacing words with the names of musical instruments in a sentence often goes undetected.",
+                        "&brawblox",
+                        "%player%: i like memes",
+                        "&dℳℰℳℰS └",
+                        "&d└( ° ͜ʖ͡°)┐",
+                        "&d%player%",
+                        "&d\n¯\\ (ツ)/¯  ",
+                        "&d ō_o",
+                        "&d\n┐('～`；)┌",
+                        "&d      ( ﾟ∩ﾟ)",
+                        "&d      ~\\_(''/)_/~ ",
+                        "&d      (☞ﾟヮﾟ)☞",
+                        "&d       °.ʖ ° ",
+                        "&d     (╭☞ ° ʖ °)╭☞         ┐",
+                        "&d      ¯\\_(°_o)_/¯     ",
+                        "&c      i really should be more active      ",
+                        "&f     %player% r u admin????!?!?!1?1?",
+                                "&dLocal Rapper &e\"Big Shaq\" &dpresents mind-boggling question - What counts as &a\"Quick maffs?\"",
+                        "&dA wild &a%player% &dhas appeared!",
+                    "&6r u redy 4 %player%????",
+                    "&ehello sir this is windows tech support\n&6you have expired tech support key",
+                    "&6i actually play multiplayer minesweeper with CPUPLAYER#1",
+                    "&3that is not a valid gamemode\n&3it can only be fidget spinners",
+                    "&foops my system crashed\n&fI lost my data but I had an antivirus",
+                    "&7r u all pretending to be afk",
+                    "&bBorddd? Dont 4get about da &6/&am&ci&dn&ei&fg&ba&am&ce&ds"
+                };
 
                 @Override
                 public String replace(ServerListPlusCore core, String s)
@@ -219,20 +263,30 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         return ChatColor.RED + "still brewing memes, pls w8.";
                     if (brain == null)
                         brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
+                    String name = "you";
+                    UUID uuid = null;
                     ChatColor color = TipCommand.getRandomColor();
-                    if (response.getRequest().getIdentity() == null)
-                        return "U_W0T_B0T: " + color + brain.getSentence();
+                    if (response.getRequest().getIdentity() != null)
+                    {
+                        PlayerIdentity identity = response.getRequest().getIdentity();
+                        name = identity.getName();
+                        uuid = identity.getUuid();
+                    }
 
-                    PlayerIdentity identity = response.getRequest().getIdentity();
+                    if (ThreadLocalRandom.current().nextBoolean())
+                    {
+                        String quote = quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
+                        return quote.replaceAll("%player%", name);
+                    }
 
                     switch (ThreadLocalRandom.current().nextInt(10))
                     {
                         case 0:
-                            return color + getEconomy().format(getEconomy().getBalance(getServer().getOfflinePlayer(identity.getUuid())));
+                            if (uuid != null)
+                                return color + getEconomy().format(getEconomy().getBalance(getServer().getOfflinePlayer(uuid)));
                         case 1:
                             if (getServer().getOnlinePlayers().size() > 0)
                                 return "U shuld join " + getServer().getOnlinePlayers().iterator().next().getDisplayName();
-                            break;
                         case 2:
                             return color + brain.getSentence("robo");
                     }
