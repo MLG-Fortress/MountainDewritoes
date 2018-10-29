@@ -328,7 +328,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new ChatListener(this, clanManager), this);
         pm.registerEvents(new DeathListener(this), this);
         new BetterZeldaHearts(this, economy);
-        new RandomStructurePaster(this);
         new JoinMessages(this);
         pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
