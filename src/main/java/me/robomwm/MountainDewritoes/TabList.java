@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 8/28/2017.
@@ -46,26 +47,34 @@ public class TabList implements Listener
                     }.runTaskLater(instance, i++);
                 }
                 //one tick breather before doing it all again!
-                task(++i);
+                task(ThreadLocalRandom.current().nextInt(++i, i + 30));
             }
         }.runTaskLater(instance, delay);
     }
 
-    boolean lol = true;
-
     private void setTabList(Player player)
     {
-        if (lol)
-            player.setPlayerListHeader(TipCommand.getRandomColor() + "MLG Fortress\n" +
+        if (ThreadLocalRandom.current().nextBoolean())
+            player.setPlayerListHeader(TipCommand.getRandomColor() + "MLG Fortress" + TAB +
+                    TipCommand.getRandomColor() + "TPS: " +
+                    df.format(instance.getServer().getTPS()[0] * 2D) + "\n" +
                     TipCommand.getRandomColor() +
                     instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
                     TipCommand.getRandomColor() + "Ping: " + PseudoCommands.getPing(player));
         else
-            player.setPlayerListFooter(TipCommand.getRandomColor() + "IP: " +
-                TipCommand.getRandomColor() + "MLG.ROBOMWM.COM" + TAB +
-                    TipCommand.getRandomColor() + "TPS: " +
-                    df.format(instance.getServer().getTPS()[0] * 2D));
+            player.setPlayerListFooter(colorizer("IP: ", "MLG", ".", "ROBOMWM", ".", "COM"));
 
-        lol = !lol;
+    }
+
+    private String colorizer(String... args)
+    {
+        StringBuilder stringBuilder = new StringBuilder(TipCommand.getRandomColor().toString());
+        for (String arg : args)
+        {
+            if (ThreadLocalRandom.current().nextBoolean())
+                stringBuilder.append(TipCommand.getRandomColor().toString());
+            stringBuilder.append(arg);
+        }
+        return stringBuilder.toString();
     }
 }
