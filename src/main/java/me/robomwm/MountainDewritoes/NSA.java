@@ -1,8 +1,8 @@
 package me.robomwm.MountainDewritoes;
 
+import com.robomwm.usefulutil.UsefulUtil;
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.Events.TransactionEvent;
-import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

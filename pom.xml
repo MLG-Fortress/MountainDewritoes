@@ -139,7 +139,7 @@
         <dependency>
             <groupId>com.github.RoboMWM</groupId>
             <artifactId>UsefulUtil</artifactId>
-            <version>1.23</version>
+            <version>3.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -158,11 +158,6 @@
             <groupId>com.github.Brettflan</groupId>
             <artifactId>WorldBorder</artifactId>
             <version>-d8d1b28b57-1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.MLG-Fortress</groupId>
-            <artifactId>NoMyStuff</artifactId>
-            <version>031fd10bac</version>
         </dependency>
         <dependency>
             <groupId>com.github.RoboMWM</groupId>

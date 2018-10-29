@@ -1,8 +1,8 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
 import com.destroystokyo.paper.Title;
+import com.robomwm.usefulutil.UsefulUtil;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;

@@ -1,8 +1,8 @@
 package me.robomwm.MountainDewritoes.combat;
 
 import com.robomwm.customitemrecipes.CustomItemRecipes;
+import com.robomwm.usefulutil.UsefulUtil;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.usefulutil.UsefulUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

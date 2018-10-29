@@ -416,6 +416,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new AntiLag(this);
         new FirstJoin(this);
         new DummerEnderman(this);
+        new OldTNT(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())

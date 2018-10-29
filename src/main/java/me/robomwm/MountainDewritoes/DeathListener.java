@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
