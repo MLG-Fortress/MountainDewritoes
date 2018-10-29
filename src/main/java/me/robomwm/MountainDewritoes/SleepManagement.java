@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,17 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by RoboMWM on 11/26/2016.
  */
 public class SleepManagement implements Listener
 {
     MountainDewritoes instance;
-    World WORLD;
-    private Set<World> worldsToSync = new HashSet<>();
     boolean playedMorning = false;
     boolean playedNight = false;
 
@@ -26,10 +22,7 @@ public class SleepManagement implements Listener
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.instance = plugin;
-        WORLD = instance.getServer().getWorld("mall");
-
-
-        worldsToSync.remove(WORLD);
+        final World WORLD = instance.getServer().getWorld("firstjoin");
 
         new BukkitRunnable()
         {
@@ -37,14 +30,14 @@ public class SleepManagement implements Listener
             {
                 for (World world : plugin.getServer().getWorlds())
                 {
-                    if (world.getGameRuleValue("doDaylightCycle").equals("false"))
+                    if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE))
                         continue;
                     if (WORLD.getTime() == world.getTime())
                         return;
                     world.setTime(WORLD.getTime());
                 }
             }
-        }.runTaskTimer(instance, 1200L, 1200L);
+        }.runTaskTimer(instance, 20L, 1200L);
     }
 
 

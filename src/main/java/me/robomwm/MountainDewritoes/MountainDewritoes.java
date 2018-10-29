@@ -38,6 +38,7 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -288,21 +289,27 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        survivalWorlds.add(getServer().getWorld("wellworld"));
 
         minigameWorlds.add(getServer().getWorld("spawn"));
-        minigameWorlds.add(getServer().getWorld("minigames"));
-        minigameWorlds.add(getServer().getWorld("bam"));
-        minigameWorlds.add(getServer().getWorld("flatroom"));
-        minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
-        minigameWorlds.add(getServer().getWorld("dogepvp"));
+//        minigameWorlds.add(getServer().getWorld("minigames"));
+//        minigameWorlds.add(getServer().getWorld("bam"));
+//        minigameWorlds.add(getServer().getWorld("flatroom"));
+//        minigameWorlds.add(getServer().getWorld("CreativeParkourMaps"));
+//        minigameWorlds.add(getServer().getWorld("dogepvp"));
 
         for (World world : getServer().getWorlds())
         {
             //Don't keep spawn chunks in memory
             world.setKeepSpawnInMemory(false);
 
+            //minigame worlds don't do daylight cycles
+            if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE))
+                minigameWorlds.add(world);
+
+            //else it's a non-minigame world
             //Set border on survival worlds
             //Border is a "hard stop", most worlds are generated to a much smaller radius.
-            if (world.getPVP() && !minigameWorlds.contains(world))
+            else if (world.getPVP() && !minigameWorlds.contains(world))
                 world.getWorldBorder().setSize(20000);
+
         }
 
 //        if (getServer().getWorld("wellworld") != null)
