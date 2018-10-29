@@ -263,7 +263,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         return ChatColor.RED + "still brewing memes, pls w8.";
                     if (brain == null)
                         brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
-                    String name = "you";
+                    String name = "u";
                     UUID uuid = null;
                     ChatColor color = TipCommand.getRandomColor();
                     if (response.getRequest().getIdentity() != null)
@@ -289,8 +289,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                                 return "U shuld join " + getServer().getOnlinePlayers().iterator().next().getDisplayName();
                         case 2:
                             return color + brain.getSentence("robo");
+                        default:
+                            if (!name.equals("u"))
+                                return "U_W0T_B0T: " + color + brain.getSentence(name);
                     }
-                    return "U_W0T_B0T: " + color + brain.getSentence(response.getRequest().getIdentity().getName());
+                    return "U_W0T_B0T: " + color + brain.getSentence();
 
                 }
             });
