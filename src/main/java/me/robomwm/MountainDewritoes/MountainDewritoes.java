@@ -4,6 +4,7 @@ import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemrecipes.CustomItemRecipes;
 import com.robomwm.grandioseapi.GrandioseAPI;
 import info.gomeow.chester.Chester;
+import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
@@ -450,7 +451,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("reset").setExecutor(new ResetCommands(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand());
         new Emoticons(this);
-
+        new ChangelogCommand(this);
+        
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
 
