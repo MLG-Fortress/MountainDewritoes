@@ -33,6 +33,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
 
     public ChangelogCommand(MountainDewritoes plugin)
     {
+        this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         storage = UsefulUtil.loadOrCreateYamlFile(plugin, "changelog.data");
         plugin.getCommand("changelog").setExecutor(this);
