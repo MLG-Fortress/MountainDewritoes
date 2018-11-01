@@ -5,10 +5,12 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,17 +34,97 @@ public class LazyText
         return book;
     }
 
-    public static BaseComponent[] buildPage(Object... strings)
+    public static BaseComponent[] buildPage(Object... components)
     {
-        List<BaseComponent> baseComponents = new ArrayList<>(strings.length);
-        for (Object object : strings)
+        List<BaseComponent> baseComponents = new ArrayList<>(components.length);
+        for (Object object : components)
         {
             if (object instanceof BaseComponent)
                 baseComponents.add((BaseComponent)object);
             else if (object instanceof String)
                 baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText((String)object)));
         }
-        return baseComponents.toArray(new BaseComponent[baseComponents.size()]);
+        return baseComponents.toArray(new BaseComponent[0]);
+    }
+
+    /**
+     * Combines components into an array split into an element for each page.
+     * Primarily for setting BookMeta.
+     *
+     *
+     * @apiNote Currently lacking: page overflow (splitting component across pages when too large)
+     * @param maxWidth max characters that can be in a line.
+     * @param lineCount max lines that can be in a page.
+     * @param contents Strings or BaseComponents
+     * @return
+     */
+    public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull Object... contents)
+    {
+        List<BaseComponent[]> pages = new ArrayList<>();
+        List<BaseComponent> page = new ArrayList<>();
+        int currentLineWidth = 0;
+        int lines = 0;
+
+        for (Object object : contents)
+        {
+            String text = getString(object);
+
+            //Handle "new page" character: \p
+            //For now, "new page" character has to be its own string/component
+            if (text.equalsIgnoreCase("\\p"))
+            {
+                pages.add(buildPage(page.toArray()));
+                currentLineWidth = 0;
+                lines = 0;
+                continue;
+            }
+
+            //Add newlines
+            if (text.contains("\n"))
+            {
+                lines += StringUtils.countMatches(text, "\n");
+                text = text.substring(text.lastIndexOf("\n"));
+            }
+
+            currentLineWidth += text.length();
+
+            if (currentLineWidth > maxWidth)
+            {
+                lines += Math.ceil(currentLineWidth / (double)maxWidth);
+            }
+
+            if (lines > lineCount)
+            {
+                pages.add(buildPage(page.toArray()));
+                currentLineWidth = text.length();
+                lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
+            }
+
+            page.addAll(getComponentAsList(object));
+        }
+
+        return pages;
+    }
+
+    public static String getString(Object object)
+    {
+        if (object instanceof BaseComponent)
+            return ((BaseComponent)object).toLegacyText();
+        else
+            return object.toString();
+    }
+
+    public static List<BaseComponent> getComponentAsList(Object object)
+    {
+        return Arrays.asList(getComponent(object));
+    }
+
+    public static BaseComponent[] getComponent(Object object)
+    {
+        if (object instanceof BaseComponent)
+            return new BaseComponent[]{(BaseComponent)object};
+        else
+            return TextComponent.fromLegacyText(object.toString());
     }
 
     public static List<BaseComponent> addLegacyText(String string, List<BaseComponent> baseComponents)
