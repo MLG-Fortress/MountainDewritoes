@@ -58,16 +58,16 @@ public class LazyText
      * @param contents Strings or BaseComponents
      * @return
      */
-    public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull Object... contents)
+    public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull BaseComponent... contents)
     {
         List<BaseComponent[]> pages = new ArrayList<>();
         List<BaseComponent> page = new ArrayList<>();
         int currentLineWidth = 0;
         int lines = 0;
 
-        for (Object object : contents)
+        for (BaseComponent component : contents)
         {
-            String text = getString(object);
+            String text = component.toLegacyText();
 
             //Handle "new page" character: \p
             //For now, "new page" character has to be its own string/component
@@ -100,7 +100,7 @@ public class LazyText
                 lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
             }
 
-            page.addAll(getComponentAsList(object));
+            page.add(component);
         }
 
         return pages;
@@ -116,10 +116,25 @@ public class LazyText
 
     public static List<BaseComponent> getComponentAsList(Object object)
     {
-        return Arrays.asList(getComponent(object));
+        return Arrays.asList(getComponentArray(object));
     }
 
-    public static BaseComponent[] getComponent(Object object)
+    public static BaseComponent[] concatenate(Object... objects)
+    {
+        List<BaseComponent> components = new ArrayList<>();
+        for (Object object : objects)
+        {
+            if (object instanceof BaseComponent)
+                components.add((BaseComponent)object);
+            else if (object instanceof BaseComponent[])
+                components.addAll(Arrays.asList((BaseComponent[])object));
+            else
+                components.addAll(Arrays.asList(TextComponent.fromLegacyText(object.toString())));
+        }
+        return components.toArray(new BaseComponent[0]);
+    }
+
+    public static BaseComponent[] getComponentArray(Object object)
     {
         if (object instanceof BaseComponent)
             return new BaseComponent[]{(BaseComponent)object};

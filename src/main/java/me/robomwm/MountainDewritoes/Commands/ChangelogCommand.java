@@ -79,7 +79,8 @@ public class ChangelogCommand implements Listener, CommandExecutor
     {
         TextComponent component = LazyText.command("⬅Back                        \n","/changelog","Back to /changelog");
         BookMeta bookMeta = LazyText.getBookMeta();
-        bookMeta.spigot().setPages(LazyText.buildPages(20, 12, component, getChangelogEntry(time)));
+        bookMeta.spigot().setPages(LazyText.buildPages(20, 12,
+                LazyText.concatenate(component, getChangelogEntry(time))));
         return LazyText.getBook(bookMeta);
     }
 
@@ -112,8 +113,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
         List<BaseComponent> entries = new ArrayList<>();
         for (String key : storage.getKeys(false))
         {
-            BaseComponent[] entry = new BaseComponent[2];
-            TextComponent component = new TextComponent(UsefulUtil.formatTime(Long.valueOf(key), 0));
+            TextComponent component = new TextComponent(UsefulUtil.formatTime(Long.valueOf(key) / 1000, 0) + "\n");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
             component.setColor(ChatColor.AQUA);
             //TODO: truncate preview, word wrap
