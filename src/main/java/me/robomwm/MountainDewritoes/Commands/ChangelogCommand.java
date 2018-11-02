@@ -59,6 +59,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
             {
                 ItemStack book = getEntryList();
                 plugin.openBook((Player)sender, book);
+                ((Player)sender).spigot().sendMessage(getChangelogEntries().toArray(new BaseComponent[0]));
                 return true;
             }
             plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
@@ -106,7 +107,6 @@ public class ChangelogCommand implements Listener, CommandExecutor
             //TODO: truncate preview, word wrap
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getChangelogEntry(key)));
             entries.add(component);
-            plugin.getLogger().info(getChangelogEntry(key).toString() + "\n" + storage.getString(key));
         }
         return entries;
     }

@@ -47,7 +47,7 @@ public class TabList implements Listener
                     }.runTaskLater(instance, i++);
                 }
                 //one tick breather before doing it all again!
-                task(ThreadLocalRandom.current().nextInt(++i, i + 30));
+                task(++i);
             }
         }.runTaskLater(instance, delay);
     }
@@ -55,12 +55,10 @@ public class TabList implements Listener
     private void setTabList(Player player)
     {
         if (ThreadLocalRandom.current().nextBoolean())
-            player.setPlayerListHeader(TipCommand.getRandomColor() + "MLG Fortress" + TAB +
-                    TipCommand.getRandomColor() + "TPS: " +
-                    df.format(instance.getServer().getTPS()[0] * 2D) + "\n" +
-                    TipCommand.getRandomColor() +
-                    instance.getEconomy().format(instance.getEconomy().getBalance(player)) + TAB +
-                    TipCommand.getRandomColor() + "Ping: " + PseudoCommands.getPing(player));
+            player.setPlayerListHeader(colorizer("MLG", "Fortress", TAB, "TPS: ",
+                    df.format(instance.getServer().getTPS()[0] * 2D), "\n",
+                    instance.getEconomy().format(instance.getEconomy().getBalance(player)), TAB,
+                    "Ping: ", PseudoCommands.getPing(player)));
         else
             player.setPlayerListFooter(colorizer("IP: ", "MLG", ".", "ROBOMWM", ".", "COM"));
 
