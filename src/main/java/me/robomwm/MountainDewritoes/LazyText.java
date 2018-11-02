@@ -82,7 +82,8 @@ public class LazyText
         public ItemStack getBook(int maxWidth, int maxLines)
         {
             BookMeta meta = getBookMeta();
-            getBookMeta().spigot().setPages(buildPages(maxWidth, maxLines, baseComponents));
+            for (BaseComponent[] c : buildPages(maxWidth, maxLines, baseComponents))
+                getBookMeta().spigot().addPage(c);
             return LazyText.getBook(meta);
         }
     }

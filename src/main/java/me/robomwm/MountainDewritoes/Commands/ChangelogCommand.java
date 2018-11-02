@@ -62,15 +62,15 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 ((Player)sender).spigot().sendMessage(getChangelogEntries().toArray(new BaseComponent[0]));
                 return true;
             }
-            plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
+//            plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
             ((Player)sender).spigot().sendMessage(getChangelogEntry(args[0]));
             TextComponent component = LazyText.command("⬅Back                        \n","/changelog","Back to /changelog");
-            List<BaseComponent> components = new LazyText.Builder()
+            LazyText.Builder builder = new LazyText.Builder()
                     .add(component)
-                    .add(getChangelogEntry(args[0]))
-                    .getBaseComponents();
-            for (BaseComponent[] c : LazyText.buildPages(50, 12, components))
+                    .add(getChangelogEntry(args[0]));
+            for (BaseComponent[] c : LazyText.buildPages(50, 12, builder.getBaseComponents()))
                 sender.sendMessage(c);
+            plugin.openBook((Player)sender, builder.getBook(50, 12));
 
             return true;
         }
