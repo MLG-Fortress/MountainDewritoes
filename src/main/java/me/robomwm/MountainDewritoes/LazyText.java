@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class LazyText
 {
+    //Ok, now this is looking like that Text library thing
+    //Oh well
     public static class Builder
     {
         List<BaseComponent> baseComponents = new ArrayList<>();
@@ -50,6 +52,23 @@ public class LazyText
             return this;
         }
 
+        public Builder add(String text, ChatColor color)
+        {
+            baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText(text, color)));
+            return this;
+        }
+
+        public Builder color(ChatColor color)
+        {
+            last().setColor(color);
+            return this;
+        }
+
+        public BaseComponent last()
+        {
+            return baseComponents.get(baseComponents.size() - 1);
+        }
+
         public List<BaseComponent> getBaseComponents()
         {
             return baseComponents;
@@ -58,6 +77,13 @@ public class LazyText
         public BaseComponent[] getBaseComponentsArray()
         {
             return baseComponents.toArray(new BaseComponent[0]);
+        }
+
+        public ItemStack getBook(int maxWidth, int maxLines)
+        {
+            BookMeta meta = getBookMeta();
+            getBookMeta().spigot().setPages(buildPages(maxWidth, maxLines, baseComponents));
+            return LazyText.getBook(meta);
         }
     }
 
@@ -73,6 +99,7 @@ public class LazyText
         return book;
     }
 
+    @Deprecated
     public static BaseComponent[] buildPage(Object... components)
     {
         List<BaseComponent> baseComponents = new ArrayList<>(components.length);
@@ -106,13 +133,13 @@ public class LazyText
 
         for (BaseComponent component : components)
         {
-            String text = component.toLegacyText();
+            String text = component.toPlainText();
 
             //Handle "new page" character: \p
             //For now, "new page" character has to be its own string/component
             if (text.equalsIgnoreCase("\\p"))
             {
-                pages.add(buildPage(page.toArray()));
+                pages.add(page.toArray(new BaseComponent[0]));
                 currentLineWidth = 0;
                 lines = 0;
                 continue;
@@ -134,7 +161,7 @@ public class LazyText
 
             if (lines > lineCount)
             {
-                pages.add(buildPage(page.toArray()));
+                pages.add(page.toArray(new BaseComponent[0]));
                 currentLineWidth = text.length();
                 lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
             }
@@ -145,44 +172,7 @@ public class LazyText
         return pages;
     }
 
-    public static String getString(Object object)
-    {
-        if (object instanceof BaseComponent)
-            return ((BaseComponent)object).toLegacyText();
-        else
-            return object.toString();
-    }
-
-    public static List<BaseComponent> getComponentAsList(Object object)
-    {
-        return Arrays.asList(getComponentArray(object));
-    }
-
-    public static List<BaseComponent> concatenate(Object... objects)
-    {
-        List<BaseComponent> components = new ArrayList<>();
-        for (Object object : objects)
-        {
-            if (object instanceof BaseComponent)
-                components.add((BaseComponent)object);
-            else if (object instanceof BaseComponent[])
-                components.addAll(Arrays.asList((BaseComponent[])object));
-            else if (object instanceof List<?> && ((List)object).get(0) instanceof BaseComponent)
-                components.addAll((List<BaseComponent>)object);
-            else
-                components.addAll(Arrays.asList(TextComponent.fromLegacyText(object.toString())));
-        }
-        return components;
-    }
-
-    public static BaseComponent[] getComponentArray(Object object)
-    {
-        if (object instanceof BaseComponent)
-            return new BaseComponent[]{(BaseComponent)object};
-        else
-            return TextComponent.fromLegacyText(object.toString());
-    }
-
+    @Deprecated
     public static List<BaseComponent> addLegacyText(String string, List<BaseComponent> baseComponents)
     {
         for (BaseComponent baseComponent : TextComponent.fromLegacyText(string))
@@ -190,11 +180,13 @@ public class LazyText
         return baseComponents;
     }
 
+    @Deprecated
     public static TextComponent command(String message, String command)
     {
         return command(message, command, command);
     }
 
+    @Deprecated
     public static TextComponent command(String message, String command, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
@@ -205,6 +197,7 @@ public class LazyText
         return textComponent;
     }
 
+    @Deprecated
     public static TextComponent url(String message, String URL, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
@@ -215,11 +208,13 @@ public class LazyText
         return textComponent;
     }
 
+    @Deprecated
     public static TextComponent suggest(String message, String suggestion)
     {
         return suggest(message, suggestion, suggestion);
     }
 
+    @Deprecated
     public static TextComponent suggest(String message, String suggestion, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
@@ -230,6 +225,7 @@ public class LazyText
         return textComponent;
     }
 
+    @Deprecated
     public static TextComponent hover(String message, String hover)
     {
         TextComponent textComponent = new TextComponent(message);
