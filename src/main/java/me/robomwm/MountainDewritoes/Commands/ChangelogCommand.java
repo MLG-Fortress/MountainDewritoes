@@ -69,7 +69,8 @@ public class ChangelogCommand implements Listener, CommandExecutor
                     .add(component)
                     .add(getChangelogEntry(args[0]))
                     .getBaseComponents();
-            ((Player)sender).spigot().sendMessage(components.toArray(new BaseComponent[0]));
+            for (BaseComponent[] c : LazyText.buildPages(50, 12, components))
+                sender.sendMessage(c);
 
             return true;
         }

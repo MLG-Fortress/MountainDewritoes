@@ -288,7 +288,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         return quote.replaceAll("%player%", name);
                     }
 
-                    switch (ThreadLocalRandom.current().nextInt(10))
+                    if (ThreadLocalRandom.current().nextBoolean() && !name.equals("u"))
+                    {
+                        return "U_W0T_B0T: " + color + brain.getSentence(name);
+                    }
+
+                    switch (ThreadLocalRandom.current().nextInt(3))
                     {
                         case 0:
                             if (uuid != null)
@@ -298,12 +303,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                                 return "U shuld join " + getServer().getOnlinePlayers().iterator().next().getDisplayName();
                         case 2:
                             return color + brain.getSentence("robo");
-                        default:
-                            if (!name.equals("u"))
-                                return "U_W0T_B0T: " + color + brain.getSentence(name);
                     }
-                    return "U_W0T_B0T: " + color + brain.getSentence();
 
+                    return "U_W0T_B0T: " + color + brain.getSentence();
                 }
             });
         }
