@@ -70,7 +70,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
                     .add(getChangelogEntry(args[0]));
             for (BaseComponent[] c : LazyText.buildPages(50, 12, builder.getBaseComponents()))
                 sender.sendMessage(c);
-            plugin.openBook((Player)sender, builder.getBook(50, 12));
+            plugin.openBook((Player)sender, builder.toBook(50, 12));
 
             return true;
         }

@@ -79,7 +79,7 @@ public class LazyText
             return baseComponents.toArray(new BaseComponent[0]);
         }
 
-        public ItemStack getBook(int maxWidth, int maxLines)
+        public ItemStack toBook(int maxWidth, int maxLines)
         {
             BookMeta meta = getBookMeta();
             for (BaseComponent[] c : buildPages(maxWidth, maxLines, baseComponents))
@@ -172,6 +172,7 @@ public class LazyText
             page.add(component);
         }
 
+        pages.add(page.toArray(new BaseComponent[0]));
         return pages;
     }
 

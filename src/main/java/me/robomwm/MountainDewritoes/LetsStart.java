@@ -88,14 +88,14 @@ public class LetsStart implements Listener, CommandExecutor
         builder.add("\nTo take a break from the custom survival you can take a visit to");
         builder.add(LazyText.command(" /minigames! ", "/minigames"));
         builder.add("Play games like cookie clicker and create parkours!");
-        minigames = builder.getBook(50, 20);
+        minigames = builder.toBook(50, 20);
 
 //        bookMeta.spigot().addPage(LazyText.buildPage(
 //                LazyText.command("⬅Back                        \n","/help","Back to /menu"),
 //                "\nTo take a break from the custom survival you can take a visit to",
 //                LazyText.command(" /minigames! ", "/minigames"),
 //                "Play games like cookie clicker and create parkours!"));
-//        minigames = LazyText.getBook(bookMeta);
+//        minigames = LazyText.toBook(bookMeta);
 
         bookMeta = LazyText.getBookMeta();
         bookMeta.spigot().addPage(LazyText.buildPage(
