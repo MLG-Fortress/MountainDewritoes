@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -14,6 +13,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created on 3/10/2018.
@@ -79,10 +79,10 @@ public class LazyText
             return baseComponents.toArray(new BaseComponent[0]);
         }
 
-        public ItemStack toBook(int maxWidth, int maxLines)
+        public ItemStack toBook()
         {
             BookMeta meta = getBookMeta();
-            getBookMeta().spigot().setPages(buildPages(maxWidth, maxLines, baseComponents));
+            getBookMeta().spigot().setPages(buildPages("\\p", baseComponents));
             return LazyText.getBook(meta);
         }
     }
@@ -114,61 +114,43 @@ public class LazyText
     }
 
     /**
-     * Combines components into an array split into an element for each page.
+     * Combines a list of components into pages, split by a defined "new page" character or string.
      * Primarily for setting BookMeta.
      *
+     * Does not provide any line or page wrapping.
      *
-     * @apiNote Currently lacking: page overflow (splitting component across pages when too large)
-     * @param maxWidth max characters that can be in a line.
-     * @param lineCount max lines that can be in a page.
+     * @param newPageChar String or character that represents a page break.
      * @param components BaseComponents
      * @return
      */
-    public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull List<BaseComponent> components)
+    public static List<BaseComponent[]> buildPages(String newPageChar, @Nonnull List<BaseComponent> components)
     {
+        newPageChar = Pattern.quote(newPageChar);
         List<BaseComponent[]> completedPages = new ArrayList<>();
         List<BaseComponent> workingPage = new ArrayList<>();
-        int currentLineWidth = 0;
-        int lines = 0;
 
         for (BaseComponent component : components)
         {
-            String text = component.toPlainText();
+           String plainText = component.toPlainText();
 
-            //Handle "new page" character: \p
-            //For now, "new page" character has to be its own string/component
-            if (text.equalsIgnoreCase("\\p"))
+            //Handle new page char
+            if (plainText.contains(newPageChar) && component instanceof TextComponent)
             {
-                completedPages.add(workingPage.toArray(new BaseComponent[0]));
-                workingPage.clear();
-                currentLineWidth = 0;
-                lines = 0;
+                String[] strings = plainText.split(newPageChar);
+                String text;
+                int length = strings.length - 1;
+                for (int i = 0; i < strings.length; i++)
+                {
+                    text = strings[i];
+                    TextComponent textComponent = (TextComponent)(component.duplicate());
+                    textComponent.setText(text);
+                    workingPage.add(textComponent);
+
+                    //Don't append page break with last element
+                    if (i < length)
+                        completedPages.add(workingPage.toArray(new BaseComponent[0]));
+                }
                 continue;
-            }
-
-            //Add newlines within text, if present
-            if (text.contains("\n"))
-            {
-                lines += StringUtils.countMatches(text, "\n");
-                text = text.substring(text.lastIndexOf("\n"));
-                currentLineWidth = 0;
-            }
-
-            //calculate current line width
-            currentLineWidth += text.length();
-
-            if (currentLineWidth > maxWidth)
-            {
-                lines += Math.ceil(currentLineWidth / (double)maxWidth);
-            }
-
-            //If lineCount is exceeded, add page to collection
-            if (lines > lineCount)
-            {
-                completedPages.add(workingPage.toArray(new BaseComponent[0]));
-                workingPage.clear();
-                currentLineWidth = text.length();
-                lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
             }
 
             //add component to page
@@ -179,6 +161,14 @@ public class LazyText
         completedPages.add(workingPage.toArray(new BaseComponent[0]));
 
         return completedPages;
+    }
+
+    private static int indexOf(String string, char c)
+    {
+        int index = string.indexOf(c);
+        if (index < 0)
+            return string.length();
+        return index;
     }
 
     @Deprecated

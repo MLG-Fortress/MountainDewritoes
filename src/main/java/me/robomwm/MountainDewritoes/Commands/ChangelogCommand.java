@@ -16,7 +16,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,16 +61,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 ((Player)sender).spigot().sendMessage(getChangelogEntries().toArray(new BaseComponent[0]));
                 return true;
             }
-//            plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
-            ((Player)sender).spigot().sendMessage(getChangelogEntry(args[0]));
-            TextComponent component = LazyText.command("⬅Back                        \n","/changelog","Back to /changelog");
-            LazyText.Builder builder = new LazyText.Builder()
-                    .add(component)
-                    .add(getChangelogEntry(args[0]));
-            for (BaseComponent[] c : LazyText.buildPages(50, 12, builder.getBaseComponents()))
-                sender.sendMessage(c);
-            plugin.openBook((Player)sender, builder.toBook(50, 12));
-
+            plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
             return true;
         }
         else if (cmd.getName().equalsIgnoreCase("deletelog"))
@@ -88,21 +78,15 @@ public class ChangelogCommand implements Listener, CommandExecutor
     public ItemStack getChangelogEntryBook(String time)
     {
         TextComponent component = LazyText.command("⬅Back                        \n","/changelog","Back to /changelog");
-        BookMeta bookMeta = LazyText.getBookMeta();
-        LazyText.Builder builder = new LazyText.Builder();
-        List<BaseComponent> components = new LazyText.Builder()
+        return new LazyText.Builder()
                 .add(component)
                 .add(getChangelogEntry(time))
-                .getBaseComponents();
-        bookMeta.spigot().setPages(LazyText.buildPages(20, 12, components));
-        return LazyText.getBook(bookMeta);
+                .toBook();
     }
 
     public ItemStack getEntryList()
     {
-        BookMeta meta = LazyText.getBookMeta();
-        meta.spigot().setPages(LazyText.buildPages(50, 20, getChangelogEntries()));
-        return LazyText.getBook(meta);
+        return new LazyText.Builder().add(getChangelogEntries()).toBook();
     }
 
     public List<BaseComponent> getChangelogEntries()
