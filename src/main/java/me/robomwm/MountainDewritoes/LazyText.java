@@ -82,8 +82,7 @@ public class LazyText
         public ItemStack toBook(int maxWidth, int maxLines)
         {
             BookMeta meta = getBookMeta();
-            for (BaseComponent[] c : buildPages(maxWidth, maxLines, baseComponents))
-                getBookMeta().spigot().addPage(c);
+            getBookMeta().spigot().setPages(buildPages(maxWidth, maxLines, baseComponents));
             return LazyText.getBook(meta);
         }
     }
@@ -147,13 +146,15 @@ public class LazyText
                 continue;
             }
 
-            //Add newlines
+            //Add newlines within text, if present
             if (text.contains("\n"))
             {
                 lines += StringUtils.countMatches(text, "\n");
                 text = text.substring(text.lastIndexOf("\n"));
+                currentLineWidth = 0;
             }
 
+            //calculate current line width
             currentLineWidth += text.length();
 
             if (currentLineWidth > maxWidth)
@@ -161,6 +162,7 @@ public class LazyText
                 lines += Math.ceil(currentLineWidth / (double)maxWidth);
             }
 
+            //If lineCount is exceeded, add page to collection
             if (lines > lineCount)
             {
                 pages.add(page.toArray(new BaseComponent[0]));
@@ -169,10 +171,13 @@ public class LazyText
                 lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
             }
 
+            //add component to page
             page.add(component);
         }
 
+        //add last page to collection
         pages.add(page.toArray(new BaseComponent[0]));
+
         return pages;
     }
 
