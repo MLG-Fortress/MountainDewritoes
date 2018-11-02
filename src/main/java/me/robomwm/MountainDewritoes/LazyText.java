@@ -140,6 +140,7 @@ public class LazyText
             if (text.equalsIgnoreCase("\\p"))
             {
                 pages.add(page.toArray(new BaseComponent[0]));
+                page.clear();
                 currentLineWidth = 0;
                 lines = 0;
                 continue;
@@ -162,6 +163,7 @@ public class LazyText
             if (lines > lineCount)
             {
                 pages.add(page.toArray(new BaseComponent[0]));
+                page.clear();
                 currentLineWidth = text.length();
                 lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
             }

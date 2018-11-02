@@ -63,6 +63,14 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 return true;
             }
             plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
+            ((Player)sender).spigot().sendMessage(getChangelogEntry(args[0]));
+            TextComponent component = LazyText.command("⬅Back                        \n","/changelog","Back to /changelog");
+            List<BaseComponent> components = new LazyText.Builder()
+                    .add(component)
+                    .add(getChangelogEntry(args[0]))
+                    .getBaseComponents();
+            ((Player)sender).spigot().sendMessage(components.toArray(new BaseComponent[0]));
+
             return true;
         }
         else if (cmd.getName().equalsIgnoreCase("deletelog"))
@@ -101,7 +109,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
         List<BaseComponent> entries = new ArrayList<>();
         for (String key : storage.getKeys(false))
         {
-            TextComponent component = new TextComponent(UsefulUtil.formatTime(Long.valueOf(key) / 1000, 0) + "\n");
+            TextComponent component = new TextComponent(UsefulUtil.formatTime(Long.valueOf(key), 0) + "\n");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
             component.setColor(ChatColor.AQUA);
             //TODO: truncate preview, word wrap
