@@ -22,6 +22,45 @@ import java.util.List;
  */
 public class LazyText
 {
+    public static class Builder
+    {
+        List<BaseComponent> baseComponents = new ArrayList<>();
+
+        public Builder add(BaseComponent component)
+        {
+            baseComponents.add(component);
+            return this;
+        }
+
+        public Builder add(BaseComponent[] components)
+        {
+            baseComponents.addAll(Arrays.asList(components));
+            return this;
+        }
+
+        public Builder add(List<BaseComponent> components)
+        {
+            baseComponents.addAll(components);
+            return this;
+        }
+
+        public Builder add(String text)
+        {
+            baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText(text)));
+            return this;
+        }
+
+        public List<BaseComponent> getBaseComponents()
+        {
+            return baseComponents;
+        }
+
+        public BaseComponent[] getBaseComponentsArray()
+        {
+            return baseComponents.toArray(new BaseComponent[0]);
+        }
+    }
+
     public static BookMeta getBookMeta()
     {
         return (BookMeta)(new ItemStack(Material.WRITTEN_BOOK).getItemMeta());
@@ -55,17 +94,17 @@ public class LazyText
      * @apiNote Currently lacking: page overflow (splitting component across pages when too large)
      * @param maxWidth max characters that can be in a line.
      * @param lineCount max lines that can be in a page.
-     * @param contents Strings or BaseComponents
+     * @param components BaseComponents
      * @return
      */
-    public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull BaseComponent... contents)
+    public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull List<BaseComponent> components)
     {
         List<BaseComponent[]> pages = new ArrayList<>();
         List<BaseComponent> page = new ArrayList<>();
         int currentLineWidth = 0;
         int lines = 0;
 
-        for (BaseComponent component : contents)
+        for (BaseComponent component : components)
         {
             String text = component.toLegacyText();
 
@@ -119,7 +158,7 @@ public class LazyText
         return Arrays.asList(getComponentArray(object));
     }
 
-    public static BaseComponent[] concatenate(Object... objects)
+    public static List<BaseComponent> concatenate(Object... objects)
     {
         List<BaseComponent> components = new ArrayList<>();
         for (Object object : objects)
@@ -128,10 +167,12 @@ public class LazyText
                 components.add((BaseComponent)object);
             else if (object instanceof BaseComponent[])
                 components.addAll(Arrays.asList((BaseComponent[])object));
+            else if (object instanceof List<?> && ((List)object).get(0) instanceof BaseComponent)
+                components.addAll((List<BaseComponent>)object);
             else
                 components.addAll(Arrays.asList(TextComponent.fromLegacyText(object.toString())));
         }
-        return components.toArray(new BaseComponent[0]);
+        return components;
     }
 
     public static BaseComponent[] getComponentArray(Object object)

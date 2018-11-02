@@ -48,7 +48,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
         {
             if (!sender.isOp())
                 return false;
-            String thing = String.join("", args);
+            String thing = String.join(" ", args);
             storage.set(String.valueOf(System.currentTimeMillis()), thing);
             UsefulUtil.saveYamlFile(plugin, "changelog.data", storage);
             return true;
@@ -57,7 +57,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
         {
             if (args.length == 0)
             {
-                ItemStack book = createBook(getChangelogEntries());
+                ItemStack book = getEntryList();
                 plugin.openBook((Player)sender, book);
                 return true;
             }
@@ -79,33 +79,20 @@ public class ChangelogCommand implements Listener, CommandExecutor
     {
         TextComponent component = LazyText.command("⬅Back                        \n","/changelog","Back to /changelog");
         BookMeta bookMeta = LazyText.getBookMeta();
-        bookMeta.spigot().setPages(LazyText.buildPages(20, 12,
-                LazyText.concatenate(component, getChangelogEntry(time))));
+        LazyText.Builder builder = new LazyText.Builder();
+        List<BaseComponent> components = new LazyText.Builder()
+                .add(component)
+                .add(getChangelogEntry(time))
+                .getBaseComponents();
+        bookMeta.spigot().setPages(LazyText.buildPages(20, 12, components));
         return LazyText.getBook(bookMeta);
     }
 
-    public ItemStack createBook(List<BaseComponent> lines)
+    public ItemStack getEntryList()
     {
-        List<BaseComponent[]> pages = new ArrayList<>();
-        List<BaseComponent> page = new ArrayList<>();
-
-        int i = 0;
-        for (BaseComponent component : lines)
-        {
-            if (++i % 12 == 0)
-            {
-                pages.add(LazyText.buildPage(page));
-                page.clear();
-                i = 0;
-            }
-            page.add(component);
-        }
-
-        pages.add(LazyText.buildPage(page));
-        BookMeta bookMeta = LazyText.getBookMeta();
-        for (BaseComponent[] pageContents : pages)
-            bookMeta.spigot().addPage(pageContents);
-        return LazyText.getBook(bookMeta);
+        BookMeta meta = LazyText.getBookMeta();
+        meta.spigot().setPages(LazyText.buildPages(50, 20, getChangelogEntries()));
+        return LazyText.getBook(meta);
     }
 
     public List<BaseComponent> getChangelogEntries()
@@ -119,6 +106,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
             //TODO: truncate preview, word wrap
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getChangelogEntry(key)));
             entries.add(component);
+            plugin.getLogger().info(getChangelogEntry(key).toString() + "\n" + storage.getString(key));
         }
         return entries;
     }
