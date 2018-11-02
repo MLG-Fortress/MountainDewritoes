@@ -126,8 +126,8 @@ public class LazyText
      */
     public static List<BaseComponent[]> buildPages(int maxWidth, int lineCount, @Nonnull List<BaseComponent> components)
     {
-        List<BaseComponent[]> pages = new ArrayList<>();
-        List<BaseComponent> page = new ArrayList<>();
+        List<BaseComponent[]> completedPages = new ArrayList<>();
+        List<BaseComponent> workingPage = new ArrayList<>();
         int currentLineWidth = 0;
         int lines = 0;
 
@@ -139,8 +139,8 @@ public class LazyText
             //For now, "new page" character has to be its own string/component
             if (text.equalsIgnoreCase("\\p"))
             {
-                pages.add(page.toArray(new BaseComponent[0]));
-                page.clear();
+                completedPages.add(workingPage.toArray(new BaseComponent[0]));
+                workingPage.clear();
                 currentLineWidth = 0;
                 lines = 0;
                 continue;
@@ -165,20 +165,20 @@ public class LazyText
             //If lineCount is exceeded, add page to collection
             if (lines > lineCount)
             {
-                pages.add(page.toArray(new BaseComponent[0]));
-                page.clear();
+                completedPages.add(workingPage.toArray(new BaseComponent[0]));
+                workingPage.clear();
                 currentLineWidth = text.length();
                 lines = (int)Math.ceil(currentLineWidth / (double)maxWidth);
             }
 
             //add component to page
-            page.add(component);
+            workingPage.add(component);
         }
 
         //add last page to collection
-        pages.add(page.toArray(new BaseComponent[0]));
+        completedPages.add(workingPage.toArray(new BaseComponent[0]));
 
-        return pages;
+        return completedPages;
     }
 
     @Deprecated
