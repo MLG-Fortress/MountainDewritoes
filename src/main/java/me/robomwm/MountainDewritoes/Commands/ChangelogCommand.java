@@ -16,9 +16,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +58,6 @@ public class ChangelogCommand implements Listener, CommandExecutor
             if (args.length == 0)
             {
                 plugin.openBook((Player)sender, new LazyText.Builder().add(getChangelogEntries()).toBook());
-                sender.sendMessage(((BookMeta)new LazyText.Builder().add(getChangelogEntries()).toBook().getItemMeta()).spigot().getPages().get(0));
                 return true;
             }
             plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
@@ -66,9 +65,9 @@ public class ChangelogCommand implements Listener, CommandExecutor
         }
         else if (cmd.getName().equalsIgnoreCase("deletelog"))
         {
-            if (!sender.isOp())
+            if (!sender.isOp() || args.length == 0)
                 return false;
-            storage.set(String.valueOf(System.currentTimeMillis()), null);
+            storage.set(String.valueOf(args[0]), null);
             UsefulUtil.saveYamlFile(plugin, "changelog.data", storage);
             return true;
         }
@@ -89,13 +88,14 @@ public class ChangelogCommand implements Listener, CommandExecutor
         List<BaseComponent> entries = new ArrayList<>();
         for (String key : storage.getKeys(false))
         {
-            TextComponent component = new TextComponent(UsefulUtil.formatTime(Long.valueOf(key), 0) + "\n");
+            TextComponent component = new TextComponent(UsefulUtil.formatTime((System.currentTimeMillis() - Long.valueOf(key)) / 1000, 0) + "\n");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
             component.setColor(ChatColor.AQUA);
             //TODO: truncate preview, word wrap
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getChangelogEntry(key)));
             entries.add(component);
         }
+        Collections.reverse(entries);
         return entries;
     }
 
