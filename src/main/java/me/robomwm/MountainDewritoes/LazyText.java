@@ -154,6 +154,9 @@ public class LazyText
                 continue;
             }
 
+            Bukkit.broadcastMessage(plainText);
+
+
             //add component to page
             workingPage.add(component);
         }
