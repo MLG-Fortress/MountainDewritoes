@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
             if (args.length == 0)
             {
                 plugin.openBook((Player)sender, new LazyText.Builder().add(getChangelogEntries()).toBook());
-                ((Player)sender).spigot().sendMessage(new LazyText.Builder().add(getChangelogEntries()).getBaseComponentsArray());
+                sender.sendMessage(((BookMeta)new LazyText.Builder().add(getChangelogEntries()).toBook().getItemMeta()).spigot().getPages().get(0));
                 return true;
             }
             plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
