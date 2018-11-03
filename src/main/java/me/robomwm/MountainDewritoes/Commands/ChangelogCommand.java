@@ -56,9 +56,8 @@ public class ChangelogCommand implements Listener, CommandExecutor
         {
             if (args.length == 0)
             {
-                ItemStack book = getEntryList();
-                plugin.openBook((Player)sender, book);
-                ((Player)sender).spigot().sendMessage(getChangelogEntries().toArray(new BaseComponent[0]));
+                plugin.openBook((Player)sender, new LazyText.Builder().add(getChangelogEntries()).toBook());
+                ((Player)sender).spigot().sendMessage(new LazyText.Builder().add(getChangelogEntries()).getBaseComponentsArray());
                 return true;
             }
             plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
@@ -82,11 +81,6 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 .add(component)
                 .add(getChangelogEntry(time))
                 .toBook();
-    }
-
-    public ItemStack getEntryList()
-    {
-        return new LazyText.Builder().add(getChangelogEntries()).toBook();
     }
 
     public List<BaseComponent> getChangelogEntries()
