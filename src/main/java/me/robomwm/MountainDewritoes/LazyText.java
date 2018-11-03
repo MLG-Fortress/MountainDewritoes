@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -132,29 +131,29 @@ public class LazyText
 
         for (BaseComponent component : components)
         {
-           String plainText = component.toPlainText();
-
-            //Handle new page char
-            if (plainText.contains(newPageChar) && component instanceof TextComponent)
-            {
-                String[] strings = plainText.split(newPageChar);
-                String text;
-                int length = strings.length - 1;
-                for (int i = 0; i < strings.length; i++)
-                {
-                    text = strings[i];
-                    TextComponent textComponent = (TextComponent)(component.duplicate());
-                    textComponent.setText(text);
-                    workingPage.add(textComponent);
-                    Bukkit.broadcastMessage(text);
-                    //Don't append page break with last element
-                    if (i < length)
-                        completedPages.add(workingPage.toArray(new BaseComponent[0]));
-                }
-                continue;
-            }
-
-            Bukkit.broadcastMessage(plainText);
+//           String plainText = component.toPlainText();
+//
+//            //Handle new page char
+//            if (plainText.contains(newPageChar) && component instanceof TextComponent)
+//            {
+//                String[] strings = plainText.split(newPageChar);
+//                String text;
+//                int length = strings.length - 1;
+//                for (int i = 0; i < strings.length; i++)
+//                {
+//                    text = strings[i];
+//                    TextComponent textComponent = (TextComponent)(component.duplicate());
+//                    textComponent.setText(text);
+//                    workingPage.add(textComponent);
+//                    Bukkit.broadcastMessage(text);
+//                    //Don't append page break with last element
+//                    if (i < length)
+//                        completedPages.add(workingPage.toArray(new BaseComponent[0]));
+//                }
+//                continue;
+//            }
+//
+//            Bukkit.broadcastMessage(plainText);
 
 
             //add component to page
