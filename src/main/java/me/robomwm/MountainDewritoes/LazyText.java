@@ -82,7 +82,7 @@ public class LazyText
         public ItemStack toBook()
         {
             BookMeta meta = getBookMeta();
-            getBookMeta().spigot().setPages(buildPages("\\p", baseComponents));
+            meta.spigot().setPages(buildPages("\\p", baseComponents));
             return LazyText.getBook(meta);
         }
     }
