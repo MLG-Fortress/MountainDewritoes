@@ -5,8 +5,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,10 +56,12 @@ class ActionCenter
     private Plugin plugin;
     private Notifications manager;
     private Scoreboard scoreboard;
+    private Objective objective;
     private Player player;
     private BukkitTask expireTask;
     private int expirationLength;
     private Map<String, List<String>> entries = new LinkedHashMap<>();
+    private List<String> currentDisplay = new ArrayList<>(16);
 
     ActionCenter(Plugin plugin, Notifications manager, Player player, int expireTimeInTicks)
     {
@@ -68,8 +73,10 @@ class ActionCenter
         manager.infoBoards.put(player, this);
         this.expirationLength = expireTimeInTicks;
         this.player = player;
-
-        //TODO initialize and set scoreboard
+        this.scoreboard = plugin.getServer().getScoreboardManager().getNewScoreboard();
+        this.objective = this.scoreboard.registerNewObjective("Notifications", "dummy", "Notifications");
+        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        player.setScoreboard(this.scoreboard);
     }
 
     public boolean refreshDisplay()
@@ -91,10 +98,21 @@ class ActionCenter
         }
         while (lineCount > 16);
 
-        //TODO: set scoreboard entries
+        //set scoreboard lines
+        int i = 0;
         for (Map.Entry<String, List<String>> test : entries.entrySet())
         {
-
+            for (String line : test.getValue())
+            {
+                if (currentDisplay.size() > i)
+                    scoreboard.resetScores(currentDisplay.get(i));
+                currentDisplay.set(i, line);
+                objective.getScore(line).setScore(i++);
+            }
+            if (currentDisplay.size() > i)
+                scoreboard.resetScores(currentDisplay.get(i));
+            currentDisplay.set(i, " ");
+            objective.getScore(" ").setScore(i++); //TODO: probably doesn't work for multiple entries
         }
 
         return true;
