@@ -1,7 +1,6 @@
-package me.robomwm.MountainDewritoes;
+package me.robomwm.MountainDewritoes.notifications;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -10,6 +9,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Map;
  *
  * @author RoboMWM
  */
-public class Notifications implements Listener
+public class Notifications
 {
     private Plugin plugin;
     private Scoreboard mainScoreboard;
@@ -30,7 +30,9 @@ public class Notifications implements Listener
     {
         this.plugin = plugin;
         this.mainScoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
+        //register senders
+        new TransactionNotification(this, plugin);
     }
 
     public ActionCenter getActionCenter(Player player)
@@ -47,6 +49,7 @@ public class Notifications implements Listener
         if (actionCenter == null)
             return false;
 
+        Collections.reverse(lines);
         return actionCenter.addEntry(category, lines);
     }
 }
@@ -115,6 +118,7 @@ class ActionCenter
             objective.getScore(" ").setScore(i++); //TODO: probably doesn't work for multiple entries
         }
 
+        refreshExpiration();
         return true;
     }
 

@@ -37,6 +37,7 @@ import net.minecrell.serverlistplus.core.replacement.ReplacementManager;
 import net.minecrell.serverlistplus.core.status.StatusResponse;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+import me.robomwm.MountainDewritoes.notifications.Notifications;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
@@ -425,7 +426,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             pm.registerEvents(new TeleportingEffects(this), this);
 
         //Utilities
-        //new ScoreboardStuff(this);
+        new Notifications(this);
         new BukkitRunnable()
         {
             public void run()
