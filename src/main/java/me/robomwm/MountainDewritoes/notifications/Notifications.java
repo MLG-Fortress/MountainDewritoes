@@ -8,7 +8,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -64,7 +63,7 @@ class ActionCenter
     private BukkitTask expireTask;
     private int expirationLength;
     private Map<String, List<String>> entries = new LinkedHashMap<>();
-    private List<String> currentDisplay = new ArrayList<>(16);
+    private String[] currentDisplay = new String[16];
 
     ActionCenter(Plugin plugin, Notifications manager, Player player, int expireTimeInTicks)
     {
@@ -107,14 +106,14 @@ class ActionCenter
         {
             for (String line : test.getValue())
             {
-                if (currentDisplay.size() > i)
-                    scoreboard.resetScores(currentDisplay.get(i));
-                currentDisplay.set(i, line);
+                if (currentDisplay[i] != null)
+                    scoreboard.resetScores(currentDisplay[i]);
+                currentDisplay[i] = line;
                 objective.getScore(line).setScore(i++);
             }
-            if (currentDisplay.size() > i)
-                scoreboard.resetScores(currentDisplay.get(i));
-            currentDisplay.set(i, " ");
+            if (currentDisplay[i] != null)
+                scoreboard.resetScores(currentDisplay[i]);
+            currentDisplay[i] = " ";
             objective.getScore(" ").setScore(i++); //TODO: probably doesn't work for multiple entries
         }
 
