@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import com.robomwm.usefulutil.UsefulUtil;
 import de.themoep.minedown.MineDown;
+import me.robomwm.MountainDewritoes.Events.PlayerLoadedWorldEvent;
 import me.robomwm.MountainDewritoes.LazyText;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.md_5.bungee.api.ChatColor;
@@ -14,12 +15,20 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created on 10/31/2018.
@@ -30,6 +39,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
 {
     private MountainDewritoes plugin;
     private YamlConfiguration storage;
+    private Map<UUID, Long> lastReadChangelog = new ConcurrentHashMap<>();
 
     public ChangelogCommand(MountainDewritoes plugin)
     {
@@ -57,7 +67,8 @@ public class ChangelogCommand implements Listener, CommandExecutor
         {
             if (args.length == 0)
             {
-                plugin.openBook((Player)sender, new LazyText.Builder().add(getChangelogEntries()).toBook());
+                plugin.openBook((Player)sender, new LazyText.Builder().add(getChangelogEntries(lastReadChangelog.get(((Player)sender).getUniqueId()))).toBook());
+                lastReadChangelog.put(((Player)sender).getUniqueId(), System.currentTimeMillis());
                 return true;
             }
             plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
@@ -83,7 +94,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 .toBook();
     }
 
-    public List<BaseComponent> getChangelogEntries()
+    public List<BaseComponent> getChangelogEntries(long time)
     {
         List<BaseComponent> entries = new ArrayList<>();
         int i = 0;
@@ -93,7 +104,10 @@ public class ChangelogCommand implements Listener, CommandExecutor
             if (++i % 12 == 0)
                 component.setText(component.getText() + "\\p");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
-            component.setColor(ChatColor.AQUA);
+            if (Long.valueOf(key) > time)
+                component.setColor(ChatColor.AQUA);
+            else
+                component.setColor(ChatColor.DARK_AQUA);
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getChangelogEntry(key)));
             entries.add(component);
         }
@@ -105,5 +119,39 @@ public class ChangelogCommand implements Listener, CommandExecutor
     public BaseComponent[] getChangelogEntry(String time)
     {
         return new MineDown(storage.getString(time, "")).replace("\\n", "\n").toComponent();
+    }
+
+    @EventHandler
+    private void onPlayerJoin(PlayerJoinEvent event)
+    {
+        if (!lastReadChangelog.containsKey(event.getPlayer().getUniqueId()))
+            lastReadChangelog.put(event.getPlayer().getUniqueId(), event.getPlayer().getLastPlayed());
+    }
+
+    @EventHandler
+    private void onPlayerLoad(PlayerLoadedWorldEvent event)
+    {
+        Set<String> keys = new HashSet<>(storage.getKeys(false));
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                int newChanges = 0;
+                for (String key : keys)
+                {
+                    if (Long.valueOf(key) > lastReadChangelog.get(event.getPlayer().getUniqueId()))
+                        newChanges++;
+                }
+                if (newChanges > 0)
+                {
+                    event.getPlayer().sendMessage(new LazyText.Builder().add(TipCommand.getRandomColor()
+                            + Integer.toString(newChanges)
+                            + " new server updates in the /changelog!")
+                            .cmd("/changelog", true)
+                            .toComponentArray());
+                }
+            }
+        }.runTaskAsynchronously(plugin);
     }
 }

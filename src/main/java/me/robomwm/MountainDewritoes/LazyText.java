@@ -58,6 +58,26 @@ public class LazyText
             return this;
         }
 
+        public Builder cmd(String command, boolean hover)
+        {
+            last().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+            if (hover)
+                hover(command);
+            return this;
+        }
+
+        public Builder hover(String hover)
+        {
+            last().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
+            return this;
+        }
+
+        public Builder hover(String hover, ChatColor defaultColor)
+        {
+            last().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover, defaultColor)));
+            return this;
+        }
+
         public Builder color(ChatColor color)
         {
             last().setColor(color);
@@ -69,12 +89,12 @@ public class LazyText
             return baseComponents.get(baseComponents.size() - 1);
         }
 
-        public List<BaseComponent> getBaseComponents()
+        public List<BaseComponent> toComponents()
         {
             return baseComponents;
         }
 
-        public BaseComponent[] getBaseComponentsArray()
+        public BaseComponent[] toComponentArray()
         {
             return baseComponents.toArray(new BaseComponent[0]);
         }
