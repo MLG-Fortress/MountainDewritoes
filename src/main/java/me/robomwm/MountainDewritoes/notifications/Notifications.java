@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.notifications;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -7,6 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +65,7 @@ class ActionCenter
     private BukkitTask expireTask;
     private int expirationLength;
     private Map<String, List<String>> entries = new LinkedHashMap<>();
-    private String[] currentDisplay = new String[16];
+    private Team[] currentDisplay = new Team[16];
 
     ActionCenter(Plugin plugin, Notifications manager, Player player, int expireTimeInTicks)
     {
@@ -96,7 +98,7 @@ class ActionCenter
                 entries.remove(entries.keySet().iterator().next());
             lineCount = 0;
             for (List<String> lines : entries.values())
-                lineCount += lines.size();
+                lineCount += lines.size() + 1;
         }
         while (lineCount > 16);
 
@@ -106,15 +108,25 @@ class ActionCenter
         {
             for (String line : test.getValue())
             {
-                if (currentDisplay[i] != null)
-                    scoreboard.resetScores(currentDisplay[i]);
-                currentDisplay[i] = line;
-                objective.getScore(line).setScore(i++);
+                if (currentDisplay[i] == null)
+                {
+                    String teamName = ChatColor.values()[i].toString();
+                    currentDisplay[i] = scoreboard.registerNewTeam(teamName);
+                    currentDisplay[i].addEntry(teamName);
+                    objective.getScore(teamName).setScore(i);
+                }
+                currentDisplay[i++].setPrefix(line);
             }
-            if (currentDisplay[i] != null)
-                scoreboard.resetScores(currentDisplay[i]);
-            currentDisplay[i] = " ";
-            objective.getScore(" ").setScore(i++); //TODO: probably doesn't work for multiple entries
+
+            //line break
+            if (currentDisplay[i] == null)
+            {
+                String teamName = ChatColor.values()[i].toString();
+                currentDisplay[i] = scoreboard.registerNewTeam(teamName);
+                currentDisplay[i].addEntry(teamName);
+                objective.getScore(teamName).setScore(i);
+            }
+            currentDisplay[i++].setPrefix(" ");
         }
 
         refreshExpiration();
