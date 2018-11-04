@@ -24,20 +24,28 @@ import java.util.Map;
 public class ScoreboardStuff implements Listener
 {
     private JavaPlugin instance;
-    private Map<Player, List<String>> currentScoreboardView = new HashMap<>();
+    private Map<Player, List<String>> currentScoreboardView;
     private Map<Player, BukkitTask> removalTasks = new HashMap<>();
     private SbManager sbManager;
 
     public ScoreboardStuff(JavaPlugin plugin)
     {
-        if (true) return; //TODO: Await scoreboardstats update to 1.13
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        this.instance = plugin;
+        try
+        {
+            ScoreboardStats scoreboardStats = (ScoreboardStats)plugin.getServer().getPluginManager().getPlugin("ScoreboardStats");
+            if (scoreboardStats == null || !scoreboardStats.isEnabled())
+                return;
+            sbManager = scoreboardStats.getScoreboardManager();
+            //currentScoreboardView = new HashMap<>();
+            removalTasks = new HashMap<>();
+            this.instance = plugin;
+            plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        }
+        catch (Throwable rock)
+        {
+            plugin.getLogger().warning("ScoreboardStats not found or needs an update.");
+        }
 
-        ScoreboardStats scoreboardStats = (ScoreboardStats)plugin.getServer().getPluginManager().getPlugin("ScoreboardStats");
-        if (scoreboardStats == null)
-            return;
-        sbManager = scoreboardStats.getScoreboardManager();
     }
 
     private void scheduleScoreboardRemoval(SbManager sbManager, Player player, JavaPlugin plugin, long delay)
@@ -60,6 +68,8 @@ public class ScoreboardStuff implements Listener
     @EventHandler
     private void onTransaction(TransactionEvent event)
     {
+        if (sbManager == null)
+            return;
         Player player = event.getPlayer();
         sbManager.unregister(player);
         sbManager.createScoreboard(player);

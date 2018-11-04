@@ -425,7 +425,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             pm.registerEvents(new TeleportingEffects(this), this);
 
         //Utilities
-        new ScoreboardStuff(this);
+        //new ScoreboardStuff(this);
         new BukkitRunnable()
         {
             public void run()
@@ -473,7 +473,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
-        //TODO: delete instantiated worlds (i.e. those not in MV)
         betterNoDamageTicks.onDisable();
         for (Player player : getServer().getOnlinePlayers())
             atmosphericManager.stopMusic(player);
@@ -548,7 +547,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     /**
      * Worldguard doesn't fully protect paintings and itemframes from being destroyed...
-     * TODO: might need to include "Item" entity
      * @param event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

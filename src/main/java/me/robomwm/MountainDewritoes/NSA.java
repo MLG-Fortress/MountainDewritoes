@@ -20,6 +20,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -50,11 +54,115 @@ public class NSA implements Listener
     {
         instance = mountainDewritoes;
         instance.registerListener(this);
+
+//        new BukkitRunnable()
+//        {
+//            Scoreboard sb = mountainDewritoes.getServer().getScoreboardManager().getMainScoreboard();
+//            @Override
+//            public void run()
+//            {
+//                for (Player player : mountainDewritoes.getServer().getOnlinePlayers())
+//                    scoreboardSynchronizer(sb, player.getScoreboard());
+//            }
+//        }.runTaskTimer(mountainDewritoes, 20L, 1L);
+    }
+
+    private void scoreboardSynchronizer(Scoreboard source, Scoreboard target)
+    {
+        if (source == target)
+            return;
+
+        //sync teams
+        for (Team sTeam : source.getTeams())
+        {
+            Team tTeam = target.getTeam(sTeam.getName());
+            if (tTeam == null)
+                tTeam = target.registerNewTeam(sTeam.getName());
+
+            tTeam.setPrefix(sTeam.getPrefix());
+            tTeam.setSuffix(sTeam.getSuffix());
+            tTeam.setColor(sTeam.getColor());
+            //Currently unused
+//            tTeam.setDisplayName(sTeam.getDisplayName());
+//            tTeam.setCanSeeFriendlyInvisibles(sTeam.canSeeFriendlyInvisibles());
+//            tTeam.setAllowFriendlyFire(sTeam.allowFriendlyFire());
+//            for (Team.Option option : Team.Option.values())
+//            {
+//                tTeam.setOption(option, sTeam.getOption(option));
+//            }
+        }
+
+        //sync objectives
+        for (Objective sObjective : source.getObjectives())
+        {
+            Objective tObjective = target.getObjective(sObjective.getName());
+            if (tObjective == null)
+                tObjective = target.registerNewObjective(sObjective.getName(), sObjective.getCriteria(), sObjective.getDisplayName());
+            tObjective.setDisplaySlot(sObjective.getDisplaySlot());
+            if (!sObjective.isModifiable())
+                continue;
+
+            //sync scores
+            for (String entry : source.getEntries())
+            {
+                Score sScore = sObjective.getScore(entry);
+                Score tScore = tObjective.getScore(entry);
+                tScore.setScore(sScore.getScore());
+            }
+        }
+    }
+
+    //Will likely remove in favor of Notifications/Action Center
+    @Deprecated
+    public static Scoreboard getPlayerScoreboard(Player player)
+    {
+        if (player.getScoreboard() != instance.getServer().getScoreboardManager().getMainScoreboard())
+            return player.getScoreboard();
+        Scoreboard scoreboard = instance.getServer().getScoreboardManager().getNewScoreboard();
+        player.setScoreboard(scoreboard);
+        return scoreboard;
+    }
+
+    public static void removeScoreboard(Player player, Scoreboard scoreboard)
+    {
+        if (player.getScoreboard() == instance.getServer().getScoreboardManager().getMainScoreboard())
+            return;
+        if (player.getScoreboard() != scoreboard)
+            return;
+        final Scoreboard oldScoreboard = player.getScoreboard();
+        player.setScoreboard(instance.getServer().getScoreboardManager().getMainScoreboard());
+
+        //Idk if unregistering is necessary if we don't hold a reference to the scoreboard anymore...?
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (Team team : oldScoreboard.getTeams())
+                    team.unregister();
+                for (Objective objective : oldScoreboard.getObjectives())
+                    objective.unregister();
+            }
+        }.runTaskAsynchronously(instance);
     }
 
     static private final String mobTrackingMetadata = "MD_MOBTRACKING";
     static private final String killStreak = "MD_KILLSTREAK";
     static private final String spreePoints = "MD_KILLSTREAKPOINTS";
+
+    @EventHandler
+    private void cleanupMetadataOnQuit(PlayerQuitEvent event) //You never know if memory leaks
+    {
+        cleanup(event.getPlayer());
+    }
+
+    public void cleanup(Player player)
+    {
+        player.removeMetadata(mobTrackingMetadata, instance);
+        clearSpreePoints(player);
+        lastLocation.remove(player);
+        tempMetadata.remove(player);
+    }
 
     public static boolean getTempdata(Player player, String key)
     {
@@ -74,20 +182,6 @@ public class NSA implements Listener
         if (!tempMetadata.containsKey(player))
             tempMetadata.put(player, ConcurrentHashMap.newKeySet());
         return tempMetadata.get(player).add(key);
-    }
-
-    @EventHandler
-    private void cleanupMetadataOnQuit(PlayerQuitEvent event) //You never know if memory leaks
-    {
-        cleanup(event.getPlayer());
-    }
-
-    public void cleanup(Player player)
-    {
-        player.removeMetadata(mobTrackingMetadata, instance);
-        clearSpreePoints(player);
-        lastLocation.remove(player);
-        tempMetadata.remove(player);
     }
 
     public static Location getLastLocation(Player player)

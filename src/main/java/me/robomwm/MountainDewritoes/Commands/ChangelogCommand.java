@@ -86,15 +86,18 @@ public class ChangelogCommand implements Listener, CommandExecutor
     public List<BaseComponent> getChangelogEntries()
     {
         List<BaseComponent> entries = new ArrayList<>();
+        int i = 0;
         for (String key : storage.getKeys(false))
         {
-            TextComponent component = new TextComponent(UsefulUtil.formatTime((System.currentTimeMillis() - Long.valueOf(key)) / 1000, 0) + "\n");
+            TextComponent component = new TextComponent(UsefulUtil.formatTime((System.currentTimeMillis() - Long.valueOf(key)) / 1000, 0) + " ago \n");
+            if (++i % 12 == 0)
+                component.setText(component.getText() + "\\p");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
             component.setColor(ChatColor.AQUA);
-            //TODO: truncate preview, word wrap
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getChangelogEntry(key)));
             entries.add(component);
         }
+        entries.add(new TextComponent("Log o' changes\n"));
         Collections.reverse(entries);
         return entries;
     }
