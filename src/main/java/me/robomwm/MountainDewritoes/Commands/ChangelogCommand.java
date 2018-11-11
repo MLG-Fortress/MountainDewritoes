@@ -135,7 +135,6 @@ public class ChangelogCommand implements Listener, CommandExecutor
     {
         Set<String> keys = new HashSet<>(storage.getKeys(false));
         long lastRead = lastReadChangelog.get(event.getPlayer().getUniqueId());
-        plugin.getLogger().info(String.valueOf(lastRead));
         new BukkitRunnable()
         {
             @Override

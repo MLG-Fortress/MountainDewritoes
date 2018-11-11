@@ -97,7 +97,7 @@ public class MinedownBookCommand implements CommandExecutor
         {
             if (++i % 12 == 0)
                 builder.add("\\p");
-            String name = file.getName().substring(file.getName().lastIndexOf("."));
+            String name = file.getName().substring(0, file.getName().lastIndexOf("."));
             builder.add(name).cmd("/" + label + " " + name, true);
             builder.add("\n").color(ChatColor.RESET);
         }
