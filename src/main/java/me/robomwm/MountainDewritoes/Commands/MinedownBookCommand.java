@@ -108,7 +108,7 @@ public class MinedownBookCommand implements CommandExecutor
     {
         LazyText.Builder builder = new LazyText.Builder();
         //TODO: back button
-        File file = new File(folder.getPath() + name + ".txt");
+        File file = new File(folder.getPath() + File.separator + name + ".txt");
         if (!file.exists())
             return builder.add("Chapter does not exist!").color(ChatColor.RED);
 
