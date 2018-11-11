@@ -59,8 +59,8 @@ public class TabList implements Listener
                     df.format(instance.getServer().getTPS()[0] * 2D), "\n",
                     instance.getEconomy().format(instance.getEconomy().getBalance(player)), TAB,
                     "Ping: ", PseudoCommands.getPing(player), "\n",
-                    "Coordinates: ",
-                    df.format(player.getLocation().getX()), ", ", df.format(player.getLocation().getZ())));
+                    "Coordinates: (",
+                    df.format(player.getLocation().getX()), ", ", df.format(player.getLocation().getZ()), ")"));
         else
             player.setPlayerListFooter(colorizer("IP: ", "MLG", ".", "ROBOMWM", ".", "COM"));
 
