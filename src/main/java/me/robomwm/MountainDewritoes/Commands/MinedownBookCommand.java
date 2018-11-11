@@ -30,6 +30,7 @@ public class MinedownBookCommand implements CommandExecutor
         this.plugin = plugin;
         folder = new File(plugin.getDataFolder() + File.separator + "book" + File.separator);
         folder.mkdirs();
+        plugin.getCommand("start").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

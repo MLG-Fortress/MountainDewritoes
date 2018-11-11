@@ -9,6 +9,7 @@ import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.Emoticons;
+import me.robomwm.MountainDewritoes.Commands.MinedownBookCommand;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.ResetCommands;
@@ -456,11 +457,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("clearchat").setExecutor(new ClearChatCommand());
         new Emoticons(this);
         new ChangelogCommand(this);
+        new MinedownBookCommand(this);
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
 
-        getCommand("start").setExecutor(new LetsStart(this));
+        getCommand("old").setExecutor(new LetsStart(this));
         saveConfig();
         new BukkitRunnable()
         {
