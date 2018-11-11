@@ -59,8 +59,10 @@ public class ChangelogCommand implements Listener, CommandExecutor
             if (!sender.isOp())
                 return false;
             String thing = String.join(" ", args);
-            storage.set(String.valueOf(System.currentTimeMillis()), thing);
+            String time = String.valueOf(System.currentTimeMillis());
+            storage.set(time, thing);
             UsefulUtil.saveYamlFile(plugin, "changelog.data", storage);
+            sender.sendMessage(time + ": " + thing);
             return true;
         }
         else if (cmd.getName().equalsIgnoreCase("changelog") && sender instanceof Player)
@@ -111,7 +113,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
             component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, getChangelogEntry(key)));
             entries.add(component);
         }
-        entries.add(new TextComponent("Log o' changes\n"));
+        entries.add(new TextComponent("    Log o' changes\n"));
         Collections.reverse(entries);
         return entries;
     }
@@ -132,6 +134,8 @@ public class ChangelogCommand implements Listener, CommandExecutor
     private void onPlayerLoad(PlayerLoadedWorldEvent event)
     {
         Set<String> keys = new HashSet<>(storage.getKeys(false));
+        long lastRead = lastReadChangelog.get(event.getPlayer().getUniqueId());
+        plugin.getLogger().info(String.valueOf(lastRead));
         new BukkitRunnable()
         {
             @Override
@@ -140,7 +144,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 int newChanges = 0;
                 for (String key : keys)
                 {
-                    if (Long.valueOf(key) > lastReadChangelog.get(event.getPlayer().getUniqueId()))
+                    if (Long.valueOf(key) > lastRead)
                         newChanges++;
                 }
                 if (newChanges > 0)

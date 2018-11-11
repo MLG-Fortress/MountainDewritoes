@@ -1,7 +1,9 @@
 package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -37,6 +39,8 @@ public class ArmorAugmentation implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         new OldFood(this.plugin);
         ATPgeneration();
+        for (World world : plugin.getServer().getWorlds())
+            world.setGameRule(GameRule.NATURAL_REGENERATION, false);
     }
 
     public MountainDewritoes getPlugin()

@@ -339,11 +339,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         safeWorlds.add(getServer().getWorld("prison"));
         safeWorlds.add(getServer().getWorld("firstjoin"));
         safeWorlds.add(getServer().getWorld("CreativeParkourMaps"));
+        safeWorlds.remove(null);
 
         for (World world : safeWorlds)
         {
-            if (world != null)
-                world.setPVP(false);
+            world.setPVP(false);
+            world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
         }
 
 //        survivalWorlds.add(getServer().getWorld("mall"));

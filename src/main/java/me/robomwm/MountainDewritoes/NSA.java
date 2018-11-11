@@ -55,16 +55,16 @@ public class NSA implements Listener
         instance = mountainDewritoes;
         instance.registerListener(this);
 
-//        new BukkitRunnable()
-//        {
-//            Scoreboard sb = mountainDewritoes.getServer().getScoreboardManager().getMainScoreboard();
-//            @Override
-//            public void run()
-//            {
-//                for (Player player : mountainDewritoes.getServer().getOnlinePlayers())
-//                    scoreboardSynchronizer(sb, player.getScoreboard());
-//            }
-//        }.runTaskTimer(mountainDewritoes, 20L, 1L);
+        new BukkitRunnable()
+        {
+            Scoreboard sb = mountainDewritoes.getServer().getScoreboardManager().getMainScoreboard();
+            @Override
+            public void run()
+            {
+                for (Player player : mountainDewritoes.getServer().getOnlinePlayers())
+                    scoreboardSynchronizer(sb, player.getScoreboard());
+            }
+        }.runTaskTimer(mountainDewritoes, 20L, 1L);
     }
 
     private void scoreboardSynchronizer(Scoreboard source, Scoreboard target)
