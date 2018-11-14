@@ -1,11 +1,11 @@
 package me.robomwm.MountainDewritoes.notifications;
 
 import me.robomwm.MountainDewritoes.Events.TransactionEvent;
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class TransactionNotification extends NotificationSender
 {
-    public TransactionNotification(Notifications notifications, Plugin plugin)
+    public TransactionNotification(Notifications notifications, MountainDewritoes plugin)
     {
         super(notifications, plugin);
     }

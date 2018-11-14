@@ -21,6 +21,7 @@ softdepend:
 - WorldBorder
 - NoMyStuff
 - ServerListPlus
+- PrettySimpleShop
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields

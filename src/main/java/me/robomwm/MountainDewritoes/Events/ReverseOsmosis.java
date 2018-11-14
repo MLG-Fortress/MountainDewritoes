@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes.Events;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,7 +25,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created on 2/13/2017.
@@ -36,6 +41,7 @@ public class ReverseOsmosis implements Listener
 
     private Map<Player, Double> oldBalances = new HashMap<>();
     private Map<Player, World> changedWorld = new HashMap<>();
+    private Set<Player> playersThatMoved = new HashSet<>();
 
     public ReverseOsmosis(MountainDewritoes plugin)
     {
@@ -50,23 +56,45 @@ public class ReverseOsmosis implements Listener
             {
                 for (Player player : plugin.getServer().getOnlinePlayers())
                 {
-                    if (!oldBalances.containsKey(player))
-                    {
-                        oldBalances.put(player, plugin.getEconomy().getBalance(player));
-                        continue;
-                    }
-
-                    double oldBalance = oldBalances.get(player);
-                    double balance = plugin.getEconomy().getBalance(player);
-                    double difference = balance - oldBalance;
-                    if (difference != 0)
-                    {
-                        plugin.getServer().getPluginManager().callEvent(new TransactionEvent(player, difference, plugin.getEconomy()));
-                        oldBalances.put(player, balance);
-                    }
+                    transactionEvent(player, plugin.getEconomy());
                 }
+                movedEvent();
             }
         }.runTaskTimer(plugin, 1L, 20L);
+    }
+
+    private void callEvent(Event event)
+    {
+        instance.getServer().getPluginManager().callEvent(event);
+    }
+
+    private void transactionEvent(Player player, Economy economy)
+    {
+        if (!oldBalances.containsKey(player))
+        {
+            oldBalances.put(player, economy.getBalance(player));
+            return;
+        }
+
+        double oldBalance = oldBalances.get(player);
+        double balance = economy.getBalance(player);
+        double difference = balance - oldBalance;
+        if (difference != 0)
+        {
+            callEvent(new TransactionEvent(player, difference, economy));
+            oldBalances.put(player, balance);
+        }
+    }
+
+    private void movedEvent()
+    {
+        Iterator<Player> movedPlayersIterator = playersThatMoved.iterator();
+        while (movedPlayersIterator.hasNext())
+        {
+            Player player = movedPlayersIterator.next();
+            callEvent(new ScheduledPlayerMovedEvent(player));
+            movedPlayersIterator.remove();
+        }
     }
 
     @EventHandler
@@ -74,6 +102,7 @@ public class ReverseOsmosis implements Listener
     {
         oldBalances.remove(event.getPlayer());
         changedWorld.remove(event.getPlayer());
+        playersThatMoved.remove(event.getPlayer());
     }
 
     /**
@@ -161,6 +190,12 @@ public class ReverseOsmosis implements Listener
     {
         if (changedWorld.remove(event.getPlayer()) == event.getPlayer().getWorld())
             instance.getServer().getPluginManager().callEvent(new PlayerLoadedWorldEvent(event.getPlayer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    void onPlayerMove(PlayerMoveEvent event)
+    {
+
     }
 
 }

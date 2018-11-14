@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.notifications;
 
+import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -23,17 +24,18 @@ import java.util.Map;
  */
 public class Notifications
 {
-    private Plugin plugin;
+    private MountainDewritoes plugin;
     private Scoreboard mainScoreboard;
     Map<Player, ActionCenter> infoBoards = new HashMap<>();
 
-    public Notifications(Plugin plugin)
+    public Notifications(MountainDewritoes plugin)
     {
         this.plugin = plugin;
         this.mainScoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
 
         //register senders
         new TransactionNotification(this, plugin);
+        new TipNotifications(this, plugin);
     }
 
     public ActionCenter getActionCenter(Player player)

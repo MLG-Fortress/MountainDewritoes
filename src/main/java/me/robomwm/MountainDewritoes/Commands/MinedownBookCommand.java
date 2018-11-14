@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 /**
  * Created on 11/11/2018.
@@ -93,13 +94,15 @@ public class MinedownBookCommand implements CommandExecutor
         LazyText.Builder builder = new LazyText.Builder();
         //TODO: first append toc file
         int i = 0;
-        for (File file : folder.listFiles())
+        File[] files = folder.listFiles();
+        Arrays.sort(files);
+        for (File file : files)
         {
             if (++i % 12 == 0)
                 builder.add("\\p");
             String name = file.getName().substring(0, file.getName().lastIndexOf("."));
-            builder.add(name).cmd("/" + label + " " + name, true);
-            builder.add("\n").color(ChatColor.RESET);
+            builder.add(name).cmd("/" + label + " " + name, true).color(ChatColor.DARK_AQUA);
+            builder.add("\n");
         }
         return builder;
     }
@@ -107,7 +110,8 @@ public class MinedownBookCommand implements CommandExecutor
     public LazyText.Builder getChapter(String label, String name)
     {
         LazyText.Builder builder = new LazyText.Builder();
-        //TODO: back button
+        builder.add("⬅Back                        ").color(ChatColor.DARK_AQUA).cmd("/" + label, true);
+
         File file = new File(folder.getPath() + File.separator + name + ".txt");
         if (!file.exists())
             return builder.add("Chapter does not exist!").color(ChatColor.RED);

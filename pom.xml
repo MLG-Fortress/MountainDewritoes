@@ -208,6 +208,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.MLG-Fortress</groupId>
+            <artifactId>PrettySimpleShop</artifactId>
+            <version>1.4.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
