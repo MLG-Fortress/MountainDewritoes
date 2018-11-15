@@ -195,7 +195,7 @@ public class ReverseOsmosis implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onPlayerMove(PlayerMoveEvent event)
     {
-
+        playersThatMoved.add(event.getPlayer());
     }
 
 }
