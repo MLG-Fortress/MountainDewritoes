@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created on 3/10/2018.
@@ -154,7 +155,7 @@ public class LazyText
             //Handle new page char
             if (plainText.contains(newPageChar) && component instanceof TextComponent)
             {
-                String[] strings = plainText.split(newPageChar);
+                String[] strings = plainText.split(Pattern.quote(newPageChar));
                 String text;
                 int length = strings.length - 1;
                 for (int i = 0; i < strings.length; i++)
