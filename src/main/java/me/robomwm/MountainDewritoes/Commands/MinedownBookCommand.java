@@ -69,7 +69,7 @@ public class MinedownBookCommand implements CommandExecutor
                     @Override
                     public void run()
                     {
-                        LazyText.Builder builder = getChapter(label, String.join("_", args).toLowerCase());
+                        LazyText.Builder builder = getChapter(label, String.join("_", args));
                         //who has time to taskchain
                         new BukkitRunnable()
                         {

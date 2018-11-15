@@ -62,6 +62,7 @@
                             <include>com.github.RoboMWM:UsefulUtil</include>
                             <include>pw.valaria:bookutil</include>
                             <include>de.themoep:minedown</include>
+                            <include>org.apache.commons:commons-text</include>
                         </includes>
                     </artifactSet>
                     <relocations>
