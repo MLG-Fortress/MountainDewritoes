@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Created on 3/10/2018.
@@ -145,21 +144,16 @@ public class LazyText
      */
     public static List<BaseComponent[]> buildPages(String newPageChar, @Nonnull List<BaseComponent> components)
     {
-        newPageChar = Pattern.quote(newPageChar);
         List<BaseComponent[]> completedPages = new ArrayList<>();
         List<BaseComponent> workingPage = new ArrayList<>();
 
         for (BaseComponent component : components)
         {
            String plainText = component.toPlainText();
-           System.out.println("LT: " + component.getClass().getName() + plainText);
-           System.out.println("LT: " + plainText.contains(newPageChar));
-           System.out.println("LT: " + newPageChar);
 
             //Handle new page char
             if (plainText.contains(newPageChar) && component instanceof TextComponent)
             {
-                System.out.println("LT: has char");
                 String[] strings = plainText.split(newPageChar);
                 String text;
                 int length = strings.length - 1;
