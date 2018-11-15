@@ -110,7 +110,7 @@ public class MinedownBookCommand implements CommandExecutor
     public LazyText.Builder getChapter(String label, String name)
     {
         LazyText.Builder builder = new LazyText.Builder();
-        builder.add("⬅Back                        ").color(ChatColor.DARK_AQUA).cmd("/" + label, true);
+        builder.add("⬅Back               ").color(ChatColor.DARK_AQUA).cmd("/" + label, true);
 
         File file = new File(folder.getPath() + File.separator + name + ".txt");
         if (!file.exists())
