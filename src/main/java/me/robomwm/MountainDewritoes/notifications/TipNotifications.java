@@ -37,10 +37,12 @@ public class TipNotifications extends NotificationSender
         Block block = player.getTargetBlock(5);
         if (block == null)
             return;
+        player.sendActionBar(block.getType().name());
         BlockState state = block.getState();
         if (!(state instanceof Container))
             return;
         Container container = (Container)state;
+        player.sendActionBar(state.getClass().getName() + String.valueOf(shopAPI.isShop(container, false)));
         if (shopAPI.isShop(container, false))
             return;
 
