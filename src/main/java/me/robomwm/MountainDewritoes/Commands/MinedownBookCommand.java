@@ -118,12 +118,12 @@ public class MinedownBookCommand implements CommandExecutor
         File file = new File(folder.getPath() + File.separator + name + ".txt");
 
         //best match if misspelled
-        int i = 0;
         if (!file.exists())
         {
+            int i = 0;
             for (File file1 : folder.listFiles())
             {
-                String name1 = file1.getName().substring(0, file.getName().lastIndexOf(".")).replaceAll("_", " ");
+                String name1 = file1.getName().substring(0, file1.getName().lastIndexOf(".")).replaceAll("_", " ");
                 int j = new FuzzyScore(Locale.ENGLISH).fuzzyScore(name1, name);
                 if (j > i)
                 {
@@ -131,10 +131,9 @@ public class MinedownBookCommand implements CommandExecutor
                     i = j;
                 }
             }
+            if (i == 0)
+                return getTableOfContents(label);
         }
-
-        if (i == 0)
-            return getTableOfContents(label);
 
 
         try
