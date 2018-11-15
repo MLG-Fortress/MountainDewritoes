@@ -4,6 +4,7 @@ import com.robomwm.prettysimpleshop.PrettySimpleShop;
 import com.robomwm.prettysimpleshop.shop.ShopAPI;
 import me.robomwm.MountainDewritoes.Events.ScheduledPlayerMovedEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
@@ -50,8 +51,8 @@ public class TipNotifications extends NotificationSender
         List<String> lines = new ArrayList<>();
 
         lines.add(itemStack.getAmount() + " " + PrettySimpleShop.getItemName(itemStack));
-        lines.add(" for " + plugin.getEconomy().format(price) + " each ");
-        lines.add("Punch chest for more info.");
+        lines.add(ChatColor.YELLOW + plugin.getEconomy().format(price) + " each.");
+        lines.add("Punch chest to /buy.");
 
         addEntry(player, "shop", lines);
     }
