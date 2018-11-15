@@ -153,6 +153,8 @@ public class LazyText
         {
            String plainText = component.toPlainText();
            System.out.println("LT: " + component.getClass().getName() + plainText);
+           System.out.println("LT: " + plainText.contains(newPageChar));
+           System.out.println("LT: " + newPageChar);
 
             //Handle new page char
             if (plainText.contains(newPageChar) && component instanceof TextComponent)
