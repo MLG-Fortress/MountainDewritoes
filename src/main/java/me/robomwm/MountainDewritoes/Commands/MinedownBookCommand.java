@@ -116,7 +116,7 @@ public class MinedownBookCommand implements CommandExecutor
     {
         LazyText.Builder builder = new LazyText.Builder();
         builder.add("IP: MLG.ROBOMWM.COM\n").color(ChatColor.DARK_PURPLE)
-                .add("? ").color(ChatColor.DARK_AQUA).cmd("/tip", false)
+                .add(" ? ").color(ChatColor.DARK_AQUA).cmd("/tip", false)
                 .hover(new LazyText.Builder()
                         .add("/tip\n")
                         .add("Dark aqua is clickable\n").color(ChatColor.DARK_AQUA)
@@ -131,7 +131,7 @@ public class MinedownBookCommand implements CommandExecutor
                 .add(" ☀ ").url("http://r.robomwm.com/mlgideas", "Submit or vote on ideas for MLG Fortress!")
                 .add(" # \n").url("http://r.robomwm.com/mememap", "Open the " + ChatColor.AQUA +
                 "map\n" + ChatColor.RESET + "and " + ChatColor.AQUA + "IRC" + ChatColor.RESET + " chatroom.")
-                .add("  Server /changes and updates").cmd("/changelog", "View server changelog")
+                .add("  Server updates").cmd("/changelog", "View server /changelog")
                 .add("  /taco\n").cmd("/taco")
                 .add("  /clan\n").cmd("/clan")
                 .add("  /tppost \n\n").cmd("/tppost")
