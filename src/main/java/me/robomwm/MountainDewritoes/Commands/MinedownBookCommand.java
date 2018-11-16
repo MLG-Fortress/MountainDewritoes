@@ -119,8 +119,8 @@ public class MinedownBookCommand implements CommandExecutor
                 .add("            ? ").color(ChatColor.AQUA)
                 .hover(new LazyText.Builder()
                         .add("Dark aqua is clickable\n").color(ChatColor.DARK_AQUA)
-                        .add("FYI, you can open this /book by pressing F twice.\n").color(ChatColor.RESET)
-                        .add("Swap items by holding sneak when pressing F.").toComponentArray())
+                        .add("FYI, you can open this /book from the HotMenu (Press F).\n")
+                        .color(ChatColor.RESET).toComponentArray())
                 .add(" ✉ ").cmd("/mail", true)
                 .add(" ⚙ ").cmd("/settings", true)
                 .add(" ℹ ").cmd("/info", "Info+Stats")
@@ -144,6 +144,14 @@ public class MinedownBookCommand implements CommandExecutor
         int i = 0;
         File[] files = folder.listFiles();
         Arrays.sort(files);
+        builder.add("Jump to page ");
+        int pages = (files.length / 12) + 2;
+        for (int j = 0; j < pages; j++)
+        {
+            builder.page(j + 1);
+            if (j < pages - 1)
+                builder.add(", ");
+        }
         for (File file : files)
         {
             if (i++ % 12 == 0)

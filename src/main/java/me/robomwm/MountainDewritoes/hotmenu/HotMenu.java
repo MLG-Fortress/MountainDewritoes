@@ -188,6 +188,7 @@ class Menu
 
     public void register()
     {
+        color = TipCommand.getRandomColor();
         player.getInventory().setHeldItemSlot(selectedItem - 1);
         refreshDisplay(ChatColor.GRAY);
         player.setScoreboard(this.scoreboard);

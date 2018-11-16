@@ -106,8 +106,13 @@ public class LazyText
         {
             last().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
             color(ChatColor.DARK_AQUA);
-            hover(hover);
-            return this;
+            return hover(hover);
+        }
+
+        public Builder page(int page)
+        {
+            last().setClickEvent(new ClickEvent(ClickEvent.Action.CHANGE_PAGE, String.valueOf(page)));
+            return color(ChatColor.DARK_AQUA);
         }
 
         public Builder color(ChatColor color)
