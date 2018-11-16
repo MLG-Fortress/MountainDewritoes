@@ -245,11 +245,11 @@ class Menu
             return -1;
         }
 
-        for (int i = 0; i < entries.size(); i++)
-        {
-            if (selectedItem != i)
-                entries.set(i, "");
-        }
+//        for (int i = 0; i < entries.size(); i++)
+//        {
+//            if (selectedItem != i)
+//                entries.set(i, "");
+//        }
         refreshDisplay(ChatColor.DARK_GRAY);
 
         new BukkitRunnable()
