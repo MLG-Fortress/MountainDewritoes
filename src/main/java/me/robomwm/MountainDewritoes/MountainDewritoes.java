@@ -30,6 +30,7 @@ import me.robomwm.MountainDewritoes.combat.BetterNoDamageTicks;
 import me.robomwm.MountainDewritoes.combat.BetterZeldaHearts;
 import me.robomwm.MountainDewritoes.combat.DummerEnderman;
 import me.robomwm.MountainDewritoes.combat.NoKnockback;
+import me.robomwm.MountainDewritoes.hotmenu.HotMenu;
 import net.milkbowl.vault.economy.Economy;
 import net.minecrell.serverlistplus.core.ServerListPlusCore;
 import net.minecrell.serverlistplus.core.player.PlayerIdentity;
@@ -429,6 +430,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         //Utilities
         new Notifications(this);
+        new HotMenu(this);
         new BukkitRunnable()
         {
             public void run()

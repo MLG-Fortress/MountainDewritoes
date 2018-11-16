@@ -80,12 +80,12 @@ public class PseudoCommands implements Listener
             case "clan":
                 event.setCancelled(clanHandler(player, command, args));
                 break;
-            case "irc":
-                event.setCancelled(ircLink(player, command, args));
-                break;
             case "afk":
             case "brb":
                 event.setCancelled(afkSeen(player));
+                break;
+            case "ping":
+                event.setCancelled(ping(player, command, args));
                 break;
         }
     }
@@ -118,16 +118,6 @@ public class PseudoCommands implements Listener
             }
         }
         return false;
-    }
-
-    private boolean ircLink(Player player, String command, String[] args)
-    {
-        if (player.isOp())
-            return false;
-        if (args.length > 0 && args[0].equalsIgnoreCase("list"))
-            return false;
-        player.performCommand("map");
-        return true;
     }
 
     private boolean balanceHandler(Player player, String command, String[] args)

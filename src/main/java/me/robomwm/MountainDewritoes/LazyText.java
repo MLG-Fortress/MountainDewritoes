@@ -58,11 +58,34 @@ public class LazyText
             return this;
         }
 
+        public Builder cmd(String command)
+        {
+            return cmd(command, true);
+        }
+
+        public Builder cmd(String command, String hover)
+        {
+            cmd(command, false);
+            return hover(hover);
+        }
+
         public Builder cmd(String command, boolean hover)
         {
+            return cmd(command, hover, ChatColor.DARK_AQUA);
+        }
+
+        public Builder cmd(String command, boolean hover, ChatColor color)
+        {
             last().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+            last().setColor(color);
             if (hover)
                 hover(command);
+            return this;
+        }
+
+        public Builder hover(BaseComponent[] component)
+        {
+            last().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, component));
             return this;
         }
 
@@ -75,6 +98,13 @@ public class LazyText
         public Builder hover(String hover, ChatColor defaultColor)
         {
             last().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover, defaultColor)));
+            return this;
+        }
+
+        public Builder url(String url, String hover)
+        {
+            last().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
+            hover(hover);
             return this;
         }
 

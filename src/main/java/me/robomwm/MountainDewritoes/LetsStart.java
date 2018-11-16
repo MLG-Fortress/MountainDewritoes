@@ -124,8 +124,9 @@ public class LetsStart implements Listener, CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         Player player = (Player)sender;
+        openSettings(player);
         if (args.length == 0)
-            return openStartBook(player);
+            return true;
 
         switch (args[0].toLowerCase())
         {
@@ -172,7 +173,8 @@ public class LetsStart implements Listener, CommandExecutor
     {
         if (event.getPlayer().isSneaking())
             return;
-        event.setCancelled(openStartBook(event.getPlayer()));
+        openSettings(event.getPlayer());
+        event.setCancelled(true);
     }
 
     private void openSettings(Player player)
