@@ -116,9 +116,9 @@ public class MinedownBookCommand implements CommandExecutor
     {
         LazyText.Builder builder = new LazyText.Builder();
         builder.add("IP: MLG.ROBOMWM.COM\n").color(ChatColor.DARK_PURPLE)
-                .add("   ? ").color(ChatColor.DARK_AQUA).cmd("/tip", false)
+                .add("? ").color(ChatColor.DARK_AQUA).cmd("/tip", false)
                 .hover(new LazyText.Builder()
-                        .add("/tip")
+                        .add("/tip\n")
                         .add("Dark aqua is clickable\n").color(ChatColor.DARK_AQUA)
                         .add("FYI, you can open this /book from the HotMenu (Press F).\n")
                         .color(ChatColor.RESET).toComponentArray())
@@ -136,7 +136,7 @@ public class MinedownBookCommand implements CommandExecutor
                 .add("  /tppost \n\n").cmd("/tppost")
                 .add("      Voicelines:\n")
                 .add(" Hello! ").cmd("/v hello")
-                .add(" Thanks!").cmd("/v thanks")
+                .add(" Thanks! ").cmd("/v thanks")
                 .add(" Ok \n")
                 .add(" Over here! ").cmd("/v overhere")
                 .add(" Dis wae! \n").cmd("/v followme")

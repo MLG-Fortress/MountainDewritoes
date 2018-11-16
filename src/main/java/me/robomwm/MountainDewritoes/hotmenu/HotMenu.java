@@ -235,7 +235,7 @@ class Menu
                 objective.getScore(teamName).setScore(-i);
             }
             if (i == selectedItem)
-                currentDisplay[i++].setPrefix(color + line + color + " ←");
+                currentDisplay[i++].setPrefix(color + line + this.color.toString() + " ←");
             else
                 currentDisplay[i++].setPrefix(inactiveColor + line);
         }
