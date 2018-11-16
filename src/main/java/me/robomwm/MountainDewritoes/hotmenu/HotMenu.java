@@ -124,7 +124,7 @@ class Menu
     private Objective objective;
     private Player player;
     private List<String> entries = new ArrayList<>(10);
-    private int selectedItem = 0;
+    private int selectedItem = 1;
     private Team[] currentDisplay = new Team[10];
     private int initialHotbarSlot;
     private ChatColor color = TipCommand.getRandomColor();
@@ -155,7 +155,7 @@ class Menu
         refreshDisplay();
     }
 
-    public void setSelectedItem(int selectedItem)
+    public void setSelectedItem(int selectedItem) //TODO: sounds
     {
         this.selectedItem = selectedItem + 1;
         refreshDisplay();
@@ -181,6 +181,7 @@ class Menu
         }
     }
 
+    //TODO: sounds
     public int unregister(boolean cancel)
     {
         if (cancel)
@@ -193,7 +194,7 @@ class Menu
 
         for (int i = 0; i < entries.size(); i++)
         {
-            if (selectedItem + 1 != i)
+            if (selectedItem != i)
                 entries.set(i, "");
         }
         refreshDisplay();
@@ -209,6 +210,6 @@ class Menu
         }.runTaskLater(plugin, 7L);
 
         player.getInventory().setHeldItemSlot(initialHotbarSlot);
-        return selectedItem + 1;
+        return selectedItem;
     }
 }
