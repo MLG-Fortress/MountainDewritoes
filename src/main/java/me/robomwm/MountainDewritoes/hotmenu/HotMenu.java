@@ -260,7 +260,7 @@ class Menu
                 if (player.getScoreboard() == scoreboard && !registered)
                     player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
             }
-        }.runTaskLater(plugin, 7L);
+        }.runTaskLater(plugin, 12L);
 
         player.getInventory().setHeldItemSlot(initialHotbarSlot);
 
