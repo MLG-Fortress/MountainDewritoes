@@ -200,22 +200,30 @@ class Menu
 
     public void register()
     {
+        registered = true;
         color = TipCommand.getRandomColor();
         player.getInventory().setHeldItemSlot(selectedItem - 1);
-        refreshDisplay(ChatColor.GRAY);
+        refreshDisplay();
         player.setScoreboard(this.scoreboard);
-        registered = true;
     }
 
     public void setSelectedItem(int selectedItem) //TODO: sounds
     {
         this.selectedItem = selectedItem + 1;
-        refreshDisplay(ChatColor.GRAY);
+        refreshDisplay();
     }
 
-    private void refreshDisplay(ChatColor inactiveColor)
+    private void refreshDisplay()
     {
         //set scoreboard lines
+        String color = this.color.toString() + ChatColor.UNDERLINE;
+        String inactiveColor = ChatColor.GRAY.toString();
+        if (!registered)
+        {
+            color += ChatColor.ITALIC.toString();
+            inactiveColor = ChatColor.DARK_GRAY.toString();
+        }
+
         int i = 0;
         for (String line : entries)
         {
@@ -250,7 +258,7 @@ class Menu
 //            if (selectedItem != i)
 //                entries.set(i, "");
 //        }
-        refreshDisplay(ChatColor.DARK_GRAY);
+        refreshDisplay();
 
         new BukkitRunnable()
         {
