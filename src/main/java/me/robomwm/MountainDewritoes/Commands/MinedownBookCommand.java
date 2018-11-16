@@ -131,7 +131,7 @@ public class MinedownBookCommand implements CommandExecutor
                 .add(" ☀ ").url("http://r.robomwm.com/mlgideas", "Submit or vote on ideas for MLG Fortress!")
                 .add(" # \n").url("http://r.robomwm.com/mememap", "Open the " + ChatColor.AQUA +
                 "map\n" + ChatColor.RESET + "and " + ChatColor.AQUA + "IRC" + ChatColor.RESET + " chatroom.")
-                .add("  Server updates").cmd("/changelog", "View server /changelog")
+                .add("  Server updates\n").cmd("/changelog", "View server /changelog")
                 .add("  /taco\n").cmd("/taco")
                 .add("  /clan\n").cmd("/clan")
                 .add("  /tppost \n\n").cmd("/tppost")
