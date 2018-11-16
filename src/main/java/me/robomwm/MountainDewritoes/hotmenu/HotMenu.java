@@ -227,9 +227,9 @@ class Menu
                 objective.getScore(teamName).setScore(-i);
             }
             if (i == selectedItem)
-                currentDisplay[i++].setPrefix(color + "→  " + line + "  ←"); //TODO: unicode arrows
+                currentDisplay[i++].setPrefix(color + line + " ←"); //TODO: unicode arrows
             else
-                currentDisplay[i++].setPrefix(inactiveColor + "   " + line);
+                currentDisplay[i++].setPrefix(inactiveColor + line);
         }
     }
 
