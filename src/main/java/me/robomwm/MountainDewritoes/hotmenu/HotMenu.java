@@ -5,8 +5,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -34,6 +36,13 @@ public class HotMenu implements Listener
     {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    public void cancel(Player player)
+    {
+        Menu menu = viewers.remove(player);
+        if (menu != null)
+            menu.unregister(true);
     }
 
     @EventHandler
@@ -72,6 +81,19 @@ public class HotMenu implements Listener
         event.setCancelled(true);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    private void onSneak(PlayerToggleSneakEvent event)
+    {
+        if (event.isSneaking())
+            cancel(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onInventoryOpen(InventoryOpenEvent event)
+    {
+        cancel((Player)event.getPlayer());
+    }
+
     private void executeSelectionOrOpenMenu(Player player)
     {
         Menu menu = viewers.remove(player);
@@ -79,10 +101,13 @@ public class HotMenu implements Listener
             viewers.put(player, new Menu(plugin, player, player.getInventory().getHeldItemSlot()));
         else
         {
-            switch (menu.unregister())
+            switch (menu.unregister(false))
             {
-                case 0:
+                case 1:
                     player.performCommand("book"); //TODO: direct method call
+                    break;
+                case 9:
+                    player.sendActionBar("You can also sneak to cancel out of the HotMenu.");
                     break;
             }
         }
@@ -110,10 +135,21 @@ class Menu
         this.player = player;
         this.initialHotbarSlot = hotbarSlot;
         this.scoreboard = plugin.getServer().getScoreboardManager().getNewScoreboard();
-        this.objective = this.scoreboard.registerNewObjective("hotmenu", "dummy", "Use scrollwheel. Press F again to select.");
+        this.objective = this.scoreboard.registerNewObjective("hotmenu", "dummy",
+                ChatColor.WHITE + "Choose with " + ChatColor.YELLOW +
+                        "scrollwheel." + ChatColor.WHITE + " Press " + ChatColor.YELLOW +
+                        "F" + ChatColor.WHITE + " to select.");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        entries.add("");
         entries.add("Open /book");
-        entries.add("Test item");
+        entries.add("Pay respects");
+        entries.add("");
+        entries.add("");
+        entries.add("");
+        entries.add("");
+        entries.add("");
+        entries.add("");
+        entries.add("Cancel");
         player.getInventory().setHeldItemSlot(0);
         player.setScoreboard(this.scoreboard);
         refreshDisplay();
@@ -121,7 +157,7 @@ class Menu
 
     public void setSelectedItem(int selectedItem)
     {
-        this.selectedItem = selectedItem;
+        this.selectedItem = selectedItem + 1;
         refreshDisplay();
     }
 
@@ -141,15 +177,23 @@ class Menu
             if (i == selectedItem)
                 currentDisplay[i++].setPrefix(color + "→ " + line + " ←"); //TODO: unicode arrows
             else
-                currentDisplay[i++].setPrefix(ChatColor.GRAY + "  " + line + "  ");
+                currentDisplay[i++].setPrefix(ChatColor.GRAY + "   " + line);
         }
     }
 
-    public int unregister()
+    public int unregister(boolean cancel)
     {
+        if (cancel)
+        {
+            if (player.getScoreboard() == scoreboard)
+                player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
+            player.getInventory().setHeldItemSlot(initialHotbarSlot);
+            return -1;
+        }
+
         for (int i = 0; i < entries.size(); i++)
         {
-            if (selectedItem != i)
+            if (selectedItem + 1 != i)
                 entries.set(i, "");
         }
         refreshDisplay();
@@ -165,6 +209,6 @@ class Menu
         }.runTaskLater(plugin, 7L);
 
         player.getInventory().setHeldItemSlot(initialHotbarSlot);
-        return selectedItem;
+        return selectedItem + 1;
     }
 }

@@ -7,9 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -168,14 +166,14 @@ public class LetsStart implements Listener, CommandExecutor
         return true;
     }
 
-    @EventHandler(ignoreCancelled = true)
-    private void onPressF(PlayerSwapHandItemsEvent event)
-    {
-        if (event.getPlayer().isSneaking())
-            return;
-        openSettings(event.getPlayer());
-        event.setCancelled(true);
-    }
+//    @EventHandler(ignoreCancelled = true)
+//    private void onPressF(PlayerSwapHandItemsEvent event)
+//    {
+//        if (event.getPlayer().isSneaking())
+//            return;
+//        openSettings(event.getPlayer());
+//        event.setCancelled(true);
+//    }
 
     private void openSettings(Player player)
     {

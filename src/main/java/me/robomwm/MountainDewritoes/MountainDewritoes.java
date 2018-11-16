@@ -464,7 +464,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
 
-        getCommand("old").setExecutor(new LetsStart(this));
         saveConfig();
         new BukkitRunnable()
         {

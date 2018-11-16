@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.Commands;
 
+import com.robomwm.grandioseapi.player.GrandPlayer;
 import de.themoep.minedown.MineDown;
 import me.robomwm.MountainDewritoes.LazyText;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
@@ -35,6 +36,8 @@ public class MinedownBookCommand implements CommandExecutor
         folder = new File(plugin.getDataFolder() + File.separator + "book" + File.separator);
         folder.mkdirs();
         plugin.getCommand("start").setExecutor(this);
+        plugin.getCommand("info").setExecutor(this);
+        plugin.getCommand("settings").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -46,10 +49,9 @@ public class MinedownBookCommand implements CommandExecutor
         switch(cmd.getName())
         {
             case "settings":
+                openSettings(player);
                 return true;
-            case "about":
-            case "stats":
-            case "stat":
+            case "info":
                 openAbout(player);
                 return true;
             case "start":
@@ -121,7 +123,7 @@ public class MinedownBookCommand implements CommandExecutor
                         .add("Swap items by holding sneak when pressing F.").toComponentArray())
                 .add(" ✉ ").cmd("/mail", true)
                 .add(" ⚙ ").cmd("/settings", true)
-                .add(" ℹ ").cmd("/about", "About+Stats")
+                .add(" ℹ ").cmd("/info", "Info+Stats")
                 .add(" # \n").url("http://r.robomwm.com/mememap", "Open the LIVE map\nand IRC chatroom")
                 .add("  Warps \n").cmd("/warp", "/warp <warp>")
                 .add("  /tppost \n").cmd("/tppost")
@@ -227,5 +229,28 @@ public class MinedownBookCommand implements CommandExecutor
                 LazyText.url("Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy")
         ));
         plugin.openBook(player, LazyText.getBook(aboutMeta));
+    }
+
+    private void openSettings(Player player)
+    {
+        BookMeta bookMeta = LazyText.getBookMeta();
+        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
+
+        bookMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅ ","/help","Back to /menu"),
+                player.getDisplayName() + org.bukkit.ChatColor.BLACK + "'s settings\n",
+                LazyText.command("View distance: " + player.getViewDistance(), "/view"), "\n",
+                LazyText.command("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"), "\n",
+                LazyText.command("Music: on", "", "Not implemented yet"), "\n",
+                LazyText.command("SneakPickup: " + getOnOff(player.hasMetadata("SNEAKPICKUP")), "/sneakpickup", "/sneakpickup\nPick up items only when sneaking."), "\n"
+        ));
+
+        plugin.openBook(player, LazyText.getBook(bookMeta));
+    }
+
+    private String getOnOff(boolean bool)
+    {
+        if (bool)
+            return "on";
+        return "off";
     }
 }
