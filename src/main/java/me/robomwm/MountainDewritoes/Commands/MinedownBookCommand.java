@@ -145,10 +145,7 @@ public class MinedownBookCommand implements CommandExecutor
         for (File file : files)
         {
             if (i++ % 12 == 0)
-            {
                 builder.add("\\p");
-                plugin.getLogger().info("ok");
-            }
             String name = file.getName().substring(0, file.getName().lastIndexOf(".")).replaceAll("_", " ");
             builder.add(name).cmd("/" + label + " " + name, true).color(ChatColor.DARK_AQUA);
             builder.add("\n");

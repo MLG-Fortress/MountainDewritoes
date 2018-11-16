@@ -196,7 +196,7 @@ public class LazyText
                     textComponent.setText(text);
                     workingPage.add(textComponent);
                     //Don't append page break with last element
-                    if (i < length)
+                    if (i < length || length == 0)
                     {
                         completedPages.add(workingPage.toArray(new BaseComponent[0]));
                         workingPage.clear();
