@@ -191,7 +191,13 @@ public class LazyText
                 String[] strings = plainText.split(Pattern.quote(newPageChar));
                 String text;
                 int length = strings.length - 1;
-                DebugCommand.debug(length);
+
+                //special case for paragraph symbol by itself
+                if (length == -1)
+                {
+                    completedPages.add(workingPage.toArray(new BaseComponent[0]));
+                    workingPage.clear();
+                }
                 for (int i = 0; i < strings.length; i++)
                 {
                     text = strings[i];

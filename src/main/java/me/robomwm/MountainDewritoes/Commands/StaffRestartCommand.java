@@ -77,6 +77,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         if (args[0].equalsIgnoreCase("abort") || args[0].equalsIgnoreCase("cancel"))
         {
             abortShutdown();
+            abortUpdate();
             sender.sendMessage("Restart aborted.");
             return true;
         }
@@ -182,11 +183,11 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                         while ((outputLine = output.readLine()) != null)
                         {
                             if (name.getName().equals("CONSOLE"))
-                                instance.getLogger().info("U: " + outputLine);
+                                instance.getLogger().info(outputLine);
                             else
-                                name.sendMessage("U: " + outputLine);
+                                name.sendMessage(outputLine);
                         }
-                        name.sendMessage("U: update complete");
+                        name.sendMessage("update complete");
                     }
                     catch (IOException e)
                     {
