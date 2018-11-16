@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class HotMenu implements Listener
 {
-    final private int SLOTS = 9;
+
     private Plugin plugin;
     private Map<Player, Menu> viewers = new HashMap<>();
 
@@ -42,18 +42,24 @@ public class HotMenu implements Listener
         Menu menu = viewers.get(event.getPlayer());
         if (menu == null)
             return;
-        int difference = event.getNewSlot() - event.getPreviousSlot();
-        int absoluteDifference = Math.abs(difference);
-        if (absoluteDifference == SLOTS - 1)
-            difference = -difference % SLOTS - 2;
-        else if (absoluteDifference > 1)
-        {
-            menu.setSelectedItem(event.getNewSlot());
-            executeSelectionOrOpenMenu(event.getPlayer());
+        if (event.getNewSlot() - event.getPreviousSlot() == 0) //idk why this fires twice
             return;
-        }
-        menu.changeSelection(difference);
-        event.setCancelled(true);
+        menu.setSelectedItem(event.getNewSlot());
+        //This doesn't work because the event doesn't fire for _every change,_ sometimes it will skip on fast scroll.
+//        final private int SLOTS = 9;
+//        int difference = event.getNewSlot() - event.getPreviousSlot();
+//        int absoluteDifference = Math.abs(difference);
+//        if (absoluteDifference == SLOTS - 1)
+//            difference = -difference % SLOTS - 2;
+//        else if (absoluteDifference > 1)
+//        {
+//            menu.setSelectedItem(event.getNewSlot());
+//            executeSelectionOrOpenMenu(event.getPlayer());
+//            return;
+//        }
+//        menu.changeSelection(difference);
+//        event.setCancelled(true);
+
     }
 
     @EventHandler
@@ -70,7 +76,7 @@ public class HotMenu implements Listener
     {
         Menu menu = viewers.remove(player);
         if (menu == null)
-            viewers.put(player, new Menu(plugin, player));
+            viewers.put(player, new Menu(plugin, player, player.getInventory().getHeldItemSlot()));
         else
         {
             switch (menu.unregister())
@@ -95,22 +101,20 @@ class Menu
     private List<String> entries = new ArrayList<>(10);
     private int selectedItem = 0;
     private Team[] currentDisplay = new Team[10];
+    private int initialHotbarSlot;
 
-    Menu(Plugin plugin, Player player)
+    Menu(Plugin plugin, Player player, int hotbarSlot)
     {
         this.plugin = plugin;
         this.player = player;
+        this.initialHotbarSlot = hotbarSlot;
         this.scoreboard = plugin.getServer().getScoreboardManager().getNewScoreboard();
         this.objective = this.scoreboard.registerNewObjective("hotmenu", "dummy", "Use scrollwheel. Press F again to select.");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         entries.add("Open /book");
         entries.add("Test item");
+        player.getInventory().setHeldItemSlot(0);
         player.setScoreboard(this.scoreboard);
-    }
-
-    public void changeSelection(int item)
-    {
-        selectedItem = (selectedItem + item) % 9;
         refreshDisplay();
     }
 
@@ -134,9 +138,9 @@ class Menu
                 objective.getScore(teamName).setScore(-i);
             }
             if (i == selectedItem)
-                currentDisplay[i++].setPrefix(TipCommand.getRandomColor() + "> " + line + " <"); //TODO: unicode arrows
+                currentDisplay[i++].setPrefix(TipCommand.getRandomColor() + "→ " + line + " ←"); //TODO: unicode arrows
             else
-                currentDisplay[i++].setPrefix(ChatColor.GRAY + " " + line + " ");
+                currentDisplay[i++].setPrefix(ChatColor.GRAY + "  " + line + "  ");
         }
     }
 
@@ -158,6 +162,8 @@ class Menu
                     player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
             }
         }.runTaskLater(plugin, 2L);
+
+        player.getInventory().setHeldItemSlot(initialHotbarSlot);
         return selectedItem;
     }
 }
