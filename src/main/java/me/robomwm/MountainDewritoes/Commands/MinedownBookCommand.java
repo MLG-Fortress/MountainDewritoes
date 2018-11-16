@@ -116,21 +116,24 @@ public class MinedownBookCommand implements CommandExecutor
     {
         LazyText.Builder builder = new LazyText.Builder();
         builder.add("IP: MLG.ROBOMWM.COM\n").color(ChatColor.DARK_PURPLE)
-                .add("        ? ").color(ChatColor.AQUA)
+                .add("   ? ").color(ChatColor.DARK_AQUA).cmd("/tip", false)
                 .hover(new LazyText.Builder()
+                        .add("/tip")
                         .add("Dark aqua is clickable\n").color(ChatColor.DARK_AQUA)
                         .add("FYI, you can open this /book from the HotMenu (Press F).\n")
                         .color(ChatColor.RESET).toComponentArray())
+                .add(" ☺ ").cmd("/emoticons")
+                .add(" ✈ ").cmd("/warps")
                 .add(" ✫ ").cmd("/changelog", "View server changes")
                 .add(" ✉ ").cmd("/mail", true)
                 .add(" ⚙ ").cmd("/settings", true)
                 .add(" ℹ ").cmd("/info", "Info+Stats")
-                .add(" # \n").url("http://r.robomwm.com/mememap", "Open the LIVE map\nand IRC chatroom")
-                .add("  Warps \n").cmd("/warp", "/warp <warp>")
-                .add("  /tppost \n").cmd("/tppost")
-                .add("  Emoticons \n").cmd("/emote", true)
-                .add("  Tip Jar \n").cmd("/tip")
-                .add("  Minigames \n\n").cmd("/minigames")
+                .add(" ☀ ").url("http://r.robomwm.com/mlgideas", "Submit or vote on ideas for MLG Fortress!")
+                .add(" # \n").url("http://r.robomwm.com/mememap", "Open the " + ChatColor.AQUA +
+                "map\n" + ChatColor.RESET + "and " + ChatColor.AQUA + "IRC" + ChatColor.RESET + " chatroom.")
+                .add("  /taco\n").cmd("/taco")
+                .add("  /clan\n").cmd("/clan")
+                .add("  /tppost \n\n").cmd("/tppost")
                 .add("      Voicelines:\n")
                 .add(" Hello! ").cmd("/v hello")
                 .add(" Thanks!").cmd("/v thanks")
@@ -140,7 +143,7 @@ public class MinedownBookCommand implements CommandExecutor
                 .add(" Help! ").cmd("/v help")
                 .add(" Lol! ").cmd("/v haha")
                 .add(" No ").cmd("/v no")
-                .add(" More...\n").cmd("/voice");
+                .add(" More...\n\n").cmd("/voice");
 
         int i = 0;
         File[] files = folder.listFiles();
