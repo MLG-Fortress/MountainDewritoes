@@ -82,7 +82,7 @@ public class HotMenu implements Listener
             switch (menu.unregister())
             {
                 case 0:
-                    player.performCommand("/book"); //TODO: direct method call
+                    player.performCommand("book"); //TODO: direct method call
                     break;
             }
         }
@@ -102,6 +102,7 @@ class Menu
     private int selectedItem = 0;
     private Team[] currentDisplay = new Team[10];
     private int initialHotbarSlot;
+    private ChatColor color = TipCommand.getRandomColor();
 
     Menu(Plugin plugin, Player player, int hotbarSlot)
     {
@@ -138,7 +139,7 @@ class Menu
                 objective.getScore(teamName).setScore(-i);
             }
             if (i == selectedItem)
-                currentDisplay[i++].setPrefix(TipCommand.getRandomColor() + "→ " + line + " ←"); //TODO: unicode arrows
+                currentDisplay[i++].setPrefix(color + "→ " + line + " ←"); //TODO: unicode arrows
             else
                 currentDisplay[i++].setPrefix(ChatColor.GRAY + "  " + line + "  ");
         }
@@ -161,7 +162,7 @@ class Menu
                 if (player.getScoreboard() == scoreboard)
                     player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
             }
-        }.runTaskLater(plugin, 2L);
+        }.runTaskLater(plugin, 7L);
 
         player.getInventory().setHeldItemSlot(initialHotbarSlot);
         return selectedItem;
