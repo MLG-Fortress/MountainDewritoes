@@ -49,17 +49,29 @@ public class HotMenu implements Listener
             menu.unregister(true);
     }
 
-    public Menu getMenu(Player player, boolean create)
+    /**
+     *
+     * @param player
+     * @param display If we should display one if none are being displayed right now
+     * @return The active menu only if it was already active. Null otherwise
+     */
+    public Menu getMenu(Player player, boolean display)
     {
         Menu menu = viewers.get(player);
-        if (create && menu == null)
+        if (menu == null && !display) //if no menu exists and don't create, return now.
+            return null;
+
+        if (display && menu == null) //we should create if menu doesn't exist
         {
             menu = new Menu(plugin, player);
             viewers.put(player, menu);
-            return menu;
+            return null;
         }
-        if (menu.isRegistered())
+        else if (menu.isRegistered()) //if menu exists and is active, return it.
             return menu;
+        else if (display) //reactivate existing menu if we should create.
+            menu.register();
+
         return null;
     }
 

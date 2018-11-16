@@ -145,11 +145,11 @@ public class MinedownBookCommand implements CommandExecutor
         int i = 0;
         File[] files = folder.listFiles();
         Arrays.sort(files);
-        builder.add("Jump to page ");
-        int pages = (files.length / 12) + 2;
+        builder.add("Jump to page ").color(ChatColor.RESET);
+        int pages = (files.length / 12) + 1;
         for (int j = 0; j < pages; j++)
         {
-            builder.page(j + 1);
+            builder.add(String.valueOf(j + 2)).page(j + 2);
             if (j < pages - 1)
                 builder.add(", ");
         }
