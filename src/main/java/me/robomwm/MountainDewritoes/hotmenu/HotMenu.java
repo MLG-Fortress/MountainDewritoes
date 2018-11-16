@@ -4,9 +4,14 @@ import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.Plugin;
@@ -28,7 +33,6 @@ import java.util.Map;
  */
 public class HotMenu implements Listener
 {
-
     private Plugin plugin;
     private Map<Player, Menu> viewers = new HashMap<>();
 
@@ -40,15 +44,29 @@ public class HotMenu implements Listener
 
     public void cancel(Player player)
     {
-        Menu menu = viewers.remove(player);
+        Menu menu = getMenu(player, false);
         if (menu != null)
             menu.unregister(true);
+    }
+
+    public Menu getMenu(Player player, boolean create)
+    {
+        Menu menu = viewers.get(player);
+        if (create && menu == null)
+        {
+            menu = new Menu(plugin, player);
+            viewers.put(player, menu);
+            return menu;
+        }
+        if (menu.isRegistered())
+            return menu;
+        return null;
     }
 
     @EventHandler
     private void onPlayerScrollWheel(PlayerItemHeldEvent event)
     {
-        Menu menu = viewers.get(event.getPlayer());
+        Menu menu = getMenu(event.getPlayer(), false);
         if (menu == null)
             return;
         if (event.getNewSlot() - event.getPreviousSlot() == 0) //idk why this fires twice
@@ -77,7 +95,9 @@ public class HotMenu implements Listener
         Player player = event.getPlayer();
         if (player.isSneaking())
             return;
-        executeSelectionOrOpenMenu(player);
+        Menu menu = getMenu(player, true);
+        if (menu != null)
+            menu.unregister(false);
         event.setCancelled(true);
     }
 
@@ -94,22 +114,28 @@ public class HotMenu implements Listener
         cancel((Player)event.getPlayer());
     }
 
-    private void executeSelectionOrOpenMenu(Player player)
+    @EventHandler
+    private void onInventoryClose(InventoryCloseEvent event)
     {
-        Menu menu = viewers.remove(player);
-        if (menu == null)
-            viewers.put(player, new Menu(plugin, player, player.getInventory().getHeldItemSlot()));
-        else
+        cancel((Player)event.getPlayer());
+    }
+
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event)
+    {
+        viewers.remove(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onAttack(PlayerInteractEvent event)
+    {
+        if (event.getAction() == Action.PHYSICAL)
+            return;
+        Menu menu = getMenu(event.getPlayer(), false);
+        if (menu != null)
         {
-            switch (menu.unregister(false))
-            {
-                case 1:
-                    player.performCommand("book"); //TODO: direct method call
-                    break;
-                case 9:
-                    player.sendActionBar("You can also sneak to cancel out of the HotMenu.");
-                    break;
-            }
+            menu.unregister(false);
+            event.setCancelled(true);
         }
     }
 }
@@ -128,12 +154,13 @@ class Menu
     private Team[] currentDisplay = new Team[10];
     private int initialHotbarSlot;
     private ChatColor color = TipCommand.getRandomColor();
+    private boolean registered;
 
-    Menu(Plugin plugin, Player player, int hotbarSlot)
+    Menu(Plugin plugin, Player player)
     {
         this.plugin = plugin;
         this.player = player;
-        this.initialHotbarSlot = hotbarSlot;
+        this.initialHotbarSlot = player.getInventory().getHeldItemSlot();
         this.scoreboard = plugin.getServer().getScoreboardManager().getNewScoreboard();
         this.objective = this.scoreboard.registerNewObjective("hotmenu", "dummy",
                 ChatColor.WHITE + "Choose with " + ChatColor.YELLOW +
@@ -142,26 +169,38 @@ class Menu
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         entries.add("");
         entries.add("Open /book");
+        entries.add("Hello!");
+        entries.add("Over here!");
+        entries.add("");
+        entries.add("");
+        entries.add("");
+        entries.add("");
         entries.add("Pay respects");
-        entries.add("");
-        entries.add("");
-        entries.add("");
-        entries.add("");
-        entries.add("");
-        entries.add("");
         entries.add("Cancel");
-        player.getInventory().setHeldItemSlot(0);
+        register();
+
+    }
+
+    public boolean isRegistered()
+    {
+        return registered;
+    }
+
+    public void register()
+    {
+        player.getInventory().setHeldItemSlot(selectedItem - 1);
+        refreshDisplay(ChatColor.GRAY);
         player.setScoreboard(this.scoreboard);
-        refreshDisplay();
+        registered = true;
     }
 
     public void setSelectedItem(int selectedItem) //TODO: sounds
     {
         this.selectedItem = selectedItem + 1;
-        refreshDisplay();
+        refreshDisplay(ChatColor.GRAY);
     }
 
-    private void refreshDisplay()
+    private void refreshDisplay(ChatColor inactiveColor)
     {
         //set scoreboard lines
         int i = 0;
@@ -175,15 +214,16 @@ class Menu
                 objective.getScore(teamName).setScore(-i);
             }
             if (i == selectedItem)
-                currentDisplay[i++].setPrefix(color + "→ " + line + " ←"); //TODO: unicode arrows
+                currentDisplay[i++].setPrefix(color + "→  " + line + "  ←"); //TODO: unicode arrows
             else
-                currentDisplay[i++].setPrefix(ChatColor.GRAY + "   " + line);
+                currentDisplay[i++].setPrefix(inactiveColor + "   " + line);
         }
     }
 
     //TODO: sounds
     public int unregister(boolean cancel)
     {
+        registered = false;
         if (cancel)
         {
             if (player.getScoreboard() == scoreboard)
@@ -197,7 +237,7 @@ class Menu
             if (selectedItem != i)
                 entries.set(i, "");
         }
-        refreshDisplay();
+        refreshDisplay(ChatColor.DARK_GRAY);
 
         new BukkitRunnable()
         {
@@ -210,6 +250,23 @@ class Menu
         }.runTaskLater(plugin, 7L);
 
         player.getInventory().setHeldItemSlot(initialHotbarSlot);
+
+        switch (selectedItem)
+        {
+            case 1:
+                player.performCommand("book");
+                break;
+            case 2:
+                player.performCommand("v hello");
+                break;
+            case 3:
+                player.performCommand("v overhere");
+                break;
+            case 9:
+                player.sendActionBar("You can also sneak to cancel out of the HotMenu.");
+                break;
+        }
+
         return selectedItem;
     }
 }
