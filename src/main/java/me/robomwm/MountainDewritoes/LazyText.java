@@ -104,6 +104,7 @@ public class LazyText
         public Builder url(String url, String hover)
         {
             last().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
+            color(ChatColor.DARK_AQUA);
             hover(hover);
             return this;
         }

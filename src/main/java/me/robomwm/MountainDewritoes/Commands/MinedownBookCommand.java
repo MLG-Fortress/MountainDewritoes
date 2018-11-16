@@ -117,7 +117,7 @@ public class MinedownBookCommand implements CommandExecutor
                 .add("            ? ").color(ChatColor.AQUA)
                 .hover(new LazyText.Builder()
                         .add("Dark aqua is clickable\n").color(ChatColor.DARK_AQUA)
-                        .add("FYI, you can open this /book by pressing F twice.")
+                        .add("FYI, you can open this /book by pressing F twice.\n").color(ChatColor.RESET)
                         .add("Swap items by holding sneak when pressing F.").toComponentArray())
                 .add(" ✉ ").cmd("/mail", true)
                 .add(" ⚙ ").cmd("/settings", true)
@@ -128,16 +128,16 @@ public class MinedownBookCommand implements CommandExecutor
                 .add("  Emoticons \n").cmd("/emote", true)
                 .add("  Tip Jar \n").cmd("/tip")
                 .add("  Minigames \n\n").cmd("/minigames")
-                .add("      Vocal Callouts:\n")
-                .add(" Hello ! ").cmd("/v hello")
-                .add(" Thanks !").cmd("/v thanks")
+                .add("      Voicelines:\n")
+                .add(" Hello! ").cmd("/v hello")
+                .add(" Thanks!").cmd("/v thanks")
                 .add(" Ok \n")
                 .add(" Over here! ").cmd("/v overhere")
-                .add(" Dis wae! ").cmd("/v followme")
+                .add(" Dis wae! \n").cmd("/v followme")
                 .add(" Help! ").cmd("/v help")
                 .add(" Lol! ").cmd("/v haha")
                 .add(" No ").cmd("/v no")
-                .add(" More...").cmd("/voice");
+                .add(" More...\n").cmd("/voice");
 
         int i = 0;
         File[] files = folder.listFiles();
@@ -145,7 +145,10 @@ public class MinedownBookCommand implements CommandExecutor
         for (File file : files)
         {
             if (i++ % 12 == 0)
+            {
                 builder.add("\\p");
+                plugin.getLogger().info("ok");
+            }
             String name = file.getName().substring(0, file.getName().lastIndexOf(".")).replaceAll("_", " ");
             builder.add(name).cmd("/" + label + " " + name, true).color(ChatColor.DARK_AQUA);
             builder.add("\n");
