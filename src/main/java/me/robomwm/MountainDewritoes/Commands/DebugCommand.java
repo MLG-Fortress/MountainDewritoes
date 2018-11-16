@@ -31,11 +31,21 @@ public class DebugCommand implements CommandExecutor
 {
     private MountainDewritoes plugin;
     private ClanManager clanManager;
+    private static boolean debug;
 
     public DebugCommand(MountainDewritoes plugin)
     {
         this.plugin = plugin;
         clanManager = SimpleClansListener.clanManager;
+    }
+
+    public static void debug(Object ya)
+    {
+        if (debug)
+        {
+            StackTraceElement e = Thread.currentThread().getStackTrace()[1];
+            System.out.println(e.getClassName() + "#" + e.getMethodName() + "@" + e.getLineNumber() + ":" + ya);
+        }
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -48,7 +58,11 @@ public class DebugCommand implements CommandExecutor
 
         //1 arg//
         if (args.length < 1)
-            return false;
+        {
+            debug = !debug;
+            sender.sendMessage(String.valueOf(debug));
+            return true;
+        }
 
         switch(args[0].toLowerCase())
         {

@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -181,7 +182,8 @@ public class LazyText
 
         for (BaseComponent component : components)
         {
-           String plainText = component.toPlainText();
+            String plainText = component.toPlainText();
+            DebugCommand.debug(plainText);
 
             //Handle new page char
             if (plainText.contains(newPageChar) && component instanceof TextComponent)
@@ -189,6 +191,7 @@ public class LazyText
                 String[] strings = plainText.split(Pattern.quote(newPageChar));
                 String text;
                 int length = strings.length - 1;
+                DebugCommand.debug(length);
                 for (int i = 0; i < strings.length; i++)
                 {
                     text = strings[i];
