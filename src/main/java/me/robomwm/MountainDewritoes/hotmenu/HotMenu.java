@@ -257,7 +257,7 @@ class Menu
             @Override
             public void run()
             {
-                if (player.getScoreboard() == scoreboard)
+                if (player.getScoreboard() == scoreboard && !registered)
                     player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
             }
         }.runTaskLater(plugin, 7L);
