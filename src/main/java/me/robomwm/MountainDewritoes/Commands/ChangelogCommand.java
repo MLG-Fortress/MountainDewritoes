@@ -49,6 +49,8 @@ public class ChangelogCommand implements Listener, CommandExecutor
         plugin.getCommand("changelog").setExecutor(this);
         plugin.getCommand("newlog").setExecutor(this);
         plugin.getCommand("deletelog").setExecutor(this);
+        for (Player player : plugin.getServer().getOnlinePlayers())
+            lastReadChangelog.put(player.getUniqueId(), player.getLastPlayed());
     }
 
     @Override

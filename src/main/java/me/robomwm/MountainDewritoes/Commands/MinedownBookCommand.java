@@ -116,11 +116,12 @@ public class MinedownBookCommand implements CommandExecutor
     {
         LazyText.Builder builder = new LazyText.Builder();
         builder.add("IP: MLG.ROBOMWM.COM\n").color(ChatColor.DARK_PURPLE)
-                .add("            ? ").color(ChatColor.AQUA)
+                .add("        ? ").color(ChatColor.AQUA)
                 .hover(new LazyText.Builder()
                         .add("Dark aqua is clickable\n").color(ChatColor.DARK_AQUA)
                         .add("FYI, you can open this /book from the HotMenu (Press F).\n")
                         .color(ChatColor.RESET).toComponentArray())
+                .add(" ✫ ").cmd("/changelog", "View server changes")
                 .add(" ✉ ").cmd("/mail", true)
                 .add(" ⚙ ").cmd("/settings", true)
                 .add(" ℹ ").cmd("/info", "Info+Stats")
