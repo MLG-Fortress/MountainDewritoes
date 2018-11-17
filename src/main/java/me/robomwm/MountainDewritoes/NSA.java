@@ -82,6 +82,8 @@ public class NSA implements Listener
             tTeam.setPrefix(sTeam.getPrefix());
             tTeam.setSuffix(sTeam.getSuffix());
             tTeam.setColor(sTeam.getColor());
+            for (String entry : sTeam.getEntries())
+                tTeam.addEntry(entry);
             //Currently unused
 //            tTeam.setDisplayName(sTeam.getDisplayName());
 //            tTeam.setCanSeeFriendlyInvisibles(sTeam.canSeeFriendlyInvisibles());

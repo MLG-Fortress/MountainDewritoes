@@ -202,6 +202,7 @@ class Menu
     {
         registered = true;
         color = TipCommand.getRandomColor();
+        initialHotbarSlot = player.getInventory().getHeldItemSlot();
         player.getInventory().setHeldItemSlot(selectedItem - 1);
         refreshDisplay();
         player.setScoreboard(this.scoreboard);

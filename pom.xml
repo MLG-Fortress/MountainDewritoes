@@ -220,6 +220,11 @@
             <artifactId>commons-text</artifactId>
             <version>1.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.AwesomePowered</groupId>
+            <artifactId>RotatoR</artifactId>
+            <version>737e9d7ce4</version>
+        </dependency>
     </dependencies>
 
 </project>
