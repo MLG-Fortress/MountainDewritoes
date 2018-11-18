@@ -31,7 +31,6 @@ public class ArmorAugmentation implements Listener
     public ArmorAugmentation(MountainDewritoes plugin)
     {
         this.plugin = plugin;
-        //plugin.getCustomItemRecipes().removeRecipe(new HashSet<>(Arrays.asList(Material.BARRIER, Material.BEDROCK))); //todo fill
         new GoldArmor(this.plugin, this);
         new IronArmor(this.plugin, this);
         new DiamondArmor(this.plugin, this);
@@ -103,22 +102,16 @@ public class ArmorAugmentation implements Listener
     {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
-        if (!(event.getEntity() instanceof LivingEntity))
-            return;
+//        if (!(event.getEntity() instanceof LivingEntity)) I don't think non-living entities take fall damage
+//            return;
 
         LivingEntity entity = (LivingEntity)event.getEntity();
 
-        if (entity.getEquipment() == null || entity.getEquipment().getBoots() == null)
+        if (entity.getEquipment() == null || entity.getEquipment().getBoots() == null) //spiders, etc.
             return;
 
-        switch(entity.getEquipment().getBoots().getType())
-        {
-            case GOLDEN_BOOTS:
-            case IRON_BOOTS:
-            case DIAMOND_BOOTS:
-                entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);
-                event.setCancelled(true);
-        }
+        entity.getWorld().playSound(entity.getLocation(), "fortress.longfallboots", 1.0f, 1.0f);
+        event.setCancelled(true);
     }
 
     //Misc. gameplay changes to accomodate
@@ -141,7 +134,7 @@ public class ArmorAugmentation implements Listener
             event.setCancelled(true);
     }
 
-    //That's ~~an energy~~ power bar, not a hunger bar.
+    //That's a dorito bar, not a hunger bar.
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onGettingHungry(FoodLevelChangeEvent event)
     {

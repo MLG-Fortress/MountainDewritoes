@@ -10,9 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created on 2/22/2018.
  *
@@ -20,7 +17,7 @@ import java.util.Map;
  */
 public class AntiLag implements Listener
 {
-    private Map<Player, Integer> viewDistance = new HashMap<>();
+//    private Map<Player, Integer> viewDistance = new HashMap<>();
 
     public AntiLag(JavaPlugin plugin)
     {

@@ -11,17 +11,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolVersion;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created on 1/30/2018.
- *
- * Leggings: "Long Leap." Leap in the direction you are looking.
- * Boots: "Magnetic Boots." Hover/fly for a short duration. Consumes around three doritos a second.
  *
  * @author RoboMWM
  */
@@ -70,16 +65,16 @@ public class IronArmor implements Listener
                     cancel();
                     return;
                 }
-                //final int velocity = 1 + player.getFoodLevel() / 6;
-                int velocity = 1;
+                final int velocity = 255 - (4 - (player.getFoodLevel() / 5));
+//                int velocity = 1;
 
-                if (player.getFoodLevel() <= 1)
-                {
-                    velocity = 254;
-                    player.setFoodLevel(0);
-                }
-                else
-                    player.setFoodLevel(player.getFoodLevel() - 1);
+//                if (player.getFoodLevel() <= 1)
+//                {
+//                    velocity = 254;
+//                    player.setFoodLevel(1);
+//                }
+//                else
+//                    player.setFoodLevel(player.getFoodLevel() - 1);
 
                 player.removePotionEffect(PotionEffectType.LEVITATION);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 30, velocity, true, false));
@@ -92,15 +87,16 @@ public class IronArmor implements Listener
                 super.cancel();
                 player.removePotionEffect(PotionEffectType.LEVITATION);
                 floaters.remove(player);
-                try
-                {
-                    if (ProtocolSupportAPI.getProtocolVersion(player).isBefore(ProtocolVersion.MINECRAFT_1_9))
-                        return;
-                }
-                catch (Throwable ignored){}
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
+//                try
+//                {
+//                    if (ProtocolSupportAPI.getProtocolVersion(player).isBefore(ProtocolVersion.MINECRAFT_1_9))
+//                        return;
+//                }
+//                catch (Throwable ignored){}
+//                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 250, true, false));
             }
         };
+
         floaters.put(player, runnable);
         runnable.runTaskTimer(instance, 0L, 10L);
     }
@@ -129,7 +125,7 @@ public class IronArmor implements Listener
                     return;
                 }
 
-                player.setVelocity(player.getLocation().getDirection().multiply(0.5));
+                player.setVelocity(player.getLocation().getDirection().multiply(0.3));
                 if (++time % 5 == 0)
                     player.setFoodLevel(player.getFoodLevel() - 1);
             }

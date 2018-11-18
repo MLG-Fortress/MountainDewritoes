@@ -114,17 +114,6 @@ public class NSA implements Listener
         }
     }
 
-    //Will likely remove in favor of Notifications/Action Center
-    @Deprecated
-    public static Scoreboard getPlayerScoreboard(Player player)
-    {
-        if (player.getScoreboard() != instance.getServer().getScoreboardManager().getMainScoreboard())
-            return player.getScoreboard();
-        Scoreboard scoreboard = instance.getServer().getScoreboardManager().getNewScoreboard();
-        player.setScoreboard(scoreboard);
-        return scoreboard;
-    }
-
     public static void removeScoreboard(Player player, Scoreboard scoreboard)
     {
         if (player.getScoreboard() == instance.getServer().getScoreboardManager().getMainScoreboard())
