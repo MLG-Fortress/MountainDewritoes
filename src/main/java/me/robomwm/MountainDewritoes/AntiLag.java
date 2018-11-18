@@ -72,19 +72,23 @@ public class AntiLag implements Listener
             return;
 
         Player player = event.getPlayer();
-
         Location location = player.getLocation();
-        location.add(-1, -2, -1);
 
-        for (int x = 0; x <= 2; x++) // to x == 1
+        int ox = location.getBlockX();
+        int oy = location.getBlockY();
+        int oz = location.getBlockZ();
+
+        for (int x = -1; x <= 1; x++)
         {
-            for (int y = 0; y <= 4; y++) // to y == 2
+            for (int y = -2; y <= 2; y++)
             {
-                for (int z = 0; z <= 2; z++) // to z == 1
+                for (int z = -1; z <= 1; z++)
                 {
-                    Location blockLocation = location.clone().add(x, y, z);
-                    Block block = blockLocation.getBlock();
-                    player.sendBlockChange(blockLocation, block.getBlockData());
+                    //Location blockLocation = location.clone().add(x, y, z);
+                    //Block block = blockLocation.getBlock();
+                    //player.sendBlockChange(blockLocation, block.getBlockData());
+                    Block block = location.getWorld().getBlockAt(ox + x, oy + y, oz + z);
+                    player.sendBlockChange(block.getLocation(), block.getBlockData());
                 }
             }
         }
