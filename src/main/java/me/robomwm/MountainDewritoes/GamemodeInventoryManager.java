@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -97,6 +98,9 @@ public class GamemodeInventoryManager implements Listener
         //Do nothing if no world change
         if (!changedWorlds(event.getTo().getWorld(), event.getPlayer()))
             return;
+
+        DebugCommand.debug(event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+        DebugCommand.debug(event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
         //Save if exiting survival world
         if (!instance.isSurvivalWorld(event.getTo().getWorld()))
@@ -282,12 +286,12 @@ public class GamemodeInventoryManager implements Listener
 
     private boolean storeAndClearInventory(Player player)
     {
-        //Can happen if player was teleporting to a different world while in creative mode
-        if (player.getGameMode() == GameMode.CREATIVE)
-            return false;
-
         //No need to save if the player is in a minigame world
         if (!instance.isSurvivalWorld(player.getWorld()))
+            return false;
+
+        //Can happen if player was teleporting to a different world while in creative mode
+        if (player.getGameMode() == GameMode.CREATIVE)
             return false;
 
         //Avoid having to deal with players holding stuff with their mouse cursor and other inventory whatnot (though idk if a tick has to elapse for this to actually work, server side).
@@ -332,12 +336,12 @@ public class GamemodeInventoryManager implements Listener
             @Override
             public void run()
             {
-                //Don't restore to creative mode players, else they'll just lose their inventory
-                if (player.getGameMode() == GameMode.CREATIVE)
-                    return;
-
                 //No need to restore if the player is in a minigame world
                 if (!instance.isSurvivalWorld(player.getWorld()))
+                    return;
+
+                //Don't restore to creative mode players, else they'll just lose their inventory
+                if (player.getGameMode() == GameMode.CREATIVE)
                     return;
 
                 ConfigurationSection snapshotSection = getPlayerInventorySnapshotSection(player);
