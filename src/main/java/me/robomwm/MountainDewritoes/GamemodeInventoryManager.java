@@ -95,12 +95,10 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onPlayerPreTeleport(PlayerTeleportEvent event)
     {
+        DebugCommand.debug(event.getPlayer().getHealth());
         //Do nothing if no world change
         if (!changedWorlds(event.getTo().getWorld(), event.getPlayer()))
             return;
-
-        DebugCommand.debug(event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-        DebugCommand.debug(event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
         //Save if exiting survival world
         if (!instance.isSurvivalWorld(event.getTo().getWorld()))
