@@ -104,14 +104,14 @@ public class FirstJoin implements Listener
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("Coal_Pickaxe"));
 
             //Spawn mobs in cellar, if none exist in it.
-            for (Entity entity : cellar.getChunk().getEntities())
-                if (entity.getType() == EntityType.SILVERFISH)
-                    return;
-            ((Monster)cellar.getWorld().spawnEntity(cellar, EntityType.SILVERFISH)).setAI(false);
-            ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,1), EntityType.SILVERFISH)).setAI(false);
-            ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,-1), EntityType.SILVERFISH)).setAI(false);
-            ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,-1), EntityType.SILVERFISH)).setAI(false);
-            ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,1), EntityType.SILVERFISH)).setAI(false);
+//            for (Entity entity : cellar.getChunk().getEntities())
+//                if (entity.getType() == EntityType.SILVERFISH)
+//                    return;
+//            ((Monster)cellar.getWorld().spawnEntity(cellar, EntityType.SILVERFISH)).setAI(false);
+//            ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,1), EntityType.SILVERFISH)).setAI(false);
+//            ((Monster)cellar.getWorld().spawnEntity(cellar.add(1,0,-1), EntityType.SILVERFISH)).setAI(false);
+//            ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,-1), EntityType.SILVERFISH)).setAI(false);
+//            ((Monster)cellar.getWorld().spawnEntity(cellar.add(-1,0,1), EntityType.SILVERFISH)).setAI(false);
         }
     }
 

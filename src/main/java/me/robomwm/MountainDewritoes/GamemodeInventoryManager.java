@@ -248,10 +248,12 @@ public class GamemodeInventoryManager implements Listener
         return inventorySnapshots.getConfigurationSection(player.getUniqueId().toString());
     }
 
-    private boolean deletePlayerInventorySnapshotSection(Player player)
+    private boolean deletePlayerInventorySnapshotSection(Player player, boolean backup)
     {
         if (inventorySnapshots.get(player.getUniqueId().toString()) != null)
         {
+            if (backup)
+                inventorySnapshots.set(player.getUniqueId().toString() + System.currentTimeMillis(), inventorySnapshots.get(player.getUniqueId().toString()));
             inventorySnapshots.set(player.getUniqueId().toString(), null);
             saveInventorySnapshots();
             return true;
@@ -365,10 +367,11 @@ public class GamemodeInventoryManager implements Listener
                 {
                     e.printStackTrace();
                     player.sendMessage(ChatColor.RED + "Error occurred in attempting to restore your inventory :c Please report this!");
+                    deletePlayerInventorySnapshotSection(player, true);
                     return;
                 }
 
-                deletePlayerInventorySnapshotSection(player);
+                deletePlayerInventorySnapshotSection(player, false);
                 player.sendMessage(ChatColor.DARK_GRAY + "Inventory restored.");
                 instance.getLogger().info(player.getName() + ": inventory restored.");
             }

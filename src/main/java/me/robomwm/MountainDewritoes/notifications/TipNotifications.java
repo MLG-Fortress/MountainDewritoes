@@ -47,6 +47,8 @@ public class TipNotifications extends NotificationSender
 
         ItemStack itemStack = shopAPI.getItemStack(container);
         double price = shopAPI.getPrice(container);
+        if (itemStack == null || price < 0)
+            return;
 
         List<String> lines = new ArrayList<>();
 
