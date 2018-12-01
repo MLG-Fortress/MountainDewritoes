@@ -65,7 +65,9 @@ public class IronArmor implements Listener
                     cancel();
                     return;
                 }
-                final int velocity = 255 - (4 - (player.getFoodLevel() / 5));
+                //final int velocity = 255 - (4 - (player.getFoodLevel() / 5));
+                //final int velocity = 251 + (player.getFoodLevel() / 5);
+                final int velocity = 254 + (player.getFoodLevel() / 15);
 //                int velocity = 1;
 
 //                if (player.getFoodLevel() <= 1)
@@ -78,7 +80,6 @@ public class IronArmor implements Listener
 
                 player.removePotionEffect(PotionEffectType.LEVITATION);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 30, velocity, true, false));
-                player.sendActionBar(Integer.toString(velocity));
             }
 
             @Override
