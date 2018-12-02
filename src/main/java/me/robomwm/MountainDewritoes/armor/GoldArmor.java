@@ -99,7 +99,7 @@ public class GoldArmor implements Listener
         if (length == 0)
             return;
         player.setMetadata("nocheatplus.checks.moving.survivalfly", new FixedMetadataValue(armorAugmentation.getPlugin(), true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, length, 10, true, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Math.min(20, length), length, true, false));
         new BukkitRunnable()
         {
             @Override
