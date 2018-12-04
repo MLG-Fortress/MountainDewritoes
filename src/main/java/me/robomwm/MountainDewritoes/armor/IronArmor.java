@@ -67,7 +67,7 @@ public class IronArmor implements Listener
                 }
                 //final int velocity = 255 - (4 - (player.getFoodLevel() / 5));
                 //final int velocity = 251 + (player.getFoodLevel() / 5);
-                final int velocity = 254 + (player.getFoodLevel() / 15);
+                final int velocity = 254 + (player.getFoodLevel() / 12);
 //                int velocity = 1;
 
 //                if (player.getFoodLevel() <= 1)
@@ -126,7 +126,7 @@ public class IronArmor implements Listener
                     return;
                 }
 
-                player.setVelocity(player.getLocation().getDirection().multiply(0.3));
+                player.setVelocity(player.getLocation().getDirection().multiply(0.3 + (player.getFoodLevel() / 80f)));
                 if (++time % 5 == 0)
                     player.setFoodLevel(player.getFoodLevel() - 1);
             }
