@@ -101,12 +101,9 @@ public class ChangelogCommand implements Listener, CommandExecutor
     public List<BaseComponent> getChangelogEntries(long time)
     {
         List<BaseComponent> entries = new ArrayList<>();
-        int i = 0;
         for (String key : storage.getKeys(false))
         {
             TextComponent component = new TextComponent(UsefulUtil.formatTime((System.currentTimeMillis() - Long.valueOf(key)) / 1000, 0) + " ago \n");
-            if (++i % 12 == 0)
-                component.setText(component.getText() + "\\p");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
             if (Long.valueOf(key) > time)
                 component.setColor(ChatColor.AQUA);
@@ -117,6 +114,9 @@ public class ChangelogCommand implements Listener, CommandExecutor
         }
         entries.add(new TextComponent("    Log o' changes\n"));
         Collections.reverse(entries);
+        for (int i = 0; i < entries.size(); i++)
+            if (i % 12 == 0)
+                entries.add(new TextComponent("\\p"));
         return entries;
     }
 
