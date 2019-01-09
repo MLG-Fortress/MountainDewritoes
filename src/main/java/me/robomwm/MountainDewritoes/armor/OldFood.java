@@ -27,6 +27,7 @@ public class OldFood implements Listener
         instance = plugin;
     }
 
+    //Player cannot eat if their energy bar is full
     @EventHandler(priority = EventPriority.LOWEST)
     private void onPlayerPreEat(PlayerInteractEvent event)
     {
@@ -80,7 +81,7 @@ public class OldFood implements Listener
         switch(itemStack.getType())
         {
             case POTION:
-                return 0;
+                return 1D;
             default:
                 return 6D;
         }
