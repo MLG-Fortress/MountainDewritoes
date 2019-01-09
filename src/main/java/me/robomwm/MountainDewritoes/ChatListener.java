@@ -1,7 +1,5 @@
 package me.robomwm.MountainDewritoes;
 
-import me.ryanhamshire.GriefPrevention.DataStore;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,7 +15,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ public class ChatListener implements Listener
     BukkitScheduler scheduler = Bukkit.getScheduler();
     public MountainDewritoes instance;
     ConcurrentHashMap<String, int[]> messageScrolling = new ConcurrentHashMap<String, int[]>();
-    DataStore ds;
+    //DataStore ds;
     ClanManager clanManager;
     Set<Pattern> filterThingy = new HashSet<>();
     List<String> replacements = new ArrayList<>();
@@ -41,8 +42,8 @@ public class ChatListener implements Listener
     public ChatListener(MountainDewritoes mountainDewritoes, ClanManager clanManager)
     {
         this.instance = mountainDewritoes;
-        GriefPrevention gp = (GriefPrevention)instance.getServer().getPluginManager().getPlugin("GriefPrevention");
-        this.ds = gp.dataStore;
+        //GriefPrevention gp = (GriefPrevention)instance.getServer().getPluginManager().getPlugin("GriefPrevention");
+        //this.ds = gp.dataStore;
         this.clanManager = clanManager;
         filterThingy.add(Pattern.compile("(?i)\\bn[^a](gg|99)+(a|er|uh)"));
         filterThingy.add(Pattern.compile("(?i)\\bfag+(s)?\\b|fag+.t|gay"));
@@ -227,7 +228,7 @@ public class ChatListener implements Listener
     void onPlayerChatFilter(AsyncPlayerChatEvent event)
     {
         //Employ softmute check, since no need to filter if softmuted
-        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
+        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size()) //|| ds.isSoftMuted(event.getPlayer().getUniqueId()))
             return;
 
         String message = ChatColor.stripColor(event.getMessage().toLowerCase());
@@ -278,7 +279,7 @@ public class ChatListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onPlayerChatCheckSoftmute(AsyncPlayerChatEvent event)
     {
-        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size() || ds.isSoftMuted(event.getPlayer().getUniqueId()))
+        if (event.getRecipients().size() < instance.getServer().getOnlinePlayers().size()) // || ds.isSoftMuted(event.getPlayer().getUniqueId()))
         {
             event.setCancelled(true);
             softmutedChats.add(event);
