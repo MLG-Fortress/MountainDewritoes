@@ -68,22 +68,18 @@ public class ChatListener implements Listener
 
     /**
     Message "Bubbles"
-    I'd rather use the objective field since I have a slightly higher character limit,
+    <s>I'd rather use the objective field since I have a slightly higher character limit,
 
     but a) not sure if possible to show different objective displayNames per-player,
     and b) weighting in what I use, I'd get a net of 4 more characters.
     Probably would be better to use holograms, but most players stare at the
-    chat window anyways...
+    chat window anyways...</s> Not anymore with 1.13!
     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         if (event.getRecipients().size() < 2)
             return; //ignore if they're the only one on
-
-        //MC 1.11 increased length of chat messages. We aren't even going to try if it's too long.
-        if (event.getMessage().length() > 100)
-            return;
 
         final Player player = event.getPlayer();
 
@@ -99,18 +95,18 @@ public class ChatListener implements Listener
         String mess = event.getMessage();
 
         //Feature: Message "scrolling"
-        if (mess.length() > 14)
+        if (mess.length() > 62)
         {
-            int speed = (100 - mess.length()) / 15;
+            int speed = (256 - mess.length()) / 63;
             if (speed < 1)
                 speed = 1;
-            //14 spaces for ending scroll
-            mess += "              ";
+            //62 spaces for ending scroll
+            mess += "                                                              ";
             //For storing in hashmap
-            int[] tasks = new int[mess.length() - 15];
+            int[] tasks = new int[mess.length() - 63];
             String lastMessage = "";
             int maxTime = 0;
-            final String firstMess = mess.substring(0, 13);
+            final String firstMess = mess.substring(0, 63);
 
             //Display first part of message
             scheduler.scheduleSyncDelayedTask(instance, new Runnable()
@@ -139,9 +135,9 @@ public class ChatListener implements Listener
                             return;
                         team.setSuffix(": " + message);
                     }
-                }, (60 + (speed * (i + 1))));
+                }, (100 + (speed * (i + 1))));
                 lastMessage = message;
-                maxTime = (60 + (speed * (i + 1)));
+                maxTime = (100 + (speed * (i + 1)));
             }
 
             //Store int array in hashmap
@@ -171,7 +167,7 @@ public class ChatListener implements Listener
             return;
         }
 
-        //if not greater than 14 characters...
+        //if not greater than 62 characters...
         final String message = mess;
         scheduler.scheduleSyncDelayedTask(instance, new Runnable()
         {
@@ -194,7 +190,7 @@ public class ChatListener implements Listener
                 if (team.getSuffix().equals(": " + message))
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "healthbar reloadplayer " + player.getName());
             }
-        }, 180L); //Display for 9 seconds
+        }, 200L); //Display for 10 seconds
     }
 
     @EventHandler(priority = EventPriority.LOW)

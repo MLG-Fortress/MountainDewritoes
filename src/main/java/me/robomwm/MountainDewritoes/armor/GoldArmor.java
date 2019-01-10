@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -26,31 +27,31 @@ import org.bukkit.util.Vector;
 public class GoldArmor implements Listener
 {
     private ArmorAugmentation armorAugmentation;
-    //private final PotionEffect chestplateEffect = new PotionEffect(PotionEffectType.JUMP, 80, 2, true, false);
+    private final PotionEffect bootsEffect = new PotionEffect(PotionEffectType.JUMP, 100, 2, true, false);
 
     GoldArmor(MountainDewritoes plugin, ArmorAugmentation armorAugmentation)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.armorAugmentation = armorAugmentation;
-//        new BukkitRunnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                for (Player player : plugin.getServer().getOnlinePlayers())
-//                {
-//                    ItemStack chestplate = player.getInventory().getChestplate();
-//                    if (chestplate == null)
-//                        continue;
-//                    if (chestplate.getType() == Material.GOLD_CHESTPLATE &&
-//                            (!player.hasPotionEffect(PotionEffectType.JUMP) || player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() <= 2))
-//                    {
-//                        player.removePotionEffect(PotionEffectType.JUMP);
-//                        player.addPotionEffect(chestplateEffect);
-//                    }
-//                }
-//            }
-//        }.runTaskTimer(plugin, 40L, 40L);
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (Player player : plugin.getServer().getOnlinePlayers())
+                {
+                    ItemStack goldboots = player.getInventory().getBoots();
+                    if (goldboots == null)
+                        continue;
+                    if (goldboots.getType() == Material.GOLDEN_BOOTS &&
+                            (!player.hasPotionEffect(PotionEffectType.JUMP) || player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() <= 2))
+                    {
+                        player.removePotionEffect(PotionEffectType.JUMP);
+                        player.addPotionEffect(bootsEffect);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin, 40L, 40L);
     }
 
     /* GOLD BOOTS */

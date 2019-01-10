@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -79,7 +80,7 @@ public class GamemodeInventoryManager implements Listener
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    private void onCqrrot(BlockBreakEvent event)
+    private void onCqrrot(BlockPlaceEvent event)
     {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
             return;
