@@ -58,7 +58,6 @@ public class OldFood implements Listener
         if (health >= maxHealth)
         {
             player.sendActionBar(player.getDisplayName() + " says I'm stuffed.");
-            event.setCancelled(true);
             return;
         }
 
@@ -82,6 +81,8 @@ public class OldFood implements Listener
         {
             case POTION:
                 return 1D;
+            case MILK_BUCKET:
+                return 2D;
             default:
                 return 6D;
         }
