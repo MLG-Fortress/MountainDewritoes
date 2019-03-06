@@ -96,17 +96,19 @@ public class GoldArmor implements Listener
         Player player = event.getPlayer();
         if (player.hasPotionEffect(PotionEffectType.SPEED))
             return;
-        int length = armorAugmentation.usePowerAbility(event, Material.GOLDEN_LEGGINGS) * 2;
+        int length = armorAugmentation.usePowerAbility(event, Material.GOLDEN_LEGGINGS) * 3;
         if (length == 0)
             return;
         player.setMetadata("nocheatplus.checks.moving.survivalfly", new FixedMetadataValue(armorAugmentation.getPlugin(), true));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Math.min(20, length), length, true, false, false));
+        //TODO: play music
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
                 player.removeMetadata("nocheatplus.checks.moving.survivalfly", armorAugmentation.getPlugin());
+                //TODO: stop music
             }
         }.runTaskLater(armorAugmentation.getPlugin(), length);
     }

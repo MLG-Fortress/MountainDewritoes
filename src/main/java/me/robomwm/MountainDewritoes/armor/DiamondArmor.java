@@ -88,8 +88,6 @@ public class DiamondArmor implements Listener
                 }
             }.runTaskTimer(armorAugmentation.getPlugin(), 20L, 1L);
         }
-
-
     }
 
     @EventHandler(ignoreCancelled = true)

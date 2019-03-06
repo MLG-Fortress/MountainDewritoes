@@ -1,9 +1,7 @@
 package me.robomwm.MountainDewritoes.armor;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.GameRule;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,7 +13,11 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.Collection;
 
 /**
  * Created on 1/3/2018.
@@ -168,24 +170,21 @@ public class ArmorAugmentation implements Listener
             return;
         if (event.getDamage() < 5.0)
             event.setCancelled(true);
-//        //TODO: goomba stomp
-//        Player player = (Player)event.getEntity();
-//        Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
-//        if (entities.size() == 0)
-//            return;
-//        FishHook hook = (FishHook)player.getWorld().spawnEntity(player.getLocation(), EntityType.FISHING_HOOK);
-//        //TODO: possible to make invisible? Yes? No?
-//        hook.setShooter(player);
-//        Vector vector = new Vector(0, -4, 0);
-//        for (LivingEntity entity : entities)
-//        {
-//            entity.damage(20, hook); //TODO: damage resist for wearing an armored hat??
-//            entity.setVelocity(vector);
-//            if (entity.getType() == EntityType.PLAYER)
-//                ((Player)entity).sendTitle(ChatColor.RED + "GOOMBA STOMPED!", "", 0, 40, 20);
-//            //TODO: tag entity, monitor deathEvent to alter death message
-//        }
-//        player.getWorld().playSound(player.getLocation(), "fortress.goombastoped", SoundCategory.PLAYERS, 1.0f, 1.0f);
+        //TODO: goomba stomp
+        Player player = (Player)event.getEntity();
+        Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
+        if (entities.size() == 0)
+            return;
+        for (LivingEntity entity : entities)
+        {
+            player.setMetadata("nocheatplus.checks.fight", new FixedMetadataValue(plugin, true));
+            entity.damage(20, player); //TODO: damage resist for wearing an armored hat??
+            entity.setVelocity(new Vector(0, -4, 0));
+            if (entity.getType() == EntityType.PLAYER)
+                ((Player)entity).sendTitle(ChatColor.RED + "GOOMBA STOMPED!", "", 0, 40, 20);
+            //TODO: tag entity, monitor deathEvent to alter death message
+        }
+        player.getWorld().playSound(player.getLocation(), "fortress.goombastoped", SoundCategory.PLAYERS, 1.0f, 1.0f);
 //        vector.setY(0.5);
 //        player.setVelocity(player.getVelocity().add(vector));
 //        player.sendMessage("Goomba Stomped!");
