@@ -79,7 +79,7 @@ public class IronArmor implements Listener
 //                    player.setFoodLevel(player.getFoodLevel() - 1);
 
                 player.removePotionEffect(PotionEffectType.LEVITATION);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 30, velocity, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 30, velocity, true, false, false));
             }
 
             @Override

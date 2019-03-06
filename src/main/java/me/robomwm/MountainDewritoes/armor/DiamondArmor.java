@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.armor;
 
+import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -12,6 +13,8 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -65,17 +68,27 @@ public class DiamondArmor implements Listener
     {
         if (!event.isSneaking() || !armorAugmentation.isEquipped(event.getPlayer(), Material.DIAMOND_BOOTS))
             return;
-        new BukkitRunnable()
+
+        Player player = event.getPlayer();
+        Integer jump = NSA.getMidairMap().get(player);
+
+        if (jump == null)
         {
-            @Override
-            public void run()
+            player.setVelocity(new Vector(0, 0.1, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 255, true, false, false));
+            new BukkitRunnable()
             {
-                if (event.getPlayer().isSneaking() && !event.getPlayer().isOnGround())
-                    event.getPlayer().setVelocity(new Vector(0, -4, 0));
-                else
-                    cancel();
-            }
-        }.runTaskTimer(armorAugmentation.getPlugin(), 1L, 1L);
+                @Override
+                public void run()
+                {
+                    if (!event.getPlayer().isOnGround())
+                        event.getPlayer().setVelocity(new Vector(0, -4, 0));
+                    else
+                        cancel();
+                }
+            }.runTaskTimer(armorAugmentation.getPlugin(), 20L, 1L);
+        }
+
 
     }
 
