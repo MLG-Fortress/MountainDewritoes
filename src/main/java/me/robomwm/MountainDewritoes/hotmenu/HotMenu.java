@@ -21,10 +21,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created on 11/15/2018.
@@ -161,12 +158,17 @@ class Menu
     private Scoreboard scoreboard;
     private Objective objective;
     private Player player;
-    private List<String> entries = new ArrayList<>(10);
+    private List<Map.Entry<String, String>> entries = new ArrayList<>(10);
     private int selectedItem = 1;
     private Team[] currentDisplay = new Team[10];
     private int initialHotbarSlot;
     private ChatColor color = TipCommand.getRandomColor();
     private boolean registered;
+
+    private void put(String name, String command)
+    {
+        entries.add(new AbstractMap.SimpleImmutableEntry<>(name, command));
+    }
 
     Menu(Plugin plugin, Player player)
     {
@@ -179,16 +181,16 @@ class Menu
                         "scrollwheel." + ChatColor.WHITE + " Press " + ChatColor.YELLOW +
                         "F" + ChatColor.WHITE + " to select.");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        entries.add("");
-        entries.add("Open /book");
-        entries.add("Hello!");
-        entries.add("Over here!");
-        entries.add("");
-        entries.add("");
-        entries.add("");
-        entries.add("");
-        entries.add("Pay respects");
-        entries.add("Cancel");
+        put("","");
+        put("Open /book", "book");
+        put("Hello!", "voice hello");
+        put("Over here!", "voice overhere");
+        put("4","");
+        put("5","");
+        put("6","");
+        put("7","");
+        put("Pay respects","");
+        put("Cancel","");
         register();
 
     }
@@ -226,8 +228,9 @@ class Menu
         }
 
         int i = 0;
-        for (String line : entries)
+        for (Map.Entry<String, String> entry : entries)
         {
+            String line = entry.getKey();
             if (currentDisplay[i] == null)
             {
                 String teamName = ChatColor.values()[i].toString();
@@ -273,17 +276,10 @@ class Menu
 
         player.getInventory().setHeldItemSlot(initialHotbarSlot);
 
+        player.performCommand(entries.get(selectedItem).getValue());
+
         switch (selectedItem)
         {
-            case 1:
-                player.performCommand("book");
-                break;
-            case 2:
-                player.performCommand("v hello");
-                break;
-            case 3:
-                player.performCommand("v overhere");
-                break;
             case 9:
                 player.sendActionBar("You can also sneak to cancel out of the HotMenu.");
                 break;

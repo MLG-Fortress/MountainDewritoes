@@ -40,7 +40,6 @@ public class AtmosphericManager implements Listener, CommandExecutor
         instance.registerListener(this);
     }
 
-    //TODO: finish, someday
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         Player player = (Player)sender;

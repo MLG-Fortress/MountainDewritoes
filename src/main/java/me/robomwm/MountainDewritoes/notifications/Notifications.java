@@ -169,6 +169,5 @@ class ActionCenter
             manager.infoBoards.remove(player);
         if (player.getScoreboard() == scoreboard)
             player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
-        //TODO: Is additional cleanup required??
     }
 }
