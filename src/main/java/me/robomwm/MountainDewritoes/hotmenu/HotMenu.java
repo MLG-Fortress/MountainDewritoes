@@ -7,13 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -129,6 +126,12 @@ public class HotMenu implements Listener
         cancel((Player)event.getPlayer());
     }
 
+    @EventHandler(ignoreCancelled = true)
+    private void onDeath(PlayerDeathEvent event)
+    {
+        cancel(event.getEntity());
+    }
+
     @EventHandler
     private void onQuit(PlayerQuitEvent event)
     {
@@ -140,6 +143,17 @@ public class HotMenu implements Listener
     {
         if (event.getAction() == Action.PHYSICAL)
             return;
+        Menu menu = getMenu(event.getPlayer(), false);
+        if (menu != null)
+        {
+            menu.unregister(false);
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onAnimation(PlayerAnimationEvent event)
+    {
         Menu menu = getMenu(event.getPlayer(), false);
         if (menu != null)
         {
@@ -185,14 +199,14 @@ class Menu
         put("Open /book", "book");
         put("Hello!", "voice hello");
         put("Over here!", "voice overhere");
-        put("4","");
-        put("5","");
-        put("6","");
-        put("7","");
+        put("","");
+        put("","");
+        put("","");
+        put("","");
         put("Pay respects","");
         put("Cancel","");
         register();
-
+        plugin.getLogger().info(player.getName() + " opened HotMenu");
     }
 
     public boolean isRegistered()
@@ -210,7 +224,7 @@ class Menu
         player.setScoreboard(this.scoreboard);
     }
 
-    public void setSelectedItem(int selectedItem) //TODO: sounds
+    public void setSelectedItem(int selectedItem)
     {
         this.selectedItem = selectedItem + 1;
         refreshDisplay();
@@ -284,6 +298,8 @@ class Menu
                 player.sendActionBar("You can also sneak to cancel out of the HotMenu.");
                 break;
         }
+
+        plugin.getLogger().info(player.getName() + " selected " + selectedItem);
 
         return selectedItem;
     }

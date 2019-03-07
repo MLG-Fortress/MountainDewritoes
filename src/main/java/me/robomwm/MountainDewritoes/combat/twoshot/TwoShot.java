@@ -14,7 +14,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Created on 1/10/2019.
  *
  * @author RoboMWM
+ *
+ * @deprecated Found an open source plugin https://github.com/ZombieStriker/QualityArmory tho I gotta mavenize it
  */
+@Deprecated
 public class TwoShot implements Listener
 {
     private MountainDewritoes mountainDewritoes;

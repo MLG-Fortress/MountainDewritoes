@@ -66,6 +66,9 @@ public class VoiceCommand implements CommandExecutor
 
         Player player = (Player)sender;
 
+        if (player.hasMetadata("DEAD"))
+            return false;
+
         if (args.length <= 0)
         {
             plugin.openBook(player, getBook());

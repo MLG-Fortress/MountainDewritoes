@@ -25,6 +25,7 @@ import java.util.List;
  *
  * @author RoboMWM
  */
+@Deprecated
 public class Weapon
 {
     private String name;
@@ -99,6 +100,7 @@ public class Weapon
     }
 }
 
+@Deprecated
 class SoundAttribute
 {
     private Sound sound;
