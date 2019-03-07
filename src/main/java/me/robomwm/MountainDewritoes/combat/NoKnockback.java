@@ -40,7 +40,7 @@ public class NoKnockback implements Listener
     void onEntityGetsHurt(EntityDamageByEntityEvent event)
     {
         if (!(event.getEntity() instanceof LivingEntity))
-            return;s
+            return;
         if (event.getEntity().hasMetadata("MD_DONT_RESISTKB"))
         {
             event.getEntity().removeMetadata("MD_DONT_RESISTKB", instance);
