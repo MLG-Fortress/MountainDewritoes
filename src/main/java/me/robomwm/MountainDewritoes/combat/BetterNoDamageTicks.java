@@ -88,7 +88,7 @@ public class BetterNoDamageTicks implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void setImmunity(EntityDamageEvent event) //TODO: ignore fakeentitydamageevent from mcmmo?
+    private void setImmunity(EntityDamageEvent event)
     {
         long ticksToExpire;
 
@@ -100,6 +100,8 @@ public class BetterNoDamageTicks implements Listener
             case CRAMMING:
             case HOT_FLOOR:
             case SUFFOCATION:
+            case DROWNING:
+            case DRAGON_BREATH:
                 ticksToExpire = 8L;
                 break;
             case ENTITY_ATTACK:
@@ -107,9 +109,15 @@ public class BetterNoDamageTicks implements Listener
             case CONTACT:
                 ticksToExpire = 10L;
                 break;
+            case DRYOUT:
+            case MELTING:
+                ticksToExpire = 40L;
+                break;
+            case POISON:
+            case MAGIC:
+            case WITHER:
             default:
                 return;
-            //TODO: drowning, wither, poison
         }
 
         if (!event.getEntity().hasMetadata(DAMAGE_IMMUNITY_KEY))

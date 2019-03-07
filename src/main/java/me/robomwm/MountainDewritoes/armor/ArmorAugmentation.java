@@ -170,20 +170,20 @@ public class ArmorAugmentation implements Listener
             return;
         if (event.getDamage() < 5.0)
             event.setCancelled(true);
-        //TODO: goomba stomp
         Player player = (Player)event.getEntity();
         Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
         if (entities.size() == 0)
             return;
+        player.setMetadata("nocheatplus.checks.fight", new FixedMetadataValue(plugin, true));
         for (LivingEntity entity : entities)
         {
-            player.setMetadata("nocheatplus.checks.fight", new FixedMetadataValue(plugin, true));
             entity.damage(20, player); //TODO: damage resist for wearing an armored hat??
             entity.setVelocity(new Vector(0, -4, 0));
             if (entity.getType() == EntityType.PLAYER)
                 ((Player)entity).sendTitle(ChatColor.RED + "GOOMBA STOMPED!", "", 0, 40, 20);
             //TODO: tag entity, monitor deathEvent to alter death message
         }
+        player.removeMetadata("nocheatplus.checks.fight", plugin);
         player.getWorld().playSound(player.getLocation(), "fortress.goombastoped", SoundCategory.PLAYERS, 1.0f, 1.0f);
 //        vector.setY(0.5);
 //        player.setVelocity(player.getVelocity().add(vector));
