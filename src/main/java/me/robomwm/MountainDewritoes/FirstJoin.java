@@ -14,11 +14,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created on 2/23/2018.
@@ -30,6 +34,7 @@ public class FirstJoin implements Listener
     private MountainDewritoes plugin;
     private Location firstJoinLocation;
     private Location cellar;
+    private Map<Location, String> tutorialLocations = new HashMap<>();
 
     public FirstJoin(MountainDewritoes plugin)
     {
@@ -59,6 +64,32 @@ public class FirstJoin implements Listener
 //                }
 //            }
 //        }.runTaskTimer(plugin, 1200L, 10L);
+    }
+
+    private Map<Player, List<ItemStack>> stacks = new HashMap<>();
+
+    private void give(Player player, ItemStack item)
+    {
+        if (item.getAmount() > 1)
+            return;
+        stacks.putIfAbsent(player, new ArrayList<>());
+        if (player.getInventory().addItem(item).isEmpty())
+            stacks.get(player).add(item);
+    }
+
+    private void repayment(Player player)
+    {
+        if (!stacks.containsKey(player))
+            return;
+        for (ItemStack stack : stacks.get(player))
+            player.getInventory().remove(stack);
+        stacks.remove(player);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void quit(PlayerQuitEvent event)
+    {
+        repayment(event.getPlayer());
     }
 
     private void onJoinWorld(Player player)
@@ -129,6 +160,7 @@ public class FirstJoin implements Listener
     @EventHandler
     private void onWorldChange(PlayerChangedWorldEvent event)
     {
+        repayment(event.getPlayer());
         if (event.getPlayer().getWorld() == firstJoinLocation.getWorld())
             onJoinWorld(event.getPlayer());
     }
@@ -167,5 +199,23 @@ public class FirstJoin implements Listener
         }
 
         plugin.openBook(player, LazyText.getBook(bookMeta));
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onMove(PlayerMoveEvent event)
+    {
+        if (event.getTo().getWorld() != firstJoinLocation.getWorld())
+            return;
+        for (Map.Entry<Location, String> location : tutorialLocations.entrySet())
+        {
+            if (location.getKey().distanceSquared(event.getTo()) < 100)
+            {
+                switch (location.getValue())
+                {
+
+                }
+                return;
+            }
+        }
     }
 }
