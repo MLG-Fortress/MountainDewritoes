@@ -66,32 +66,6 @@ public class FirstJoin implements Listener
 //        }.runTaskTimer(plugin, 1200L, 10L);
     }
 
-    private Map<Player, List<ItemStack>> stacks = new HashMap<>();
-
-    private void give(Player player, ItemStack item)
-    {
-        if (item.getAmount() > 1)
-            return;
-        stacks.putIfAbsent(player, new ArrayList<>());
-        if (player.getInventory().addItem(item).isEmpty())
-            stacks.get(player).add(item);
-    }
-
-    private void repayment(Player player)
-    {
-        if (!stacks.containsKey(player))
-            return;
-        for (ItemStack stack : stacks.get(player))
-            player.getInventory().remove(stack);
-        stacks.remove(player);
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    private void quit(PlayerQuitEvent event)
-    {
-        repayment(event.getPlayer());
-    }
-
     private void onJoinWorld(Player player)
     {
         if (player.getWorld() == firstJoinLocation.getWorld())
@@ -160,7 +134,6 @@ public class FirstJoin implements Listener
     @EventHandler
     private void onWorldChange(PlayerChangedWorldEvent event)
     {
-        repayment(event.getPlayer());
         if (event.getPlayer().getWorld() == firstJoinLocation.getWorld())
             onJoinWorld(event.getPlayer());
     }
@@ -194,8 +167,8 @@ public class FirstJoin implements Listener
                         ",\nThanks for helpin out. Hopefully u got a bit more experience! Btw, Press F to open the menu, or do /menu if ur on lameo 1.8-o.\nEnjoy de /minigames or da memetastic /wild !")
                 );
                 break;
-                default:
-                    return;
+            default:
+                return;
         }
 
         plugin.openBook(player, LazyText.getBook(bookMeta));
@@ -204,18 +177,25 @@ public class FirstJoin implements Listener
     @EventHandler(ignoreCancelled = true)
     private void onMove(PlayerMoveEvent event)
     {
+        Player player = event.getPlayer();
         if (event.getTo().getWorld() != firstJoinLocation.getWorld())
             return;
         for (Map.Entry<Location, String> location : tutorialLocations.entrySet())
         {
-            if (location.getKey().distanceSquared(event.getTo()) < 100)
-            {
-                switch (location.getValue())
-                {
+            if (location.getKey().distanceSquared(event.getTo()) > 100)
+                continue;
 
-                }
+            if (player.hasMetadata(location.getValue()))
                 return;
+
+            switch (location.getValue())
+            {
+                case "leggings":
+
+                    player.getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLDEN_LEGGINGS"));
+                    break;
             }
+            return;
         }
     }
 }
