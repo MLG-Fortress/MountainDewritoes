@@ -172,8 +172,9 @@ public class ArmorAugmentation implements Listener
             event.setCancelled(true);
         Player player = (Player)event.getEntity();
         Collection<LivingEntity> entities = player.getLocation().getNearbyLivingEntities(0.5, 0.5, 0.5);
-        if (entities.size() == 0)
+        if (entities.size() < 2)
             return;
+        entities.remove(player);
         player.setMetadata("nocheatplus.checks.fight", new FixedMetadataValue(plugin, true));
         for (LivingEntity entity : entities)
         {
