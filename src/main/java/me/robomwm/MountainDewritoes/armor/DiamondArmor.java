@@ -66,15 +66,16 @@ public class DiamondArmor implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onSneak(PlayerToggleSneakEvent event)
     {
-        if (!event.isSneaking() || !armorAugmentation.isEquipped(event.getPlayer(), Material.DIAMOND_BOOTS))
-            return;
-
         Player player = event.getPlayer();
         Integer jump = NSA.getMidairMap().get(player);
 
+        if (!event.isSneaking() || player.isOnGround()
+                || !armorAugmentation.isEquipped(event.getPlayer(), Material.DIAMOND_BOOTS))
+            return;
+
         if (jump == null)
         {
-            player.setVelocity(new Vector(0, 0.1, 0));
+            player.setVelocity(new Vector(0, 0.5, 0));
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 255, true, false, false));
             new BukkitRunnable()
             {
@@ -82,7 +83,7 @@ public class DiamondArmor implements Listener
                 public void run()
                 {
                     if (!event.getPlayer().isOnGround())
-                        event.getPlayer().setVelocity(new Vector(0, -4, 0));
+                        event.getPlayer().setVelocity(new Vector(0, -2, 0));
                     else
                         cancel();
                 }
