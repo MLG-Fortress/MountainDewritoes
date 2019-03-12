@@ -94,7 +94,7 @@ public class BetterZeldaHearts implements Listener
         if (random.nextInt(3) != 1) //66%
         {
             Item heartItem = location.getWorld().dropItem(location, customItems.getItem("healthHeart"));
-            heartItem.setCustomName(ChatColor.RED + "SwagPack");
+            heartItem.setCustomName(ChatColor.RED + "Health");
             heartItem.setCustomNameVisible(true);
             heartItem.setPickupDelay(10);
         }

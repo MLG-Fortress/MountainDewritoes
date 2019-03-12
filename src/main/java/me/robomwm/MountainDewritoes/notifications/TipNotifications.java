@@ -35,20 +35,26 @@ public class TipNotifications extends NotificationSender
     private void onMoved(ScheduledPlayerMovedEvent event)
     {
         Player player = event.getPlayer();
+        if (!lookingAtShop(player))
+            removeEntry(player, "shop");
+    }
+
+    private boolean lookingAtShop(Player player)
+    {
         Block block = player.getTargetBlock(5);
         if (block == null)
-            return;
+            return false;
         BlockState state = block.getState();
         if (!(state instanceof Container))
-            return;
+            return false;
         Container container = (Container)state;
         if (!shopAPI.isShop(container, false))
-            return;
+            return false;
 
         ItemStack itemStack = shopAPI.getItemStack(container);
         double price = shopAPI.getPrice(container);
         if (itemStack == null || price < 0)
-            return;
+            return false;
 
         List<String> lines = new ArrayList<>();
 
@@ -57,5 +63,6 @@ public class TipNotifications extends NotificationSender
         lines.add("Punch chest to /buy.");
 
         addEntry(player, "shop", lines);
+        return true;
     }
 }

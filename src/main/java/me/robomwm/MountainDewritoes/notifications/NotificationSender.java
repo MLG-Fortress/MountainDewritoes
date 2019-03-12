@@ -27,4 +27,9 @@ public abstract class NotificationSender implements Listener
     {
         notifications.addEntry(player, lines, category);
     }
+
+    public void removeEntry(Player player, String category)
+    {
+        notifications.removeEntry(player, category);
+    }
 }

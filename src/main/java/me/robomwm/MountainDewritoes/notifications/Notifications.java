@@ -38,7 +38,7 @@ public class Notifications
         new TipNotifications(this, plugin);
     }
 
-    public ActionCenter getActionCenter(Player player)
+    public ActionCenter getOrCreateActionCenter(Player player)
     {
         ActionCenter scoreboardEntry = infoBoards.get(player);
         if (scoreboardEntry == null)
@@ -46,14 +46,25 @@ public class Notifications
         return infoBoards.get(player);
     }
 
+    public ActionCenter getActionCenter(Player player)
+    {
+        return infoBoards.get(player);
+    }
+
     public boolean addEntry(Player player, List<String> lines, String category)
+    {
+        ActionCenter actionCenter = getOrCreateActionCenter(player);
+        Collections.reverse(lines);
+        return actionCenter.addEntry(category, lines);
+    }
+
+    public boolean removeEntry(Player player, String category)
     {
         ActionCenter actionCenter = getActionCenter(player);
         if (actionCenter == null)
             return false;
 
-        Collections.reverse(lines);
-        return actionCenter.addEntry(category, lines);
+        return actionCenter.removeEntry(category);
     }
 }
 
@@ -141,6 +152,16 @@ class ActionCenter
         entries.put(category, lines);
         refreshExpiration();
         return refreshDisplay();
+    }
+
+    public boolean removeEntry(String category)
+    {
+        entries.remove(category);
+        if (entries.size() == 0)
+            unregister();
+        else
+            return refreshDisplay();
+        return true;
     }
 
     public void refreshExpiration()
