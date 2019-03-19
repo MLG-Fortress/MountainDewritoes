@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.Events;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -41,7 +42,7 @@ public class ReverseOsmosis implements Listener
 
     private Map<Player, Double> oldBalances = new HashMap<>();
     private Map<Player, World> changedWorld = new HashMap<>();
-    private Set<Player> playersThatMoved = new HashSet<>();
+    private Map<Player, Location> playersThatMoved = new HashMap<>();
 
     public ReverseOsmosis(MountainDewritoes plugin)
     {
@@ -88,11 +89,11 @@ public class ReverseOsmosis implements Listener
 
     private void movedEvent()
     {
-        Iterator<Player> movedPlayersIterator = playersThatMoved.iterator();
+        Iterator<Map.Entry<Player, Location>> movedPlayersIterator = playersThatMoved.entrySet().iterator();
         while (movedPlayersIterator.hasNext())
         {
-            Player player = movedPlayersIterator.next();
-            callEvent(new ScheduledPlayerMovedEvent(player));
+            Map.Entry<Player, Location> entry = movedPlayersIterator.next();
+            callEvent(new ScheduledPlayerMovedEvent(entry.getKey(), entry.getValue()));
             movedPlayersIterator.remove();
         }
     }
@@ -195,7 +196,7 @@ public class ReverseOsmosis implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onPlayerMove(PlayerMoveEvent event)
     {
-        playersThatMoved.add(event.getPlayer());
+        playersThatMoved.putIfAbsent(event.getPlayer(), event.getFrom());
     }
 
 }

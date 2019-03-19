@@ -54,7 +54,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -616,6 +618,36 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         Player player = event.getPlayer();
         player.setHealthScaled(false);
+    }
+
+    /**
+     * Name items that spawn
+     * @param event
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    private void onItemSpawn(ItemSpawnEvent event)
+    {
+        if (event.getEntity().isCustomNameVisible() || event.getEntity().getCustomName() != null)
+            return;
+
+        ItemStack itemStack = event.getEntity().getItemStack();
+        String name = itemStack.getI18NDisplayName();
+        if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName())
+            name = itemStack.getItemMeta().getDisplayName();
+
+        event.getEntity().setCustomName(name);
+    }
+
+    /**
+     * No AI required for mobs in non-survival worlds
+     * @param event
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    private void onCreatureSpawn(CreatureSpawnEvent event)
+    {
+        if (event.getEntity().getWorld().getPVP())
+            return;
+        event.getEntity().setAI(false);
     }
 
     /**

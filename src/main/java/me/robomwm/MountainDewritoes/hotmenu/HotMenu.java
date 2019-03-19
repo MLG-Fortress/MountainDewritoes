@@ -196,7 +196,7 @@ class Menu
                         "F" + ChatColor.WHITE + " to select.");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         put("","");
-        put("Open /book", "book");
+        put("Open /menu", "menu");
         put("Hello!", "voice hello");
         put("Over here!", "voice overhere");
         put("","");

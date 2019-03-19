@@ -43,7 +43,7 @@ commands:
   voice:
     aliases: [v, voiceline, callout, voicelines, voices]
   start:
-      aliases: [menu, book, gui, ui, main, mainmenu, help, info, page, pda]
+      aliases: [menu, book, bookmenu, menubook, gui, ui, main, mainmenu, help, info, page, pda]
   music:
       aliases: [song, sound]
   shrug: {}

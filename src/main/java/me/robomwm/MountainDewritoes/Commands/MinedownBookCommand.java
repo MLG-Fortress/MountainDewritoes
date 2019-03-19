@@ -220,7 +220,7 @@ public class MinedownBookCommand implements CommandExecutor
                 org.bukkit.ChatColor.DARK_PURPLE + "About+Info\n",
                 org.bukkit.ChatColor.BLACK + "IP: MLG.ROBOMWM.COM\n",
                 LazyText.url("- Website\n", "http://techfortress.robomwm.com/p/mlg-base.html", "Fancy."),
-                LazyText.url("- Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy"), org.bukkit.ChatColor.BLACK +
+                LazyText.url("- Ur Stats\n", "http://mlg.robomwm.com:12345/player/" + player.getName(), "ayyy"), org.bukkit.ChatColor.BLACK +
                         "Dis started as Trash Tech back in 2015, except the first guy I opped built a spawn. Then wuz " +
                         "Mini Fortress as Minigames took focus. Then it now b MLG Fortress 4 da memez."));
         aboutMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅Back   ","/help","Back to /menu"),
@@ -238,8 +238,8 @@ public class MinedownBookCommand implements CommandExecutor
         aboutMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅Back   ","/help","Back to /menu"),
                 org.bukkit.ChatColor.DARK_PURPLE + "About+Info\n",
                 LazyText.url("Github: All dem custom codez\n", "https://github.com/MLG-Fortress/", "Too much wasted time."),
-                LazyText.url("Serbur Stats\n", "http://mlg.robomwm.com:28500/server/MLG_Fortress", "Serbur Stalkin"),
-                LazyText.url("Ur Stats\n", "http://mlg.robomwm.com:28500/player/" + player.getName(), "ayyy")
+                LazyText.url("Serbur Stats\n", "http://mlg.robomwm.com:12345/server/MLG_Fortress", "Serbur Stalkin"),
+                LazyText.url("Ur Stats\n", "http://mlg.robomwm.com:12345/player/" + player.getName(), "ayyy")
         ));
         plugin.openBook(player, LazyText.getBook(aboutMeta));
     }
