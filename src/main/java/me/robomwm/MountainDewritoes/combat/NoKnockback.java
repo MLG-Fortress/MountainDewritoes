@@ -26,15 +26,16 @@ public class NoKnockback implements Listener
         instance = mountainDewritoes;
     }
 
+    //NOTE: Probably not needed anymore
     //Do not cancel velocity events from bending abilities
     //A number of abilities set custom velocities, and it uses Entity#damage to damage the entity
     //And since Entity#damage(damage, sourceEntity) uses ENTITY_ATTACK as its cause, we can't tell a plugin called this in the damage event.
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    void onDamagedByBending(AbilityDamageEntityEvent event)
-    {
-        if (event.getEntity() instanceof LivingEntity)
-            event.getEntity().setMetadata("MD_DONT_RESISTKB", new FixedMetadataValue(instance, true));
-    }
+//    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+//    void onDamagedByBending(AbilityDamageEntityEvent event)
+//    {
+//        if (event.getEntity() instanceof LivingEntity)
+//            event.getEntity().setMetadata("MD_DONT_RESISTKB", new FixedMetadataValue(instance, true));
+//    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST) //We aren't modifying this event, only responding to it
     void onEntityGetsHurt(EntityDamageByEntityEvent event)
