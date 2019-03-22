@@ -55,7 +55,7 @@ public class SleepManagement implements Listener
             public void run()
             {
                 if (player.isSleeping())
-                    player.damage(0D);
+                    player.wakeup(true);
             }
         }.runTaskLater(instance, 80L);
     }
