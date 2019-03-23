@@ -1,6 +1,11 @@
 package me.robomwm.MountainDewritoes.Events;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import me.robomwm.MountainDewritoes.packetwrappers.WrapperPlayClientSteerVehicle;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -62,6 +67,33 @@ public class ReverseOsmosis implements Listener
                 movedEvent();
             }
         }.runTaskTimer(plugin, 1L, 20L);
+
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.STEER_VEHICLE)
+        {
+            @Override
+            public void onPacketReceiving(PacketEvent event)
+            {
+                WrapperPlayClientSteerVehicle steerVehicle = new WrapperPlayClientSteerVehicle(event.getPacket());
+                Set<Key> keysPressed = new HashSet<>();
+
+                if (steerVehicle.getForward() > 0)
+                    keysPressed.add(Key.FORWARD);
+                else if (steerVehicle.getForward() < 0)
+                    keysPressed.add(Key.BACK);
+
+                if (steerVehicle.getSideways() > 0)
+                    keysPressed.add(Key.LEFT);
+                else if (steerVehicle.getSideways() < 0)
+                    keysPressed.add(Key.RIGHT);
+
+                if (steerVehicle.isJump())
+                    keysPressed.add(Key.JUMP);
+                if (steerVehicle.isUnmount())
+                    keysPressed.add(Key.SNEAK);
+
+                plugin.getServer().getPluginManager().callEvent(new PlayerSteerVehicleEvent(event.getPlayer(), keysPressed));
+            }
+        });
     }
 
     private void callEvent(Event event)

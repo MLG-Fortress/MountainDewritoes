@@ -22,6 +22,7 @@ softdepend:
 - NoMyStuff
 - ServerListPlus
 - PrettySimpleShop
+- ProtocolLib
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields

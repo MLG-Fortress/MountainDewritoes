@@ -31,6 +31,7 @@ import me.robomwm.MountainDewritoes.combat.BetterZeldaHearts;
 import me.robomwm.MountainDewritoes.combat.DummerEnderman;
 import me.robomwm.MountainDewritoes.combat.NoKnockback;
 import me.robomwm.MountainDewritoes.hotmenu.HotMenu;
+import me.robomwm.MountainDewritoes.spaceship.SpaceshipPilot;
 import net.milkbowl.vault.economy.Economy;
 import net.minecrell.serverlistplus.core.ServerListPlusCore;
 import net.minecrell.serverlistplus.core.player.PlayerIdentity;
@@ -425,6 +426,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new FirstJoin(this);
         new DummerEnderman(this);
         new OldTNT(this);
+        new SpaceshipPilot(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
