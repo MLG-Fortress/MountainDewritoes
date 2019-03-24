@@ -20,7 +20,7 @@ public class Spaceship implements Listener
 {
     private final Vehicle vehicle;
     private Vector thrust = new Vector();
-    private Vector direction = new Vector(.1, 0, 0);
+    private Vector direction = new Vector(.3, 0, 0);
     private double pitch = 0;
     private double yaw = 0;
     private BukkitTask engine;
@@ -76,16 +76,16 @@ public class Spaceship implements Listener
             switch (key)
             {
                 case LEFT:
-                    yaw = Math.PI / 160;
+                    yaw = Math.PI / 130;
                     break;
                 case RIGHT:
-                    yaw = Math.PI / -160;
+                    yaw = Math.PI / -130;
                     break;
                 case FORWARD:
-                    pitch = Math.PI / -160;
+                    pitch = Math.PI / 100;
                     break;
                 case BACK:
-                    pitch = Math.PI / 160;
+                    pitch = Math.PI / -100;
                     break;
                 case JUMP:
                     //vector.zero();
