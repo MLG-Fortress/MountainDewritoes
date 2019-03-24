@@ -47,9 +47,10 @@ public class Spaceship implements Listener
             {
                 if (pitch != 0)
                 {
-                    Vector rotated2D = direction.clone();
+                    Vector rotated2D = direction.clone().rotateAroundY(Math.PI / 2);
                     rotated2D.setY(0);
-                    direction.rotateAroundAxis(rotated2D, pitch);
+                    rotated2D.normalize();
+                    direction.rotateAroundNonUnitAxis(rotated2D, pitch);
                 }
                 if (yaw != 0)
                     direction.rotateAroundY(yaw);
@@ -75,16 +76,16 @@ public class Spaceship implements Listener
             switch (key)
             {
                 case LEFT:
-                    yaw = Math.PI / 8;
+                    yaw = Math.PI / 160;
                     break;
                 case RIGHT:
-                    yaw = Math.PI / -8;
+                    yaw = Math.PI / -160;
                     break;
                 case FORWARD:
-                    pitch = Math.PI / -8;
+                    pitch = Math.PI / -160;
                     break;
                 case BACK:
-                    pitch = Math.PI / 8;
+                    pitch = Math.PI / 160;
                     break;
                 case JUMP:
                     //vector.zero();
