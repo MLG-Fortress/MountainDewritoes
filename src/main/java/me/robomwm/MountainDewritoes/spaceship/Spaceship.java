@@ -63,16 +63,16 @@ public class Spaceship implements Listener
             switch (key)
             {
                 case LEFT:
-                    vector.rotateAroundY(90);
+                    vector.rotateAroundY(Math.PI / 2);
                     break;
                 case RIGHT:
-                    vector.rotateAroundY(-90);
+                    vector.rotateAroundY(Math.PI / -2);
                     break;
                 case FORWARD:
-                    vector.rotateAroundZ(60);
+                    vector.rotateAroundZ(Math.PI / -2);
                     break;
                 case BACK:
-                    vector.rotateAroundZ(-60);
+                    vector.rotateAroundZ(Math.PI / 2);
                     break;
                 case JUMP:
                     vector.zero();
