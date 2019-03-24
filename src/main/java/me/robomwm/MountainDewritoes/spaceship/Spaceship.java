@@ -18,9 +18,11 @@ import org.bukkit.util.Vector;
  */
 public class Spaceship implements Listener
 {
-    private Vehicle vehicle;
+    private final Vehicle vehicle;
     private Vector thrust = new Vector();
-    private Vector direction = new Vector();
+    private Vector direction = new Vector(.1, 0, 0);
+    private double pitch = 0;
+    private double yaw = 0;
     private BukkitTask engine;
     private double acceleration = 1.01;
     private double maxSpeedSquared = 0.25;
@@ -43,7 +45,14 @@ public class Spaceship implements Listener
             @Override
             public void run()
             {
-                //vehicle.setVelocity(thrust.multiply(acceleration));
+                if (pitch != 0)
+                {
+                    Vector rotated2D = direction.clone();
+                    rotated2D.setY(0);
+                    direction.rotateAroundAxis(rotated2D, pitch);
+                }
+                if (yaw != 0)
+                    direction.rotateAroundY(yaw);
                 vehicle.setVelocity(direction);
             }
         }.runTaskTimer(plugin, 1L, 1L);
@@ -56,31 +65,35 @@ public class Spaceship implements Listener
 
     public void steer(PlayerSteerVehicleEvent event)
     {
-        Vector vector = new Vector(.1, 0, 0);
+        pitch = 0;
+        yaw = 0;
+
+        StringBuilder keys = new StringBuilder();
 
         for (Key key : event.getKeysPressed())
         {
             switch (key)
             {
                 case LEFT:
-                    vector.rotateAroundY(Math.PI / 2);
+                    yaw = Math.PI / 8;
                     break;
                 case RIGHT:
-                    vector.rotateAroundY(Math.PI / -2);
+                    yaw = Math.PI / -8;
                     break;
                 case FORWARD:
-                    vector.rotateAroundZ(Math.PI / -2);
+                    pitch = Math.PI / -8;
                     break;
                 case BACK:
-                    vector.rotateAroundZ(Math.PI / 2);
+                    pitch = Math.PI / 8;
                     break;
                 case JUMP:
-                    vector.zero();
+                    //vector.zero();
                     break;
             }
-            event.getPlayer().sendMessage(key.name());
+            keys.append(key);
         }
 
-        direction = vector;
+        event.getPlayer().sendActionBar(keys.toString());
     }
 }
+
