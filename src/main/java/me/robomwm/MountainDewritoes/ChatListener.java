@@ -106,7 +106,7 @@ public class ChatListener implements Listener
             int[] tasks = new int[mess.length() - 63];
             String lastMessage = "";
             int maxTime = 0;
-            final String firstMess = mess.substring(0, 63);
+            final String firstMess = mess.substring(0, 61);
 
             //Display first part of message
             scheduler.scheduleSyncDelayedTask(instance, new Runnable()
