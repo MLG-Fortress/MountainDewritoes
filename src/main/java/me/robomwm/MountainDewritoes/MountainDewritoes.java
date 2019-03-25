@@ -77,8 +77,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -253,24 +255,27 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     "&bBorddd? Dont 4get about da &6/&am&ci&dn&ei&fg&ba&am&ce&ds"
                 };
 
-                @Override
-                public String replace(ServerListPlusCore core, String s)
+                private boolean callChester()
                 {
-                    if (!serverDoneLoading)
-                        return ChatColor.RED + "still brewing memes, pls w8.";
-                    if (brain == null)
+                    if (brain == null && getServer().getPluginManager().isPluginEnabled("Chester"))
                         brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
-                    ChatColor color = TipCommand.getRandomColor();
-                    return "U_W0T_B0T: " + color + brain.getSentence();
+                    return brain != null;
                 }
 
-                @Override
-                public String replace(StatusResponse response, String s)
+                Map<UUID, Integer> count = new HashMap<>();
+
+                private String computeResponse(UUID uuid, String name)
                 {
+                    if (name == null)
+                        name = "u";
+
+                    count.putIfAbsent(uuid, 1);
+
                     if (!serverDoneLoading)
-                        return ChatColor.RED + "still brewing memes, pls w8.";
-                    if (brain == null)
-                        brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
+                        return ChatColor.RED + "still brewing memes, pls " + count.get(uuid);
+
+                    ChatColor color = TipCommand.getRandomColor();
+
                     if (!colorized)
                     {
                         for (int i = 0; i < quotes.length; i++)
@@ -278,40 +283,59 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         colorized = true;
                     }
 
-                    String name = "u";
+                    callChester();
+
+                    try
+                    {
+                        switch (ThreadLocalRandom.current().nextInt(7))
+                        {
+                            case 0:
+                                return color + brain.getSentence(name);
+                            case 1:
+                                return color + brain.getSentence();
+                            case 2:
+                                return color + getEconomy().format(getEconomy().getBalance(getServer().getOfflinePlayer(uuid)));
+                            case 3:
+                                return color + findRandomOnlinePlayer() + color + " wants to play with " +
+                                        TipCommand.getRandomColor() + name;
+                            case 4:
+                                return color + brain.getSentence("robo");
+                            case 5:
+                                return color + "ur lucky number is " + TipCommand.getRandomColor() + count;
+                        }
+                    }
+                    catch (Throwable ignored){}
+
+                    String quote = color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
+                    return quote.replaceAll("%player%", name);
+                }
+
+                private String findRandomOnlinePlayer()
+                {
+                    List<Player> victims = new ArrayList<>(getServer().getOnlinePlayers());
+                    if (victims.isEmpty())
+                        return "U_W0T_B0T";
+                    return victims.get(ThreadLocalRandom.current().nextInt(victims.size())).getDisplayName();
+                }
+
+                @Override
+                public String replace(ServerListPlusCore core, String s)
+                {
+                    return computeResponse(null, null);
+                }
+
+                @Override
+                public String replace(StatusResponse response, String s)
+                {
+                    String name = null;
                     UUID uuid = null;
-                    ChatColor color = TipCommand.getRandomColor();
                     if (response.getRequest().getIdentity() != null)
                     {
                         PlayerIdentity identity = response.getRequest().getIdentity();
                         name = identity.getName();
                         uuid = identity.getUuid();
                     }
-
-                    if (ThreadLocalRandom.current().nextBoolean())
-                    {
-                        String quote = color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
-                        return quote.replaceAll("%player%", name);
-                    }
-
-                    if (ThreadLocalRandom.current().nextBoolean() && !name.equals("u"))
-                    {
-                        return "U_W0T_B0T: " + color + brain.getSentence(name);
-                    }
-
-                    switch (ThreadLocalRandom.current().nextInt(3))
-                    {
-                        case 0:
-                            if (uuid != null)
-                                return color + getEconomy().format(getEconomy().getBalance(getServer().getOfflinePlayer(uuid)));
-                        case 1:
-                            if (getServer().getOnlinePlayers().size() > 0)
-                                return "U shuld join " + getServer().getOnlinePlayers().iterator().next().getDisplayName();
-                        case 2:
-                            return color + brain.getSentence("robo");
-                    }
-
-                    return "U_W0T_B0T: " + color + brain.getSentence();
+                    return computeResponse(uuid, name);
                 }
             });
         }
