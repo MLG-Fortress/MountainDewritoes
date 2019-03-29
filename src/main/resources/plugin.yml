@@ -62,3 +62,5 @@ commands:
   changelog:
     aliases: [log, news, new, updates, whatsnew, changes]
     usage: "/changelog - view the changes and updates made to the server."
+  login: {}
+  
