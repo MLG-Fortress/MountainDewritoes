@@ -398,6 +398,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         {
             //Don't keep spawn chunks in memory
             world.setKeepSpawnInMemory(false);
+            world.setGameRule(GameRule.NATURAL_REGENERATION, false);
 
             //minigame worlds don't do daylight cycles
             if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE))
@@ -406,7 +407,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             //else it's a non-minigame world
             //Set border on survival worlds
             //Border is a "hard stop", most worlds are generated to a much smaller radius.
-            else if (world.getPVP() && !minigameWorlds.contains(world))
+            else if (world.getPVP() && !minigameWorlds.contains(world) && !world.getGameRuleValue(GameRule.KEEP_INVENTORY))
                 world.getWorldBorder().setSize(20000);
 
         }
@@ -451,6 +452,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new DummerEnderman(this);
         new OldTNT(this);
         new SpaceshipPilot(this);
+        new HalloBB(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())

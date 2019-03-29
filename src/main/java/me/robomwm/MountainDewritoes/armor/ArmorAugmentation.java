@@ -40,8 +40,6 @@ public class ArmorAugmentation implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         new OldFood(this.plugin);
         ATPgeneration();
-        for (World world : plugin.getServer().getWorlds())
-            world.setGameRule(GameRule.NATURAL_REGENERATION, false);
     }
 
     public MountainDewritoes getPlugin()

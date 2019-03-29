@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes;
 
 import com.robomwm.usefulutil.UsefulUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
@@ -83,78 +84,78 @@ public class DeathListener implements Listener
 
         player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
 
-        //Save some items (randomly determined)
-        if (instance.isSurvivalWorld(player.getWorld()))
+        //Save some items (randomly determined) if in survival world
+        if (!instance.isSurvivalWorld(player.getWorld()) || player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY))
+            return;
+
+        if (player.getKiller() == null) //TODO: replace with "combattag" check instead
         {
-            if (player.getKiller() == null) //TODO: replace with "combattag" check instead
-            {
-                event.setKeepInventory(true);
-                event.getDrops().clear();
-                return;
-            }
+            event.setKeepInventory(true);
+            event.getDrops().clear();
+            return;
+        }
 
-            List<ItemStack> drops = event.getDrops();
-            Iterator<ItemStack> iterator = drops.iterator();
-            List<ItemStack> dropsToReturn = new ArrayList<>();
-            while (iterator.hasNext())
-            {
-                ItemStack itemStack = iterator.next();
-                if (ThreadLocalRandom.current().nextInt(3) == 0)
-                    continue;
-                dropsToReturn.add(itemStack);
-                iterator.remove();
-            }
-            deathItems.put(player.getUniqueId(), dropsToReturn);
-            EntityDamageEvent damageEvent = player.getLastDamageCause();
-            StringBuilder message = new StringBuilder("umail text ");
-            message.append(player.getName());
-            message.append(" U wer ");
-            message.append(getDeathWord());
-            message.append(" at ");
-            message.append(location.getWorld().getName());
-            message.append(" ");
-            message.append(location.getBlockX());
-            message.append(", ");
-            message.append(location.getBlockY());
-            message.append(", ");
-            message.append(location.getBlockZ());
-            message.append("\n");
-            if (damageEvent == null)
-                instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString() + "But uh we dont no how???!?!? spoopy...");
-            else
-            {
-                Entity killer = UsefulUtil.getKiller(event);
+        List<ItemStack> drops = event.getDrops();
+        Iterator<ItemStack> iterator = drops.iterator();
+        List<ItemStack> dropsToReturn = new ArrayList<>();
+        while (iterator.hasNext())
+        {
+            ItemStack itemStack = iterator.next();
+            if (ThreadLocalRandom.current().nextInt(3) == 0)
+                continue;
+            dropsToReturn.add(itemStack);
+            iterator.remove();
+        }
+        deathItems.put(player.getUniqueId(), dropsToReturn);
+        EntityDamageEvent damageEvent = player.getLastDamageCause();
+        StringBuilder message = new StringBuilder("umail text ");
+        message.append(player.getName());
+        message.append(" U wer ");
+        message.append(getDeathWord());
+        message.append(" at ");
+        message.append(location.getWorld().getName());
+        message.append(" ");
+        message.append(location.getBlockX());
+        message.append(", ");
+        message.append(location.getBlockY());
+        message.append(", ");
+        message.append(location.getBlockZ());
+        message.append("\n");
+        if (damageEvent == null)
+            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString() + "But uh we dont no how???!?!? spoopy...");
+        else
+        {
+            Entity killer = UsefulUtil.getKiller(event);
 
-                if (killer != null)
-                {
-                    message.append("Final blow: ");
-                    if (killer.getType() == EntityType.PLAYER)
-                        message.append(killer.getName());
-                    else
-                        message.append(killer.getType().name().toLowerCase());
-                    message.append("\n");
-                }
-                message.append("via ");
-                message.append(damageEvent.getCause().toString().toLowerCase());
+            if (killer != null)
+            {
+                message.append("Final blow: ");
+                if (killer.getType() == EntityType.PLAYER)
+                    message.append(killer.getName());
+                else
+                    message.append(killer.getType().name().toLowerCase());
                 message.append("\n");
             }
-
-            if (!drops.isEmpty())
-            {
-                message.append("U lost deez items:\n");
-                for (ItemStack drop : drops)
-                {
-                    message.append(drop.getAmount());
-                    message.append(" ");
-                    message.append(getItemName(drop));
-                    message.append(ChatColor.RESET);
-                    message.append(", ");
-                }
-                message.delete(message.length() - 2, message.length());
-            }
-
-            instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
+            message.append("via ");
+            message.append(damageEvent.getCause().toString().toLowerCase());
+            message.append("\n");
         }
+
+        if (!drops.isEmpty())
+        {
+            message.append("U lost deez items:\n");
+            for (ItemStack drop : drops)
+            {
+                message.append(drop.getAmount());
+                message.append(" ");
+                message.append(getItemName(drop));
+                message.append(ChatColor.RESET);
+                message.append(", ");
+            }
+            message.delete(message.length() - 2, message.length());
+        }
+
+        instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString());
     }
 
     /**
@@ -169,7 +170,7 @@ public class DeathListener implements Listener
 
         Location respawnLocation = player.getWorld().getSpawnLocation();
 
-        if (instance.isSurvivalWorld(player.getWorld()))
+        if (instance.isSurvivalWorld(player.getWorld()) && !player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY))
             respawnLocation = playersDesiredRespawnLocation.getOrDefault(player, defaultRespawnLocation);
         event.setRespawnLocation(respawnLocation);
 
@@ -180,7 +181,7 @@ public class DeathListener implements Listener
             {
                 player.getInventory().addItem(drop);
             }
-            player.sendMessage("Saved " + String.valueOf(deathItems.get(player.getUniqueId()).size()) + " item stacks from your inventory when you died.");
+            player.sendMessage("Saved " + deathItems.get(player.getUniqueId()).size() + " item stacks from your inventory when you died.");
             deathItems.remove(player.getUniqueId());
         }
     }
