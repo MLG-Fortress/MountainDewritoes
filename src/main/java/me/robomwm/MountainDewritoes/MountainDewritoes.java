@@ -318,15 +318,37 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     return victims.get(ThreadLocalRandom.current().nextInt(victims.size())).getDisplayName();
                 }
 
+                public void huh(String ok)
+                {
+                    try
+                    {
+                        MountainDewritoes.this.getServer().getLogger().info(ok);
+                    }
+                    catch (Throwable ignored) {}
+                }
+
+                public String lol(String name)
+                {
+                    ChatColor color = TipCommand.getRandomColor();
+                    if (name == null)
+                        name = "u";
+                    else
+                        name = new StringBuilder(name).insert(1, "\\u200B").toString();
+                    String quote = color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
+                    return quote.replaceAll("%player%", name);
+                }
+
                 @Override
                 public String replace(ServerListPlusCore core, String s)
                 {
+                    huh("core was called");
                     return computeResponse(null, null);
                 }
 
                 @Override
                 public String replace(StatusResponse response, String s)
                 {
+                    huh("regular was called");
                     String name = null;
                     UUID uuid = null;
                     if (response.getRequest().getIdentity() != null)
@@ -335,6 +357,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         name = identity.getName();
                         uuid = identity.getUuid();
                     }
+                    if (response.getRequest().getClient().getHostAddress().equalsIgnoreCase("173.249.30.10"))
+                        return lol(name);
                     return computeResponse(uuid, name);
                 }
             });
