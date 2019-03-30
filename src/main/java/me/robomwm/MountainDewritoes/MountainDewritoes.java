@@ -262,17 +262,15 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     return brain != null;
                 }
 
-                Map<UUID, Integer> count = new HashMap<>();
+                int count = 0;
 
                 private String computeResponse(UUID uuid, String name)
                 {
                     if (name == null)
                         name = "u";
 
-                    count.putIfAbsent(uuid, 1);
-
                     if (!serverDoneLoading)
-                        return ChatColor.RED + "still brewing memes, pls " + count.get(uuid);
+                        return ChatColor.RED + "still brewing memes, pls w8" + count;
 
                     ChatColor color = TipCommand.getRandomColor();
 
@@ -301,7 +299,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                             case 4:
                                 return color + brain.getSentence("robo");
                             case 5:
-                                return color + "ur lucky number is " + TipCommand.getRandomColor() + count.get(uuid);
+                                return color + "ur lucky number is " + TipCommand.getRandomColor() + count;
                         }
                     }
                     catch (Throwable ignored){}
@@ -329,6 +327,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
                 public String lol(String name)
                 {
+                    count++;
                     ChatColor color = TipCommand.getRandomColor();
                     if (name == null)
                         name = "u";
@@ -348,6 +347,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 @Override
                 public String replace(StatusResponse response, String s)
                 {
+
                     huh("regular was called");
                     String name = null;
                     UUID uuid = null;
@@ -357,6 +357,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         name = identity.getName();
                         uuid = identity.getUuid();
                     }
+                    if (name != null)
+                        MountainDewritoes.this.getLogger().info(name + " is active.");
                     if (response.getRequest().getClient().getHostAddress().equalsIgnoreCase("173.249.30.10"))
                         return lol(name);
                     return computeResponse(uuid, name);
