@@ -334,8 +334,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         name = "u";
                     else
                         name = new StringBuilder(name).insert(1, "\\u200B").toString();
-                    String quote = color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
-                    return quote.replaceAll("%player%", name);
+                    String quote = color + "Hi MCList! Join us, we have maymayz :DD %player% " + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
+                    return quote.replace("%player%", name);
                 }
 
                 @Override

