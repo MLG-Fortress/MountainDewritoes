@@ -301,7 +301,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                             case 4:
                                 return color + brain.getSentence("robo");
                             case 5:
-                                return color + "ur lucky number is " + TipCommand.getRandomColor() + count;
+                                return color + "ur lucky number is " + TipCommand.getRandomColor() + count.get(uuid);
                         }
                     }
                     catch (Throwable ignored){}
