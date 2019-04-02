@@ -9,26 +9,43 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created on 1/10/2019.
  *
  * @author RoboMWM
  *
- * @deprecated Found an open source plugin https://github.com/ZombieStriker/QualityArmory tho I gotta mavenize it
  */
-@Deprecated
 public class TwoShot implements Listener
 {
     private MountainDewritoes mountainDewritoes;
     private CustomItemRecipes customItems;
+    private Map<String, Weapon> weapons = new HashMap<>();
 
 
     public TwoShot(MountainDewritoes plugin)
     {
-        customItems = plugin.getCustomItemRecipes();
-        YamlConfiguration config = UsefulUtil.loadOrCreateYamlFile(plugin, "twoshot.yml");
+        this.mountainDewritoes = plugin;
 
+        try
+        {
+            this.customItems = plugin.getCustomItemRecipes();
+            File folder = new File(plugin.getDataFolder() + File.separator + "weapons");
+            folder.mkdir();
+            for (File file : folder.listFiles())
+                weapons.put(file.getName(), new Weapon(file));
+            plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        }
+        catch (Throwable rock)
+        {
+            plugin.getLogger().warning("Could not load weapons :c");
+            rock.printStackTrace();
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -46,5 +63,19 @@ public class TwoShot implements Listener
             default:
                 return;
         }
+
+        //TODO: determine current ammo, last fired, etc.
+        ItemStack itemStack = event.getItem();
+        if (itemStack == null)
+            return;
+
+        String name = customItems.extractCustomID(itemStack.getItemMeta());
+
+        if (name == null)
+            return;
+
+        Weapon weapon = weapons.get(name);
+        weapon.fire(event.getPlayer());
+        weapon.playSound(event.getPlayer(), mountainDewritoes);
     }
 }

@@ -25,6 +25,7 @@ import me.robomwm.MountainDewritoes.Rewards.LodsOfEmone;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
+import me.robomwm.MountainDewritoes.arena.Arena;
 import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
 import me.robomwm.MountainDewritoes.combat.BetterNoDamageTicks;
 import me.robomwm.MountainDewritoes.combat.BetterZeldaHearts;
@@ -347,8 +348,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 @Override
                 public String replace(StatusResponse response, String s)
                 {
-
-                    huh("regular was called");
                     String name = null;
                     UUID uuid = null;
                     if (response.getRequest().getIdentity() != null)
@@ -479,6 +478,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new OldTNT(this);
         new SpaceshipPilot(this);
         new HalloBB(this);
+        new Arena(this);
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())

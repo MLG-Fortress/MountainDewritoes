@@ -1,17 +1,33 @@
 package me.robomwm.MountainDewritoes.combat.twoshot;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.SpectralArrow;
+import org.bukkit.entity.TippedArrow;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created on 1/10/2019.
@@ -25,43 +41,65 @@ import java.util.List;
  *
  * @author RoboMWM
  */
-@Deprecated
 public class Weapon
 {
-    private String name;
-
-    //weapon attributes
-    public int clipSize;
-    public int reloadTime = 40; //in ticks
-    public int fireRate; //in ticks
-    public int quantityPerShot = 1;
+    private YamlConfiguration yaml;
 
     //projectile attributes
-    public Material type;
-    public double damage;
-    public int spread = 1;
-    public boolean gravity = false;
-    private double velocity = 4;
+    public EntityType type;
+    public String name;
 
-    public void setVelocity(int velocity)
+    public Weapon(File file)
     {
-        setVelocity(velocity / 25D);
+        this.yaml = YamlConfiguration.loadConfiguration(file);
+        this.type = EntityType.valueOf(yaml.getString("projectileType"));
+        this.name = file.getName();
+        for (String sound : yaml.getString("sounds", "").split(","))
+            sounds.add(new SoundAttribute(sound));
     }
 
-    public void setVelocity(double velocity)
+    public String getName()
     {
-        velocity = Math.min(4, velocity);
-        //velocity = Math.max(-4, velocity); //Idk, backwards bullets?
-        this.velocity = velocity;
+        return getName();
+    }
+
+    /**
+     * Ammo capacity
+     * @return
+     */
+    public int getCapacity()
+    {
+        return yaml.getInt("capacity");
+    }
+
+    /**
+     *
+     * @return in ticks
+     */
+    public int getReloadTime()
+    {
+        return yaml.getInt("reloadTime", 30);
+    }
+
+    /**
+     *
+     * @return minimum delay between shots in ticks
+     */
+    public int getFireRate()
+    {
+        return yaml.getInt("fireRate", 1);
+    }
+
+    /**
+     *
+     * @return ammo consumed per shot
+     */
+    public int getAmmoPerShot()
+    {
+        return yaml.getInt("ammoPerShot", 1);
     }
 
     private List<SoundAttribute> sounds = new ArrayList<>();
-
-    public Weapon(String name, String stringOfSounds, double damage, int clipSize)
-    {
-        for (String sound : stringOfSounds.split(","))
-            sounds.add(new SoundAttribute(sound));
-    }
 
     public BukkitTask playSound(Player player, Plugin plugin)
     {
@@ -90,17 +128,52 @@ public class Weapon
         }.runTaskTimer(plugin, 1L, 1L);
     }
 
-    public void fire()
+    private Class<? extends Projectile> getProjectileClass()
     {
-        for (int i = 0; i < quantityPerShot; i++)
+        switch (type)
         {
-           //fillout later
-            return;
+            case ARROW:
+                return Arrow.class;
+            case SNOWBALL:
+                return Snowball.class;
         }
+        return Snowball.class;
+    }
+
+    private Projectile spawnProjectile(ProjectileSource source, Vector velocity)
+    {
+        Projectile projectile = source.launchProjectile(getProjectileClass(), velocity);
+        projectile.setGravity(yaml.getBoolean("gravity", false));
+        //TODO: metadata (damage)
+        return projectile;
+    }
+
+    private Vector getVelocity(Vector facing)
+    {
+        //TODO: spread
+        facing.multiply(yaml.getDouble("speed", 1.0));
+        return facing;
+    }
+
+    public Projectile fire(LivingEntity source)
+    {
+        World world = source.getWorld();
+        Location location = source.getEyeLocation();
+        source.launchProjectile(getProjectileClass());
+        Projectile projectile = null;
+
+        for (int i = 0; i < getAmmoPerShot(); i++)
+            projectile = spawnProjectile(source, getVelocity(source.getLocation().getDirection()));
+
+        return projectile;
+    }
+
+    public String getAsString()
+    {
+        return yaml.saveToString();
     }
 }
 
-@Deprecated
 class SoundAttribute
 {
     private Sound sound;

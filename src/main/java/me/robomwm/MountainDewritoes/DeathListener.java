@@ -58,7 +58,7 @@ public class DeathListener implements Listener
         return item.getI18NDisplayName();
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     void onPlayerSadness(PlayerDeathEvent event)
     {
         final Player player = event.getEntity();

