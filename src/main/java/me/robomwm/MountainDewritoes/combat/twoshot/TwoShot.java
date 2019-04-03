@@ -44,6 +44,8 @@ public class TwoShot implements Listener
             plugin.getLogger().warning("Could not load weapons :c");
             rock.printStackTrace();
         }
+
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     private WeaponState getWeaponState(ItemStack item)
