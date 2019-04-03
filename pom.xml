@@ -117,6 +117,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.12</version>
+        </dependency>
+        <dependency>
             <groupId>fr.mrsheepsheep</groupId>
             <artifactId>tinthealth</artifactId>
             <version>1.4.6</version>
@@ -127,12 +132,6 @@
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>BetterTPA</artifactId>
             <version>3.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ProjectKorra</groupId>
-            <artifactId>ProjectKorra</artifactId>
-            <version>cbb3581a12</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

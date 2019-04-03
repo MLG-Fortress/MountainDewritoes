@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes.Commands;
 
 import com.destroystokyo.paper.Title;
+import info.gomeow.chester.Chester;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
@@ -17,10 +18,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 7/26/2017.
@@ -32,6 +35,7 @@ public class DebugCommand implements CommandExecutor
     private MountainDewritoes plugin;
     private ClanManager clanManager;
     private static boolean debug;
+    private BukkitTask talking = null;
 
     public DebugCommand(MountainDewritoes plugin)
     {
@@ -66,19 +70,41 @@ public class DebugCommand implements CommandExecutor
 
         switch(args[0].toLowerCase())
         {
-            case "recipe":
-                sender.sendMessage("recipe");
-                List<Recipe> existingRecipes = new LinkedList<>();
-                Iterator<Recipe> recipeIterator = plugin.getServer().recipeIterator();
-                while (recipeIterator.hasNext())
+            case "botconvo":
+                if (talking != null)
                 {
-                    Recipe recipe = recipeIterator.next();
-                    if (recipe.getResult().getType() != Material.GOLDEN_BOOTS)
-                        existingRecipes.add(recipe);
+                    talking.cancel();
+                    return true;
                 }
-                plugin.getServer().clearRecipes();
-                for (Recipe recipe : existingRecipes)
-                    plugin.getServer().addRecipe(recipe);
+                talking = new BukkitRunnable()
+                {
+                    Chester chester = (Chester)plugin.getServer().getPluginManager().getPlugin("Chester");
+                    String response = "hello";
+                    int count = ThreadLocalRandom.current().nextInt(5, 10);
+                    int delay = 2;
+                    int convos = 1;
+
+                    @Override
+                    public void run()
+                    {
+                        if (delay-- > 0)
+                            return;
+                        if (count-- <= 0)
+                        {
+                            count = ThreadLocalRandom.current().nextInt(5, 15);
+                            delay = ThreadLocalRandom.current().nextInt(30, 60 + (1000 * (int)Math.log(convos)));
+                            convos++;
+                            return;
+                        }
+
+                        response = chester.getHal().getSentence(response);
+                        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector " + convos + "_Dum_B0Ts: " + response);
+                        String[] messageArray = response.split(" ");
+                        if (messageArray.length > 1)
+                            response = messageArray[ThreadLocalRandom.current().nextInt(messageArray.length)];
+                        delay = ThreadLocalRandom.current().nextInt(4, 10);
+                    }
+                }.runTaskTimer(plugin, 1L, 20L);
                 return true;
             case "refreshBlocks":
                 assert player != null;

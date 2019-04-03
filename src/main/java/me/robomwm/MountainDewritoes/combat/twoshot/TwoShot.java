@@ -1,15 +1,14 @@
 package me.robomwm.MountainDewritoes.combat.twoshot;
 
 import com.robomwm.customitemrecipes.CustomItemRecipes;
-import com.robomwm.usefulutil.UsefulUtil;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,8 +24,7 @@ public class TwoShot implements Listener
 {
     private MountainDewritoes mountainDewritoes;
     private CustomItemRecipes customItems;
-    private Map<String, Weapon> weapons = new HashMap<>();
-
+    private Map<String, WeaponProperties> weapons = new HashMap<>();
 
     public TwoShot(MountainDewritoes plugin)
     {
@@ -37,8 +35,8 @@ public class TwoShot implements Listener
             this.customItems = plugin.getCustomItemRecipes();
             File folder = new File(plugin.getDataFolder() + File.separator + "weapons");
             folder.mkdir();
-            for (File file : folder.listFiles())
-                weapons.put(file.getName(), new Weapon(file));
+            for (File file : folder.listFiles()) //TODO: ignore non .yml files
+                weapons.put(file.getName(), new WeaponProperties(file));
             plugin.getServer().getPluginManager().registerEvents(this, plugin);
         }
         catch (Throwable rock)
@@ -46,6 +44,23 @@ public class TwoShot implements Listener
             plugin.getLogger().warning("Could not load weapons :c");
             rock.printStackTrace();
         }
+    }
+
+    private WeaponState getWeaponState(ItemStack item)
+    {
+        if (item == null)
+            return null;
+
+        String name = customItems.extractCustomID(item.getItemMeta());
+
+        if (name == null)
+            return null;
+
+        WeaponProperties weaponProperties = weapons.get(name);
+        if (weaponProperties == null)
+            return null;
+
+        return new WeaponState(item, weaponProperties);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -64,18 +79,26 @@ public class TwoShot implements Listener
                 return;
         }
 
-        //TODO: determine current ammo, last fired, etc.
-        ItemStack itemStack = event.getItem();
-        if (itemStack == null)
+        WeaponState weapon = getWeaponState(event.getItem());
+        if (weapon == null)
             return;
 
-        String name = customItems.extractCustomID(itemStack.getItemMeta());
+        if (weapon.canFire(mountainDewritoes.getCurrentTick()))
+            weapon.getProperties().fire(event.getPlayer(), mountainDewritoes);
 
-        if (name == null)
-            return;
+        if (weapon.getRemainingAmmo() <= 0)
+            reloadWeapon(weapon, event.getPlayer(), mountainDewritoes);
+    }
 
-        Weapon weapon = weapons.get(name);
-        weapon.fire(event.getPlayer());
-        weapon.playSound(event.getPlayer(), mountainDewritoes);
+    @EventHandler
+    public void reloadWeapon(PlayerDropItemEvent event)
+    {
+
+    }
+
+    public void reloadWeapon(WeaponState weapon, Player player, Plugin plugin)
+    {
+        if (weapon.reloadWeapon(plugin))
+            player.sendActionBar("Reloading...");
     }
 }

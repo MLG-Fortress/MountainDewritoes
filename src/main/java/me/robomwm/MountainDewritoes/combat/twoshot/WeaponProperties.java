@@ -16,6 +16,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.SpectralArrow;
 import org.bukkit.entity.TippedArrow;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,7 +42,7 @@ import java.util.Map;
  *
  * @author RoboMWM
  */
-public class Weapon
+public class WeaponProperties
 {
     private YamlConfiguration yaml;
 
@@ -49,13 +50,14 @@ public class Weapon
     public EntityType type;
     public String name;
 
-    public Weapon(File file)
+    public WeaponProperties(File file)
     {
         this.yaml = YamlConfiguration.loadConfiguration(file);
-        this.type = EntityType.valueOf(yaml.getString("projectileType"));
+        this.type = EntityType.valueOf(yaml.getString("projectileType", "SNOWBALL").toUpperCase());
         this.name = file.getName();
         for (String sound : yaml.getString("sounds", "").split(","))
-            sounds.add(new SoundAttribute(sound));
+            if (!sound.isEmpty())
+                sounds.add(new SoundAttribute(sound));
     }
 
     public String getName()
@@ -101,8 +103,11 @@ public class Weapon
 
     private List<SoundAttribute> sounds = new ArrayList<>();
 
-    public BukkitTask playSound(Player player, Plugin plugin)
+    public BukkitTask playSound(Location location, Plugin plugin)
     {
+        if (sounds.isEmpty())
+            return null;
+
         return new BukkitRunnable()
         {
             Iterator<SoundAttribute> soundsIterator = sounds.iterator();
@@ -115,7 +120,7 @@ public class Weapon
                 if (++i < soundToPlay.getDelay())
                     return;
 
-                soundToPlay.playSound(player);
+                soundToPlay.playSound(location);
 
                 if (soundsIterator.hasNext())
                 {
@@ -155,17 +160,22 @@ public class Weapon
         return facing;
     }
 
-    public Projectile fire(LivingEntity source)
+    private List<Projectile> fire(LivingEntity source)
     {
-        World world = source.getWorld();
-        Location location = source.getEyeLocation();
         source.launchProjectile(getProjectileClass());
-        Projectile projectile = null;
+        List<Projectile> projectiles = new ArrayList<>(getAmmoPerShot());
 
         for (int i = 0; i < getAmmoPerShot(); i++)
-            projectile = spawnProjectile(source, getVelocity(source.getLocation().getDirection()));
+            projectiles.add(spawnProjectile(source, getVelocity(source.getLocation().getDirection())));
 
-        return projectile;
+        return projectiles;
+    }
+
+    public void fire(LivingEntity source, Plugin plugin)
+    {
+        List<Projectile> projectiles = fire(source);
+        //TODO: particles
+        playSound(source.getLocation(), plugin);
     }
 
     public String getAsString()
@@ -200,12 +210,12 @@ class SoundAttribute
         delay = Integer.valueOf(parseMe[3]);
     }
 
-    public void playSound(Player player)
+    public void playSound(Location location)
     {
         if (sound == null)
-            player.getWorld().playSound(player.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch);
+            location.getWorld().playSound(location, sound, SoundCategory.PLAYERS, volume, pitch);
         else
-            player.getWorld().playSound(player.getLocation(), name, SoundCategory.PLAYERS, volume, pitch);
+            location.getWorld().playSound(location, name, SoundCategory.PLAYERS, volume, pitch);
     }
 
     public int getDelay()

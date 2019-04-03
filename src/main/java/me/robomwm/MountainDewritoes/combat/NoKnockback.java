@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.combat;
 
-import com.projectkorra.projectkorra.event.AbilityDamageEntityEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
@@ -8,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
