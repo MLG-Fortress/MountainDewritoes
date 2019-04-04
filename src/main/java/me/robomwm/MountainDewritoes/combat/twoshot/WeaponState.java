@@ -69,7 +69,7 @@ public class WeaponState
 
     public boolean canFire(long currentTick)
     {
-        if (reloadTask != null && getLastFired() + properties.getFireRate() < currentTick
+        if (reloadTask == null && getLastFired() + properties.getFireRate() < currentTick
                 && getRemainingAmmo() > 0)
         {
             setLastFired(currentTick);

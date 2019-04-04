@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.combat.twoshot;
 
 import com.robomwm.customitemrecipes.CustomItemRecipes;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.apache.commons.io.FilenameUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,7 +37,10 @@ public class TwoShot implements Listener
             File folder = new File(plugin.getDataFolder() + File.separator + "weapons");
             folder.mkdir();
             for (File file : folder.listFiles()) //TODO: ignore non .yml files
-                weapons.put(file.getName(), new WeaponProperties(file));
+            {
+                weapons.put(FilenameUtils.getBaseName(file.getName()), new WeaponProperties(file));
+                mountainDewritoes.getLogger().info(file.getName());
+            }
             plugin.getServer().getPluginManager().registerEvents(this, plugin);
         }
         catch (Throwable rock)
@@ -44,8 +48,6 @@ public class TwoShot implements Listener
             plugin.getLogger().warning("Could not load weapons :c");
             rock.printStackTrace();
         }
-
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     private WeaponState getWeaponState(ItemStack item)
@@ -76,7 +78,7 @@ public class TwoShot implements Listener
             case LEFT_CLICK_BLOCK:
             case RIGHT_CLICK_BLOCK:
                 if (event.getClickedBlock().getType().isInteractable())
-                    break;
+                    return;
             default:
                 return;
         }
@@ -84,6 +86,8 @@ public class TwoShot implements Listener
         WeaponState weapon = getWeaponState(event.getItem());
         if (weapon == null)
             return;
+
+        event.getPlayer().sendActionBar("got WeaponState");
 
         if (weapon.canFire(mountainDewritoes.getCurrentTick()))
             weapon.getProperties().fire(event.getPlayer(), mountainDewritoes);
