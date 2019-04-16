@@ -55,6 +55,12 @@ public class Spaceship implements Listener
                 direction.rotateAroundNonUnitAxis(rotated2D, pitch);
                 if (yaw != 0)
                     direction.rotateAroundY(yaw);
+                if (Double.isInfinite(direction.getX()))
+                    direction.setX(0);
+                if (Double.isInfinite(direction.getY()))
+                    direction.setY(0);
+                if (Double.isInfinite(direction.getZ()))
+                    direction.setZ(0);
                 vehicle.setVelocity(direction);
             }
         }.runTaskTimer(plugin, 1L, 1L);
