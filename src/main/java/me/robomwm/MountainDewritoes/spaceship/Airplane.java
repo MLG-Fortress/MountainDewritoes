@@ -4,7 +4,6 @@ import me.robomwm.MountainDewritoes.Events.Key;
 import me.robomwm.MountainDewritoes.Events.PlayerSteerVehicleEvent;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,9 +13,11 @@ import org.bukkit.util.Vector;
 /**
  * Created on 9/21/2018.
  *
+ * Difference here is pitch can be adjusted like an airplane - can move straight up or down, and takes a moment to steer.
+ *
  * @author RoboMWM
  */
-public class Spaceship implements Listener
+public class Airplane implements Listener
 {
     private final Vehicle vehicle;
     private Vector thrust = new Vector();
@@ -27,7 +28,7 @@ public class Spaceship implements Listener
     private double acceleration = 1.01;
     private double maxSpeedSquared = 0.25;
 
-    public Spaceship(Plugin plugin, Vehicle vehicle)
+    public Airplane(Plugin plugin, Vehicle vehicle)
     {
         this.vehicle = vehicle;
         vehicle.setGravity(false);
@@ -45,14 +46,13 @@ public class Spaceship implements Listener
             @Override
             public void run()
             {
-                Vector twoD = direction.clone();
-                twoD.setY(0);
-                float angleToFlat = twoD.angle(direction);
-                
-                Vector rotated2D = twoD.rotateAroundY(Math.PI / 2);
-                rotated2D.normalize();
-                direction.rotateAroundNonUnitAxis(rotated2D, angleToFlat); //resets to 0 pitch
-                direction.rotateAroundNonUnitAxis(rotated2D, pitch);
+                if (pitch != 0)
+                {
+                    Vector rotated2D = direction.clone().rotateAroundY(Math.PI / 2);
+                    rotated2D.setY(0);
+                    rotated2D.normalize();
+                    direction.rotateAroundNonUnitAxis(rotated2D, pitch);
+                }
                 if (yaw != 0)
                     direction.rotateAroundY(yaw);
                 vehicle.setVelocity(direction);
@@ -83,10 +83,10 @@ public class Spaceship implements Listener
                     yaw = Math.PI / -130;
                     break;
                 case FORWARD:
-                    pitch = Math.PI / 4;
+                    pitch = Math.PI / 100;
                     break;
                 case BACK:
-                    pitch = Math.PI / -4;
+                    pitch = Math.PI / -100;
                     break;
                 case JUMP:
                     //vector.zero();
