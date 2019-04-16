@@ -329,7 +329,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
                 public String lol(String name)
                 {
-                    count++;
                     ChatColor color = TipCommand.getRandomColor();
                     if (name == null)
                         name = "u";
@@ -349,6 +348,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 @Override
                 public String replace(StatusResponse response, String s)
                 {
+                    count++;
                     String name = null;
                     UUID uuid = null;
                     if (response.getRequest().getIdentity() != null)

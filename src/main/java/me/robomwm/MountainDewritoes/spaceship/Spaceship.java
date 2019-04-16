@@ -48,7 +48,7 @@ public class Spaceship implements Listener
                 Vector twoD = direction.clone();
                 twoD.setY(0);
                 float angleToFlat = twoD.angle(direction);
-                
+
                 Vector rotated2D = twoD.rotateAroundY(Math.PI / 2);
                 rotated2D.normalize();
                 direction.rotateAroundNonUnitAxis(rotated2D, angleToFlat); //resets to 0 pitch
