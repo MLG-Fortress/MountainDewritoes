@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.notifications;
 
+import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -94,6 +95,7 @@ class ActionCenter
         this.objective = this.scoreboard.registerNewObjective("Notifications", "dummy", "Notifications");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         player.setScoreboard(this.scoreboard);
+        refreshExpiration();
     }
 
     public boolean refreshDisplay()
@@ -150,7 +152,6 @@ class ActionCenter
     {
         entries.remove(category);
         entries.put(category, lines);
-        refreshExpiration();
         return refreshDisplay();
     }
 
@@ -166,6 +167,7 @@ class ActionCenter
 
     public void refreshExpiration()
     {
+        DebugCommand.debug("refreshing" + this);
         cancel();
         expireTask = new BukkitRunnable()
         {
@@ -185,6 +187,7 @@ class ActionCenter
 
     public void unregister()
     {
+        DebugCommand.debug("unregistering" + this);
         cancel();
         if (manager.infoBoards.get(player) == this)
             manager.infoBoards.remove(player);
