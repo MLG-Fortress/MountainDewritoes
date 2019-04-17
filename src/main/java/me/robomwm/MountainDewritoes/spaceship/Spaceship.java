@@ -2,7 +2,9 @@ package me.robomwm.MountainDewritoes.spaceship;
 
 import me.robomwm.MountainDewritoes.Events.Key;
 import me.robomwm.MountainDewritoes.Events.PlayerSteerVehicleEvent;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +26,9 @@ public class Spaceship implements Listener
     private double pitch = 0;
     private double yaw = 0;
     private BukkitTask engine;
+    private boolean brakes = false;
     private double acceleration = 1.01;
+    private double deceleration = 0.9;
     private double maxSpeedSquared = 0.25;
 
     public Spaceship(Plugin plugin, Vehicle vehicle)
@@ -50,6 +54,11 @@ public class Spaceship implements Listener
                 if (yaw != 0)
                     vector.rotateAroundY(yaw);
 
+                if (brakes && direction.lengthSquared() > 0.0025)
+                    vector.multiply(deceleration);
+                else if (!brakes && direction.lengthSquared() < maxSpeedSquared)
+                    vector.multiply(acceleration);
+
                 if (pitch != 0)
                 {
                     Vector rotated2D = vector.clone().rotateAroundY(Math.PI / 2);
@@ -58,9 +67,12 @@ public class Spaceship implements Listener
                     vector = vector.clone().rotateAroundNonUnitAxis(rotated2D, pitch);
                 }
 
+                for (Entity entity : vehicle.getPassengers())
+                    ((Player)entity).sendActionBar(vehicle.getVelocity().toString());
+
                 vehicle.setVelocity(vector);
             }
-        }.runTaskTimer(plugin, 1L, 1L);
+        }.runTaskTimer(plugin, 2L, 2L);
     }
 
 //    public void move(Vector direction)
@@ -70,6 +82,7 @@ public class Spaceship implements Listener
 
     public void steer(PlayerSteerVehicleEvent event)
     {
+        brakes = false;
         pitch = 0;
         yaw = 0;
 
@@ -86,13 +99,13 @@ public class Spaceship implements Listener
                     yaw = Math.PI / -80;
                     break;
                 case FORWARD:
-                    pitch = Math.PI / 3;
+                    pitch = Math.PI / 6;
                     break;
                 case BACK:
-                    pitch = Math.PI / -3;
+                    pitch = Math.PI / -6;
                     break;
                 case JUMP:
-                    //vector.zero();
+                    brakes = true;
                     break;
             }
             keys.append(key);
