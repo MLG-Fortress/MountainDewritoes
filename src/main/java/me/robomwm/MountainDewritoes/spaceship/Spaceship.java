@@ -72,7 +72,7 @@ public class Spaceship implements Listener
 
                 vehicle.setVelocity(vector);
             }
-        }.runTaskTimer(plugin, 2L, 2L);
+        }.runTaskTimer(plugin, 1L, 1L);
     }
 
 //    public void move(Vector direction)
