@@ -20,7 +20,7 @@ public class Spaceship implements Listener
 {
     private final Vehicle vehicle;
     private Vector thrust = new Vector();
-    private Vector direction = new Vector(.3, 0, 0);
+    private Vector direction = new Vector(.2, 0, 0);
     private double pitch = 0;
     private double yaw = 0;
     private BukkitTask engine;
@@ -47,6 +47,9 @@ public class Spaceship implements Listener
             {
                 Vector vector = direction;
 
+                if (yaw != 0)
+                    vector.rotateAroundY(yaw);
+
                 if (pitch != 0)
                 {
                     Vector rotated2D = vector.clone().rotateAroundY(Math.PI / 2);
@@ -55,10 +58,7 @@ public class Spaceship implements Listener
                     vector = vector.clone().rotateAroundNonUnitAxis(rotated2D, pitch);
                 }
 
-                if (yaw != 0)
-                    direction.rotateAroundY(yaw);
-
-                vehicle.setVelocity(direction);
+                vehicle.setVelocity(vector);
             }
         }.runTaskTimer(plugin, 1L, 1L);
     }
@@ -80,10 +80,10 @@ public class Spaceship implements Listener
             switch (key)
             {
                 case LEFT:
-                    yaw = Math.PI / 110;
+                    yaw = Math.PI / 80;
                     break;
                 case RIGHT:
-                    yaw = Math.PI / -110;
+                    yaw = Math.PI / -80;
                     break;
                 case FORWARD:
                     pitch = Math.PI / 3;
