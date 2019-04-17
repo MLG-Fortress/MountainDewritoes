@@ -58,8 +58,8 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         final double health = player.getHealth() - event.getFinalDamage();
-        //final double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        if (health <= 8D && !alreadyLowHealth.containsKey(player))
+        final double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        if (healthPercentage <= 0.33 && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
             player.playSound(player.getLocation(), "fortress.lowhealth", SoundCategory.PLAYERS, 3000000f, 1.0f);
@@ -72,7 +72,8 @@ public class LowHealth implements Listener
             {
                 public void run()
                 {
-                    if (!alreadyLowHealth.containsKey(player) || player.getHealth() > 8D)
+                    double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                    if (!alreadyLowHealth.containsKey(player) || healthPercentage > 0.33)
                     {
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
                         return;

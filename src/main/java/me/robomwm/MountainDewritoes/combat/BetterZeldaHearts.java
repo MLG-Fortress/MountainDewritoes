@@ -260,22 +260,22 @@ public class BetterZeldaHearts implements Listener
         return true;
     }
 
-    //Player loses 1 heart on death (down to minimum currentXPLevel hearts)
-    @EventHandler
-    void resetHealthOnRespawn(PlayerRespawnEvent event)
-    {
-        if (!instance.isSurvivalWorld(event.getRespawnLocation().getWorld()))
-            return;
-
-        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 2D;
-
-        if (event.getPlayer().getLevel() >= 90) //Cap is 90
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(180D);
-        else if (maxHealth < 2D) //Why
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2D);
-        else if (maxHealth <= event.getPlayer().getLevel() * 2) //Would fall currentXPLevel
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(event.getPlayer().getLevel() * 2);
-        else
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
-    }
+//    //Player loses 1 heart on death (down to minimum currentXPLevel hearts)
+//    @EventHandler
+//    void resetHealthOnRespawn(PlayerRespawnEvent event)
+//    {
+//        if (!instance.isSurvivalWorld(event.getRespawnLocation().getWorld()))
+//            return;
+//
+//        double maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 2D;
+//
+//        if (event.getPlayer().getLevel() >= 90) //Cap is 90
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(180D);
+//        else if (maxHealth < 2D) //Why
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2D);
+//        else if (maxHealth <= event.getPlayer().getLevel() * 2) //Would fall currentXPLevel
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(event.getPlayer().getLevel() * 2);
+//        else
+//            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
+//    }
 }

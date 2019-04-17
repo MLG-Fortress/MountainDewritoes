@@ -102,9 +102,6 @@ public class FirstJoin implements Listener
 
         if (!event.getPlayer().hasPlayedBefore())
         {
-            event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6D);
-            event.getPlayer().setHealth(6D);
-            event.getPlayer().setLevel(1);
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLD_BOOTS"));
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("The_Gold_Plate"));
             event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("Coal_Pickaxe"));

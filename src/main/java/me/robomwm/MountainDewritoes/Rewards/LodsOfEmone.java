@@ -37,13 +37,7 @@ public class LodsOfEmone
                 title.subtitle(ChatColor.WHITE + "                             Lv " + level);
                 message.append(ChatColor.AQUA + ChatColor.BOLD.toString() + "REACHED LEVEL " + level + "!" + ChatColor.DARK_AQUA + " U g0t: ");
 
-                //Increase health (if under max of 90), heal
-                double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                if (maxHealth < 180D)
-                {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth + 2D);
-                    message.append("a new red swag cap");
-                }
+                //heal
                 player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                 player.removePotionEffect(PotionEffectType.POISON);
                 player.removePotionEffect(PotionEffectType.WITHER);
