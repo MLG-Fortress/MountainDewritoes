@@ -45,22 +45,19 @@ public class Spaceship implements Listener
             @Override
             public void run()
             {
-                Vector twoD = direction.clone();
-                twoD.setY(0);
-                float angleToFlat = twoD.angle(direction);
+                Vector vector = direction;
 
-                Vector rotated2D = twoD.rotateAroundY(Math.PI / 2);
-                rotated2D.normalize();
-                direction.rotateAroundNonUnitAxis(rotated2D, angleToFlat); //resets to 0 pitch
-                direction.rotateAroundNonUnitAxis(rotated2D, pitch);
+                if (pitch != 0)
+                {
+                    Vector rotated2D = vector.clone().rotateAroundY(Math.PI / 2);
+                    rotated2D.setY(0);
+                    rotated2D.normalize();
+                    vector = vector.clone().rotateAroundNonUnitAxis(rotated2D, pitch);
+                }
+
                 if (yaw != 0)
                     direction.rotateAroundY(yaw);
-                if (Double.isInfinite(direction.getX()))
-                    direction.setX(0);
-                if (Double.isInfinite(direction.getY()))
-                    direction.setY(0);
-                if (Double.isInfinite(direction.getZ()))
-                    direction.setZ(0);
+
                 vehicle.setVelocity(direction);
             }
         }.runTaskTimer(plugin, 1L, 1L);
@@ -83,16 +80,16 @@ public class Spaceship implements Listener
             switch (key)
             {
                 case LEFT:
-                    yaw = Math.PI / 130;
+                    yaw = Math.PI / 110;
                     break;
                 case RIGHT:
-                    yaw = Math.PI / -130;
+                    yaw = Math.PI / -110;
                     break;
                 case FORWARD:
-                    pitch = Math.PI / 4;
+                    pitch = Math.PI / 3;
                     break;
                 case BACK:
-                    pitch = Math.PI / -4;
+                    pitch = Math.PI / -3;
                     break;
                 case JUMP:
                     //vector.zero();
