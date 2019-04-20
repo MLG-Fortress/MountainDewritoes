@@ -22,18 +22,19 @@ public class Spaceship implements Listener
 {
     private final Vehicle vehicle;
     private Vector thrust = new Vector();
-    private Vector direction = new Vector(.2, 0, 0);
+    private Vector direction;
     private double pitch = 0;
     private double yaw = 0;
     private BukkitTask engine;
     private boolean brakes = false;
-    private double acceleration = 1.01;
-    private double deceleration = 0.9;
+    private double acceleration = 1.05;
+    private double deceleration = 0.95;
     private double maxSpeedSquared = 0.25;
 
     public Spaceship(Plugin plugin, Vehicle vehicle)
     {
         this.vehicle = vehicle;
+        direction = vehicle.getLocation().getDirection().multiply(0.05);
         vehicle.setGravity(false);
 
         if (vehicle instanceof Minecart)
@@ -66,9 +67,6 @@ public class Spaceship implements Listener
                     rotated2D.normalize();
                     vector = vector.clone().rotateAroundNonUnitAxis(rotated2D, pitch);
                 }
-
-                for (Entity entity : vehicle.getPassengers())
-                    ((Player)entity).sendActionBar(vehicle.getVelocity().toString());
 
                 vehicle.setVelocity(vector);
             }
