@@ -116,7 +116,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
         Collections.reverse(entries);
         for (int i = 0; i < entries.size(); i++)
             if (i % 12 == 0)
-                entries.add(new TextComponent("\\p"));
+                entries.add(i, new TextComponent("\\p"));
         return entries;
     }
 
