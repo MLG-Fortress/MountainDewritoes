@@ -114,7 +114,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
         }
         entries.add(new TextComponent("    Log o' changes\n"));
         Collections.reverse(entries);
-        for (int i = 0; i < entries.size(); i++)
+        for (int i = 1; i < entries.size(); i++)
             if (i % 12 == 0)
                 entries.add(i, new TextComponent("\\p"));
         return entries;
