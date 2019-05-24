@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
+import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import net.awesomepowered.rotator.event.RotatorSpinEvent;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -95,5 +96,7 @@ public class AntiLag implements Listener
     private void onlySpinForPpl(RotatorSpinEvent event)
     {
         event.setCancelled(event.getRotator().getLocation().getWorld().getPlayers().isEmpty());
+        if (event.isCancelled())
+            DebugCommand.debug("well ok " + event.getRotator().getLocation());
     }
 }
