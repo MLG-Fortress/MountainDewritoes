@@ -54,10 +54,13 @@ public class GamemodeInventoryManager implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onChangeGamemode(PlayerGameModeChangeEvent event)
     {
+        if (event.getPlayer().isOp())
+            return;
+
         if (event.getNewGameMode() == GameMode.CREATIVE) //to creative
         {
             //If player is in a survival world (except prison) and is not op, deny creative gamemode
-            if (!event.getPlayer().hasPermission("md.develop"))
+            if (!event.getPlayer().hasPermission("md.develop") && instance.isSurvivalWorld(event.getPlayer().getWorld()))
             {
                 event.setCancelled(true);
                 return;
@@ -143,13 +146,12 @@ public class GamemodeInventoryManager implements Listener
         if (event.getPlayer().isOp())
             return;
 
-        //deny opening ender chest in non-survival worlds
-        if (!instance.isSurvivalWorld(player.getWorld()) && event.getInventory().getType() == InventoryType.ENDER_CHEST)
-        {
+        //deny opening ender chest in creative or non-survival worlds
+        if (event.getInventory().getType() == InventoryType.ENDER_CHEST && (event.getPlayer().getGameMode() == GameMode.CREATIVE || !instance.isSurvivalWorld(player.getWorld())))
             event.setCancelled(true);
-        }
 
-        //deny all inventory access in creative, unless the player is staff and is in a non-survival world
+        //deny all inventory access (sans crafting table) in creative, unless the player is staff and is in a non-survival world
+        //TODO this logic seems a tad convoluted
         else if (player.getGameMode() == GameMode.CREATIVE
                 && event.getInventory().getType() != InventoryType.CRAFTING
                 && (!player.hasPermission("mlgstaff") || !instance.isSurvivalWorld(event.getPlayer().getWorld())))
