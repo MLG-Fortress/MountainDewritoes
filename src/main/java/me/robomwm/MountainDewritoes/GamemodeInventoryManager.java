@@ -146,22 +146,23 @@ public class GamemodeInventoryManager implements Listener
         if (event.getPlayer().isOp())
             return;
 
-        //deny opening ender chest in creative or non-survival worlds
-        if (event.getInventory().getType() == InventoryType.ENDER_CHEST && (event.getPlayer().getGameMode() == GameMode.CREATIVE || !instance.isSurvivalWorld(player.getWorld())))
+        //deny opening ender chest while in creative gamemode or non-survival worlds
+        if (event.getInventory().getType() == InventoryType.ENDER_CHEST
+                && (event.getPlayer().getGameMode() == GameMode.CREATIVE || !instance.isSurvivalWorld(player.getWorld())))
             event.setCancelled(true);
 
-        //deny all inventory access (sans crafting table) in creative, unless the player is staff and is in a non-survival world
+        //deny all inventory access (sans crafting table) if in creative and in a survival world.
         //TODO this logic seems a tad convoluted
         else if (player.getGameMode() == GameMode.CREATIVE
-                && event.getInventory().getType() != InventoryType.CRAFTING
-                && (!player.hasPermission("mlgstaff") || !instance.isSurvivalWorld(event.getPlayer().getWorld())))
+                && instance.isSurvivalWorld(event.getPlayer().getWorld())
+                && event.getInventory().getType() != InventoryType.CRAFTING)
             event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
     private void onItemSpawn(EntityTeleportEvent event)
     {
-            event.setCancelled(instance.isSurvivalWorld(event.getFrom().getWorld()) != instance.isSurvivalWorld(event.getTo().getWorld()));
+        event.setCancelled(instance.isSurvivalWorld(event.getFrom().getWorld()) != instance.isSurvivalWorld(event.getTo().getWorld()));
     }
 
     //Drop item in creative = delete item
@@ -175,7 +176,7 @@ public class GamemodeInventoryManager implements Listener
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onItemFrameBreak(HangingBreakEvent event)
     {
         if (instance.isSurvivalWorld(event.getEntity().getWorld()))
