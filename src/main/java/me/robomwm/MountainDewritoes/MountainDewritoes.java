@@ -390,7 +390,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         Set<World> safeWorlds = new HashSet<>();
         safeWorlds.add(getServer().getWorld("mall"));
-        safeWorlds.add(getServer().getWorld("spawn"));
         safeWorlds.add(getServer().getWorld("prison"));
         safeWorlds.add(getServer().getWorld("firstjoin"));
         safeWorlds.add(getServer().getWorld("CreativeParkourMaps"));
@@ -413,7 +412,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        survivalWorlds.add(getServer().getWorld("maxiworld"));
 //        survivalWorlds.add(getServer().getWorld("wellworld"));
 
-        minigameWorlds.add(getServer().getWorld("spawn"));
 //        minigameWorlds.add(getServer().getWorld("minigames"));
 //        minigameWorlds.add(getServer().getWorld("bam"));
 //        minigameWorlds.add(getServer().getWorld("flatroom"));
