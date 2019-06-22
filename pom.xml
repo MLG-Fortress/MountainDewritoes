@@ -22,10 +22,6 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>valaria</id>
-            <url>https://repo.valaria.pw/repository/maven-public/</url>
-        </repository>
-        <repository>
             <id>minecrell</id>
             <url>https://repo.minecrell.net/snapshots</url>
         </repository>
@@ -113,7 +109,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -167,12 +163,6 @@
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>GrandioseAPI</artifactId>
             <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>pw.valaria</groupId>
-            <artifactId>bookutil</artifactId>
-            <version>1.2-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.minecrell</groupId>

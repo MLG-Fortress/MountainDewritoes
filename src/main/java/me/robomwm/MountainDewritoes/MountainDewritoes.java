@@ -73,7 +73,6 @@ import org.jibble.jmegahal.JMegaHal;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
-import pw.valaria.bookutil.BookUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -135,7 +134,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
     private CustomItemRecipes customItemRecipes;
-    private BookUtil bookUtil;
 
     public GrandioseAPI getGrandioseAPI()
     {
@@ -144,8 +142,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public void openBook(Player player, ItemStack book)
     {
-        if (bookUtil != null)
-            bookUtil.openBook(player, book);
+        player.openBook(book);
     }
 
     public CustomItemRecipes getCustomItemRecipes()
@@ -376,15 +373,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         setupEconomy(this);
         tipCommand = new TipCommand(this);
         customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
-        try
-        {
-            bookUtil = new BookUtil(this);
-        }
-        catch (Throwable rock)
-        {
-            getLogger().severe("BookUtil is out of date.");
-            rock.printStackTrace();
-        }
 
         //Initialize commonly-used sets
 

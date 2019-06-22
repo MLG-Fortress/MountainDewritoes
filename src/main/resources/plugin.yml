@@ -3,7 +3,7 @@ version: ${git.commit.id.describe-short}
 website: https://robomwm.com
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
-api-version: 1.13
+api-version: '1.14'
 depend:
 - CustomItemRecipes
 - GrandioseAPI
