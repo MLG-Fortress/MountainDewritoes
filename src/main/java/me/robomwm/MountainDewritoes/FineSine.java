@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +48,8 @@ public class FineSine implements Listener
             return;
         if (event.getClickedBlock() == null)
             return;
-        if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN)
+        if (!Tag.SIGNS.isTagged(event.getClickedBlock().getType()) &&
+                !Tag.WALL_SIGNS.isTagged(event.getClickedBlock().getType()))
             return;
         Sign sine = (Sign)event.getClickedBlock().getState();
         if (!sine.getLine(0).equals(FINE_SINE_LABEL))

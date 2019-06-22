@@ -101,8 +101,8 @@ public class TheMidnightPortalToAnywhere implements Listener
         Location location = randomChunkMappedLocation(event.getFrom());
         if (location == null)
             return;
-        event.useTravelAgent(true);
-        event.getPortalTravelAgent().setSearchRadius(36);
+//        event.useTravelAgent(true);
+//        event.getPortalTravelAgent().setSearchRadius(36);
         event.setTo(location);
     }
 
@@ -112,8 +112,8 @@ public class TheMidnightPortalToAnywhere implements Listener
         Location location = randomChunkMappedLocation(event.getFrom());
         if (location == null)
             return;
-        event.useTravelAgent(true);
-        event.getPortalTravelAgent().setSearchRadius(36);
+//        event.useTravelAgent(true);
+//        event.getPortalTravelAgent().setSearchRadius(36);
         event.setTo(location);
     }
 
