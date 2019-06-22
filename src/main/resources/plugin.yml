@@ -57,7 +57,7 @@ commands:
   settings:
     aliases: [setting, option, options]
   view:
-    aliases: [viewdistance, distance, vd, renderdistance, render]
+    #aliases: [viewdistance, distance, vd, renderdistance, render]
     usage: "/view [chunk radius] - Modifies view distance. Radius must be between 3-16. Also note that despite what you set here, you will still need to modify the render distance in Options > Video settings to see further."
   changelog:
     aliases: [log, news, new, updates, whatsnew, changes]

@@ -155,21 +155,21 @@ public class JoinMessages implements Listener
                     return;
                 event.getPlayer().setMetadata("MD_DECLINED", new FixedMetadataValue(instance, true));
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
-                event.getPlayer().setViewDistance(grandPlayer.getYaml().getInt("viewDistance", 8));
+//                event.getPlayer().setViewDistance(grandPlayer.getYaml().getInt("viewDistance", 8));
                 break;
             case SUCCESSFULLY_LOADED:
                 event.getPlayer().removeMetadata("MD_ACCEPTED", instance);
                 event.getPlayer().removeMetadata("MD_JOINING", instance);
                 event.getPlayer().setMetadata("MD_LOADED", new FixedMetadataValue(instance, true));
                 //instance.getTitleManager().removeTitle(event.getPlayer(), 0);
-                new BukkitRunnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        player.setViewDistance(grandPlayer.getYaml().getInt("viewDistance", 8));
-                    }
-                }.runTaskLater(instance, 20L);
+//                new BukkitRunnable()
+//                {
+//                    @Override
+//                    public void run()
+//                    {
+//                        player.setViewDistance(grandPlayer.getYaml().getInt("viewDistance", 8));
+//                    }
+//                }.runTaskLater(instance, 20L);
                 break;
         }
     }

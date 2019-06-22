@@ -251,7 +251,7 @@ public class MinedownBookCommand implements CommandExecutor
 
         bookMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅ ","/help","Back to /menu"),
                 player.getDisplayName() + org.bukkit.ChatColor.BLACK + "'s settings\n",
-                LazyText.command("View distance: " + player.getViewDistance(), "/view"), "\n",
+                //LazyText.command("View distance: " + player.getViewDistance(), "/view"), "\n",
                 LazyText.command("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"), "\n",
                 LazyText.command("Music: on", "", "Not implemented yet"), "\n",
                 LazyText.command("SneakPickup: " + getOnOff(player.hasMetadata("SNEAKPICKUP")), "/sneakpickup", "/sneakpickup\nPick up items only when sneaking."), "\n"
