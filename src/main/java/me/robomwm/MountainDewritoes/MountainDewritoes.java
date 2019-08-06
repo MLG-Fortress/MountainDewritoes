@@ -680,18 +680,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     }
 
     /**
-     * No AI required for mobs in non-survival worlds
-     * @param event
-     */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    private void onCreatureSpawn(CreatureSpawnEvent event)
-    {
-        if (event.getEntity().getWorld().getPVP())
-            return;
-        event.getEntity().setAI(false);
-    }
-
-    /**
      * Convenience method
      * @param min
      * @param max
