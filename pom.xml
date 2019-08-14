@@ -204,6 +204,12 @@
             <version>1.7</version>
         </dependency>
         <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.AwesomePowered</groupId>
             <artifactId>RotatoR</artifactId>
             <version>737e9d7ce4</version>
