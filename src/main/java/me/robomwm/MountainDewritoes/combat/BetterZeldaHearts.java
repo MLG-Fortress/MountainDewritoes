@@ -1,7 +1,7 @@
 package me.robomwm.MountainDewritoes.combat;
 
 import com.robomwm.customitemrecipes.CustomItemRecipes;
-import com.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutils.UsefulUtils;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -83,7 +83,7 @@ public class BetterZeldaHearts implements Listener
         if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
             return;
 
-        if (!event.getEntity().hasAI() || !UsefulUtil.isMonster(event.getEntity()))
+        if (!event.getEntity().hasAI() || !UsefulUtils.isMonster(event.getEntity()))
             return;
         LivingEntity entity = event.getEntity();
         if (entity.getKiller() == null)

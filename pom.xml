@@ -59,24 +59,20 @@
                     <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>com.github.RoboMWM:UsefulUtil</include>
+                            <include>com.github.RoboMWM:UsefulUtils</include>
                             <include>pw.valaria:bookutil</include>
                             <include>de.themoep:minedown</include>
                             <include>org.apache.commons:commons-text</include>
+                            <include>org.bstats:bstats-bukkit</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>me.robomwm.usefulutil</pattern>
-                            <shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>pw.valaria.bookutil</pattern>
-                            <shadedPattern>me.robomwm.MountainDewritoes</shadedPattern>
-                        </relocation>
-                        <relocation>
+                            <pattern>org.bstats</pattern>
                             <pattern>de.themoep.minedown</pattern>
-                            <shadedPattern>me.robomwm.MountainDewritoes.minedown</shadedPattern>
+                            <shadedPattern>me.robomwm.MountainDewritoes.shaded</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -109,7 +105,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.14.2-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -138,8 +134,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.RoboMWM</groupId>
-            <artifactId>UsefulUtil</artifactId>
-            <version>3.1</version>
+            <artifactId>UsefulUtils</artifactId>
+            <version>4.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

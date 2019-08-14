@@ -1,7 +1,7 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
 import com.destroystokyo.paper.Title;
-import com.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutils.UsefulUtils;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -47,7 +47,7 @@ public class HitSound implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onPlayerDamage(EntityDamageByEntityEvent event)
     {
-        Entity damager = UsefulUtil.getSourceAttacker(event, false);
+        Entity damager = UsefulUtils.getSourceAttacker(event, false);
         //Check if attacker is a player or if damage was caused due to a projectile or if self-damage
         if (damager == null || damager.getType() != EntityType.PLAYER || damager == event.getEntity())
             return;
@@ -62,7 +62,7 @@ public class HitSound implements Listener
     @EventHandler
     void onEntityDeath(EntityDeathEvent event)
     {
-        Entity killerEntity = UsefulUtil.getKiller(event);
+        Entity killerEntity = UsefulUtils.getKiller(event);
         if (killerEntity == null || killerEntity.getType() != EntityType.PLAYER)
             return;
 

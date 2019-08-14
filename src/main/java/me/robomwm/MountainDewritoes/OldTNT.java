@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
-import com.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutils.UsefulUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -50,7 +50,7 @@ public class OldTNT implements Listener
             tnt.setY(tnt.getY() + 0.6D);
             tnt.setZ(tnt.getZ() + 0.5D);
 
-            UsefulUtil.tntSetSource(tnt.getWorld().spawn(tnt, TNTPrimed.class), event.getPlayer());
+            UsefulUtils.tntSetSource(tnt.getWorld().spawn(tnt, TNTPrimed.class), event.getPlayer());
             event.setCancelled(true);
             event.getBlock().setType(Material.AIR);
         }
@@ -70,6 +70,6 @@ public class OldTNT implements Listener
             player = plugin.getServer().getPlayer(tnt.getMetadata("CS_pName").get(0).asString());
         else
             return;
-        UsefulUtil.tntSetSource(tnt, player);
+        UsefulUtils.tntSetSource(tnt, player);
     }
 }

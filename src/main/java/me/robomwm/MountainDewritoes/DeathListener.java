@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
-import com.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutils.UsefulUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -125,7 +125,7 @@ public class DeathListener implements Listener
             instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), message.toString() + "But uh we dont no how???!?!? spoopy...");
         else
         {
-            Entity killer = UsefulUtil.getKiller(event);
+            Entity killer = UsefulUtils.getKiller(event);
 
             if (killer != null)
             {

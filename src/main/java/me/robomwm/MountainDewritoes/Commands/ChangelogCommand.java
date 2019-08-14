@@ -1,6 +1,7 @@
 package me.robomwm.MountainDewritoes.Commands;
 
-import com.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutils.FileUtils;
+import com.robomwm.usefulutils.UsefulUtils;
 import de.themoep.minedown.MineDown;
 import me.robomwm.MountainDewritoes.Events.PlayerLoadedWorldEvent;
 import me.robomwm.MountainDewritoes.LazyText;
@@ -21,6 +22,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -45,7 +47,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
     {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        storage = UsefulUtil.loadOrCreateYamlFile(plugin, "changelog.data");
+        storage = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "changelog.data"));
         plugin.getCommand("changelog").setExecutor(this);
         plugin.getCommand("newlog").setExecutor(this);
         plugin.getCommand("deletelog").setExecutor(this);
@@ -63,7 +65,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
             String thing = String.join(" ", args);
             String time = String.valueOf(System.currentTimeMillis());
             storage.set(time, thing);
-            UsefulUtil.saveYamlFile(plugin, "changelog.data", storage);
+            FileUtils.saveStringToFile(plugin, "changelog.data", storage.saveToString());
             sender.sendMessage(time + ": " + thing);
             return true;
         }
@@ -83,7 +85,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
             if (!sender.isOp() || args.length == 0)
                 return false;
             storage.set(String.valueOf(args[0]), null);
-            UsefulUtil.saveYamlFile(plugin, "changelog.data", storage);
+            FileUtils.saveStringToFile(plugin, "changelog.data", storage.saveToString());
             return true;
         }
         return false;
@@ -103,9 +105,9 @@ public class ChangelogCommand implements Listener, CommandExecutor
         List<BaseComponent> entries = new ArrayList<>();
         for (String key : storage.getKeys(false))
         {
-            TextComponent component = new TextComponent(UsefulUtil.formatTime((System.currentTimeMillis() - Long.valueOf(key)) / 1000, 0) + " ago \n");
+            TextComponent component = new TextComponent(UsefulUtils.formatTime((System.currentTimeMillis() - Long.parseLong(key)) / 1000, 0) + " ago \n");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/changelog " + key));
-            if (Long.valueOf(key) > time)
+            if (Long.parseLong(key) > time)
                 component.setColor(ChatColor.AQUA);
             else
                 component.setColor(ChatColor.DARK_AQUA);
@@ -145,7 +147,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
                 int newChanges = 0;
                 for (String key : keys)
                 {
-                    if (Long.valueOf(key) > lastRead)
+                    if (Long.parseLong(key) > lastRead)
                         newChanges++;
                 }
                 if (newChanges > 0)

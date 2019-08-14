@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
-import com.robomwm.usefulutil.UsefulUtil;
+import com.robomwm.usefulutils.UsefulUtils;
 import me.robomwm.MountainDewritoes.Events.MonsterTargetPlayerEvent;
 import me.robomwm.MountainDewritoes.Events.TransactionEvent;
 import org.bukkit.ChatColor;
@@ -261,9 +261,9 @@ public class NSA implements Listener
     @SuppressWarnings("unchecked")
     private void onEntityDeath(EntityDeathEvent event)
     {
-        if (event.getEntityType() != EntityType.PLAYER && !UsefulUtil.isMonster(event.getEntity()))
+        if (event.getEntityType() != EntityType.PLAYER && !UsefulUtils.isMonster(event.getEntity()))
             return;
-        Entity killerEntity = UsefulUtil.getKiller(event);
+        Entity killerEntity = UsefulUtils.getKiller(event);
         if (killerEntity == null || killerEntity.getType() != EntityType.PLAYER)
             return;
 
@@ -345,7 +345,7 @@ public class NSA implements Listener
             if (transaction.getAmount() < 0)
                 prefix = ChatColor.RED.toString();
             listOfTransactions.append(prefix + instance.getEconomy().format(transaction.getAmount())
-                    + " " + ChatColor.GRAY + UsefulUtil.formatTime(UsefulUtil.getEpoch() - transaction.getSeconds()) + " ago");
+                    + " " + ChatColor.GRAY + UsefulUtils.formatTime(UsefulUtils.getCurrentSeconds() - transaction.getSeconds()) + " ago");
             listOfTransactions.append("\n");
         }
         return listOfTransactions.toString();
