@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.combat;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -10,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
@@ -44,10 +46,20 @@ public class BetterNoDamageTicks implements Listener
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     private void onEntitySpawn(CreatureSpawnEvent event)
     {
         event.getEntity().setMaximumNoDamageTicks(0);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onChunkLoadEntity(ChunkLoadEvent event)
+    {
+        for (Entity entity : event.getChunk().getEntities())
+        {
+            if (entity instanceof LivingEntity)
+                ((LivingEntity)entity).setMaximumNoDamageTicks(0);
+        }
     }
 
     @EventHandler
