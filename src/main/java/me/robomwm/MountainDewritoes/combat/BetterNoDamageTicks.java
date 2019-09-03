@@ -102,6 +102,10 @@ public class BetterNoDamageTicks implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void setImmunity(EntityDamageEvent event)
     {
+        if (event.getEntity() instanceof LivingEntity)
+            if (((LivingEntity) event.getEntity()).getMaximumNoDamageTicks() > 0)
+                instance.getLogger().warning(event.getEntityType().name() + " has max no damage ticks of " + ((LivingEntity) event.getEntity()).getMaximumNoDamageTicks() + " at " + event.getEntity().getLocation());
+
         long ticksToExpire;
 
         switch (event.getCause())
