@@ -199,7 +199,7 @@
         <dependency>
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>PrettySimpleShop</artifactId>
-            <version>1.4.1</version>
+            <version>1.6.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
