@@ -72,10 +72,14 @@
                     </artifactSet>
                     <relocations>
                         <relocation>
-                            <pattern>me.robomwm.usefulutil</pattern>
-                            <pattern>pw.valaria.bookutil</pattern>
-                            <pattern>org.bstats</pattern>
+                            <pattern>com.robomwm.usefulutils</pattern>
+                            <shadedPattern>me.robomwm.MountainDewritoes.shaded</shadedPattern>
+                            <pattern>org.bstats.</pattern>
                             <pattern>de.themoep.minedown</pattern>
+                            <shadedPattern>me.robomwm.MountainDewritoes.shaded</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.robomwm.usefulutils</pattern>
                             <shadedPattern>me.robomwm.MountainDewritoes.shaded</shadedPattern>
                         </relocation>
                     </relocations>

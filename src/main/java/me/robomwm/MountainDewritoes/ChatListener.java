@@ -51,7 +51,7 @@ public class ChatListener implements Listener
         filterThingy.add(Pattern.compile("(?i)\\bass\\b"));
         filterThingy.add(Pattern.compile("(?i)\\bcum\\b"));
         filterThingy.add(Pattern.compile("(?i)f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+|f+u+c+"));
-        filterThingy.add(Pattern.compile("(?i)cunt|whore|fag|slut|queer|bit?ch|bi(c|s)h|bastard|damn|damm|danm|\\bcrap|shit"));
+        filterThingy.add(Pattern.compile("(?i)cunt|whore|fag|slut|queer|bit?ch|bi(c|s)h|bastard|damn|damm|danm|\\bcrap|shit|pussy"));
         filterThingy.add(Pattern.compile("(?i)\\bd\\s*i\\s*c?\\s*k\\b|\\bp\\s*e\\s*n(\\s|\\.)*i\\s*s\\b"));
         filterThingy.add(Pattern.compile("(?i)\\bb\\s*o\\s*o\\s*b\\b|\\bb\\s*r\\s*e\\s*a\\s*s\\s*t(\\s*s)?\\b|\\st\\s*i\\s*t(\\s*s|\\s*t\\s*y|\\s*t\\s*i\\s*e\\s*s)?\\b"));
         filterThingy.add(Pattern.compile("(?i)\\bn\\s*i\\s*g\\s*(g\\s*)?(a|a\\s*h|e\\s*r)?\\b"));
