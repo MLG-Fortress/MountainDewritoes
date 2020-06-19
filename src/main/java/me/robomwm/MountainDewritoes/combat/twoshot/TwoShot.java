@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes.combat.twoshot;
 
-import com.robomwm.customitemrecipes.CustomItemRecipes;
+import com.robomwm.customitemregistry.CustomItemRegistry;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class TwoShot implements Listener
 {
     private MountainDewritoes mountainDewritoes;
-    private CustomItemRecipes customItems;
+    private CustomItemRegistry customItems;
     private Map<String, WeaponProperties> weapons = new HashMap<>();
 
     public TwoShot(MountainDewritoes plugin)
@@ -33,7 +33,7 @@ public class TwoShot implements Listener
 
         try
         {
-            this.customItems = plugin.getCustomItemRecipes();
+            this.customItems = plugin.getCustomItemRegistry();
             File folder = new File(plugin.getDataFolder() + File.separator + "weapons");
             folder.mkdir();
             for (File file : folder.listFiles()) //TODO: ignore non .yml files

@@ -1,6 +1,6 @@
 package me.robomwm.MountainDewritoes.combat;
 
-import com.robomwm.customitemrecipes.CustomItemRecipes;
+import com.robomwm.customitemregistry.CustomItemRegistry;
 import com.robomwm.usefulutils.UsefulUtils;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.milkbowl.vault.economy.Economy;
@@ -22,7 +22,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -42,7 +41,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BetterZeldaHearts implements Listener
 {
-    private CustomItemRecipes customItems;
+    private CustomItemRegistry customItems;
     private MountainDewritoes instance;
     private Economy economy;
 
@@ -51,7 +50,7 @@ public class BetterZeldaHearts implements Listener
         this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.economy = economy;
-        customItems = plugin.getCustomItemRecipes();
+        customItems = plugin.getCustomItemRegistry();
 
         ItemStack heart = new ItemStack(Material.RED_DYE);
         ItemMeta heartMeta = heart.getItemMeta();
