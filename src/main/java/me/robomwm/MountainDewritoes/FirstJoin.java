@@ -4,10 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,13 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -102,9 +96,9 @@ public class FirstJoin implements Listener
 
         if (!event.getPlayer().hasPlayedBefore())
         {
-            event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLD_BOOTS"));
-            event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("The_Gold_Plate"));
-            event.getPlayer().getInventory().addItem(plugin.getCustomItemRecipes().getItem("Coal_Pickaxe"));
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemRegistry().getItem("GOLD_BOOTS"));
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemRegistry().getItem("The_Gold_Plate"));
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemRegistry().getItem("Coal_Pickaxe"));
 
             //Spawn mobs in cellar, if none exist in it.
 //            for (Entity entity : cellar.getChunk().getEntities())
@@ -189,7 +183,7 @@ public class FirstJoin implements Listener
             {
                 case "leggings":
 
-                    player.getInventory().addItem(plugin.getCustomItemRecipes().getItem("GOLDEN_LEGGINGS"));
+                    player.getInventory().addItem(plugin.getCustomItemRegistry().getItem("GOLDEN_LEGGINGS"));
                     break;
             }
             return;

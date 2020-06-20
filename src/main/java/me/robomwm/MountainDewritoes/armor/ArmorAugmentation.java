@@ -302,7 +302,7 @@ public class ArmorAugmentation implements Listener
 //        NSA.setItemVersion(itemMeta, 2, 1);
 //        itemStack.setItemMeta(itemMeta);
 //    }
-//        CustomItemRecipes customItems = plugin.getCustomItemRecipes();
+//        CustomItemRegistry customItems = plugin.getCustomItemRegistry();
 //
 //        List<String> bootsLore = new ArrayList<>();
 //        bootsLore.add("The standard gravity-defying doublejump");

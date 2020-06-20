@@ -1,7 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
-import com.robomwm.customitemrecipes.CustomItemRecipes;
+import com.robomwm.customitemregistry.CustomItemRegistry;
 import com.robomwm.grandioseapi.GrandioseAPI;
 import info.gomeow.chester.Chester;
 import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
@@ -57,7 +57,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -78,10 +77,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -133,7 +130,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private SimpleClansListener simpleClansListener;
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
-    private CustomItemRecipes customItemRecipes;
+    private CustomItemRegistry customItemRegistry;
 
     public GrandioseAPI getGrandioseAPI()
     {
@@ -145,9 +142,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         player.openBook(book);
     }
 
-    public CustomItemRecipes getCustomItemRecipes()
+    public CustomItemRegistry getCustomItemRegistry()
     {
-        return customItemRecipes;
+        return customItemRegistry;
     }
 
     public TitleManager getTitleManager()
@@ -372,7 +369,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         setupEconomy(this);
         tipCommand = new TipCommand(this);
-        customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
+        customItemRegistry = (CustomItemRegistry)getServer().getPluginManager().getPlugin("CustomItemRegistry");
 
         //Initialize commonly-used sets
 
