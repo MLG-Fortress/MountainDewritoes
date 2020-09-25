@@ -146,7 +146,11 @@ public class LazyText
 
     public static BookMeta getBookMeta()
     {
-        return (BookMeta)(new ItemStack(Material.WRITTEN_BOOK).getItemMeta());
+        BookMeta meta = (BookMeta)(new ItemStack(Material.WRITTEN_BOOK).getItemMeta());
+        meta.setTitle("BookGUI");
+        meta.setAuthor("RoboMWM");
+        meta.setGeneration(BookMeta.Generation.ORIGINAL);
+        return meta;
     }
 
     public static ItemStack getBook(BookMeta bookMeta)

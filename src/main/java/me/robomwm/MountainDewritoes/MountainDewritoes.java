@@ -137,6 +137,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         return (GrandioseAPI)getServer().getPluginManager().getPlugin("GrandioseAPI");
     }
 
+    @Deprecated
     public void openBook(Player player, ItemStack book)
     {
         player.openBook(book);
