@@ -91,7 +91,15 @@ public class ReverseOsmosis implements Listener
                 if (steerVehicle.isUnmount())
                     keysPressed.add(Key.SNEAK);
 
-                plugin.getServer().getPluginManager().callEvent(new PlayerSteerVehicleEvent(event.getPlayer(), keysPressed));
+                new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        plugin.getServer().getPluginManager().callEvent(new PlayerSteerVehicleEvent(event.getPlayer(), keysPressed));
+                    }
+                }.runTask(plugin);
+
             }
         });
     }
