@@ -60,7 +60,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
     {
         if (cmd.getName().equalsIgnoreCase("newlog"))
         {
-            if (!sender.isOp())
+            if (!sender.hasPermission("md.newlog"))
                 return false;
             String thing = String.join(" ", args);
             String time = String.valueOf(System.currentTimeMillis());
