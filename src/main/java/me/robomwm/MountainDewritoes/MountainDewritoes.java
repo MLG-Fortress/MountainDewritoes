@@ -33,6 +33,7 @@ import me.robomwm.MountainDewritoes.combat.DummerEnderman;
 import me.robomwm.MountainDewritoes.combat.NoKnockback;
 import me.robomwm.MountainDewritoes.combat.twoshot.TwoShot;
 import me.robomwm.MountainDewritoes.hotmenu.HotMenu;
+import me.robomwm.MountainDewritoes.lab.SpawnSomeMobs;
 import me.robomwm.MountainDewritoes.spaceship.SpaceshipPilot;
 import net.milkbowl.vault.economy.Economy;
 import net.minecrell.serverlistplus.core.ServerListPlusCore;
@@ -464,6 +465,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SpaceshipPilot(this);
         new Arena(this);
         new TwoShot(this);
+        new SpawnSomeMobs(this, getServer().getWorld("mall"));
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
