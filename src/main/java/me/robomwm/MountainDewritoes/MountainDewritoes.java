@@ -401,46 +401,35 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         if (getServer().getWorld("world") == null)
         {
-            dispatchCommand("mv delete world");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "world" + " " + "normal" + " -t " + "amplified");
         }
         if (getServer().getWorld("world_nether") == null)
         {
-            dispatchCommand("mv delete world_nether");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "world_nether" + " " + "nether" + " -t " + "amplified");
         }
         if (getServer().getWorld("world_the_end") == null)
         {
-            dispatchCommand("mv delete world_the_end");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "world_the_end" + " " + "end" + " -t " + "amplified");
         }
         if (getServer().getWorld("cityworld") == null)
         {
-            dispatchCommand("mv delete cityworld");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "cityworld" + " " + "normal" + " -g " + "cityworld");
         }
         if (getServer().getWorld("cityworld_nether") == null)
         {
-            dispatchCommand("mv delete cityworld_nether");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "cityworld_nether" + " " + "nether" + " -g " + "cityworld");
         }
         if (getServer().getWorld("maxiworld") == null)
         {
-            dispatchCommand("mv delete maxiworld");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "maxiworld" + " " + "normal" + " -g " + "maxiworld");
         }
         if (getServer().getWorld("wellworld") == null)
         {
-            dispatchCommand("mv delete wellworld");
-            dispatchCommand("mvconfirm");
             dispatchCommand("mv create " + "wellworld" + " " + "normal" + " -g " + "wellworld");
         }
+
+        if (getServer().getWorld("dungeonmaze") == null)
+            dispatchCommand("mv create " + "dungeonmaze" + " " + "normal" + " -g " + "dungeonmaze");
 
 //        minigameWorlds.add(getServer().getWorld("minigames"));
 //        minigameWorlds.add(getServer().getWorld("bam"));
