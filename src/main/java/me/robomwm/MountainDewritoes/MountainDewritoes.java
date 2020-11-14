@@ -399,6 +399,49 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        survivalWorlds.add(getServer().getWorld("maxiworld"));
 //        survivalWorlds.add(getServer().getWorld("wellworld"));
 
+        if (getServer().getWorld("world") == null)
+        {
+            dispatchCommand("mv delete world");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "world" + "normal" + " -t " + "amplified");
+        }
+        if (getServer().getWorld("world_nether") == null)
+        {
+            dispatchCommand("mv delete world_nether");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "world_nether" + "nether" + " -t " + "amplified");
+        }
+        if (getServer().getWorld("world_the_end") == null)
+        {
+            dispatchCommand("mv delete world_the_end");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "world_the_end" + "end" + " -t " + "amplified");
+        }
+        if (getServer().getWorld("cityworld") == null)
+        {
+            dispatchCommand("mv delete cityworld");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "cityworld" + "normal" + " -g " + "cityworld");
+        }
+        if (getServer().getWorld("cityworld_nether") == null)
+        {
+            dispatchCommand("mv delete cityworld_nether");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "cityworld_nether" + "nether" + " -g " + "cityworld");
+        }
+        if (getServer().getWorld("maxiworld") == null)
+        {
+            dispatchCommand("mv delete maxiworld");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "maxiworld" + "normal" + " -g " + "maxiworld");
+        }
+        if (getServer().getWorld("wellworld") == null)
+        {
+            dispatchCommand("mv delete wellworld");
+            dispatchCommand("mvconfirm");
+            dispatchCommand("mv create " + "wellworld" + "normal" + " -g " + "wellworld");
+        }
+
 //        minigameWorlds.add(getServer().getWorld("minigames"));
 //        minigameWorlds.add(getServer().getWorld("bam"));
 //        minigameWorlds.add(getServer().getWorld("flatroom"));
@@ -423,8 +466,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         }
 
-//        if (getServer().getWorld("wellworld") != null)
-//            getServer().getWorld("wellworld").getWorldBorder().setSize(10000);
         //getServer().getWorld("firstjoin").setKeepSpawnInMemory(true); //TODO: revert when paper fixes https://github.com/PaperMC/Paper/issues/4693
 
         //Classes other classes might want to use
@@ -527,6 +568,20 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         for (String key : usedMetadata.keySet())
             for (Metadatable target : usedMetadata.get(key))
                 target.removeMetadata(key, this);
+    }
+
+    public void dispatchCommand(String command)
+    {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+                System.out.println("Executing command from " + e.getClass().getSimpleName() + "#" + e.getMethodName() + "@" + e.getLineNumber() + ":" + command);
+                getServer().dispatchCommand(getServer().getConsoleSender(), command);
+            }
+        }.runTask(this);
     }
 
     /*Convenience methods that rely on soft dependencies*/
