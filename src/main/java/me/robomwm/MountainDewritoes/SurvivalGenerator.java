@@ -60,11 +60,14 @@ public class SurvivalGenerator extends ChunkGenerator
     {
         int regionX = chunkX / 32;
         int regionZ = chunkZ / 32;
-
         int section = regionX + regionZ; //another lazy name except this one idk what I should name it
+        StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+        System.out.println("MD: x" + chunkX + " z:" + chunkZ + " section:" + section + " trace:" + e.getClass().getSimpleName() + "#" + e.getMethodName() + "@" + e.getLineNumber());
+
         if (GeneratorPluginNames.length <= section)
             return null;
 
+        System.out.println("MD: using:" + GeneratorPluginNames[section]);
         return generators.get(GeneratorPluginNames[section]);
     }
 

@@ -400,37 +400,18 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        survivalWorlds.add(getServer().getWorld("maxiworld"));
 //        survivalWorlds.add(getServer().getWorld("wellworld"));
 
-        if (getServer().getWorld("world") == null)
-        {
-            dispatchCommand("mv create " + "world" + " " + "normal" + " -t " + "amplified");
-        }
-        if (getServer().getWorld("world_nether") == null)
-        {
-            dispatchCommand("mv create " + "world_nether" + " " + "nether" + " -t " + "amplified");
-        }
-        if (getServer().getWorld("world_the_end") == null)
-        {
-            dispatchCommand("mv create " + "world_the_end" + " " + "end" + " -t " + "amplified");
-        }
-        if (getServer().getWorld("cityworld") == null)
-        {
-            dispatchCommand("mv create " + "cityworld" + " " + "normal" + " -g " + "cityworld");
-        }
-        if (getServer().getWorld("cityworld_nether") == null)
-        {
-            dispatchCommand("mv create " + "cityworld_nether" + " " + "nether" + " -g " + "cityworld");
-        }
-        if (getServer().getWorld("maxiworld") == null)
-        {
-            dispatchCommand("mv create " + "maxiworld" + " " + "normal" + " -g " + "maxiworld");
-        }
-        if (getServer().getWorld("wellworld") == null)
-        {
-            dispatchCommand("mv create " + "wellworld" + " " + "normal" + " -g " + "wellworld");
-        }
-
-        if (getServer().getWorld("dungeonmaze") == null)
-            dispatchCommand("mv create " + "dungeonmaze" + " " + "normal" + " -g " + "dungeonmaze");
+//        if (getServer().getWorld("world") == null)
+//        {
+//            dispatchCommand("mv create " + "world" + " " + "normal" + " -t " + "amplified -g MountainDewritoes");
+//        }
+//        if (getServer().getWorld("world_nether") == null)
+//        {
+//            dispatchCommand("mv create " + "world_nether" + " " + "nether" + " -t " + "amplified -g MountainDewritoes");
+//        }
+//        if (getServer().getWorld("world_the_end") == null)
+//        {
+//            dispatchCommand("mv create " + "world_the_end" + " " + "end" + " -t " + "amplified -g MountainDewritoes");
+//        }
 
 //        minigameWorlds.add(getServer().getWorld("minigames"));
 //        minigameWorlds.add(getServer().getWorld("bam"));
