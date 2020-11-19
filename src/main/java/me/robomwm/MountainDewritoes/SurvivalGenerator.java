@@ -60,7 +60,13 @@ public class SurvivalGenerator extends ChunkGenerator
     {
         int regionX = chunkX / 32;
         int regionZ = chunkZ / 32;
-        int section = regionX + regionZ; //another lazy name except this one idk what I should name it
+
+        if (chunkX < 0)
+            regionX--;
+        if (regionZ < 0)
+            regionZ--;
+
+        int section = Math.abs(regionX + regionZ); //another lazy name except this one idk what I should name it
         StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         System.out.println("MD: x" + chunkX + " z:" + chunkZ + " regionX:" + regionX + " regionZ:" + regionZ + " section:" + section + " trace:" + e.getClassName() + "#" + e.getMethodName() + "@" + e.getLineNumber());
 
