@@ -62,6 +62,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.Metadatable;
@@ -546,6 +547,22 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                 serverDoneLoading = true;
             }
         }.runTask(this);
+    }
+
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
+    {
+        String[] worldNameSplit = worldName.split("_");
+        String suffix = worldNameSplit[worldNameSplit.length - 1];
+        switch (suffix)
+        {
+            case "nether":
+                return new SurvivalGenerator(this, worldName, id); //TODO
+            case "end":
+                return new SurvivalGenerator(this, worldName, id); //TODO
+            default:
+                return new SurvivalGenerator(this, worldName, id);
+        }
     }
 
     public void onDisable()
