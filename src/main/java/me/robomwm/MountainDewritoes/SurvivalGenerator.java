@@ -6,16 +6,13 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Created on 11/18/2020.
@@ -24,12 +21,15 @@ import java.util.Set;
  */
 public class SurvivalGenerator extends ChunkGenerator
 {
+    private Logger logger;
+
     private String[] GeneratorPluginNames = new String[] {"CityWorld", "WellWorld", "MaxiWorld", "DungeonMaze"};
 
     Map<String, ChunkGenerator> generators = new HashMap<>();
 
     public SurvivalGenerator(MountainDewritoes plugin, String worldName, String id)
     {
+        this.logger = plugin.getLogger();
         PluginManager pluginManager = plugin.getServer().getPluginManager();
 
         for (String pluginName : GeneratorPluginNames)
@@ -68,15 +68,15 @@ public class SurvivalGenerator extends ChunkGenerator
 
         int section = Math.abs(regionX + regionZ); //another lazy name except this one idk what I should name it
         StackTraceElement e = Thread.currentThread().getStackTrace()[2];
-        System.out.println("MD: x" + chunkX + " z:" + chunkZ + " regionX:" + regionX + " regionZ:" + regionZ + " section:" + section + " trace:" + e.getClassName() + "#" + e.getMethodName() + "@" + e.getLineNumber());
+        logger.info("MD: x" + chunkX + " z:" + chunkZ + " regionX:" + regionX + " regionZ:" + regionZ + " section:" + section + " trace:" + e.getClassName() + "#" + e.getMethodName() + "@" + e.getLineNumber());
 
         if (GeneratorPluginNames.length <= section)
         {
-            System.out.println("MD: using:NONE");
+            logger.info("MD: using:NONE");
             return null;
         }
 
-        System.out.println("MD: using:" + GeneratorPluginNames[section]);
+        logger.info("MD: using:" + GeneratorPluginNames[section]);
         return generators.get(GeneratorPluginNames[section]);
     }
 
@@ -130,7 +130,7 @@ public class SurvivalGenerator extends ChunkGenerator
                 return false;
         }
 
-        System.out.println("MountainDewritoes: isParallelCapable is true!!! :o Async away!!!!");
+        logger.info("isParallelCapable is true!!! :o Async away!!!!");
         return true;
     }
 
