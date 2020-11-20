@@ -8,8 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
 
 /**
  * Created on 2/22/2018.
@@ -20,9 +26,35 @@ public class AntiLag implements Listener
 {
 //    private Map<Player, Integer> viewDistance = new HashMap<>();
 
+    private int onlinePlayers;
+    private Plugin plugin;
+
     public AntiLag(JavaPlugin plugin)
     {
+        this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        PluginManager pluginManager = plugin.getServer().getPluginManager();
+        plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
+        if (Runtime.getRuntime().maxMemory() > 939104L)
+            return;
+        for (String name : Arrays.asList("BlueMap", "DiscordSRV"))
+        {
+            try
+            {
+                Plugin pluginToDisable = pluginManager.getPlugin(name);
+                if (pluginToDisable == null || !pluginToDisable.isEnabled())
+                {
+                    plugin.getLogger().info("Plugin " + name + " does not exist or is not enabled, skipping.");
+                    continue;
+                }
+                pluginManager.disablePlugin(plugin);
+            }
+            catch (Throwable rock)
+            {
+                plugin.getLogger().warning("Failed to do something for " + name);
+                rock.printStackTrace();
+            }
+        }
     }
 
 
@@ -92,11 +124,27 @@ public class AntiLag implements Listener
         }
     }
 
+    @EventHandler
+    private void onPlayerJoin(PlayerJoinEvent event)
+    {
+        onlinePlayers++;
+    }
+
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event)
+    {
+        onlinePlayers--;
+        if (onlinePlayers < 0)
+        {
+            plugin.getLogger().severe("dahek, how is onlinePlayers count " + onlinePlayers);
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector onlinePlayers count somehow is at " + onlinePlayers);
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     private void onlySpinForPpl(RotatorSpinEvent event)
     {
-        event.setCancelled(event.getRotator().getLocation().getWorld().getPlayers().isEmpty());
-        if (event.isCancelled())
-            DebugCommand.debug("well ok " + event.getRotator().getLocation());
+        if (onlinePlayers == 0 || event.getRotator().getLocation().getWorld().getPlayers().isEmpty())
+            event.setCancelled(true);
     }
 }
