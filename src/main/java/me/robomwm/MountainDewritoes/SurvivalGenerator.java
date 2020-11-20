@@ -72,7 +72,7 @@ public class SurvivalGenerator extends ChunkGenerator
 
         if (GeneratorPluginNames.length <= section)
         {
-            logger.info("MD: using:NONE");
+            //logger.info("MD: using:NONE");
             return null;
         }
 
