@@ -62,6 +62,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -526,8 +527,15 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             public void run()
             {
                 serverDoneLoading = true;
+                getLogger().info("WE DONE");
             }
         }.runTask(this);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onServerLoadEvent(ServerLoadEvent event)
+    {
+        getLogger().info("EVENT LOAD SEZ WE DONE");
     }
 
     @Override
