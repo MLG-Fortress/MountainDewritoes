@@ -25,8 +25,6 @@ softdepend:
 - WellWorld
 - MaxiWorld
 - DungeonMaze
-- BlueMap
-- DiscordSRV
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields

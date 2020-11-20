@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 
@@ -37,24 +38,32 @@ public class AntiLag implements Listener
         plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
         if (Runtime.getRuntime().maxMemory() > 662700032L)
             return;
-        for (String name : Arrays.asList("BlueMap", "DiscordSRV"))
+        new BukkitRunnable()
         {
-            try
+            @Override
+            public void run()
             {
-                Plugin pluginToDisable = pluginManager.getPlugin(name);
-                if (pluginToDisable == null || !pluginToDisable.isEnabled())
+                for (String name : Arrays.asList("BlueMap", "DiscordSRV", "ErrorSink", "Vote4Diamondz"))
                 {
-                    plugin.getLogger().info("Plugin " + name + " does not exist or is not enabled, skipping.");
-                    continue;
+                    try
+                    {
+                        Plugin pluginToDisable = pluginManager.getPlugin(name);
+                        if (pluginToDisable == null || !pluginToDisable.isEnabled())
+                        {
+                            plugin.getLogger().info("Plugin " + name + " does not exist or is not enabled, skipping.");
+                            continue;
+                        }
+                        pluginManager.disablePlugin(plugin, true);
+                    }
+                    catch (Throwable rock)
+                    {
+                        plugin.getLogger().warning("Failed to do something for " + name);
+                        rock.printStackTrace();
+                    }
                 }
-                pluginManager.disablePlugin(plugin);
             }
-            catch (Throwable rock)
-            {
-                plugin.getLogger().warning("Failed to do something for " + name);
-                rock.printStackTrace();
-            }
-        }
+        }.runTask(plugin);
+
     }
 
 

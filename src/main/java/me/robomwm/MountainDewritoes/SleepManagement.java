@@ -37,7 +37,7 @@ public class SleepManagement implements Listener
                     world.setTime(WORLD.getTime());
                 }
             }
-        }.runTaskTimer(instance, 20L, 1200L);
+        }.runTaskTimer(instance, 20L, 6000L);
     }
 
 
