@@ -48,7 +48,7 @@ public class DebugCommand implements CommandExecutor
         if (debug)
         {
             StackTraceElement e = Thread.currentThread().getStackTrace()[2];
-            System.out.println(e.getClass().getSimpleName() + "#" + e.getMethodName() + "@" + e.getLineNumber() + ":" + ya);
+            System.out.println(e.getClassName() + "#" + e.getMethodName() + "@" + e.getLineNumber() + ":" + ya);
         }
     }
 

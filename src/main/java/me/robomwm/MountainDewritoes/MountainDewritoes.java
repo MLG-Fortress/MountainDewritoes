@@ -573,7 +573,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             public void run()
             {
                 StackTraceElement e = Thread.currentThread().getStackTrace()[2];
-                System.out.println("Executing command from " + e.getClass().getSimpleName() + "#" + e.getMethodName() + "@" + e.getLineNumber() + ":" + command);
+                System.out.println("Executing command from " + e.getClassName() + "#" + e.getMethodName() + "@" + e.getLineNumber() + ":" + command);
                 getServer().dispatchCommand(getServer().getConsoleSender(), command);
             }
         }.runTask(this);
