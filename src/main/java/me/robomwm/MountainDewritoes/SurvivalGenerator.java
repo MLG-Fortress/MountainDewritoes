@@ -58,8 +58,8 @@ public class SurvivalGenerator extends ChunkGenerator
 
     private ChunkGenerator getGenerator(int chunkX, int chunkZ)
     {
-        int regionX = chunkX / 32;
-        int regionZ = chunkZ / 32;
+        int regionX = chunkX / 128;
+        int regionZ = chunkZ / 128;
 
         if (chunkX < 0)
             regionX--;
