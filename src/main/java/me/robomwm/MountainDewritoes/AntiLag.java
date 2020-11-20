@@ -119,7 +119,11 @@ public class AntiLag implements Listener
             plugin.dispatchCommand("plugman unload " + pluginName);
 
         for (World world : plugin.getServer().getWorlds())
+        {
+            if (world.getName().equalsIgnoreCase("test_world"))
+                continue;
             plugin.dispatchCommand("mv unload " + world.getName());
+        }
     }
 
 
