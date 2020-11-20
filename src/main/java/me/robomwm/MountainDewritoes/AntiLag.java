@@ -17,8 +17,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,11 +33,11 @@ public class AntiLag implements Listener
 //    private Map<Player, Integer> viewDistance = new HashMap<>();
 
     private int onlinePlayers;
-    private Plugin plugin;
+    private MountainDewritoes plugin;
     private PluginManager pluginManager;
     private boolean ranDisabler = true;
 
-    public AntiLag(JavaPlugin plugin)
+    public AntiLag(MountainDewritoes plugin)
     {
         this.plugin = plugin;
         this.pluginManager = plugin.getServer().getPluginManager();
@@ -65,12 +67,15 @@ public class AntiLag implements Listener
         doNotDisable.add("ServerListPlus");
         doNotDisable.add("AzureResizer");
         doNotDisable.add("CommunicationConnector");
+        doNotDisable.add("PurpleIRC");
+        doNotDisable.add("Chester");
         doNotDisable.add("Essentials");
         doNotDisable.add("Halp");
         doNotDisable.add("PlugMan");
         doNotDisable.add("HotFix");
         doNotDisable.add("LuckPerms");
         doNotDisable.add("Vault");
+        doNotDisable.add("ProtocolLib");
         doNotDisable.add("Votifier");
         doNotDisable.add("ProtocolSupport");
         doNotDisable.add("Geyser");
@@ -86,6 +91,8 @@ public class AntiLag implements Listener
         doNotDisable.add("MaxiWorld");
         doNotDisable.add("DungeonMaze");
 
+        List<String> disabledPlugins = new ArrayList<>();
+
         for (Plugin pluginToDisable : pluginManager.getPlugins())
         {
             try
@@ -98,7 +105,7 @@ public class AntiLag implements Listener
                     continue;
                 }
                 pluginManager.disablePlugin(pluginToDisable, true);
-
+                disabledPlugins.add(pluginToDisable.getName());
             }
             catch (Throwable rock)
             {
@@ -106,6 +113,9 @@ public class AntiLag implements Listener
                 rock.printStackTrace();
             }
         }
+
+        for (String pluginName : disabledPlugins)
+            plugin.dispatchCommand("plugman unload " + pluginName);
     }
 
 
