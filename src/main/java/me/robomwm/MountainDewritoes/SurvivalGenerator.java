@@ -120,17 +120,18 @@ public class SurvivalGenerator extends ChunkGenerator
         }
     }
 
-    //Probably not safe if we use the vanilla generator anyways
+    //Probably not safe if we use the vanilla generator anyways, but according to electronicboy:
+    //[17:20:23] +DiscordBot: <zzzCat> yes, but no real effect right now
     @Override
     public boolean isParallelCapable()
     {
-        for (ChunkGenerator generator : generators.values())
-        {
-            if (!generator.isParallelCapable())
-                return false;
-        }
-
-        logger.info("isParallelCapable is true!!! :o Async away!!!!");
+//        for (ChunkGenerator generator : generators.values())
+//        {
+//            if (!generator.isParallelCapable())
+//                return false;
+//        }
+//
+//        logger.info("isParallelCapable is true!!! :o Async away!!!!");
         return true;
     }
 
