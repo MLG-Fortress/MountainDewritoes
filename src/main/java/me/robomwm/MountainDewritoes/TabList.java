@@ -98,13 +98,13 @@ public class TabList implements Listener
             case 8:
             case 9:
             case 10:
-                return ""
+                return "✖ Ow";
             case 11:
             case 12:
             case 13:
             case 14:
             case 15:
-                return "⚠ Yup";
+                return "⚠ Strugglin";
             case 16:
             case 17:
                 return "⚠ Some";
@@ -114,7 +114,7 @@ public class TabList implements Listener
             case 21:
                 return "✔ Nope";
             default:
-                return "Not anymore ☺";
+                return "☺ Not anymore";
         }
     }
 }
