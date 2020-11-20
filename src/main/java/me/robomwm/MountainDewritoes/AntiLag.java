@@ -11,12 +11,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created on 2/22/2018.
@@ -29,42 +32,83 @@ public class AntiLag implements Listener
 
     private int onlinePlayers;
     private Plugin plugin;
+    private PluginManager pluginManager;
+    private boolean ranDisabler = true;
 
     public AntiLag(JavaPlugin plugin)
     {
         this.plugin = plugin;
+        this.pluginManager = plugin.getServer().getPluginManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        PluginManager pluginManager = plugin.getServer().getPluginManager();
         plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
         if (Runtime.getRuntime().maxMemory() > 662700032L)
             return;
+        ranDisabler = false;
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                for (String name : Arrays.asList("BlueMap", "DiscordSRV", "ErrorSink", "Vote4Diamondz", "AreaShop", "ExtraHardMode", "WorldGuard"))
-                {
-                    try
-                    {
-                        Plugin pluginToDisable = pluginManager.getPlugin(name);
-                        if (pluginToDisable == null || !pluginToDisable.isEnabled())
-                        {
-                            plugin.getLogger().info("Plugin " + name + " does not exist or is not enabled, skipping.");
-                            continue;
-                        }
-                        pluginManager.disablePlugin(pluginToDisable, true);
-                    }
-                    catch (Throwable rock)
-                    {
-                        plugin.getLogger().warning("Failed to do something for " + name);
-                        rock.printStackTrace();
-                    }
-                }
+                onServerLoad(null);
             }
         }.runTask(plugin);
-
     }
+
+    @EventHandler
+    private void onServerLoad(ServerLoadEvent event)
+    {
+        if (ranDisabler)
+            return;
+        ranDisabler = true;
+        Set<String> doNotDisable = new HashSet<>();
+        doNotDisable.add("MountainDewritoes");
+        doNotDisable.add("ServerListPlus");
+        doNotDisable.add("AzureResizer");
+        doNotDisable.add("CommunicationConnector");
+        doNotDisable.add("Essentials");
+        doNotDisable.add("Halp");
+        doNotDisable.add("PlugMan");
+        doNotDisable.add("HotFix");
+        doNotDisable.add("LuckPerms");
+        doNotDisable.add("Vault");
+        doNotDisable.add("Votifier");
+        doNotDisable.add("ProtocolSupport");
+        doNotDisable.add("Geyser");
+        //Need to remove hard dependency on these
+        doNotDisable.add("CustomItemRegistry");
+        doNotDisable.add("GrandioseAPI");
+        //worldgen plugins
+        doNotDisable.add("Multiverse-Core");
+        doNotDisable.add("Chunky");
+        doNotDisable.add("NullTerrain");
+        doNotDisable.add("CityWorld");
+        doNotDisable.add("WellWorld");
+        doNotDisable.add("MaxiWorld");
+        doNotDisable.add("DungeonMaze");
+
+        for (Plugin pluginToDisable : pluginManager.getPlugins())
+        {
+            try
+            {
+                if (doNotDisable.contains(pluginToDisable.getName()))
+                    continue;
+                if (!pluginToDisable.isEnabled())
+                {
+                    plugin.getLogger().info("Plugin " + pluginToDisable.getName() + " is not enabled, skipping.");
+                    continue;
+                }
+                pluginManager.disablePlugin(pluginToDisable, true);
+
+            }
+            catch (Throwable rock)
+            {
+                plugin.getLogger().warning("Failed to do something for " + pluginToDisable.getName());
+                rock.printStackTrace();
+            }
+        }
+    }
+
+
 
 
     //Seems to cause issues with the client. Unsure if it's because view distance changes too quickly or wat.
