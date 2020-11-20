@@ -55,15 +55,14 @@ public class TabList implements Listener
     private void setTabList(Player player)
     {
         if (ThreadLocalRandom.current().nextBoolean())
-            player.setPlayerListHeader(colorizer("MLG ", "Fortress", TAB, "TPS: ",
-                    df.format(instance.getServer().getTPS()[0]), "\n",
+            player.setPlayerListHeader(colorizer("MLG ", "Fortress", TAB, "Lag: ",
+                    lagMeter(), "\n",
                     instance.getEconomy().format(instance.getEconomy().getBalance(player)), TAB,
                     "Ping: ", PseudoCommands.getPing(player), "\n",
                     "Coordinates: (",
                     df.format(player.getLocation().getX()), ", ", df.format(player.getLocation().getZ()), ")"));
         else
             player.setPlayerListFooter(colorizer("IP: ", "MLG", ".", "ROBOMWM", ".", "COM"));
-
     }
 
     private String colorizer(String... args)
@@ -76,5 +75,46 @@ public class TabList implements Listener
             stringBuilder.append(arg);
         }
         return stringBuilder.toString();
+    }
+
+    private String lagMeter()
+    {
+        int tps = (int)instance.getServer().getTPS()[0];
+        if (tps < 0)
+            return "⌚ we're goin backwards!!";
+
+        switch (tps)
+        {
+            case 0:
+                return "✖ in a coma";
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return "✖ dyin";
+            case 8:
+            case 9:
+            case 10:
+                return ""
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                return "⚠ Yup";
+            case 16:
+            case 17:
+                return "⚠ Some";
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+                return "✔ Nope";
+            default:
+                return "Not anymore ☺";
+        }
     }
 }
