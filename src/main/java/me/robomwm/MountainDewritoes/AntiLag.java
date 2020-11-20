@@ -43,7 +43,7 @@ public class AntiLag implements Listener
             @Override
             public void run()
             {
-                for (String name : Arrays.asList("BlueMap", "DiscordSRV", "ErrorSink", "Vote4Diamondz"))
+                for (String name : Arrays.asList("BlueMap", "DiscordSRV", "ErrorSink", "Vote4Diamondz", "AreaShop", "ExtraHardMode", "WorldGuard"))
                 {
                     try
                     {
