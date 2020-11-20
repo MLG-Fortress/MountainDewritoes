@@ -53,7 +53,7 @@ public class AntiLag implements Listener
                             plugin.getLogger().info("Plugin " + name + " does not exist or is not enabled, skipping.");
                             continue;
                         }
-                        pluginManager.disablePlugin(plugin, true);
+                        pluginManager.disablePlugin(pluginToDisable, true);
                     }
                     catch (Throwable rock)
                     {
