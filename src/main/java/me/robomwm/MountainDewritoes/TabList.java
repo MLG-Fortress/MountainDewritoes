@@ -55,8 +55,8 @@ public class TabList implements Listener
     private void setTabList(Player player)
     {
         if (ThreadLocalRandom.current().nextBoolean())
-            player.setPlayerListHeader(colorizer("MLG ", "Fortress", TAB, "Lag: ",
-                    Double.toString(20D - Math.round(instance.getServer().getTPS()[0]) * 5D), "%\n",
+            player.setPlayerListHeader(colorizer("MLG ", "Fortress", TAB, "TPS: ",
+                    df.format(instance.getServer().getTPS()[0]), "\n",
                     instance.getEconomy().format(instance.getEconomy().getBalance(player)), TAB,
                     "Ping: ", PseudoCommands.getPing(player), "\n",
                     "Coordinates: (",
