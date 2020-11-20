@@ -3,6 +3,7 @@ package me.robomwm.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import net.awesomepowered.rotator.event.RotatorSpinEvent;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -116,6 +117,9 @@ public class AntiLag implements Listener
 
         for (String pluginName : disabledPlugins)
             plugin.dispatchCommand("plugman unload " + pluginName);
+
+        for (World world : plugin.getServer().getWorlds())
+            plugin.dispatchCommand("mv unload " + world.getName());
     }
 
 
