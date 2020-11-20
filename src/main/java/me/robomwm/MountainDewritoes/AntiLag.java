@@ -35,7 +35,7 @@ public class AntiLag implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         PluginManager pluginManager = plugin.getServer().getPluginManager();
         plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
-        if (Runtime.getRuntime().maxMemory() > 939104L)
+        if (Runtime.getRuntime().maxMemory() > 662700032L)
             return;
         for (String name : Arrays.asList("BlueMap", "DiscordSRV"))
         {
