@@ -554,22 +554,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getLogger().info("EVENT LOAD SEZ WE DONE");
     }
 
-    @Override
-    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
-    {
-        String[] worldNameSplit = worldName.split("_");
-        String suffix = worldNameSplit[worldNameSplit.length - 1];
-        switch (suffix)
-        {
-            case "nether":
-                return new SurvivalGenerator(this, worldName, id); //TODO
-            case "end":
-                return new SurvivalGenerator(this, worldName, id); //TODO
-            default:
-                return new SurvivalGenerator(this, worldName, id);
-        }
-    }
-
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
