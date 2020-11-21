@@ -75,7 +75,7 @@ public class AtmosphericMusic implements Listener
         }
 
         MusicThing song = songs.get(index++);
-        if (location == null)
+        if (location == null || location.getWorld() == null)
             return;
         List<Player> players = location.getWorld().getPlayers();
         for (Player player : players)
