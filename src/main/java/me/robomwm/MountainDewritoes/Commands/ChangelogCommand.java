@@ -41,7 +41,7 @@ public class ChangelogCommand implements Listener, CommandExecutor
 {
     private MountainDewritoes plugin;
     private YamlConfiguration storage;
-    private Map<UUID, Long> lastReadChangelog = new ConcurrentHashMap<>();
+    public static Map<UUID, Long> lastReadChangelog = new ConcurrentHashMap<>();
 
     public ChangelogCommand(MountainDewritoes plugin)
     {
@@ -73,11 +73,11 @@ public class ChangelogCommand implements Listener, CommandExecutor
         {
             if (args.length == 0)
             {
-                plugin.openBook((Player)sender, new LazyText.Builder().add(getChangelogEntries(lastReadChangelog.get(((Player)sender).getUniqueId()))).toBook());
+                ((Player)sender).openBook(new LazyText.Builder().add(getChangelogEntries(lastReadChangelog.get(((Player)sender).getUniqueId()))).toBook());
                 lastReadChangelog.put(((Player)sender).getUniqueId(), System.currentTimeMillis());
                 return true;
             }
-            plugin.openBook((Player)sender, getChangelogEntryBook(args[0]));
+            ((Player)sender).openBook(getChangelogEntryBook(args[0]));
             return true;
         }
         else if (cmd.getName().equalsIgnoreCase("deletelog"))

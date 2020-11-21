@@ -285,7 +285,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
                     try
                     {
-                        switch (ThreadLocalRandom.current().nextInt(7))
+                        switch (ThreadLocalRandom.current().nextInt(9))
                         {
                             case 0:
                                 return color + brain.getSentence(name);
@@ -300,12 +300,26 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                                 return color + brain.getSentence("robo");
                             case 5:
                                 return color + "ur lucky number is " + TipCommand.getRandomColor() + count;
+                            case 6:
+                                int too = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                int two = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                int four = too + two;
+                                int minus = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                int three = four - minus;
+                                return TipCommand.getRandomColor() + Integer.toString(too) + color + " + " +
+                                        TipCommand.getRandomColor() + two + color + " = " +
+                                        TipCommand.getRandomColor() + four + color + " - " +
+                                        TipCommand.getRandomColor() + minus + color + " = " +
+                                        TipCommand.getRandomColor() + three + color + " quik maffs";
+                            case 7:
+                                return color + "There r " + ChangelogCommand.lastReadChangelog.get(getServer().getOfflinePlayer(uuid).getUniqueId()) +
+                                        " new updates in the /log!";
                         }
                     }
                     catch (Throwable ignored){}
 
                     String quote = color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
-                    return quote.replaceAll("%player%", name);
+                    return quote.replace("%player%", name);
                 }
 
                 private String findRandomOnlinePlayer()
@@ -357,6 +371,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     }
                     if (name != null)
                         MountainDewritoes.this.getLogger().info(name + " is active.");
+                    else
+                        MountainDewritoes.this.getLogger().info(response.getRequest().getClient().getHostAddress() + " is active.");
                     if (response.getRequest().getClient().getHostAddress().equalsIgnoreCase("173.249.30.10"))
                         return lol(name);
                     return computeResponse(uuid, name);
