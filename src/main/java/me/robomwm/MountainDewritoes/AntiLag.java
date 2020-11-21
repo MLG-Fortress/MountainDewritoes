@@ -84,6 +84,7 @@ public class AntiLag implements Listener
         doNotDisable.add("CustomItemRegistry");
         doNotDisable.add("GrandioseAPI");
         //worldgen plugins
+        doNotDisable.add("GeneratorOfGenerators");
         doNotDisable.add("Multiverse-Core");
         doNotDisable.add("Chunky");
         doNotDisable.add("NullTerrain");
