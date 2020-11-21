@@ -371,8 +371,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     }
                     if (name != null)
                         MountainDewritoes.this.getLogger().info(name + " is active.");
-                    else
-                        MountainDewritoes.this.getLogger().info(response.getRequest().getClient().getHostAddress() + " is active.");
                     if (response.getRequest().getClient().getHostAddress().equalsIgnoreCase("173.249.30.10"))
                         return lol(name);
                     return computeResponse(uuid, name);
