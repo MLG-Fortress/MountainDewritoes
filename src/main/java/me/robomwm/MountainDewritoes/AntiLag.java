@@ -125,6 +125,8 @@ public class AntiLag implements Listener
                 continue;
             plugin.dispatchCommand("mv unload " + world.getName());
         }
+        
+        plugin.dispatchCommand("chunky continue");
     }
 
 
