@@ -301,10 +301,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                             case 5:
                                 return color + "ur lucky number is " + TipCommand.getRandomColor() + count;
                             case 6:
-                                int too = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
-                                int two = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                int too = ThreadLocalRandom.current().nextInt(4);
+                                int two = ThreadLocalRandom.current().nextInt(4);
                                 int four = too + two;
-                                int minus = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                int minus = ThreadLocalRandom.current().nextInt(4);
                                 int three = four - minus;
                                 return TipCommand.getRandomColor() + Integer.toString(too) + color + " + " +
                                         TipCommand.getRandomColor() + two + color + " = " +
