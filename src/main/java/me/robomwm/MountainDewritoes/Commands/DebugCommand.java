@@ -6,7 +6,7 @@ import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
