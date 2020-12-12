@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>37-SNAPSHOT</version>
+    <version>37</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -111,7 +109,8 @@
     </build>
     <scm>
         <developerConnection>scm:git:https://github.com/MLG-Fortress/MountainDewritoes.git</developerConnection>
-    </scm>
+      <tag>MountainDewritoes-37</tag>
+  </scm>
     <dependencies>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
