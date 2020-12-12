@@ -252,7 +252,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                     "&3that is not a valid gamemode\n&3it can only be fidget spinners",
                     "&foops my system crashed\n&fI lost my data but I had an antivirus",
                     "&7r u all pretending to be afk",
-                    "&bBorddd? Dont 4get about da &6/&am&ci&dn&ei&fg&ba&am&ce&ds"
+                    "&bBorddd? Dont 4get about da &6/&am&ci&dn&ei&fg&ba&am&ce&ds",
+                        "&eidk man i'm dead rn, brain empty"
                 };
 
                 private boolean callChester()

@@ -6,7 +6,7 @@
 
     <groupId>me.robomwm</groupId>
     <artifactId>MountainDewritoes</artifactId>
-    <version>37</version>
+    <version>37-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -109,6 +109,9 @@
             </plugin>
         </plugins>
     </build>
+    <scm>
+        <developerConnection>scm:git:https://github.com/MLG-Fortress/MountainDewritoes.git</developerConnection>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
