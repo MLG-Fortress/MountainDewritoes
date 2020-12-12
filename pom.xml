@@ -112,6 +112,7 @@
                 <configuration>
                     <tagNameFormat>@{project.version}</tagNameFormat>
                     <arguments>Dmaven.deploy.skip=true</arguments>
+                    <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
                 </configuration>
             </plugin>
         </plugins>
