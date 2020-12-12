@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @author RoboMWM
  *
- * @Deprecated
+ * @deprecated
  * @see Emoticons
  */
 public class EmoticonCommands implements CommandExecutor
