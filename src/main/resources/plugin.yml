@@ -1,5 +1,5 @@
 name: MountainDewritoes
-version: 'commit ${git.commit.id.describe-short}'
+version: 'commit ${git.commit.id.abbrev}'
 website: https://robomwm.com
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
