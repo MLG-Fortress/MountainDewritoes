@@ -11,6 +11,7 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,10 @@ public class TipNotifications extends NotificationSender
 {
     private ShopAPI shopAPI;
 
-    public TipNotifications(Notifications notifications, MountainDewritoes plugin, PrettySimpleShop shopPlugin)
+    public TipNotifications(Notifications notifications, MountainDewritoes plugin, Plugin shopPlugin)
     {
         super(notifications, plugin);
-        shopAPI = shopPlugin.getShopAPI();
+        shopAPI = ((PrettySimpleShop)shopPlugin).getShopAPI();
     }
 
     //shop

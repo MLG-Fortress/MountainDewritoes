@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.notifications;
 
-import com.robomwm.prettysimpleshop.PrettySimpleShop;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
@@ -37,7 +36,7 @@ public class Notifications
 
         //register senders
         new TransactionNotification(this, plugin);
-        PrettySimpleShop shopPlugin = (PrettySimpleShop)plugin.getServer().getPluginManager().getPlugin("PrettySimpleShop");
+        Plugin shopPlugin = plugin.getServer().getPluginManager().getPlugin("PrettySimpleShop");
         if (shopPlugin != null)
             new TipNotifications(this, plugin, shopPlugin);
     }
