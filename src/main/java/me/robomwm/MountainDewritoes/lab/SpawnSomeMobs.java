@@ -4,7 +4,6 @@ import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,32 +23,32 @@ public class SpawnSomeMobs
     {
         this.plugin = plugin;
 
-        try
-        {
-            locations.add(new Location(mall, -43, 4, 157));
-        }
-
-        catch (Throwable rock)
-        {
-            return;
-        }
-
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                for (Location location : locations)
-                {
-                    World world = location.getWorld();
-
-                    if (world.getPlayerCount() == 0)
-                        return;
-
-                    world.spawnEntity(location, getRandomMob());
-                }
-            }
-        }.runTaskTimer(plugin, 200L, 200L);
+//        try
+//        {
+//            locations.add(new Location(mall, -43, 4, 157));
+//        }
+//
+//        catch (Throwable rock)
+//        {
+//            return;
+//        }
+//
+//        new BukkitRunnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                for (Location location : locations)
+//                {
+//                    World world = location.getWorld();
+//
+//                    if (world.getPlayerCount() == 0)
+//                        return;
+//
+//                    world.spawnEntity(location, getRandomMob());
+//                }
+//            }
+//        }.runTaskTimer(plugin, 200L, 200L);
     }
 
     //TODO: move to a util or something
