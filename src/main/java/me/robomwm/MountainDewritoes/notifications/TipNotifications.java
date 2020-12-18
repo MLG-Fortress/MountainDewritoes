@@ -24,10 +24,10 @@ public class TipNotifications extends NotificationSender
 {
     private ShopAPI shopAPI;
 
-    public TipNotifications(Notifications notifications, MountainDewritoes plugin)
+    public TipNotifications(Notifications notifications, MountainDewritoes plugin, PrettySimpleShop shopPlugin)
     {
         super(notifications, plugin);
-        shopAPI = ((PrettySimpleShop)plugin.getServer().getPluginManager().getPlugin("PrettySimpleShop")).getShopAPI();
+        shopAPI = shopPlugin.getShopAPI();
     }
 
     //shop
