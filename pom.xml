@@ -64,7 +64,7 @@
                             <include>com.github.RoboMWM:UsefulUtils</include>
                             <include>pw.valaria:bookutil</include>
                             <include>de.themoep:minedown</include>
-                            <include>org.apache.commons:commons-io</include>
+                            <include>commons-io:commons-io</include>
                             <include>org.bstats:bstats-bukkit</include>
                         </includes>
                     </artifactSet>
