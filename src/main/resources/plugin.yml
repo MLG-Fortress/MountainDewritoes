@@ -1,5 +1,5 @@
 name: MountainDewritoes
-version: 'commit ${git.commit.id.abbrev}'
+version: ' ${git.commit.id.abbrev}'
 website: https://robomwm.com
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
@@ -32,8 +32,10 @@ commands:
   mdebug: {}
   restart:
     aliases: [stop]
-  restartnow: {}
-  update: {}
+  restartnow:
+    permission: mlg.admin
+  update:
+    permission: mlg.admin
   clearchat:
     aliases: [chatclear]
   tip:
@@ -62,4 +64,7 @@ commands:
     aliases: [log, news, new, updates, whatsnew, changes]
     usage: "/changelog - view the changes and updates made to the server."
   login: {}
+  syncconfigs:
+    aliases: [sync, configssync]
+    permission: mlg.admin
   
