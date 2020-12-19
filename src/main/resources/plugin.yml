@@ -67,4 +67,5 @@ commands:
   syncconfigs:
     aliases: [sync, configssync]
     permission: mlg.admin
-  
+  mop:
+    permission: mlg.admin
