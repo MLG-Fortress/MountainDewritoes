@@ -37,6 +37,7 @@ public class SyncCommand implements CommandExecutor
         try
         {
             syncProcess = processBuilder.start();
+            sender.sendMessage("Plugin config sync script started...");
             new BukkitRunnable()
             {
                 @Override
