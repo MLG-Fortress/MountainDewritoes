@@ -20,6 +20,8 @@ softdepend:
 - ServerListPlus
 - PrettySimpleShop
 - ProtocolLib
+- RotatoR
+- Snowbars
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields

@@ -1,7 +1,7 @@
 package me.robomwm.MountainDewritoes;
 
-import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import net.awesomepowered.rotator.event.RotatorSpinEvent;
+import net.poweredbyawesome.snowbars.event.SnowbarSnowEvent;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -15,11 +15,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -219,6 +217,13 @@ public class AntiLag implements Listener
     private void onlySpinForPpl(RotatorSpinEvent event)
     {
         if (onlinePlayers == 0 || event.getRotator().getLocation().getWorld().getPlayers().isEmpty())
+            event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onlySnowForPpl(SnowbarSnowEvent event)
+    {
+        if (onlinePlayers == 0 || event.getSnowbar().getBase().getLocation().getWorld().getPlayers().isEmpty())
             event.setCancelled(true);
     }
 }

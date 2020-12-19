@@ -236,6 +236,11 @@
             <version>737e9d7ce4</version>
         </dependency>
         <dependency>
+            <groupId>com.github.AwesomePowered</groupId>
+            <artifactId>Snowbars</artifactId>
+            <version>cb5d6414a5</version>
+        </dependency>
+        <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.5.1</version>
