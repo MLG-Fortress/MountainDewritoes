@@ -3,7 +3,6 @@ package me.robomwm.MountainDewritoes;
 import net.awesomepowered.rotator.event.RotatorSpinEvent;
 import net.poweredbyawesome.snowbars.event.SnowbarSnowEvent;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,15 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.server.ServerLoadEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created on 2/22/2018.
@@ -34,7 +25,7 @@ public class AntiLag implements Listener
     private int onlinePlayers;
     private MountainDewritoes plugin;
     private PluginManager pluginManager;
-    private boolean ranDisabler = true;
+    //private boolean ranDisabler = true;
 
     public AntiLag(MountainDewritoes plugin)
     {
@@ -42,90 +33,91 @@ public class AntiLag implements Listener
         this.pluginManager = plugin.getServer().getPluginManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
-        if (Runtime.getRuntime().maxMemory() > 662700032L)
-            return;
-        ranDisabler = false;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                onServerLoad(null);
-            }
-        }.runTask(plugin);
+//        if (Runtime.getRuntime().maxMemory() > 662700032L)
+//            return;
+//        ranDisabler = false;
+//        new BukkitRunnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                onServerLoad(null);
+//            }
+//        }.runTask(plugin);
     }
 
-    @EventHandler
-    private void onServerLoad(ServerLoadEvent event)
-    {
-        if (ranDisabler)
-            return;
-        ranDisabler = true;
-        Set<String> doNotDisable = new HashSet<>();
-        doNotDisable.add("MountainDewritoes");
-        doNotDisable.add("ServerListPlus");
-        doNotDisable.add("AzureResizer");
-        doNotDisable.add("CommunicationConnector");
-        doNotDisable.add("PurpleIRC");
-        doNotDisable.add("Chester");
-        doNotDisable.add("Essentials");
-        doNotDisable.add("Halp");
-        doNotDisable.add("PlugMan");
-        doNotDisable.add("HotFix");
-        doNotDisable.add("LuckPerms");
-        doNotDisable.add("Vault");
-        doNotDisable.add("ProtocolLib");
-        doNotDisable.add("Votifier");
-        doNotDisable.add("ProtocolSupport");
-        doNotDisable.add("Geyser");
-        //Need to remove hard dependency on these
-        doNotDisable.add("CustomItemRegistry");
-        doNotDisable.add("GrandioseAPI");
-        //worldgen plugins
-        doNotDisable.add("GeneratorOfGenerators");
-        doNotDisable.add("Multiverse-Core");
-        doNotDisable.add("Chunky");
-        doNotDisable.add("NullTerrain");
-        doNotDisable.add("CityWorld");
-        doNotDisable.add("WellWorld");
-        doNotDisable.add("MaxiWorld");
-        doNotDisable.add("DungeonMaze");
-
-        List<String> disabledPlugins = new ArrayList<>();
-
-        for (Plugin pluginToDisable : pluginManager.getPlugins())
-        {
-            try
-            {
-                if (doNotDisable.contains(pluginToDisable.getName()))
-                    continue;
-                if (!pluginToDisable.isEnabled())
-                {
-                    plugin.getLogger().info("Plugin " + pluginToDisable.getName() + " is not enabled, skipping.");
-                    continue;
-                }
-                pluginManager.disablePlugin(pluginToDisable, true);
-                disabledPlugins.add(pluginToDisable.getName());
-            }
-            catch (Throwable rock)
-            {
-                plugin.getLogger().warning("Failed to do something for " + pluginToDisable.getName());
-                rock.printStackTrace();
-            }
-        }
-
-        for (String pluginName : disabledPlugins)
-            plugin.dispatchCommand("plugman unload " + pluginName);
-
-        for (World world : plugin.getServer().getWorlds())
-        {
-            if (world.getName().equalsIgnoreCase("test_world"))
-                continue;
-            plugin.dispatchCommand("mv unload " + world.getName());
-        }
-        
-        plugin.dispatchCommand("chunky continue");
-    }
+    //since server start times can take forever (25 minutes!) I've decided not to do this and just have bash copy over the essential plugins
+//    @EventHandler
+//    private void onServerLoad(ServerLoadEvent event)
+//    {
+//        if (ranDisabler)
+//            return;
+//        ranDisabler = true;
+//        Set<String> doNotDisable = new HashSet<>();
+//        doNotDisable.add("MountainDewritoes");
+//        doNotDisable.add("ServerListPlus");
+//        doNotDisable.add("AzureResizer");
+//        doNotDisable.add("CommunicationConnector");
+//        doNotDisable.add("PurpleIRC");
+//        doNotDisable.add("Chester");
+//        doNotDisable.add("Essentials");
+//        doNotDisable.add("Halp");
+//        doNotDisable.add("PlugMan");
+//        doNotDisable.add("HotFix");
+//        doNotDisable.add("LuckPerms");
+//        doNotDisable.add("Vault");
+//        doNotDisable.add("ProtocolLib");
+//        doNotDisable.add("Votifier");
+//        doNotDisable.add("ProtocolSupport");
+//        doNotDisable.add("Geyser");
+//        //Need to remove hard dependency on these
+//        doNotDisable.add("CustomItemRegistry");
+//        doNotDisable.add("GrandioseAPI");
+//        //worldgen plugins
+//        doNotDisable.add("GeneratorOfGenerators");
+//        doNotDisable.add("Multiverse-Core");
+//        doNotDisable.add("Chunky");
+//        doNotDisable.add("NullTerrain");
+//        doNotDisable.add("CityWorld");
+//        doNotDisable.add("WellWorld");
+//        doNotDisable.add("MaxiWorld");
+//        doNotDisable.add("DungeonMaze");
+//
+//        List<String> disabledPlugins = new ArrayList<>();
+//
+//        for (Plugin pluginToDisable : pluginManager.getPlugins())
+//        {
+//            try
+//            {
+//                if (doNotDisable.contains(pluginToDisable.getName()))
+//                    continue;
+//                if (!pluginToDisable.isEnabled())
+//                {
+//                    plugin.getLogger().info("Plugin " + pluginToDisable.getName() + " is not enabled, skipping.");
+//                    continue;
+//                }
+//                pluginManager.disablePlugin(pluginToDisable, true);
+//                disabledPlugins.add(pluginToDisable.getName());
+//            }
+//            catch (Throwable rock)
+//            {
+//                plugin.getLogger().warning("Failed to do something for " + pluginToDisable.getName());
+//                rock.printStackTrace();
+//            }
+//        }
+//
+//        for (String pluginName : disabledPlugins)
+//            plugin.dispatchCommand("plugman unload " + pluginName);
+//
+//        for (World world : plugin.getServer().getWorlds())
+//        {
+//            if (world.getName().equalsIgnoreCase("test_world"))
+//                continue;
+//            plugin.dispatchCommand("mv unload " + world.getName());
+//        }
+//
+//        plugin.dispatchCommand("chunky continue");
+//    }
 
 
 
