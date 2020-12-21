@@ -27,7 +27,7 @@ jobs:
       with: 
         upload_url:  ${{ github.event.release.upload_url }} # how come I found this on the second page of bing results in some guys blog instead of in the documentation, or am I just not looking in the right spots. https://itnext.io/getting-started-with-github-actions-fe94167dbc6d?gi=a7321180760b 
         asset_path:  target/${{ github.repository.name }}.jar
-        asset_name:  ${{ github.repository.name }}
+        asset_name:  ${{ GITHUB_REPOSITORY }}
         asset_content_type: application/java-archive
       env:
         GITHUB_TOKEN: ${{ github.token }}
