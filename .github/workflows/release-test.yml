@@ -38,3 +38,9 @@ jobs:
         asset_content_type: application/java-archive
       env:
         GITHUB_TOKEN: ${{ github.token }}
+        
+    - name: Dump github context
+      run:   echo "$GITHUB_CONTEXT"
+      shell: bash
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
