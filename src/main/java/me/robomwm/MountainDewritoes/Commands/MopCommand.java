@@ -28,7 +28,7 @@ public class MopCommand implements CommandExecutor
             return false;
 
         if (!sender.hasPermission("*"))
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + sender.getName() + " permission settemp true * 3h");
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + sender.getName() + " permission settemp * true 3h");
         else
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + sender.getName() + " permission unsettemp *");
 
