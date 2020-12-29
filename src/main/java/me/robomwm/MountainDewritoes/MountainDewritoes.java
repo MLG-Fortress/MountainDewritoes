@@ -10,6 +10,7 @@ import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.Emoticons;
 import me.robomwm.MountainDewritoes.Commands.MinedownBookCommand;
+import me.robomwm.MountainDewritoes.Commands.MopCommand;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.ResetCommands;
@@ -532,6 +533,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new ChangelogCommand(this);
         new MinedownBookCommand(this);
         new SyncCommand(this);
+        new MopCommand(this);
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
