@@ -2,7 +2,9 @@ package me.robomwm.MountainDewritoes;
 
 import net.awesomepowered.rotator.event.RotatorSpinEvent;
 import net.poweredbyawesome.snowbars.event.SnowbarSnowEvent;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,6 +35,12 @@ public class AntiLag implements Listener
         this.pluginManager = plugin.getServer().getPluginManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
+        World spawnWorld = plugin.getServer().getWorld("firstjoin");
+        spawnWorld.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        spawnWorld.setGameRule(GameRule.DISABLE_RAIDS, false);
+        spawnWorld.setGameRule(GameRule.DO_TILE_DROPS, false);
+        spawnWorld.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        spawnWorld.setAutoSave(false);
 //        if (Runtime.getRuntime().maxMemory() > 662700032L)
 //            return;
 //        ranDisabler = false;

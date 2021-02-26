@@ -15,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -54,17 +55,27 @@ public class NSA implements Listener
     {
         instance = mountainDewritoes;
         instance.registerListener(this);
+    }
 
+    @EventHandler
+    public void onJoinStartSync(PlayerJoinEvent event)
+    {
         new BukkitRunnable()
         {
-            Scoreboard sb = mountainDewritoes.getServer().getScoreboardManager().getMainScoreboard();
+            Player player = event.getPlayer();
+
             @Override
             public void run()
             {
-                for (Player player : mountainDewritoes.getServer().getOnlinePlayers())
-                    scoreboardSynchronizer(sb, player.getScoreboard());
+                if (!player.isOnline())
+                {
+                    this.cancel();
+                    return;
+                }
+
+                scoreboardSynchronizer(instance.getServer().getScoreboardManager().getMainScoreboard(), player.getScoreboard());
             }
-        }.runTaskTimer(mountainDewritoes, 20L, 1L);
+        }.runTaskTimer(instance, 20L, 1L);
     }
 
     private void scoreboardSynchronizer(Scoreboard source, Scoreboard target)

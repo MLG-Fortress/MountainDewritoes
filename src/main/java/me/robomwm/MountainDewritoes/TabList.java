@@ -3,7 +3,9 @@ package me.robomwm.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
@@ -19,37 +21,35 @@ public class TabList implements Listener
     private String TAB = "    ";
     private MountainDewritoes instance;
     private DecimalFormat df = new DecimalFormat("#.##");
+
     public TabList(MountainDewritoes plugin)
     {
         this.instance = plugin;
-        task(20);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    private void task(int delay)
+    //does not scale, but is more efficient with smaller player loads and avoids unnecessary object creation
+    //I used a global task that scheduled as appropriate depending getOnlinePlayers
+    //However, it seems that it is somewhat expensive(?) to call this on low-end servers (even if empty!)
+    //If need be, I can revert to that, but until then, this should be fine anyway.
+    //Ideally this would be done async, with any relevant data calls filled in concurrently/atomically
+    @EventHandler
+    private void onJoin(PlayerJoinEvent event)
     {
-        new BukkitRunnable() //premature optimization is the root of all evils... or rather, a waste of time
-        { //I.e. I could probably do something where I get the data sync that I need sync, then set tab async
+        new BukkitRunnable()
+        {
             @Override
             public void run()
             {
-                //for each online player, update tablist 1 tick apart
-                //updates "slower" (in perspective of player) as more players come online
-                int i = 1;
-                for (Player player : instance.getServer().getOnlinePlayers())
+                if (!event.getPlayer().isOnline())
                 {
-                    new BukkitRunnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            setTabList(player);
-                        }
-                    }.runTaskLater(instance, i++);
+                    this.cancel();
+                    return;
                 }
-                //one tick breather before doing it all again!
-                task(++i);
+
+                setTabList(event.getPlayer());
             }
-        }.runTaskLater(instance, delay);
+        }.runTaskTimer(instance, 20L, 2L);
     }
 
     private void setTabList(Player player)

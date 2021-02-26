@@ -41,7 +41,7 @@ public class PseudoCommands implements Listener
     {
         try
         {
-            return Integer.toString(ping.getInt(muhHandle.invoke(player))) + "ms";
+            return ping.getInt(muhHandle.invoke(player)) + "ms";
         }
         catch (Throwable ignored)
         {
