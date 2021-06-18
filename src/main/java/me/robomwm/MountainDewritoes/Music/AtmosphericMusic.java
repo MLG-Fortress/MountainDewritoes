@@ -25,6 +25,8 @@ import java.util.Map;
 /**
  * Created on 3/3/2017.
  *
+ * TODO: don't hardcode worlds in here.
+ *
  * @author RoboMWM
  */
 public class AtmosphericMusic implements Listener
@@ -249,8 +251,6 @@ public class AtmosphericMusic implements Listener
     @EventHandler(priority = EventPriority.HIGH)
     void onMobTarget(MonsterTargetPlayerEvent event)
     {
-        if (!instance.isSurvivalWorld(event.getPlayer().getWorld()))
-            return;
         //if (NSA.howManyTargetingPlayer(event.getPlayer()) > 3)
 
     }

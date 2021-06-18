@@ -79,9 +79,6 @@ public class BetterZeldaHearts implements Listener
     @EventHandler(priority = EventPriority.LOW)
     void onEntityDeath(EntityDeathEvent event)
     {
-        if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
-            return;
-
         if (!event.getEntity().hasAI() || !UsefulUtils.isMonster(event.getEntity()))
             return;
         LivingEntity entity = event.getEntity();

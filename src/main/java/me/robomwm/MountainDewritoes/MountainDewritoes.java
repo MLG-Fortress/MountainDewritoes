@@ -7,7 +7,6 @@ import info.gomeow.chester.Chester;
 import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
-import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.Emoticons;
 import me.robomwm.MountainDewritoes.Commands.MinedownBookCommand;
 import me.robomwm.MountainDewritoes.Commands.MopCommand;
@@ -35,7 +34,6 @@ import me.robomwm.MountainDewritoes.combat.DummerEnderman;
 import me.robomwm.MountainDewritoes.combat.NoKnockback;
 import me.robomwm.MountainDewritoes.combat.twoshot.TwoShot;
 import me.robomwm.MountainDewritoes.hotmenu.HotMenu;
-import me.robomwm.MountainDewritoes.lab.SpawnSomeMobs;
 import me.robomwm.MountainDewritoes.notifications.Notifications;
 import me.robomwm.MountainDewritoes.spaceship.SpaceshipPilot;
 import net.milkbowl.vault.economy.Economy;
@@ -97,6 +95,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 {
     //metadata "API" that allows us to clear metadata onDisable
     private Map<String, Set<Metadatable>> usedMetadata = new HashMap<>();
+
+    @Deprecated //Use PDC
     public void setMetadata(Metadatable target, String key, Object value)
     {
         if (!usedMetadata.containsKey(key))
@@ -105,10 +105,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         target.setMetadata(key, new FixedMetadataValue(this, value));
     }
 
-    //Set<Player> usedEC = new HashSet<>();
-    //Pattern ec = Pattern.compile("\\bec\\b|\\bechest\\b|\\bpv\\b");
     private long currentTick = 0L; //"Server time in ticks"
-    private Set<World> minigameWorlds = new HashSet<>();
     private FileConfiguration newConfig;
     private Economy economy;
     private boolean serverDoneLoading = false;
@@ -116,11 +113,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public long getCurrentTick()
     {
         return currentTick;
-    }
-
-    public boolean isSurvivalWorld(World world)
-    {
-        return !minigameWorlds.contains(world);
     }
 
     public void registerListener(Listener listener)
@@ -442,15 +434,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             world.setKeepSpawnInMemory(false);
             world.setGameRule(GameRule.NATURAL_REGENERATION, false);
 
-            //minigame worlds don't do daylight cycles
-            if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE))
-                minigameWorlds.add(world);
-
-            //else it's a non-minigame world
             //Set border on survival worlds
             //Border is a "hard stop", most worlds are generated to a much smaller radius.
-            else if (world.getPVP() && !minigameWorlds.contains(world) && !world.getGameRuleValue(GameRule.KEEP_INVENTORY))
-                world.getWorldBorder().setSize(20000);
+            world.getWorldBorder().setSize(20000);
 
         }
 
@@ -468,10 +454,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         pm.registerEvents(new DeathListener(this), this);
         new BetterZeldaHearts(this, economy);
         new JoinMessages(this);
-        pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
         pm.registerEvents(new HitSound(this), this);
-        new GamemodeInventoryManager(this);
         pm.registerEvents(new NoKnockback(this), this);
         new SleepManagement(this);
 
@@ -487,14 +471,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 //        new TheMidnightPortalToAnywhere(this);
         atmosphericManager = new AtmosphericManager(this);
         new ArmorAugmentation(this);
-        new AntiLag(this);
         new FirstJoin(this);
         new DummerEnderman(this);
         new OldTNT(this);
         new SpaceshipPilot(this);
         new Arena(this);
         new TwoShot(this);
-        new SpawnSomeMobs(this, getServer().getWorld("mall"));
 
         //Plugin-dependent listeners
         if (getServer().getPluginManager().getPlugin("BetterTPA") != null && getServer().getPluginManager().getPlugin("BetterTPA").isEnabled())
@@ -534,9 +516,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new MinedownBookCommand(this);
         new SyncCommand(this);
         new MopCommand(this);
-
-        EmoticonCommands emoticonCommands = new EmoticonCommands(this);
-        getCommand("shrug").setExecutor(emoticonCommands);
 
         saveConfig();
         new BukkitRunnable()

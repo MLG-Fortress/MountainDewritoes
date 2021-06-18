@@ -31,6 +31,8 @@ import java.util.Set;
  *
  * @author RoboMWM
  */
+
+//TODO May consider getting rid of this as vanilla enchantments are something mojang adds and I'd rather not spend time on plugins reimplementing enchants idk
 public class LevelingProgression implements Listener
 {
     private LodsOfEmone lodsOfEmone;
@@ -73,9 +75,6 @@ public class LevelingProgression implements Listener
     @EventHandler(ignoreCancelled = true)
     private void levelChangeEvent(PlayerExpChangeEvent event) //We only want to fire on naturally-collected XP.
     {
-        if (!plugin.isSurvivalWorld(event.getPlayer().getWorld()))
-            return;
-
         Player player = event.getPlayer();
 
         //Wait a tick so player.getLevel() updates
@@ -115,11 +114,6 @@ public class LevelingProgression implements Listener
     @EventHandler
     private void onJoin(PlayerJoinEvent event)
     {
-        if (!plugin.isSurvivalWorld(event.getPlayer().getWorld()))
-        {
-            playersToCheck.add(event.getPlayer());
-            return;
-        }
         registerPlayerLevel(event.getPlayer());
     }
     @EventHandler(priority = EventPriority.MONITOR)
@@ -130,8 +124,6 @@ public class LevelingProgression implements Listener
     @EventHandler
     private void onPlayerChangesWorld(PlayerChangedWorldEvent event)
     {
-        if (!plugin.isSurvivalWorld(event.getPlayer().getWorld()))
-            return;
         if (playersToCheck.contains(event.getPlayer()))
             registerPlayerLevel(event.getPlayer());
     }

@@ -2,7 +2,6 @@ package me.robomwm.MountainDewritoes;
 
 import com.robomwm.usefulutils.UsefulUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
@@ -84,10 +83,6 @@ public class DeathListener implements Listener
 
         player.playSound(player.getLocation(), "fortress.death", SoundCategory.PLAYERS, 3000000f, 1.0f);
 
-        //Save some items (randomly determined) if in survival world
-        if (!instance.isSurvivalWorld(player.getWorld()) || player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY))
-            return;
-
         if (player.getKiller() == null) //TODO: replace with "combattag" check instead
         {
             event.setKeepInventory(true);
@@ -95,6 +90,8 @@ public class DeathListener implements Listener
             return;
         }
 
+        //Save some items (randomly determined)
+        //todo maybe remove or destroy some items instead? hmm
         List<ItemStack> drops = event.getDrops();
         Iterator<ItemStack> iterator = drops.iterator();
         List<ItemStack> dropsToReturn = new ArrayList<>();
@@ -168,10 +165,10 @@ public class DeathListener implements Listener
     {
         Player player = event.getPlayer();
 
+        //TODO maybe a "respawn choice" plugin idk
         Location respawnLocation = player.getWorld().getSpawnLocation();
 
-        if (instance.isSurvivalWorld(player.getWorld()) && !player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY))
-            respawnLocation = playersDesiredRespawnLocation.getOrDefault(player, defaultRespawnLocation);
+        respawnLocation = playersDesiredRespawnLocation.getOrDefault(player, defaultRespawnLocation);
         event.setRespawnLocation(respawnLocation);
 
         //Return items

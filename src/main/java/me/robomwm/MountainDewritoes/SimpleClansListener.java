@@ -26,6 +26,9 @@ import org.bukkit.scoreboard.Team;
  * "Handles" clan home teleportation
  * Handles friendly-fire
  */
+
+// My oldest code, def needs some cleanup
+
 public class SimpleClansListener implements Listener
 {
     private Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -213,8 +216,6 @@ public class SimpleClansListener implements Listener
 
                 team.setPrefix(tag + " ");
                 team.setColor(ChatColor.getByChar(tag.substring(1)));
-                if (instance.isSurvivalWorld(player.getWorld()))
-                    return;
 
                 if (player.getScoreboard() != sb)
                 {
@@ -310,8 +311,6 @@ public class SimpleClansListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onPlayerAboutToGetHit(ProjectileCollideEvent event)
     {
-        if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
-            return;
         if (event.getCollidedWith().getType() != EntityType.PLAYER)
             return;
         if (!(event.getEntity().getShooter() instanceof Player))
@@ -328,8 +327,6 @@ public class SimpleClansListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onPlayerDamage(EntityDamageByEntityEvent event)
     {
-        if (!instance.isSurvivalWorld(event.getEntity().getWorld()))
-            return;
         if (event.getDamager().getType() != EntityType.PLAYER)
             return;
         if (event.getEntity().getType() != EntityType.PLAYER)
