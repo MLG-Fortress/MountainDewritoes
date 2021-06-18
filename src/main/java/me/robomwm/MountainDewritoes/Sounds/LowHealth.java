@@ -72,7 +72,7 @@ public class LowHealth implements Listener
             {
                 public void run()
                 {
-                    double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                    double healthPercentage = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                     if (!alreadyLowHealth.containsKey(player) || healthPercentage > 0.33)
                     {
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)
