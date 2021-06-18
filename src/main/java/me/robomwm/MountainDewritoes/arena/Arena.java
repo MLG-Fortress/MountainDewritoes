@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
 
+// Idk when I even created this, seems it doesn't even have the intellij signature so must've been something I did while playing with another IDE like VS Code.
+
 public class Arena implements Listener
 {
     public Plugin plugin;
