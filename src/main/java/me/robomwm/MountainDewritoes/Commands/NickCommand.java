@@ -37,6 +37,11 @@ public class NickCommand implements CommandExecutor, Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         grandioseAPI = (GrandioseAPI)plugin.getServer().getPluginManager().getPlugin("GrandioseAPI");
         RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
+        if (rsp == null)
+        {
+            plugin.getLogger().severe("nicknames not working cuz rsp is null for some reason. but why?!?! Prolly cuz some other plugins broke vault and essentialschat");
+            return;
+        }
         chat = rsp.getProvider();
 
         StringBuilder builder = new StringBuilder();
