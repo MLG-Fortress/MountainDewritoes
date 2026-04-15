@@ -1,7 +1,7 @@
 package me.robomwm.MountainDewritoes.Commands;
 
 import com.destroystokyo.paper.Title;
-import info.gomeow.chester.Chester;
+
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.Music.MusicThing;
 import me.robomwm.MountainDewritoes.SimpleClansListener;
@@ -78,7 +78,7 @@ public class DebugCommand implements CommandExecutor
                 }
                 talking = new BukkitRunnable()
                 {
-                    Chester chester = (Chester)plugin.getServer().getPluginManager().getPlugin("Chester");
+
                     String response = "hello";
                     int count = ThreadLocalRandom.current().nextInt(5, 10);
                     int delay = 2;
@@ -97,7 +97,7 @@ public class DebugCommand implements CommandExecutor
                             return;
                         }
 
-                        response = chester.getHal().getSentence(response);
+                        response = "beep boop";
                         plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector " + convos + "_Dum_B0Ts: " + response);
                         String[] messageArray = response.split(" ");
                         if (messageArray.length > 1)

@@ -59,7 +59,7 @@ public class OldTNT implements Listener
     @EventHandler
     private void onCrackShotExplosion(ExplosionPrimeEvent event)
     {
-        if (event.getEntityType() != EntityType.PRIMED_TNT)
+        if (event.getEntityType() != EntityType.TNT)
             return;
         if (!event.getEntity().hasMetadata("CS_Label"))
             return;

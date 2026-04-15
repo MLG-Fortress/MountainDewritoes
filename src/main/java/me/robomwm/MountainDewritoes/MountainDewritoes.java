@@ -3,7 +3,7 @@ package me.robomwm.MountainDewritoes;
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemregistry.CustomItemRegistry;
 import com.robomwm.grandioseapi.GrandioseAPI;
-import info.gomeow.chester.Chester;
+
 import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
@@ -72,7 +72,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jibble.jmegahal.JMegaHal;
+
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -210,7 +210,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         {
             ReplacementManager.getDynamic().add(new LiteralPlaceholder("%bot%")
             {
-                private JMegaHal brain;
+
                 private boolean colorized = false;
                 String[] quotes = {
                         "&b        such seber       &6many meme\n    &c%player%      &amuch plogenz       &eWow",
@@ -257,12 +257,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         "&eidk man i'm dead rn, brain empty"
                 };
 
-                private boolean callChester()
-                {
-                    if (brain == null && getServer().getPluginManager().isPluginEnabled("Chester"))
-                        brain = ((Chester)getServer().getPluginManager().getPlugin("Chester")).getHal();
-                    return brain != null;
-                }
+
 
                 int count = 0;
 
@@ -283,23 +278,23 @@ public class MountainDewritoes extends JavaPlugin implements Listener
                         colorized = true;
                     }
 
-                    callChester();
+
 
                     try
                     {
-                        switch (ThreadLocalRandom.current().nextInt(9))
+                        switch (ThreadLocalRandom.current().nextInt(6))
                         {
                             case 0:
-                                return color + brain.getSentence(name);
+                                return color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
                             case 1:
-                                return color + brain.getSentence();
+                                return color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
                             case 2:
                                 return color + getEconomy().format(getEconomy().getBalance(getServer().getOfflinePlayer(uuid)));
                             case 3:
                                 return color + findRandomOnlinePlayer() + color + " wants to play with " +
                                         TipCommand.getRandomColor() + name;
                             case 4:
-                                return color + brain.getSentence("robo");
+                                return color + quotes[ThreadLocalRandom.current().nextInt(quotes.length)];
                             case 5:
                                 return color + "ur lucky number is " + TipCommand.getRandomColor() + count;
                             case 6:
