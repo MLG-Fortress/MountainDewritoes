@@ -7,8 +7,9 @@
     <version>39.1.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Minecraft 26.1.2 requires Java 25 -->
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
     </properties>
     <repositories>
         <repository>
@@ -59,7 +60,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.3</version>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <minimizeJar>true</minimizeJar>
@@ -123,19 +124,19 @@
     </build>
     <scm>
         <developerConnection>scm:git:https://github.com/MLG-Fortress/MountainDewritoes.git</developerConnection>
-      <tag>39.1.1</tag>
-  </scm>
+        <tag>39.1.1</tag>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>[26.1.2.build,)</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <version>1.17.0</version>
         </dependency>
         <dependency>
             <groupId>fr.mrsheepsheep</groupId>
@@ -215,7 +216,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>3.14.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.MLG-Fortress</groupId>
@@ -226,12 +227,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.9</version>
+            <version>1.12.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>2.2.1</version>
+            <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -244,15 +245,16 @@
             <artifactId>Snowbars</artifactId>
             <version>cb5d6414a5</version>
         </dependency>
+        <!-- Changed groupId and version to fix 401 error -->
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
+            <groupId>net.dmulloy2</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.6.0</version>
+            <version>5.4.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.10.0</version>
+            <version>2.16.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
