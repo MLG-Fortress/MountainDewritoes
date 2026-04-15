@@ -157,13 +157,6 @@ public class StaffRestartCommand implements CommandExecutor, Listener
 
     private boolean update(boolean noShutdown)
     {
-        updateComplete = true;
-        if (!noShutdown)
-        {
-            actuallyShutdown();
-        }
-        return true;
-        /*
         if (updateComplete && !noShutdown)
         {
             actuallyShutdown();
@@ -225,7 +218,6 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             return false;
         }
         return true;
-        */
     }
 
     private void actuallyShutdown()
