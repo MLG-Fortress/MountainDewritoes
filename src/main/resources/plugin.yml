@@ -4,10 +4,9 @@ website: https://robomwm.com
 author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
 api-version: '1.14'
-depend:
+softdepend:
 - CustomItemRegistry
 - GrandioseAPI
-softdepend:
 - ExtraHardMode
 - Healthbar
 - Multiverse-Core

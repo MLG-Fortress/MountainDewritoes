@@ -462,12 +462,19 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
         SimpleClans sc = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
-        ClanManager clanManager = sc.getClanManager();
+        ClanManager clanManager = null;
         pm.registerEvents(this, this);
-        pm.registerEvents(new ChatListener(this, clanManager), this);
+        if (sc != null) {
+            clanManager = sc.getClanManager();
+            pm.registerEvents(new ChatListener(this, clanManager), this);
+        }
         pm.registerEvents(new DeathListener(this), this);
-        new BetterZeldaHearts(this, economy);
-        new JoinMessages(this);
+        if (customItemRegistry != null) {
+            new BetterZeldaHearts(this, economy);
+        }
+        if (getGrandioseAPI() != null) {
+            new JoinMessages(this);
+        }
         pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
         pm.registerEvents(new HitSound(this), this);
@@ -476,24 +483,36 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SleepManagement(this);
 
         new ReverseOsmosis(this);
-        simpleClansListener = new SimpleClansListener(this, clanManager);
+        if (sc != null) {
+            simpleClansListener = new SimpleClansListener(this, clanManager);
+        }
         new ReplacementSoundEffects(this);
         new Ogrewatch(this);
         betterNoDamageTicks = new BetterNoDamageTicks(this);
         new FineSine(this);
         new LodsOfEmone(this);
-        new PseudoCommands(this);
+        if (getGrandioseAPI() != null) {
+            new PseudoCommands(this);
+        }
         new TabList(this);
 //        new TheMidnightPortalToAnywhere(this);
         atmosphericManager = new AtmosphericManager(this);
-        new ArmorAugmentation(this);
-        new AntiLag(this);
-        new FirstJoin(this);
+        if (customItemRegistry != null) {
+            new ArmorAugmentation(this);
+        }
+        if (getGrandioseAPI() != null) {
+            new AntiLag(this);
+        }
+        if (customItemRegistry != null) {
+            new FirstJoin(this);
+        }
         new DummerEnderman(this);
         new OldTNT(this);
         new SpaceshipPilot(this);
         new Arena(this);
-        new TwoShot(this);
+        if (customItemRegistry != null) {
+            new TwoShot(this);
+        }
         new SpawnSomeMobs(this, getServer().getWorld("mall"));
 
         //Plugin-dependent listeners
@@ -513,7 +532,9 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         titleManager = new TitleManager(this);
 
         //Commands
-        getCommand("nick").setExecutor(new NickCommand(this));
+        if (getGrandioseAPI() != null) {
+            getCommand("nick").setExecutor(new NickCommand(this));
+        }
         getCommand("warp").setExecutor(new WarpCommand(this));
         StaffRestartCommand staffRestartCommand = new StaffRestartCommand(this);
         getCommand("restart").setExecutor(staffRestartCommand);
@@ -526,12 +547,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("watchwinreward").setExecutor(debugCommand);
         getCommand("md").setExecutor(debugCommand);
         getCommand("voice").setExecutor(new VoiceCommand(this));
-        getCommand("view").setExecutor(new ViewDistanceCommand(this));
+        if (getGrandioseAPI() != null) {
+            getCommand("view").setExecutor(new ViewDistanceCommand(this));
+        }
         getCommand("reset").setExecutor(new ResetCommands(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand());
         new Emoticons(this);
         new ChangelogCommand(this);
-        new MinedownBookCommand(this);
+        if (getGrandioseAPI() != null) {
+            new MinedownBookCommand(this);
+        }
         new SyncCommand(this);
         new MopCommand(this);
 
