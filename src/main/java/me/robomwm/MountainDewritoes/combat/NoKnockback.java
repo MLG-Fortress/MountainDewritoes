@@ -63,16 +63,16 @@ public class NoKnockback implements Listener
                 return;
         }
 
-        final double oldKnockbackResistanceValue = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getBaseValue();
+        final double oldKnockbackResistanceValue = target.getAttribute(Attribute.KNOCKBACK_RESISTANCE).getBaseValue();
 
         //Temporarily set a high resistance value
-        target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999D);
+        target.getAttribute(Attribute.KNOCKBACK_RESISTANCE).setBaseValue(999D);
         //Then remove it after a tick (assuming this fires before the next damage event comes in...)
         new BukkitRunnable()
         {
             public void run()
             {
-                target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(oldKnockbackResistanceValue);
+                target.getAttribute(Attribute.KNOCKBACK_RESISTANCE).setBaseValue(oldKnockbackResistanceValue);
             }
         }.runTask(instance);
     }

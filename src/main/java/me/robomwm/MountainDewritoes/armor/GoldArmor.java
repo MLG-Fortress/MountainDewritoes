@@ -27,7 +27,7 @@ import org.bukkit.util.Vector;
 public class GoldArmor implements Listener
 {
     private ArmorAugmentation armorAugmentation;
-    private final PotionEffect bootsEffect = new PotionEffect(PotionEffectType.JUMP, 100, 2, true, false);
+    private final PotionEffect bootsEffect = new PotionEffect(PotionEffectType.JUMP_BOOST, 100, 2, true, false);
 
     GoldArmor(MountainDewritoes plugin, ArmorAugmentation armorAugmentation)
     {
@@ -44,9 +44,9 @@ public class GoldArmor implements Listener
                     if (goldboots == null)
                         continue;
                     if (goldboots.getType() == Material.GOLDEN_BOOTS &&
-                            (!player.hasPotionEffect(PotionEffectType.JUMP) || player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() <= 2))
+                            (!player.hasPotionEffect(PotionEffectType.JUMP_BOOST) || player.getPotionEffect(PotionEffectType.JUMP_BOOST).getAmplifier() <= 2))
                     {
-                        player.removePotionEffect(PotionEffectType.JUMP);
+                        player.removePotionEffect(PotionEffectType.JUMP_BOOST);
                         player.addPotionEffect(bootsEffect);
                     }
                 }

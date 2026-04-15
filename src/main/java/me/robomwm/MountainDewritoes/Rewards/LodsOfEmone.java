@@ -38,7 +38,7 @@ public class LodsOfEmone
                 message.append(ChatColor.AQUA + ChatColor.BOLD.toString() + "REACHED LEVEL " + level + "!" + ChatColor.DARK_AQUA + " U g0t: ");
 
                 //heal
-                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
                 player.removePotionEffect(PotionEffectType.POISON);
                 player.removePotionEffect(PotionEffectType.WITHER);
 

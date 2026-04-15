@@ -35,7 +35,7 @@ public class TrampleGrass implements Listener
 
         switch (block.getType())
         {
-            case GRASS:
+            case GRASS_BLOCK:
                 block.setType(Material.AIR);
                 break;
             //todo: flowers

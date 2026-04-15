@@ -38,7 +38,7 @@ public class LowHealth implements Listener
             return;
 
         Player player = (Player)event.getEntity();
-        if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() <= 8D)
+        if (player.getAttribute(Attribute.MAX_HEALTH).getValue() <= 8D)
             return;
 
         //Only play the low health sound once, until the player is no longer at low health
@@ -58,7 +58,7 @@ public class LowHealth implements Listener
 //            return; //ignore rapid health regeneration
 
         final double health = player.getHealth() - event.getFinalDamage();
-        final double healthPercentage = health / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        final double healthPercentage = health / player.getAttribute(Attribute.MAX_HEALTH).getValue();
         if (healthPercentage <= 0.33 && !alreadyLowHealth.containsKey(player))
         {
             player.stopSound("");
@@ -72,7 +72,7 @@ public class LowHealth implements Listener
             {
                 public void run()
                 {
-                    double healthPercentage = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                    double healthPercentage = player.getHealth() / player.getAttribute(Attribute.MAX_HEALTH).getValue();
                     if (!alreadyLowHealth.containsKey(player) || healthPercentage > 0.33)
                     {
                         cancel(); //Some other event determined player is not at low health (e.g. death handler)

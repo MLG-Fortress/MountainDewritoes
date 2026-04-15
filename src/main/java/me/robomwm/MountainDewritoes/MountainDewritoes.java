@@ -697,7 +697,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         double yield = event.getYield();
         for (Entity nearbyEntity : entity.getNearbyEntities(yield, yield, yield))
         {
-            if (nearbyEntity.getType() == EntityType.DROPPED_ITEM)
+            if (nearbyEntity.getType() == EntityType.ITEM)
             {
                 event.setCancelled(true);
                 return;
@@ -720,7 +720,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         List<Entity> newEntities = new ArrayList<>();
         for (Entity nearbyEntity : event.getAffectedEntities())
         {
-            if (nearbyEntity.getType() != EntityType.DROPPED_ITEM || !nearbyEntity.hasMetadata("NO_PICKUP"))
+            if (nearbyEntity.getType() != EntityType.ITEM || !nearbyEntity.hasMetadata("NO_PICKUP"))
             {
                 newEntities.add(nearbyEntity);
             }

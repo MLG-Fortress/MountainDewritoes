@@ -60,7 +60,7 @@ public class BetterZeldaHearts implements Listener
 
         ItemStack healthCanister = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta)healthCanister.getItemMeta();
-        potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+        potionMeta.setBasePotionData(new PotionData(PotionType.HEALING));
         potionMeta.setDisplayName(ChatColor.RED + "Health Canister");
         List<String> lore = new ArrayList<>();
         lore.add("Increases ur maximum swegginess");
@@ -111,7 +111,7 @@ public class BetterZeldaHearts implements Listener
         if (economy == null)
             return;
 
-        int maxHealth = (int)entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        int maxHealth = (int)entity.getAttribute(Attribute.MAX_HEALTH).getValue();
         int moneyToDrop = maxHealth;
         moneyToDrop *= Math.log(entity.getTicksLived());
 
@@ -167,7 +167,7 @@ public class BetterZeldaHearts implements Listener
         if (item.getType() != Material.POTION)
             return;
         PotionMeta potionMeta = (PotionMeta)item.getItemMeta();
-        if (potionMeta.getBasePotionData().getType() != PotionType.INSTANT_HEAL)
+        if (potionMeta.getBasePotionData().getType() != PotionType.HEALING)
             return;
         if (!potionMeta.hasLore())
             return;
@@ -175,7 +175,7 @@ public class BetterZeldaHearts implements Listener
         if (!customItems.isItem("healthCanister", item))
             return;
         Player player = event.getPlayer();
-        AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealth = event.getPlayer().getAttribute(Attribute.MAX_HEALTH);
         if (maxHealth.getValue() >= 180D)
         {
             player.sendMessage(ChatColor.RED + "u reached da maximum sweg of 90 swegcaps!");
@@ -246,12 +246,12 @@ public class BetterZeldaHearts implements Listener
 
     boolean healPlayer(Player player)
     {
-        if (player.getHealth() >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
+        if (player.getHealth() >= player.getAttribute(Attribute.MAX_HEALTH).getValue()
                 && player.getFireTicks() <= 0
                 && player.getPotionEffect(PotionEffectType.POISON) == null
                 && player.getPotionEffect(PotionEffectType.WITHER) == null)
             return false;
-        player.addPotionEffect(PotionEffectType.HEAL.createEffect(1, 2));
+        player.addPotionEffect(PotionEffectType.INSTANT_HEALTH.createEffect(1, 2));
         player.setFireTicks(0); //Extinguish
         player.removePotionEffect(PotionEffectType.POISON);
         player.removePotionEffect(PotionEffectType.WITHER);

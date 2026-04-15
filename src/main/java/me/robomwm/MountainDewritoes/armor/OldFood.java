@@ -36,7 +36,7 @@ public class OldFood implements Listener
         Player player = event.getPlayer();
         if (player.getFoodLevel() < 20)
             return;
-        if (player.getHealth() >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+        if (player.getHealth() >= player.getAttribute(Attribute.MAX_HEALTH).getValue())
             return;
         if (getFood(event.getItem()) > 0)
             player.setFoodLevel(19);
@@ -46,7 +46,7 @@ public class OldFood implements Listener
     private void onPlayerEats(PlayerItemConsumeEvent event)
     {
         Player player = event.getPlayer();
-        double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
         double health = player.getHealth();
         double healthToAdd;
 
