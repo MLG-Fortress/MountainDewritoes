@@ -7,9 +7,9 @@
     <version>39.1.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Minecraft 26.1.2 requires Java 25 -->
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <!-- Minecraft 26.1.2 requires Java 21 for compatibility -->
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <repositories>
         <repository>
