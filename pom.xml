@@ -16,10 +16,6 @@
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io/</url>
-        </repository>
-        <repository>
             <id>minecrell</id>
             <url>https://repo.minecrell.net/snapshots/</url>
         </repository>
@@ -42,6 +38,10 @@
         <repository>
             <id>CodeMC</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io/</url>
         </repository>
     </repositories>
     <build>
