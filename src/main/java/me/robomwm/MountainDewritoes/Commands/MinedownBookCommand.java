@@ -246,7 +246,7 @@ public class MinedownBookCommand implements CommandExecutor
     private void openSettings(Player player)
     {
         BookMeta bookMeta = LazyText.getBookMeta();
-        org.bukkit.ChatColor nameColor = plugin.getPlayerDataStore().getNameColor(player);
+        org.bukkit.ChatColor nameColor = plugin.getNameColor(player);
 
         bookMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅ ","/help","Back to /menu"),
                 player.getDisplayName() + org.bukkit.ChatColor.BLACK + "'s settings\n",

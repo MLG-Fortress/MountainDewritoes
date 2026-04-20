@@ -89,7 +89,7 @@ public class NickCommand implements CommandExecutor, Listener
             }
             //player.performCommand("enick " + convertColor(color) + player.getName());
             player.setDisplayName(color + chat.getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
-            plugin.getPlayerDataStore().setNameColor(player, color);
+            plugin.setNameColor(player, color);
             player.sendMessage("Your name's color is now " + color + color.name().toLowerCase());
             return true;
         }
@@ -118,7 +118,7 @@ public class NickCommand implements CommandExecutor, Listener
     @EventHandler(priority = EventPriority.LOWEST)
     private void colorizeNewPlayers(PlayerJoinEvent event)
     {
-        ChatColor color = plugin.getPlayerDataStore().getNameColor(event.getPlayer());
+        ChatColor color = plugin.getNameColor(event.getPlayer());
         event.getPlayer().setDisplayName(color + chat.getPlayerPrefix(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
     }
 
