@@ -24,7 +24,7 @@ Some features include:
 - Nicknames
 - Name colors
 - Warps
-- Quick access menu
+- HotMenu (quick access menu)
 - Changelog
 - Schedule server restarts after plugin updates
 - Others
@@ -43,7 +43,11 @@ Feature code is mostly grouped by package:
 - `Music/` - atmospheric/music systems
 - `Commands/` - command handlers and command utilities
 - `notifications/` - tips and transaction/player notifications
-- `spaceship/`, `arena/`, `NotOverwatch/`, `Rewards/`, `hotmenu/` - gameplay systems and experiments
+- `spaceship/` - minecart ship flight test. key steer.
+- `arena/` - PvP kill gives XP orb.
+- `NotOverwatch/` - hero-style ability tests. gear name checks.
+- `Rewards/` - level-up rewards. enchant table blocked.
+- `hotmenu/` - press F. scroll pick. run command.
 - `Events/` and `packetwrappers/` - custom event plumbing and packet wrappers
 
 There is also a `trash/` folder containing older or unused classes kept for reference.
@@ -103,4 +107,6 @@ Registered commands (see `plugin.yml`) include:
 - The codebase has evolved over many years, so package names and features reflect both active systems and historical experiments.
 
 ## Disabled features
-- View-distance changing via `/view` is currently disabled (the command currently sends guidance text only).
+- `/view` command exists.
+- view-distance change disabled.
+- command sends guidance only.
