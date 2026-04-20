@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.Commands;
 
-import me.robomwm.MountainDewritoes.ReflectionHandler;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import me.robomwm.MountainDewritoes.NSA;
 import org.bukkit.entity.Player;
@@ -9,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created on 8/19/2017.
@@ -19,34 +16,19 @@ import java.lang.reflect.Method;
  */
 public class PseudoCommands implements Listener
 {
-    private static Method muhHandle;
-    private static Field ping;
     private MountainDewritoes instance;
     public PseudoCommands(MountainDewritoes plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         instance = plugin;
-        try
-        {
-            muhHandle = ReflectionHandler.getMethod("CraftPlayer", ReflectionHandler.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
-            ping = ReflectionHandler.getField("EntityPlayer", ReflectionHandler.PackageType.MINECRAFT_SERVER, true, "ping");
-        }
-        catch (Throwable dum)
-        {
-            plugin.getLogger().warning("Ping command and etc. won't work.");
-        }
     }
 
     public static String getPing(Player player)
     {
-        try
-        {
-            return ping.getInt(muhHandle.invoke(player)) + "ms";
-        }
-        catch (Throwable ignored)
-        {
-            return "over 9000!ms";
-        }
+        int ping = player.spigot().getPing();
+        if (ping < 0)
+            return "unknown";
+        return ping + "ms";
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -108,9 +90,9 @@ public class PseudoCommands implements Listener
     private boolean ping(Player player, String command, String[] args)
     {
         player.sendMessage("Your ping: " + getPing(player));
-        if (args.length > 1)
+        if (args.length > 0)
         {
-            Player target = instance.getServer().getPlayer(args[1]);
+            Player target = instance.getServer().getPlayer(args[0]);
             if (target != null)
             {
                 player.sendMessage(target.getDisplayName() + "'s ping: " + getPing(target));
