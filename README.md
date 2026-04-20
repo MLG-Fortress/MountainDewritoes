@@ -1,7 +1,7 @@
 # MountainDewritoes
 Custom server plugin for the MLG Fortress Minecraft server.
 
-IP: mlg.robomwm.com
+IP: `mlg.robomwm.com`
 
 Some features include:
 
@@ -18,5 +18,91 @@ Some features include:
 - Health canisters
 - Health pickups
 - ArmorAugmentation (armor does stuff)
+- Voice lines
+- Tip notifications
+- Transaction notifications
+- Nicknames
+- Name colors
+- Warps
+- HotMenu (quick access menu)
+- Changelog
+- Schedule server restarts after plugin updates
 - Others
 - Seriously I can't seem to stop myself from adding more in here
+
+## What is in this repo
+This is a long-running "all-in-one" server plugin. It mixes gameplay features, quality-of-life systems, commands, and integrations used by the MLG Fortress network.
+
+The plugin entry point is:
+- `me.robomwm.MountainDewritoes.MountainDewritoes`
+
+Feature code is mostly grouped by package:
+- `combat/` and `combat/twoshot/` - combat tuning and weapon systems
+- `Sounds/` - hit/low-health/replacement sound behavior
+- `armor/` - armor augmentation logic
+- `Music/` - atmospheric/music systems
+- `Commands/` - command handlers and command utilities
+- `notifications/` - tips and transaction/player notifications
+- `spaceship/` - minecart ship flight test. key steer.
+- `arena/` - PvP kill gives XP orb.
+- `NotOverwatch/` - hero-style ability tests. gear name checks.
+- `Rewards/` - level-up rewards. enchant table blocked.
+- `hotmenu/` - press F. scroll pick. run command.
+- `Events/` and `packetwrappers/` - custom event plumbing and packet wrappers
+
+There is also a `trash/` folder containing older or unused classes kept for reference.
+
+## Requirements
+- Java 21
+- Paper API `26.1.2+` (as declared in `pom.xml`)
+- Maven 3.x
+
+## Build
+```bash
+mvn clean package
+```
+
+The built plugin jar is shaded and produced under `target/`.
+
+## Runtime integrations
+MountainDewritoes supports many optional plugins through soft dependencies and runtime checks. Notable integrations include:
+- CustomItemRegistry
+- GrandioseAPI
+- SimpleClans
+- BetterTPA
+- Vault
+- ProtocolLib
+- PrettySimpleShop
+- ServerListPlus
+
+Behavior for several features is enabled only when corresponding plugins are present.
+
+## Commands
+Registered commands (see `plugin.yml`) include:
+- `nick` (aliases: `color`, `name`, `nickname`, ...)
+- `warp`
+- `clearchat`
+- `tip`
+- `voice`
+- `start`
+- `music`
+- `shrug`
+- `lejail`
+- `reset`
+- `md`
+- `watchwinreward`
+- `newlog`, `deletelog`
+- `info`
+- `settings`
+- `view`
+- `changelog`
+- `login`
+
+## Notes
+- This project is intentionally practical rather than flashy.
+- The codebase has evolved over many years, so package names and features reflect both active systems and historical experiments.
+
+## Disabled features
+- `/view` command exists.
+- view-distance change disabled.
+- command sends guidance only.
