@@ -156,7 +156,7 @@ public class PseudoCommands implements Listener
 
     public char getColorCode(Player player)
     {
-        return instance.getNameColor(player).getChar();
+        return instance.getPlayerDataStore().getNameColor(player).getChar();
 //        //Get hash code of player's UUID
 //        int colorCode = player.getUniqueId().hashCode();
 //        //Ensure number is positive
