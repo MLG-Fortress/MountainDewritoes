@@ -6,7 +6,6 @@ main: me.robomwm.MountainDewritoes.MountainDewritoes
 api-version: '1.14'
 softdepend:
 - CustomItemRegistry
-- GrandioseAPI
 - ExtraHardMode
 - Healthbar
 - Multiverse-Core

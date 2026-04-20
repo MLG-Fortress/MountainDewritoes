@@ -2,8 +2,6 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemregistry.CustomItemRegistry;
-import com.robomwm.grandioseapi.GrandioseAPI;
-
 import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
@@ -135,10 +133,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private TipCommand tipCommand;
     private AtmosphericManager atmosphericManager;
     private CustomItemRegistry customItemRegistry;
+    private PlayerDataStore playerDataStore;
 
-    public GrandioseAPI getGrandioseAPI()
+    public PlayerDataStore getPlayerDataStore()
     {
-        return (GrandioseAPI)getServer().getPluginManager().getPlugin("GrandioseAPI");
+        return playerDataStore;
     }
 
     @Deprecated
@@ -453,6 +452,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
         //Classes other classes might want to use
         new NSA(this);
+        playerDataStore = new PlayerDataStore(this);
 
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
@@ -467,9 +467,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         if (customItemRegistry != null) {
             new BetterZeldaHearts(this, economy);
         }
-        if (getGrandioseAPI() != null) {
-            new JoinMessages(this);
-        }
+        new JoinMessages(this);
         pm.registerEvents(new ShoppingMall(this), this);
         pm.registerEvents(new LowHealth(this), this);
         pm.registerEvents(new HitSound(this), this);
@@ -486,18 +484,14 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         betterNoDamageTicks = new BetterNoDamageTicks(this);
         new FineSine(this);
         new LodsOfEmone(this);
-        if (getGrandioseAPI() != null) {
-            new PseudoCommands(this);
-        }
+        new PseudoCommands(this);
         new TabList(this);
 //        new TheMidnightPortalToAnywhere(this);
         atmosphericManager = new AtmosphericManager(this);
         if (customItemRegistry != null) {
             new ArmorAugmentation(this);
         }
-        if (getGrandioseAPI() != null) {
-            new AntiLag(this);
-        }
+        new AntiLag(this);
         if (customItemRegistry != null) {
             new FirstJoin(this);
         }
@@ -527,9 +521,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         titleManager = new TitleManager(this);
 
         //Commands
-        if (getGrandioseAPI() != null) {
-            getCommand("nick").setExecutor(new NickCommand(this));
-        }
+        getCommand("nick").setExecutor(new NickCommand(this));
         getCommand("warp").setExecutor(new WarpCommand(this));
         StaffRestartCommand staffRestartCommand = new StaffRestartCommand(this);
         getCommand("restart").setExecutor(staffRestartCommand);
@@ -542,16 +534,12 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("watchwinreward").setExecutor(debugCommand);
         getCommand("md").setExecutor(debugCommand);
         getCommand("voice").setExecutor(new VoiceCommand(this));
-        if (getGrandioseAPI() != null) {
-            getCommand("view").setExecutor(new ViewDistanceCommand(this));
-        }
+        getCommand("view").setExecutor(new ViewDistanceCommand(this));
         getCommand("reset").setExecutor(new ResetCommands(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand());
         new Emoticons(this);
         new ChangelogCommand(this);
-        if (getGrandioseAPI() != null) {
-            new MinedownBookCommand(this);
-        }
+        new MinedownBookCommand(this);
         new SyncCommand(this);
         new MopCommand(this);
 
