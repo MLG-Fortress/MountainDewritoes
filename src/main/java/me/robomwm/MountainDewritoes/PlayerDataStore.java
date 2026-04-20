@@ -2,55 +2,37 @@ package me.robomwm.MountainDewritoes;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
 
 public class PlayerDataStore
 {
-    private final JavaPlugin plugin;
-    private final Map<UUID, YamlConfiguration> cache = new HashMap<>();
-    private final File folder;
+    private final NamespacedKey nameColorKey;
+    private final NamespacedKey expLevelKey;
 
     public PlayerDataStore(JavaPlugin plugin)
     {
-        this.plugin = plugin;
-        this.folder = new File(plugin.getDataFolder(), "grandPlayers");
-        folder.mkdirs();
+        this.nameColorKey = new NamespacedKey(plugin, "name_color");
+        this.expLevelKey = new NamespacedKey(plugin, "exp_level");
     }
 
-    private YamlConfiguration getYaml(OfflinePlayer player)
+    private Player asOnlinePlayer(OfflinePlayer player)
     {
-        UUID uuid = player.getUniqueId();
-        if (!cache.containsKey(uuid))
-        {
-            File file = new File(folder, uuid + ".yml");
-            cache.put(uuid, YamlConfiguration.loadConfiguration(file));
-        }
-        return cache.get(uuid);
-    }
-
-    private void save(OfflinePlayer player)
-    {
-        try
-        {
-            getYaml(player).save(new File(folder, player.getUniqueId() + ".yml"));
-        }
-        catch (IOException e)
-        {
-            plugin.getLogger().log(Level.SEVERE, "Failed to save player data for " + player.getUniqueId(), e);
-        }
+        return player.isOnline() ? (Player) player : null;
     }
 
     public ChatColor getNameColor(OfflinePlayer player)
     {
-        String color = getYaml(player).getString("nameColor");
+        Player onlinePlayer = asOnlinePlayer(player);
+        String color = null;
+        if (onlinePlayer != null)
+        {
+            PersistentDataContainer container = onlinePlayer.getPersistentDataContainer();
+            color = container.get(nameColorKey, PersistentDataType.STRING);
+        }
         if (color != null)
             return ChatColor.valueOf(color);
 
@@ -62,18 +44,26 @@ public class PlayerDataStore
 
     public void setNameColor(OfflinePlayer player, ChatColor color)
     {
-        getYaml(player).set("nameColor", color.name());
-        save(player);
+        Player onlinePlayer = asOnlinePlayer(player);
+        if (onlinePlayer == null)
+            return;
+        onlinePlayer.getPersistentDataContainer().set(nameColorKey, PersistentDataType.STRING, color.name());
     }
 
     public int getExpLevel(OfflinePlayer player)
     {
-        return getYaml(player).getInt("expLevel");
+        Player onlinePlayer = asOnlinePlayer(player);
+        if (onlinePlayer == null)
+            return 0;
+        Integer level = onlinePlayer.getPersistentDataContainer().get(expLevelKey, PersistentDataType.INTEGER);
+        return level == null ? 0 : level;
     }
 
     public void setExpLevel(OfflinePlayer player, int level)
     {
-        getYaml(player).set("expLevel", level);
-        save(player);
+        Player onlinePlayer = asOnlinePlayer(player);
+        if (onlinePlayer == null)
+            return;
+        onlinePlayer.getPersistentDataContainer().set(expLevelKey, PersistentDataType.INTEGER, level);
     }
 }

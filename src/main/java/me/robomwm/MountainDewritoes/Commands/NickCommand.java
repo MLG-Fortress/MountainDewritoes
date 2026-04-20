@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,7 +23,6 @@ public class NickCommand implements CommandExecutor, Listener
 {
     private String acceptableColors;
     private MountainDewritoes plugin;
-    private YamlConfiguration playerColorsYaml;
     private Chat chat;
 
     public NickCommand(MountainDewritoes plugin)
