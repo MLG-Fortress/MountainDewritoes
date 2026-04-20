@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.Commands;
 
-import com.robomwm.grandioseapi.player.GrandPlayer;
 import de.themoep.minedown.MineDown;
 import me.robomwm.MountainDewritoes.LazyText;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
@@ -247,12 +246,12 @@ public class MinedownBookCommand implements CommandExecutor
     private void openSettings(Player player)
     {
         BookMeta bookMeta = LazyText.getBookMeta();
-        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
+        org.bukkit.ChatColor nameColor = plugin.getPlayerDataStore().getNameColor(player);
 
         bookMeta.spigot().addPage(LazyText.buildPage(LazyText.command("⬅ ","/help","Back to /menu"),
                 player.getDisplayName() + org.bukkit.ChatColor.BLACK + "'s settings\n",
                 //LazyText.command("View distance: " + player.getViewDistance(), "/view"), "\n",
-                LazyText.command("Name color: " + grandPlayer.getNameColor() + grandPlayer.getNameColor().name().toLowerCase(), "/name"), "\n",
+                LazyText.command("Name color: " + nameColor + nameColor.name().toLowerCase(), "/name"), "\n",
                 LazyText.command("Music: on", "", "Not implemented yet"), "\n",
                 LazyText.command("SneakPickup: " + getOnOff(player.hasMetadata("SNEAKPICKUP")), "/sneakpickup", "/sneakpickup\nPick up items only when sneaking."), "\n"
         ));

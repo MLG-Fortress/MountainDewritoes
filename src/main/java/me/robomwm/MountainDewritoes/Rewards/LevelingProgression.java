@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.Rewards;
 
-import com.robomwm.grandioseapi.player.GrandPlayer;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -47,8 +46,7 @@ public class LevelingProgression implements Listener
     //How many times did the player level up (compared to when we last checked)?
     private int getLevelUpAmount(Player player)
     {
-        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
-        Integer lastRecordedLevel = grandPlayer.getYaml().getInt("expLevel");
+        int lastRecordedLevel = plugin.getPlayerDataStore().getExpLevel(player);
         if (lastRecordedLevel == 0)
         {
             plugin.getLogger().severe(player.getName() + " had no prior expLevel!");
@@ -64,7 +62,7 @@ public class LevelingProgression implements Listener
         }
         if (timesToLevelUp > 0)
         {
-            grandPlayer.getYaml().set("expLevel", player.getLevel());
+            plugin.getPlayerDataStore().setExpLevel(player, player.getLevel());
             return timesToLevelUp;
         }
         return 0;
@@ -137,12 +135,10 @@ public class LevelingProgression implements Listener
     }
     private void registerPlayerLevel(Player player)
     {
-        GrandPlayer grandPlayer = plugin.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
-        Integer lastRecordedLevel = grandPlayer.getYaml().getInt("expLevel");
+        int lastRecordedLevel = plugin.getPlayerDataStore().getExpLevel(player);
         if (lastRecordedLevel == 0)
         {
-            grandPlayer.getYaml().set("expLevel", player.getLevel());
-            grandPlayer.saveYaml();
+            plugin.getPlayerDataStore().setExpLevel(player, player.getLevel());
         }
         playersToCheck.remove(player);
     }

@@ -1,7 +1,6 @@
 package me.robomwm.MountainDewritoes;
 
 import com.destroystokyo.paper.Title;
-import com.robomwm.grandioseapi.player.GrandPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -143,8 +142,6 @@ public class JoinMessages implements Listener
     private void statusOfPack(PlayerResourcePackStatusEvent event)
     {
         Player player = event.getPlayer();
-        GrandPlayer grandPlayer = instance.getGrandioseAPI().getGrandPlayerManager().getGrandPlayer(player);
-
         switch(event.getStatus())
         {
             case ACCEPTED:

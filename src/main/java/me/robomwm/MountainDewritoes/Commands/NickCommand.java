@@ -1,7 +1,5 @@
 package me.robomwm.MountainDewritoes.Commands;
 
-import com.robomwm.grandioseapi.GrandioseAPI;
-import com.robomwm.grandioseapi.player.GrandPlayer;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
@@ -24,7 +22,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
  */
 public class NickCommand implements CommandExecutor, Listener
 {
-    private GrandioseAPI grandioseAPI;
     private String acceptableColors;
     private MountainDewritoes plugin;
     private YamlConfiguration playerColorsYaml;
@@ -35,7 +32,6 @@ public class NickCommand implements CommandExecutor, Listener
         //Set<String> colorThingy = new HashSet<>(Arrays.asList("Aqua", "Blue", "Dark_Blue", "Green", "Dark_Green", "Light_Purple", "Dark_Purple", "Red", "Dark_Red", "Gold", "Yellow"));
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        grandioseAPI = (GrandioseAPI)plugin.getServer().getPluginManager().getPlugin("GrandioseAPI");
         RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
         if (rsp == null)
         {
@@ -95,7 +91,7 @@ public class NickCommand implements CommandExecutor, Listener
             }
             //player.performCommand("enick " + convertColor(color) + player.getName());
             player.setDisplayName(color + chat.getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
-            grandioseAPI.getGrandPlayerManager().getGrandPlayer(player).setNameColor(color);
+            plugin.getPlayerDataStore().setNameColor(player, color);
             player.sendMessage("Your name's color is now " + color + color.name().toLowerCase());
             return true;
         }
@@ -124,8 +120,8 @@ public class NickCommand implements CommandExecutor, Listener
     @EventHandler(priority = EventPriority.LOWEST)
     private void colorizeNewPlayers(PlayerJoinEvent event)
     {
-        GrandPlayer grandPlayer = grandioseAPI.getGrandPlayerManager().getGrandPlayer(event.getPlayer());
-        event.getPlayer().setDisplayName(grandPlayer.getNameColor() + chat.getPlayerPrefix(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
+        ChatColor color = plugin.getPlayerDataStore().getNameColor(event.getPlayer());
+        event.getPlayer().setDisplayName(color + chat.getPlayerPrefix(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
     }
 
     //Now resides in GrandioseAPI
