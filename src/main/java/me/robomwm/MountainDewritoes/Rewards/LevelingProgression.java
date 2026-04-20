@@ -46,7 +46,7 @@ public class LevelingProgression implements Listener
     //How many times did the player level up (compared to when we last checked)?
     private int getLevelUpAmount(Player player)
     {
-        int lastRecordedLevel = plugin.getStoredExpLevel(player);
+        int lastRecordedLevel = plugin.getPlayerDataStore().getStoredExpLevel(player);
         if (lastRecordedLevel == 0)
         {
             plugin.getLogger().severe(player.getName() + " had no prior expLevel!");
@@ -62,7 +62,7 @@ public class LevelingProgression implements Listener
         }
         if (timesToLevelUp > 0)
         {
-            plugin.setStoredExpLevel(player, player.getLevel());
+            plugin.getPlayerDataStore().setStoredExpLevel(player, player.getLevel());
             return timesToLevelUp;
         }
         return 0;
@@ -135,10 +135,10 @@ public class LevelingProgression implements Listener
     }
     private void registerPlayerLevel(Player player)
     {
-        int lastRecordedLevel = plugin.getStoredExpLevel(player);
+        int lastRecordedLevel = plugin.getPlayerDataStore().getStoredExpLevel(player);
         if (lastRecordedLevel == 0)
         {
-            plugin.setStoredExpLevel(player, player.getLevel());
+            plugin.getPlayerDataStore().setStoredExpLevel(player, player.getLevel());
         }
         playersToCheck.remove(player);
     }
