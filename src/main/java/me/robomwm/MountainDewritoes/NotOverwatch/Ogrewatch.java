@@ -71,6 +71,8 @@ public class Ogrewatch implements Listener
     {
         if (itemStack == null)
             return false;
+        if (!itemStack.hasItemMeta())
+            return false;
         if (!itemStack.getItemMeta().hasDisplayName())
             return false;
         return name.equalsIgnoreCase(itemStack.getItemMeta().getDisplayName());
