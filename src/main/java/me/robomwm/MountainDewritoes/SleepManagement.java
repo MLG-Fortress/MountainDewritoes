@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.World.Environment;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -30,7 +31,7 @@ public class SleepManagement implements Listener
             {
                 for (World world : plugin.getServer().getWorlds())
                 {
-                    if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE))
+                    if (!world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE) || world.isFixedTime())
                         continue;
                     if (WORLD.getTime() == world.getTime())
                         continue;
