@@ -73,7 +73,6 @@ MountainDewritoes supports many optional plugins through soft dependencies and r
 - Vault
 - ProtocolLib
 - PrettySimpleShop
-- ServerListPlus
 
 Behavior for several features is enabled only when corresponding plugins are present.
 

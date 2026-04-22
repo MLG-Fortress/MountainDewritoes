@@ -68,3 +68,4 @@ target/
 *.name
 *.iml
 *.idea/
+.codex
