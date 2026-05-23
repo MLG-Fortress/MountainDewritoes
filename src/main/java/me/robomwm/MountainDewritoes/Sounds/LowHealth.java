@@ -1,9 +1,10 @@
 package me.robomwm.MountainDewritoes.Sounds;
 
-import fr.mrsheepsheep.tinthealth.THAPI;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.WorldBorder;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -138,19 +139,18 @@ public class LowHealth implements Listener
 
     private void applyTint(Player player, boolean should)
     {
-        try
+        if (should)
         {
-            if (should)
-                THAPI.setTint(player, 100);
-            else
-                THAPI.fadeTint(player, 100, 1);
-                //THAPI.removeTint(player);
+            WorldBorder worldBorder = Bukkit.createWorldBorder();
+            worldBorder.setCenter(player.getLocation());
+            worldBorder.setSize(200000D);
+            worldBorder.setWarningDistance(1300000);
+            worldBorder.setWarningTime(15);
+            player.setWorldBorder(worldBorder);
+            return;
         }
-        catch (Exception | Error e)
-        {
-            instance.getLogger().info("You probably need to update TintHealth.");
-            //instance.getLogger().warning(e.getMessage());
-        }
+
+        player.setWorldBorder(null);
     }
 
     @EventHandler(ignoreCancelled = true)

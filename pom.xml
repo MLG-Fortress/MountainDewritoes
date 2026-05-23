@@ -139,13 +139,6 @@
             <version>1.22.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.mrsheepsheep</groupId>
-            <artifactId>tinthealth</artifactId>
-            <version>1.4.6</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/TintHealth.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>com.github.MLG-Fortress</groupId>
             <artifactId>BetterTPA</artifactId>
             <version>3.9</version>
