@@ -1,11 +1,6 @@
 package me.robomwm.MountainDewritoes.Events;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
-import me.robomwm.MountainDewritoes.packetwrappers.WrapperPlayClientSteerVehicle;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +18,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.Key;
+import org.bukkit.Input;
+import org.bukkit.event.player.PlayerInputEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -67,41 +65,6 @@ public class ReverseOsmosis implements Listener
                 movedEvent();
             }
         }.runTaskTimer(plugin, 1L, 20L);
-
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.STEER_VEHICLE)
-        {
-            @Override
-            public void onPacketReceiving(PacketEvent event)
-            {
-                WrapperPlayClientSteerVehicle steerVehicle = new WrapperPlayClientSteerVehicle(event.getPacket());
-                Set<Key> keysPressed = new HashSet<>();
-
-                if (steerVehicle.getForward() > 0)
-                    keysPressed.add(Key.FORWARD);
-                else if (steerVehicle.getForward() < 0)
-                    keysPressed.add(Key.BACK);
-
-                if (steerVehicle.getSideways() > 0)
-                    keysPressed.add(Key.LEFT);
-                else if (steerVehicle.getSideways() < 0)
-                    keysPressed.add(Key.RIGHT);
-
-                if (steerVehicle.isJump())
-                    keysPressed.add(Key.JUMP);
-                if (steerVehicle.isUnmount())
-                    keysPressed.add(Key.SNEAK);
-
-                new BukkitRunnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        plugin.getServer().getPluginManager().callEvent(new PlayerSteerVehicleEvent(event.getPlayer(), keysPressed));
-                    }
-                }.runTask(plugin);
-
-            }
-        });
     }
 
     private void callEvent(Event event)
@@ -237,6 +200,37 @@ public class ReverseOsmosis implements Listener
     void onPlayerMove(PlayerMoveEvent event)
     {
         playersThatMoved.putIfAbsent(event.getPlayer(), event.getFrom());
+    }
+
+    @EventHandler
+    public void onPlayerInput(PlayerInputEvent event)
+    {
+        Player player = event.getPlayer();
+
+        if (!player.isInsideVehicle())
+        {
+            return;
+        }
+
+        Input input = event.getInput();
+        Set<Key> keysPressed = new HashSet<>();
+
+        if (input.isForward())
+            keysPressed.add(Key.FORWARD);
+        else if (input.isBackward())
+            keysPressed.add(Key.BACK);
+
+        if (input.isLeft())
+            keysPressed.add(Key.LEFT);
+        else if (input.isRight())
+            keysPressed.add(Key.RIGHT);
+
+        if (input.isJump())
+            keysPressed.add(Key.JUMP);
+        if (input.isSneak())
+            keysPressed.add(Key.SNEAK);
+
+        instance.getServer().getPluginManager().callEvent(new PlayerSteerVehicleEvent(player, keysPressed));
     }
 
 }
