@@ -5,6 +5,7 @@ import com.robomwm.customitemregistry.CustomItemRegistry;
 import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
+import me.robomwm.MountainDewritoes.Commands.DisplayAdminCommand;
 import me.robomwm.MountainDewritoes.Commands.EmoticonCommands;
 import me.robomwm.MountainDewritoes.Commands.Emoticons;
 import me.robomwm.MountainDewritoes.Commands.MinedownBookCommand;
@@ -366,6 +367,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new MinedownBookCommand(this);
         new SyncCommand(this);
         new MopCommand(this);
+        getCommand("displayadmin").setExecutor(new DisplayAdminCommand());
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);

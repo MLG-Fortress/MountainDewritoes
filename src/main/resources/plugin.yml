@@ -68,3 +68,7 @@ commands:
     permission: mlg.admin
   mop:
     permission: mlg.admin
+  displayadmin:
+    description: Select and move display entities.
+    usage: /<command> <select|movehere>
+    permission: mlg.admin
