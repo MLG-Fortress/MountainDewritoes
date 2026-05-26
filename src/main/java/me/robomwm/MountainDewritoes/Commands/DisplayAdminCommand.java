@@ -27,7 +27,7 @@ public class DisplayAdminCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /" + label + " <select|movehere>");
+            player.sendMessage(ChatColor.RED + "Usage: /" + label + " <select|movehere [yOffset]>");
             return true;
         }
 
@@ -37,7 +37,15 @@ public class DisplayAdminCommand implements CommandExecutor {
             case "select":
                 return handleSelect(player);
             case "movehere":
-                return handleMoveHere(player);
+                double yOffset = 0.0;
+                if (args.length >= 2) {
+                    try {
+                        yOffset = Double.parseDouble(args[1]);
+                    } catch (NumberFormatException e) {
+                        player.sendMessage(ChatColor.RED + "Invalid offset value. Using 0.");
+                    }
+                }
+                return handleMoveHere(player, yOffset);
             default:
                 player.sendMessage(ChatColor.RED + "Unknown argument. Use 'select' or 'movehere'.");
                 return true;
@@ -72,7 +80,7 @@ public class DisplayAdminCommand implements CommandExecutor {
         return true;
     }
 
-    private boolean handleMoveHere(Player player) {
+    private boolean handleMoveHere(Player player, double yOffset) {
         UUID displayId = selectedDisplays.get(player.getUniqueId());
 
         if (displayId == null) {
@@ -88,7 +96,9 @@ public class DisplayAdminCommand implements CommandExecutor {
             return true;
         }
 
-        targetEntity.teleport(player.getLocation());
+        var location = player.getEyeLocation();
+        location.setY(location.getY() + yOffset);
+        targetEntity.teleport(location);
         player.sendMessage(ChatColor.GREEN + "Moved the selected display entity to your current position.");
         return true;
     }
