@@ -41,6 +41,10 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         <repository>
+            <id>viaversion-repo</id>
+            <url>https://repo.viaversion.com</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io/</url>
         </repository>
@@ -157,11 +161,10 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.ProtocolSupport</groupId>
-            <artifactId>ProtocolSupport</artifactId>
-            <version>4.26.dev</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/ProtocolSupport.jar</systemPath>
+            <groupId>com.viaversion</groupId>
+            <artifactId>viaversion-api</artifactId>
+            <version>5.7.2</version>
+            <scope>provided</scope>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>com.github.games647</groupId>-->

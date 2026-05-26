@@ -2,6 +2,8 @@ package me.robomwm.MountainDewritoes;
 
 import com.reilaos.bukkit.TheThuum.shouts.ShoutAreaOfEffectEvent;
 import com.robomwm.customitemregistry.CustomItemRegistry;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import me.robomwm.MountainDewritoes.Commands.ChangelogCommand;
 import me.robomwm.MountainDewritoes.Commands.ClearChatCommand;
 import me.robomwm.MountainDewritoes.Commands.DebugCommand;
@@ -66,10 +68,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -416,11 +414,27 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     }
 
     /*Convenience methods that rely on soft dependencies*/
-    public boolean isLatest(Player player)
+    public boolean isOutdatedClient(Player player)
     {
-        if (!getServer().getPluginManager().isPluginEnabled("ProtocolSupport"))
-            return true;
-        return ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.getLatest(ProtocolType.PC);
+        if (!getServer().getPluginManager().isPluginEnabled("ViaVersion"))
+            return false;
+
+        ProtocolVersion clientVersion = Via.getAPI().getPlayerProtocolVersion(player);
+        ProtocolVersion serverVersion = Via.getAPI().getServerVersion().highestSupportedProtocolVersion();
+        if (clientVersion == ProtocolVersion.unknown || serverVersion == ProtocolVersion.unknown)
+            return false;
+        return clientVersion.olderThan(serverVersion);
+    }
+
+    public String getClientProtocolName(Player player)
+    {
+        if (!getServer().getPluginManager().isPluginEnabled("ViaVersion"))
+            return "unknown version";
+
+        ProtocolVersion clientVersion = Via.getAPI().getPlayerProtocolVersion(player);
+        if (clientVersion == ProtocolVersion.unknown)
+            return "unknown version";
+        return clientVersion.getName();
     }
 
     /*

@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import protocolsupport.api.ProtocolSupportAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
  *
  * Random tip of the day
  * Resource pack notifier
- * Warning to players using older clients (protocolsupport dependency)
+ * Warning to players using older clients (ViaVersion dependency)
  */
 public class JoinMessages implements Listener
 {
@@ -192,13 +191,13 @@ public class JoinMessages implements Listener
                 if (!instance.getServer().getOnlinePlayers().contains(player))
                     return;
                 StringBuilder stringBuilder = new StringBuilder();
-                if (!instance.isLatest(player))
+                if (instance.isOutdatedClient(player))
                 {
                     String old = NSA.getRandomString("archaic", "ancient", "outdated", "out of date", "old", "dum");
                     stringBuilder.append("is using ");
                     stringBuilder.append(old);
                     stringBuilder.append(" ");
-                    stringBuilder.append(ProtocolSupportAPI.getProtocolVersion(player).getName());
+                    stringBuilder.append(instance.getClientProtocolName(player));
                 }
 
                 if (player.hasMetadata("MD_DECLINED"))

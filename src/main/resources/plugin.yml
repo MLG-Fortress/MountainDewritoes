@@ -18,6 +18,7 @@ softdepend:
 - PrettySimpleShop
 - RotatoR
 - Snowbars
+- ViaVersion
 #Currently needed until we nuke crackshot
 loadbefore:
 - AbsorptionShields

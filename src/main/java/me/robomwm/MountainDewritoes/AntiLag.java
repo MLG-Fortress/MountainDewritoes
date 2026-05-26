@@ -75,7 +75,7 @@ public class AntiLag implements Listener
 //        doNotDisable.add("LuckPerms");
 //        doNotDisable.add("Vault");
 //        doNotDisable.add("Votifier");
-//        doNotDisable.add("ProtocolSupport");
+//        doNotDisable.add("ViaVersion");
 //        doNotDisable.add("Geyser");
 //        //Need to remove hard dependency on these
 //        doNotDisable.add("CustomItemRegistry");
