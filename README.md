@@ -71,7 +71,6 @@ MountainDewritoes supports many optional plugins through soft dependencies and r
 - SimpleClans
 - BetterTPA
 - Vault
-- ProtocolLib
 - PrettySimpleShop
 
 Behavior for several features is enabled only when corresponding plugins are present.
