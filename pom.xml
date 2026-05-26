@@ -223,12 +223,7 @@
             <artifactId>Snowbars</artifactId>
             <version>cb5d6414a5</version>
         </dependency>
-        <!-- Changed groupId and version to fix 401 error -->
-        <dependency>
-            <groupId>net.dmulloy2</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>5.4.0</version>
-        </dependency>
+        <!-- ProtocolLib dependency removed - no longer needed after switching to PlayerInputEvent API -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

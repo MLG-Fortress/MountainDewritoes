@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.Key;
 import org.bukkit.Input;
 import org.bukkit.event.player.PlayerInputEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
