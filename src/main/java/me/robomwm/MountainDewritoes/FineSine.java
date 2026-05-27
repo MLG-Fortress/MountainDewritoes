@@ -5,7 +5,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
@@ -36,7 +38,20 @@ public class FineSine implements Listener
         if (!event.getPlayer().hasPermission("mlgstaff"))
             return;
         if (event.getLine(0).equals("FINESINE"))
+        {
             event.setLine(0, FINE_SINE_LABEL);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (!(event.getBlock().getState() instanceof Sign sine))
+                        return;
+                    sine.setWaxed(true);
+                    sine.update();
+                }
+            }.runTask(instance);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -52,15 +67,22 @@ public class FineSine implements Listener
                 !Tag.WALL_SIGNS.isTagged(event.getClickedBlock().getType()))
             return;
         Sign sine = (Sign)event.getClickedBlock().getState();
-        if (!sine.getLine(0).equals(FINE_SINE_LABEL))
+        SignSide side = sine.getTargetSide(event.getPlayer());
+        if (!side.getLine(0).equals(FINE_SINE_LABEL))
             return;
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+        {
+            event.setUseInteractedBlock(Event.Result.DENY);
+            event.setUseItemInHand(Event.Result.DENY);
+            event.setCancelled(true);
+        }
 
         //I'd String.join but gotta get rid of the first line somehow
-        StringBuilder command = new StringBuilder(sine.getLine(1));
-        if (!sine.getLine(2).isEmpty())
-            command.append(" " + sine.getLine(2));
-        if (!sine.getLine(3).isEmpty())
-            command.append(" " + sine.getLine(3));
+        StringBuilder command = new StringBuilder(side.getLine(1));
+        if (!side.getLine(2).isEmpty())
+            command.append(" ").append(side.getLine(2));
+        if (!side.getLine(3).isEmpty())
+            command.append(" ").append(side.getLine(3));
 
         new BukkitRunnable()
         {
