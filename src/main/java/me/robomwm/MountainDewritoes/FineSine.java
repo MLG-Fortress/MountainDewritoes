@@ -1,13 +1,16 @@
 package me.robomwm.MountainDewritoes;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.SignSide;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
@@ -25,6 +28,7 @@ public class FineSine implements Listener
 {
     JavaPlugin instance;
     private final String FINE_SINE_LABEL = ChatColor.DARK_BLUE + "\u2503 FINE  SINE \u2503"; //┃
+    private final Component FINE_SINE_COMPONENT = LegacyComponentSerializer.legacySection().deserialize(FINE_SINE_LABEL);
 
     FineSine(JavaPlugin plugin)
     {
@@ -37,9 +41,9 @@ public class FineSine implements Listener
     {
         if (!event.getPlayer().hasPermission("mlgstaff"))
             return;
-        if (event.getLine(0).equals("FINESINE"))
+        if (PlainTextComponentSerializer.plainText().serialize(event.line(0)).equals("FINESINE"))
         {
-            event.setLine(0, FINE_SINE_LABEL);
+            event.line(0, FINE_SINE_COMPONENT);
             new BukkitRunnable()
             {
                 @Override
@@ -47,8 +51,7 @@ public class FineSine implements Listener
                 {
                     if (!(event.getBlock().getState() instanceof Sign sine))
                         return;
-                    sine.setWaxed(true);
-                    sine.update();
+                    wax(sine);
                 }
             }.runTask(instance);
         }
@@ -68,8 +71,9 @@ public class FineSine implements Listener
             return;
         Sign sine = (Sign)event.getClickedBlock().getState();
         SignSide side = sine.getTargetSide(event.getPlayer());
-        if (!side.getLine(0).equals(FINE_SINE_LABEL))
+        if (!LegacyComponentSerializer.legacySection().serialize(side.line(0)).equals(FINE_SINE_LABEL))
             return;
+        wax(sine);
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
             event.setUseInteractedBlock(Event.Result.DENY);
@@ -78,11 +82,14 @@ public class FineSine implements Listener
         }
 
         //I'd String.join but gotta get rid of the first line somehow
-        StringBuilder command = new StringBuilder(side.getLine(1));
-        if (!side.getLine(2).isEmpty())
-            command.append(" ").append(side.getLine(2));
-        if (!side.getLine(3).isEmpty())
-            command.append(" ").append(side.getLine(3));
+        String line1 = PlainTextComponentSerializer.plainText().serialize(side.line(1));
+        String line2 = PlainTextComponentSerializer.plainText().serialize(side.line(2));
+        String line3 = PlainTextComponentSerializer.plainText().serialize(side.line(3));
+        StringBuilder command = new StringBuilder(line1);
+        if (!line2.isEmpty())
+            command.append(" ").append(line2);
+        if (!line3.isEmpty())
+            command.append(" ").append(line3);
 
         new BukkitRunnable()
         {
@@ -92,5 +99,13 @@ public class FineSine implements Listener
                 event.getPlayer().chat(command.toString());
             }
         }.runTask(instance);
+    }
+
+    private void wax(Sign sine)
+    {
+        if (sine.isWaxed())
+            return;
+        sine.setWaxed(true);
+        sine.update();
     }
 }
