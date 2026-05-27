@@ -145,7 +145,6 @@ public class LowHealth implements Listener
             worldBorder.setCenter(player.getLocation());
             worldBorder.setSize(200000D);
             worldBorder.setWarningDistance(1300000);
-            worldBorder.setWarningTime(15);
             player.setWorldBorder(worldBorder);
             return;
         }
