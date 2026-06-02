@@ -76,3 +76,7 @@ commands:
     description: Toggle and run admin AI maintenance tasks.
     usage: /<command> <on|off|status|reload|abort|run <prompt>>
     permission: mlg.admin
+  spaceship:
+    description: Control spaceships.
+    usage: /<command> <spaceship|airplane|tag>
+    permission: mlg.admin

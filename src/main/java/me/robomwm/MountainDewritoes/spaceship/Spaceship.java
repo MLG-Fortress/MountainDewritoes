@@ -18,10 +18,9 @@ import org.bukkit.util.Vector;
  *
  * @author RoboMWM
  */
-public class Spaceship implements Listener
+public class Spaceship implements FlightControl
 {
     private final Vehicle vehicle;
-    private Vector thrust = new Vector();
     private Vector direction;
     private double pitch = 0;
     private double yaw = 0;
@@ -42,8 +41,6 @@ public class Spaceship implements Listener
             Minecart cart = (Minecart)vehicle;
             cart.setMaxSpeed(999);
         }
-
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
         engine = new BukkitRunnable()
         {
@@ -71,6 +68,15 @@ public class Spaceship implements Listener
                 vehicle.setVelocity(vector);
             }
         }.runTaskTimer(plugin, 1L, 1L);
+    }
+
+    public void stop()
+    {
+        if (engine != null)
+            engine.cancel();
+        vehicle.setGravity(true);
+        if (vehicle instanceof Minecart)
+            ((Minecart) vehicle).setMaxSpeed(0.4);
     }
 
 //    public void move(Vector direction)

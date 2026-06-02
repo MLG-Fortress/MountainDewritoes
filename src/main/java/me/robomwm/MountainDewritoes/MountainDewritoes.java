@@ -15,6 +15,7 @@ import me.robomwm.MountainDewritoes.Commands.MopCommand;
 import me.robomwm.MountainDewritoes.Commands.NickCommand;
 import me.robomwm.MountainDewritoes.Commands.PseudoCommands;
 import me.robomwm.MountainDewritoes.Commands.ResetCommands;
+import me.robomwm.MountainDewritoes.Commands.SpaceshipCommand;
 import me.robomwm.MountainDewritoes.Commands.StaffRestartCommand;
 import me.robomwm.MountainDewritoes.Commands.SyncCommand;
 import me.robomwm.MountainDewritoes.Commands.TipCommand;
@@ -370,6 +371,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         getCommand("displayadmin").setExecutor(new DisplayAdminCommand());
         adminAiCommand = new AdminAiCommand(this);
         getCommand("adminai").setExecutor(adminAiCommand);
+        getCommand("spaceship").setExecutor(new SpaceshipCommand(this));
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);

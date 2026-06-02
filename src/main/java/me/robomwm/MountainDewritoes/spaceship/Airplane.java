@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
  *
  * @author RoboMWM
  */
-public class Airplane implements Listener
+public class Airplane implements FlightControl
 {
     private final Vehicle vehicle;
     private Vector thrust = new Vector();
@@ -39,8 +39,6 @@ public class Airplane implements Listener
             cart.setMaxSpeed(999);
         }
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-
         engine = new BukkitRunnable()
         {
             @Override
@@ -60,10 +58,14 @@ public class Airplane implements Listener
         }.runTaskTimer(plugin, 1L, 1L);
     }
 
-//    public void move(Vector direction)
-//    {
-//        thrust.add(direction);
-//    }
+    public void stop()
+    {
+        if (engine != null)
+            engine.cancel();
+        vehicle.setGravity(true);
+        if (vehicle instanceof Minecart)
+            ((Minecart) vehicle).setMaxSpeed(0.4);
+    }
 
     public void steer(PlayerSteerVehicleEvent event)
     {
