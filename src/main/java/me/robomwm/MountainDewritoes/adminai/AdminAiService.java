@@ -29,6 +29,7 @@ class AdminAiService
     private final Gson gson = new Gson();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final AtomicReference<Process> currentProcess = new AtomicReference<>();
+    private final AtomicReference<CompletableFuture<Boolean>> approvalFuture = new AtomicReference<>();
     private CompletableFuture<?> currentTask;
 
     AdminAiService(MountainDewritoes plugin)
@@ -40,6 +41,7 @@ class AdminAiService
     String getStatus()
     {
         return (config.isEnabled() ? ChatColor.GREEN + "enabled" : ChatColor.RED + "disabled")
+                + (config.isInteractive() ? ChatColor.YELLOW + " (interactive)" : ChatColor.GRAY + " (autonomous)")
                 + ChatColor.GOLD + ", task=" + (isRunning() ? "running" : "idle")
                 + ", providers=" + config.getProviders().size();
     }
@@ -49,6 +51,18 @@ class AdminAiService
         config.setEnabled(enabled);
         if (!enabled)
             abortCurrentTask();
+    }
+
+    void setInteractive(boolean interactive)
+    {
+        config.setInteractive(interactive);
+    }
+
+    void approve(boolean approved)
+    {
+        CompletableFuture<Boolean> future = approvalFuture.getAndSet(null);
+        if (future != null)
+            future.complete(approved);
     }
 
     void reload()
@@ -83,6 +97,9 @@ class AdminAiService
         Process process = currentProcess.getAndSet(null);
         if (process != null)
             process.destroyForcibly();
+        CompletableFuture<Boolean> approval = approvalFuture.getAndSet(null);
+        if (approval != null)
+            approval.complete(false);
         if (currentTask != null)
             currentTask.cancel(true);
     }
@@ -160,6 +177,31 @@ class AdminAiService
     {
         ensureStillEnabled();
         String actionName = action.action == null ? "" : action.action.toLowerCase(Locale.ROOT);
+
+        if (config.isInteractive() && isDestructive(actionName))
+        {
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            approvalFuture.set(future);
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                plugin.getServer().broadcast(ChatColor.GOLD + "[Admin AI] Pending Action: " + actionName, "mlg.admin");
+                if ("write_file".equals(actionName))
+                    plugin.getServer().broadcast(ChatColor.GRAY + "Path: " + action.path, "mlg.admin");
+                if ("run_command".equals(actionName))
+                    plugin.getServer().broadcast(ChatColor.GRAY + "Command: " + action.command, "mlg.admin");
+                plugin.getServer().broadcast(ChatColor.YELLOW + "Use /adminai approve or /adminai deny", "mlg.admin");
+            });
+
+            try
+            {
+                if (!future.get())
+                    return "RESULT error\nAction denied by administrator.";
+            }
+            catch (Exception e)
+            {
+                return "RESULT error\nApproval process interrupted.";
+            }
+        }
+
         return switch (actionName)
         {
             case "read_log" -> "RESULT read_log\n" + readAllowedFile(action.path, true);
@@ -344,6 +386,11 @@ class AdminAiService
     private void send(CommandSender sender, String message)
     {
         plugin.getServer().getScheduler().runTask(plugin, () -> sender.sendMessage(message));
+    }
+
+    private boolean isDestructive(String actionName)
+    {
+        return "write_file".equals(actionName) || "run_command".equals(actionName);
     }
 
     private String truncate(String input, int max)

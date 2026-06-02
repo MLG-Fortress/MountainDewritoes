@@ -45,6 +45,26 @@ public class AdminAiCommand implements CommandExecutor
                 adminAiService.abortCurrentTask();
                 sender.sendMessage(ChatColor.RED + "Admin AI task aborted.");
                 return true;
+            case "approve":
+            case "yes":
+                adminAiService.approve(true);
+                sender.sendMessage(ChatColor.GREEN + "Action approved.");
+                return true;
+            case "deny":
+            case "no":
+                adminAiService.approve(false);
+                sender.sendMessage(ChatColor.RED + "Action denied.");
+                return true;
+            case "interactive":
+                if (args.length < 2)
+                {
+                    sender.sendMessage(ChatColor.GOLD + "Interactive mode: " + (adminAiService.getStatus().contains("interactive") ? "on" : "off"));
+                    return true;
+                }
+                boolean interactive = args[1].equalsIgnoreCase("on") || args[1].equalsIgnoreCase("true");
+                adminAiService.setInteractive(interactive);
+                sender.sendMessage(ChatColor.GREEN + "Interactive mode " + (interactive ? "enabled" : "disabled") + ".");
+                return true;
             case "reload":
                 adminAiService.reload();
                 sender.sendMessage(ChatColor.GREEN + "Admin AI config reloaded.");

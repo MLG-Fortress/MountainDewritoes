@@ -27,6 +27,7 @@ class AdminAiConfig
     {
         FileConfiguration config = plugin.getConfig();
         config.addDefault("admin-ai|enabled", false);
+        config.addDefault("admin-ai|interactive", true);
         config.addDefault("admin-ai|max-iterations", 12);
         config.addDefault("admin-ai|max-command-seconds", 300);
         config.addDefault("admin-ai|max-file-bytes", 65536);
@@ -88,6 +89,17 @@ class AdminAiConfig
     void setEnabled(boolean enabled)
     {
         plugin.getConfig().set("admin-ai|enabled", enabled);
+        plugin.saveConfig();
+    }
+
+    boolean isInteractive()
+    {
+        return plugin.getConfig().getBoolean("admin-ai|interactive", true);
+    }
+
+    void setInteractive(boolean interactive)
+    {
+        plugin.getConfig().set("admin-ai|interactive", interactive);
         plugin.saveConfig();
     }
 
