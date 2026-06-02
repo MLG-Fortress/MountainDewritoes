@@ -74,6 +74,10 @@ public class AdminAiCommand implements CommandExecutor
                     return false;
                 adminAiService.run(sender, StringUtils.join(args, " ", 1, args.length));
                 return true;
+            case "check":
+                adminAiService.run(sender, "Perform a maintenance check.", true);
+                sender.sendMessage(ChatColor.GREEN + "Proactive maintenance check triggered.");
+                return true;
             default:
                 return false;
         }

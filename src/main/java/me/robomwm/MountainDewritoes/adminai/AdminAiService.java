@@ -36,6 +36,15 @@ class AdminAiService
     {
         this.plugin = plugin;
         this.config = new AdminAiConfig(plugin);
+        scheduleMaintenanceCheck();
+    }
+
+    private void scheduleMaintenanceCheck()
+    {
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (config.isEnabled())
+                run(plugin.getServer().getConsoleSender(), "Perform a routine maintenance check. Look for errors in the logs and ensure all plugins are up to date.", true);
+        }, 1200L); // 1 minute after startup
     }
 
     String getStatus()
@@ -72,24 +81,33 @@ class AdminAiService
 
     void run(CommandSender sender, String prompt)
     {
+        run(sender, prompt, false);
+    }
+
+    void run(CommandSender sender, String prompt, boolean proactive)
+    {
         if (!config.isEnabled())
         {
-            sender.sendMessage(ChatColor.RED + "Admin AI is disabled. Use /adminai on first.");
+            if (!proactive)
+                sender.sendMessage(ChatColor.RED + "Admin AI is disabled. Use /adminai on first.");
             return;
         }
         if (isRunning())
         {
-            sender.sendMessage(ChatColor.RED + "Admin AI task already running.");
+            if (!proactive)
+                sender.sendMessage(ChatColor.RED + "Admin AI task already running.");
             return;
         }
         if (config.getProviders().isEmpty())
         {
-            sender.sendMessage(ChatColor.RED + "No enabled admin-ai providers in config.yml.");
+            if (!proactive)
+                sender.sendMessage(ChatColor.RED + "No enabled admin-ai providers in config.yml.");
             return;
         }
 
-        currentTask = CompletableFuture.runAsync(() -> runAgent(sender, prompt), executor);
-        sender.sendMessage(ChatColor.GREEN + "Admin AI task started.");
+        currentTask = CompletableFuture.runAsync(() -> runAgent(sender, prompt, proactive), executor);
+        if (!proactive)
+            sender.sendMessage(ChatColor.GREEN + "Admin AI task started.");
     }
 
     void abortCurrentTask()
@@ -115,7 +133,7 @@ class AdminAiService
         return currentTask != null && !currentTask.isDone();
     }
 
-    private void runAgent(CommandSender sender, String userPrompt)
+    private void runAgent(CommandSender sender, String userPrompt, boolean proactive)
     {
         List<AiMessage> messages = new ArrayList<>();
         messages.add(new AiMessage("system", systemPrompt()));
@@ -129,7 +147,7 @@ class AdminAiService
                 String response = completeWithFallback(messages);
                 messages.add(new AiMessage("assistant", response));
                 AiAction action = parseAction(response);
-                String result = executeAction(action);
+                String result = executeAction(action, proactive);
                 messages.add(new AiMessage("user", result));
                 if ("finish".equalsIgnoreCase(action.action))
                 {
@@ -173,17 +191,17 @@ class AdminAiService
         throw last == null ? new IOException("No enabled providers.") : last;
     }
 
-    private String executeAction(AiAction action) throws IOException, InterruptedException
+    private String executeAction(AiAction action, boolean proactive) throws IOException, InterruptedException
     {
         ensureStillEnabled();
         String actionName = action.action == null ? "" : action.action.toLowerCase(Locale.ROOT);
 
-        if (config.isInteractive() && isDestructive(actionName))
+        if ((config.isInteractive() || proactive) && isDestructive(actionName))
         {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
             approvalFuture.set(future);
             plugin.getServer().getScheduler().runTask(plugin, () -> {
-                plugin.getServer().broadcast(ChatColor.GOLD + "[Admin AI] Pending Action: " + actionName, "mlg.admin");
+                plugin.getServer().broadcast(ChatColor.GOLD + "[Admin AI" + (proactive ? " PROACTIVE" : "") + "] Pending Action: " + actionName, "mlg.admin");
                 if ("write_file".equals(actionName))
                     plugin.getServer().broadcast(ChatColor.GRAY + "Path: " + action.path, "mlg.admin");
                 if ("run_command".equals(actionName))
