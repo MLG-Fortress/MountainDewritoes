@@ -103,4 +103,38 @@ public class SpaceshipPilot implements Listener
         if (control != null)
             control.steer(event);
     }
+
+    public void initiateWarp(Player pilot, org.bukkit.Location target)
+    {
+        Vehicle vehicle = steering.get(pilot);
+        if (vehicle == null)
+            return;
+
+        FlightControl oldControl = activeFlights.remove(vehicle);
+        if (oldControl != null)
+            oldControl.stop();
+
+        WarpDrive warpDrive = new WarpDrive(plugin, vehicle, target, (v) -> {
+            // Re-initialize original flight model after warp
+            activeFlights.remove(v); // Remove WarpDrive
+            String model = v.getPersistentDataContainer().get(flightModelKey, org.bukkit.persistence.PersistentDataType.STRING);
+            if (model != null)
+            {
+                FlightControl newControl = null;
+                switch (model)
+                {
+                    case "Spaceship":
+                        newControl = new Spaceship(plugin, v);
+                        break;
+                    case "Airplane":
+                        newControl = new Airplane(plugin, v);
+                        break;
+                }
+                if (newControl != null)
+                    activeFlights.put(v, newControl);
+            }
+        });
+
+        activeFlights.put(vehicle, warpDrive);
+    }
 }

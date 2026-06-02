@@ -2,6 +2,7 @@ package me.robomwm.MountainDewritoes.Commands;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,11 +36,41 @@ public class SpaceshipCommand implements CommandExecutor
 
         if (args.length < 1)
         {
-            player.sendMessage(ChatColor.RED + "/spaceship <spaceship|airplane|tag>");
+            player.sendMessage(ChatColor.RED + "/spaceship <spaceship|airplane|tag|warp>");
             return true;
         }
 
         String type = args[0].toLowerCase();
+
+        if (type.equals("warp"))
+        {
+            if (args.length < 4)
+            {
+                player.sendMessage(ChatColor.RED + "/spaceship warp <x> <y> <z>");
+                return true;
+            }
+            if (!player.isInsideVehicle())
+            {
+                player.sendMessage(ChatColor.RED + "You must be inside a vehicle to warp.");
+                return true;
+            }
+            
+            try
+            {
+                double x = Double.parseDouble(args[1]);
+                double y = Double.parseDouble(args[2]);
+                double z = Double.parseDouble(args[3]);
+                Location target = new Location(player.getWorld(), x, y, z);
+                
+                plugin.getSpaceshipPilot().initiateWarp(player, target);
+                player.sendMessage(ChatColor.AQUA + "Warp drive engaged. Aligning...");
+            }
+            catch (NumberFormatException e)
+            {
+                player.sendMessage(ChatColor.RED + "Invalid coordinates.");
+            }
+            return true;
+        }
 
         if (type.equals("tag"))
         {

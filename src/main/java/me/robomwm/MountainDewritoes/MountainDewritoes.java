@@ -130,10 +130,16 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private CustomItemRegistry customItemRegistry;
     private PlayerDataStore playerDataStore;
     private AdminAiCommand adminAiCommand;
+    private SpaceshipPilot spaceshipPilot;
 
     public PlayerDataStore getPlayerDataStore()
     {
         return playerDataStore;
+    }
+
+    public SpaceshipPilot getSpaceshipPilot()
+    {
+        return spaceshipPilot;
     }
 
     @Deprecated
@@ -323,7 +329,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         }
         new DummerEnderman(this);
         new OldTNT(this);
-        new SpaceshipPilot(this);
+        spaceshipPilot = new SpaceshipPilot(this);
         new Arena(this);
         if (customItemRegistry != null) {
             new TwoShot(this);
