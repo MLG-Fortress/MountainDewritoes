@@ -72,3 +72,7 @@ commands:
     description: Select and move display entities.
     usage: /<command> <select|movehere [yOffset]>
     permission: mlg.admin
+  spaceship:
+    description: Control spaceships.
+    usage: /<command> <spaceship|airplane|tag>
+    permission: mlg.admin

@@ -373,6 +373,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SyncCommand(this);
         new MopCommand(this);
         getCommand("displayadmin").setExecutor(new DisplayAdminCommand());
+        getCommand("spaceship").setExecutor(new SpaceshipCommand(this));
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
