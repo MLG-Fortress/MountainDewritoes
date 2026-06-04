@@ -72,11 +72,3 @@ commands:
     description: Select and move display entities.
     usage: /<command> <select|movehere [yOffset]>
     permission: mlg.admin
-  adminai:
-    description: Toggle and run admin AI maintenance tasks.
-    usage: /<command> <on|off|status|reload|abort|run <prompt>>
-    permission: mlg.admin
-  spaceship:
-    description: Control spaceships.
-    usage: /<command> <spaceship|airplane|tag>
-    permission: mlg.admin

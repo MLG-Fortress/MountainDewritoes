@@ -29,7 +29,6 @@ import me.robomwm.MountainDewritoes.Rewards.LodsOfEmone;
 import me.robomwm.MountainDewritoes.Sounds.HitSound;
 import me.robomwm.MountainDewritoes.Sounds.LowHealth;
 import me.robomwm.MountainDewritoes.Sounds.ReplacementSoundEffects;
-import me.robomwm.MountainDewritoes.adminai.AdminAiCommand;
 import me.robomwm.MountainDewritoes.arena.Arena;
 import me.robomwm.MountainDewritoes.armor.ArmorAugmentation;
 import me.robomwm.MountainDewritoes.combat.BetterNoDamageTicks;
@@ -129,7 +128,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private AtmosphericManager atmosphericManager;
     private CustomItemRegistry customItemRegistry;
     private PlayerDataStore playerDataStore;
-    private AdminAiCommand adminAiCommand;
     private SpaceshipPilot spaceshipPilot;
 
     public PlayerDataStore getPlayerDataStore()
@@ -375,9 +373,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         new SyncCommand(this);
         new MopCommand(this);
         getCommand("displayadmin").setExecutor(new DisplayAdminCommand());
-        adminAiCommand = new AdminAiCommand(this);
-        getCommand("adminai").setExecutor(adminAiCommand);
-        getCommand("spaceship").setExecutor(new SpaceshipCommand(this));
 
         EmoticonCommands emoticonCommands = new EmoticonCommands(this);
         getCommand("shrug").setExecutor(emoticonCommands);
@@ -403,8 +398,6 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
-        if (adminAiCommand != null)
-            adminAiCommand.shutdown();
         betterNoDamageTicks.onDisable();
         for (Player player : getServer().getOnlinePlayers())
             atmosphericManager.stopMusic(player);
