@@ -177,7 +177,7 @@ public class DebugCommand implements CommandExecutor
             clanManager.getClanPlayer(target).getClan().removePlayerFromClan(target.getUniqueId());
             return true;
         }
-        else if (cmd.getName().equalsIgnoreCase("lejail"))
+        else if (cmd.getName().equalsIgnoreCase("lejail") && args.length >= 2)
         {
             Player target = plugin.getServer().getPlayerExact(args[0]);
             if (target == null || target.hasPermission("i.am.jailed"))

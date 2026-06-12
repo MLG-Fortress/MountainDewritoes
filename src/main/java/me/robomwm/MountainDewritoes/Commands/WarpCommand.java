@@ -114,7 +114,7 @@ public class WarpCommand implements CommandExecutor
             return true;
         }
 
-        if (player.isOp() && args[0].equalsIgnoreCase("create"))
+        if (player.isOp() && args[0].equalsIgnoreCase("create") && args.length > 1)
         {
             addWarp(args[1].toLowerCase(), player.getLocation());
             player.sendMessage("Warp created");
