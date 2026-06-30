@@ -184,6 +184,10 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     {
         newConfig = new YamlConfiguration();
         newConfig.options().pathSeparator('|'); //Literally had to override these config-related members in JavaPlugin just to do this -_-
+
+        newConfig.addDefault("pack", "https://github.com/MLG-Fortress/MLG-Resource-Pack/releases/latest/download/MLG-Resource-Pack.zip");
+        newConfig.options().copyDefaults(true);
+
         try
         {
             newConfig.load(new File(getDataFolder(), "config.yml"));
