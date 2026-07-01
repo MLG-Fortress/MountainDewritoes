@@ -215,6 +215,38 @@ public class ExceptionLogger
     }
     
     /**
+     * Sanitize plugin name to be safe for use as a filename
+     */
+    private String sanitizeFileName(String pluginName)
+    {
+        if (pluginName == null || pluginName.isEmpty())
+            return "unknown";
+        
+        StringBuilder sb = new StringBuilder();
+        for (char c : pluginName.toCharArray())
+        {
+            if (c >= 'a' && c <= 'z')
+                sb.append(c);
+            else if (c >= 'A' && c <= 'Z')
+                sb.append(c);
+            else if (c >= '0' && c <= '9')
+                sb.append(c);
+            else if (c == '.' || c == '-' || c == '_')
+                sb.append(c);
+            else
+                sb.append('_');
+        }
+        
+        // Remove leading/trailing dots and underscores
+        String result = sb.toString();
+        result = result.replaceAll("^[._]+", "");
+        result = result.replaceAll("[._]+$", "");
+        result = result.replaceAll("__+", "_");
+        
+        return result.isEmpty() ? "unknown" : result;
+    }
+    
+    /**
      * Create a unique key for an exception to identify duplicates
      */
     private String createExceptionKey(Throwable throwable, String pluginName)
@@ -292,27 +324,12 @@ public class ExceptionLogger
     }
     
     /**
-     * Log exception to a file in the plugin's data folder
+     * Log exception to a file in MountainDewritoes' data folder, one file per plugin
      */
     private void logExceptionToFile(String pluginName, Throwable throwable, List<String> context, Thread thread)
     {
-        Plugin targetPlugin = Bukkit.getPluginManager().getPlugin(pluginName);
-        File pluginDataFolder = null;
-        
-        if (targetPlugin != null)
-        {
-            pluginDataFolder = targetPlugin.getDataFolder();
-        }
-        else if (pluginName.equals(plugin.getName()))
-        {
-            pluginDataFolder = plugin.getDataFolder();
-        }
-        
-        // Fallback: use MountainDewritoes data folder with subdirectory for the plugin
-        if (pluginDataFolder == null)
-        {
-            pluginDataFolder = new File(plugin.getDataFolder(), "plugin_exceptions" + File.separator + pluginName);
-        }
+        // All exception logs go directly to MountainDewritoes' data folder
+        File pluginDataFolder = plugin.getDataFolder();
         
         // Create the directory if it doesn't exist
         if (!pluginDataFolder.exists())
@@ -320,8 +337,8 @@ public class ExceptionLogger
             pluginDataFolder.mkdirs();
         }
         
-        // Create a log file for this plugin
-        File logFile = new File(pluginDataFolder, "exceptions.log");
+        // Create a log file for this plugin (one file per plugin)
+        File logFile = new File(pluginDataFolder, sanitizeFileName(pluginName) + "_exceptions.log");
         
         try
         {
@@ -396,7 +413,7 @@ public class ExceptionLogger
             
             bufferedWriter.close();
             
-            plugin.getLogger().info("Logged exception from plugin " + pluginName + " to: " + logFile.getAbsolutePath());
+            plugin.getLogger().info("Logged exception from plugin " + pluginName + " to: " + logFile.getPath());
             
         } catch (IOException e)
         {
