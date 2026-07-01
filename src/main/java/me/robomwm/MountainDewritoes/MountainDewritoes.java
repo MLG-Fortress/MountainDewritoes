@@ -22,6 +22,7 @@ import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import me.robomwm.MountainDewritoes.Commands.ViewDistanceCommand;
 import me.robomwm.MountainDewritoes.Commands.VoiceCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
+import me.robomwm.MountainDewritoes.exceptionlogger.ExceptionLogger;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.NotOverwatch.Ogrewatch;
@@ -129,6 +130,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     private CustomItemRegistry customItemRegistry;
     private PlayerDataStore playerDataStore;
     private SpaceshipPilot spaceshipPilot;
+    private ExceptionLogger exceptionLogger;
 
     public PlayerDataStore getPlayerDataStore()
     {
@@ -138,6 +140,11 @@ public class MountainDewritoes extends JavaPlugin implements Listener
     public SpaceshipPilot getSpaceshipPilot()
     {
         return spaceshipPilot;
+    }
+
+    public ExceptionLogger getExceptionLogger()
+    {
+        return exceptionLogger;
     }
 
     @Deprecated
@@ -286,6 +293,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         //Classes other classes might want to use
         new NSA(this);
         playerDataStore = new PlayerDataStore(this);
+        exceptionLogger = new ExceptionLogger(this);
 
         //Wow, lots-o-listeners
         PluginManager pm = getServer().getPluginManager();
