@@ -40,10 +40,8 @@ public class ExceptionLogger
      */
     private void setupExceptionHandler()
     {
-        // Get the current default uncaught exception handler
         Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         
-        // Set our custom handler that wraps the default
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             handleException(thread, throwable);
             if (defaultHandler != null)
@@ -52,22 +50,21 @@ public class ExceptionLogger
             }
         });
         
-        // Also hook into Bukkit's logger to catch exceptions
+        // Hook into all loaded plugin loggers
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins())
+        {
+            Logger pluginLogger = plugin.getLogger();
+            if (pluginLogger != null)
+            {
+                pluginLogger.addHandler(new ExceptionLoggingHandler(plugin.getName(), this));
+            }
+        }
+        
+        // Also hook into Bukkit's logger
         Logger bukkitLogger = Bukkit.getLogger();
         if (bukkitLogger != null)
         {
-            // Wrap the logger's handlers
-            for (Handler handler : bukkitLogger.getHandlers())
-            {
-                if (handler instanceof ConsoleHandler || handler instanceof FileHandler)
-                {
-                    // We'll monitor the logger by adding our own handler
-                    break;
-                }
-            }
-            
-            // Add our custom handler to Bukkit's logger
-            bukkitLogger.addHandler(new ExceptionLoggingHandler(this));
+            bukkitLogger.addHandler(new ExceptionLoggingHandler(null, this));
         }
         
         // Start a task to periodically clean up old context data
@@ -78,7 +75,7 @@ public class ExceptionLogger
             {
                 cleanupOldContextData();
             }
-        }.runTaskTimer(plugin, 20 * 60 * 60L, 20 * 60 * 60L); // Clean up every hour
+        }.runTaskTimer(plugin, 20 * 60 * 60L, 20 * 60 * 60L);
     }
     
     /**
@@ -86,10 +83,17 @@ public class ExceptionLogger
      */
     public void handleException(Thread thread, Throwable throwable)
     {
+        handleException(thread, throwable, null);
+    }
+    
+    public void handleException(Thread thread, Throwable throwable, String pluginName)
+    {
         try
         {
-            // Find which plugin caused this exception
-            String pluginName = findPluginFromThread(thread, throwable);
+            if (pluginName == null || pluginName.isEmpty())
+            {
+                pluginName = findPluginFromThread(thread, throwable);
+            }
             
             if (pluginName == null || pluginName.isEmpty())
             {
@@ -191,16 +195,18 @@ public class ExceptionLogger
             
             // Look for plugin package patterns
             if (className.startsWith("org.bukkit") || className.startsWith("net.minecraft"))
-                continue; // Skip Bukkit/Spigot/NMS classes
+                continue;
                 
-            // Check if this class belongs to a loaded plugin
+            // Check if this class belongs to a loaded plugin by package
             for (Plugin plugin : Bukkit.getPluginManager().getPlugins())
             {
-                String pluginClassPath = plugin.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-                if (pluginClassPath != null && className.startsWith(plugin.getName()))
-                {
-                    return plugin.getName();
-                }
+                try {
+                    String pluginPackage = plugin.getClass().getPackage().getName();
+                    if (className.startsWith(pluginPackage) || className.startsWith(plugin.getName()))
+                    {
+                        return plugin.getName();
+                    }
+                } catch (Exception ignored) {}
             }
         }
         
@@ -466,10 +472,12 @@ public class ExceptionLogger
      */
     private static class ExceptionLoggingHandler extends Handler
     {
+        private final String pluginName;
         private final ExceptionLogger exceptionLogger;
         
-        public ExceptionLoggingHandler(ExceptionLogger exceptionLogger)
+        public ExceptionLoggingHandler(String pluginName, ExceptionLogger exceptionLogger)
         {
+            this.pluginName = pluginName;
             this.exceptionLogger = exceptionLogger;
         }
         
@@ -478,40 +486,54 @@ public class ExceptionLogger
         {
             if (record.getThrown() != null)
             {
-                // Find the plugin from the logger name
-                String loggerName = record.getLoggerName();
-                String pluginName = extractPluginName(loggerName);
-                
-                if (pluginName != null)
+                String name = pluginName;
+                if (name == null)
                 {
-                    exceptionLogger.handleException(Thread.currentThread(), record.getThrown());
+                    name = extractPluginByThrowable(record.getThrown());
                 }
+                if (name == null)
+                {
+                    name = "unknown";
+                }
+                exceptionLogger.handleException(Thread.currentThread(), record.getThrown(), name);
             }
         }
         
-        private String extractPluginName(String loggerName)
+        private String extractPluginByThrowable(Throwable throwable)
         {
-            // Common patterns: org.bukkit.plugin.PluginName, me.author.PluginName, etc.
-            if (loggerName.startsWith("org.bukkit") || loggerName.startsWith("net.minecraft"))
-                return null;
-                
-            // Try to find a loaded plugin that matches
-            for (Plugin plugin : Bukkit.getPluginManager().getPlugins())
+            StackTraceElement[] stackTrace = throwable.getStackTrace();
+            for (StackTraceElement element : stackTrace)
             {
-                if (loggerName.startsWith(plugin.getName()) || loggerName.contains("." + plugin.getName()))
+                String className = element.getClassName();
+                if (className.startsWith("org.bukkit") || className.startsWith("net.minecraft"))
+                    continue;
+                    
+                for (Plugin plugin : Bukkit.getPluginManager().getPlugins())
                 {
-                    return plugin.getName();
+                    try {
+                        String pluginPackage = plugin.getClass().getPackage().getName();
+                        if (className.startsWith(pluginPackage) || className.startsWith(plugin.getName()))
+                        {
+                            return plugin.getName();
+                        }
+                    } catch (Exception ignored) {}
                 }
+            }
+            // Check if it's from MountainDewritoes itself
+            for (StackTraceElement element : stackTrace)
+            {
+                if (element.getClassName().startsWith("me.robomwm.MountainDewritoes"))
+                    return exceptionLogger.plugin.getName();
             }
             return null;
         }
-        
+         
         @Override
         public void flush()
         {
             // No-op
         }
-        
+         
         @Override
         public void close() throws SecurityException
         {
