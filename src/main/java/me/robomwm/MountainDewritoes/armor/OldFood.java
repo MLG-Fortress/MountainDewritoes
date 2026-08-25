@@ -1,7 +1,5 @@
 package me.robomwm.MountainDewritoes.armor;
 
-import me.robomwm.MountainDewritoes.Commands.DebugCommand;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,21 +66,10 @@ public class OldFood implements Listener
 
         EntityRegainHealthEvent healthEvent = new EntityRegainHealthEvent(event.getPlayer(), healthToAdd, EntityRegainHealthEvent.RegainReason.EATING);
         instance.getServer().getPluginManager().callEvent(healthEvent);
-        DebugCommand.debug("OldFood onEat: " + player.getName() + " item " + event.getItem().getType() + " health " + health + "->" + (health + healthToAdd) + " healthEvent cancelled=" + healthEvent.isCancelled() + " food=" + player.getFoodLevel() + " diagnosticAllowFood=" + me.robomwm.MountainDewritoes.armor.ArmorAugmentation.diagnosticAllowFood);
         if (healthEvent.isCancelled())
             event.setCancelled(true);
-        else {
+        else
             player.setHealth(health + healthToAdd);
-            // Diagnostic: explicitly play burp to test if vanilla burp suppressed (see #113)
-            // Vanilla burp is in FoodProperties.onConsume after FoodData.eat, but our dorito bar may suppress it
-            // This explicit play will verify if client can hear burp at all
-            try {
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 0.9f + (float)Math.random()*0.2f);
-                DebugCommand.debug("OldFood explicit burp played for " + player.getName());
-            } catch (Exception e) {
-                DebugCommand.debug("OldFood burp play failed: " + e);
-            }
-        }
 
     }
 
