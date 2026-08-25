@@ -170,6 +170,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
 
     public Economy getEconomy()
     {
+        if (economy == null)
+            setupEconomy(this);
         return economy;
     }
 

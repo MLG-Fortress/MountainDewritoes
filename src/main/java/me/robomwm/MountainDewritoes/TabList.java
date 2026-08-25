@@ -55,12 +55,19 @@ public class TabList implements Listener
     private void setTabList(Player player)
     {
         if (ThreadLocalRandom.current().nextBoolean())
+        {
+            String balanceStr;
+            if (instance.getEconomy() == null)
+                balanceStr = "Balance: ?";
+            else
+                balanceStr = instance.getEconomy().format(instance.getEconomy().getBalance(player));
             player.setPlayerListHeader(colorizer("MLG ", "Fortress", TAB, "Lag: ",
                     lagMeter(), "\n",
-                    instance.getEconomy().format(instance.getEconomy().getBalance(player)), TAB,
+                    balanceStr, TAB,
                     "Ping: ", PseudoCommands.getPing(player), "\n",
                     "Coordinates: (",
                     df.format(player.getLocation().getX()), ", ", df.format(player.getLocation().getZ()), ")"));
+        }
         else
             player.setPlayerListFooter(colorizer("IP: ", "MLG", ".", "ROBOMWM", ".", "COM"));
     }

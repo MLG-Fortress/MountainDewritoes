@@ -52,6 +52,8 @@ public class LodsOfEmone
                 }
 
                 //Give moniez
+                if (instance.getEconomy() == null)
+                    return;
                 double money = Math.log(level) * 500;
                 instance.getEconomy().depositPlayer(player, money);
                 message.append(", and ");

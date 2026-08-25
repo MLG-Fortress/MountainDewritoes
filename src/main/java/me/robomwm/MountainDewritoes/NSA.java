@@ -355,7 +355,12 @@ public class NSA implements Listener
             String prefix = ChatColor.GREEN + "+";
             if (transaction.getAmount() < 0)
                 prefix = ChatColor.RED.toString();
-            listOfTransactions.append(prefix + instance.getEconomy().format(transaction.getAmount())
+            String amountStr;
+            if (instance.getEconomy() == null)
+                amountStr = String.valueOf(transaction.getAmount());
+            else
+                amountStr = instance.getEconomy().format(transaction.getAmount());
+            listOfTransactions.append(prefix + amountStr
                     + " " + ChatColor.GRAY + UsefulUtils.formatTime(UsefulUtils.getCurrentSeconds() - transaction.getSeconds()) + " ago");
             listOfTransactions.append("\n");
         }

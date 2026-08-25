@@ -5,6 +5,7 @@ author: RoboMWM
 main: me.robomwm.MountainDewritoes.MountainDewritoes
 api-version: '1.14'
 softdepend:
+- Vault
 - CustomItemRegistry
 - ExtraHardMode
 - Healthbar

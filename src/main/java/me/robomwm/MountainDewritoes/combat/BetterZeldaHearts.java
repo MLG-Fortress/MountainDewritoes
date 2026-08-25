@@ -144,6 +144,8 @@ public class BetterZeldaHearts implements Listener
 
     private void dropMobMoney(Location location, double amount)
     {
+        if (economy == null)
+            return;
         ItemStack money = customItems.getItem("mobMoney");
         ItemMeta moneyMeta = money.getItemMeta();
         List<String> lore = moneyMeta.getLore();
@@ -227,12 +229,14 @@ public class BetterZeldaHearts implements Listener
         }
 
         else if (isMobMoney(itemStack))
-        {
-            double money = Double.valueOf(itemStack.getItemMeta().getLore().get(0));
-            economy.depositPlayer(event.getPlayer(), money);
-            event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.mobmoney", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            event.getItem().remove();
-        }
+            {
+                if (economy == null)
+                    return;
+                double money = Double.valueOf(itemStack.getItemMeta().getLore().get(0));
+                economy.depositPlayer(event.getPlayer(), money);
+                event.getPlayer().playSound(event.getPlayer().getLocation(), "fortress.mobmoney", SoundCategory.PLAYERS, 3000000f, 1.0f);
+                event.getItem().remove();
+            }
     }
 
     private boolean isHealthHeart(ItemStack item)

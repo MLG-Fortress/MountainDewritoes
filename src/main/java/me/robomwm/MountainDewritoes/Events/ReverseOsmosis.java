@@ -57,9 +57,12 @@ public class ReverseOsmosis implements Listener
             @Override
             public void run()
             {
+                Economy economy = plugin.getEconomy();
+                if (economy == null)
+                    return;
                 for (Player player : plugin.getServer().getOnlinePlayers())
                 {
-                    transactionEvent(player, plugin.getEconomy());
+                    transactionEvent(player, economy);
                 }
                 movedEvent();
             }
@@ -73,6 +76,8 @@ public class ReverseOsmosis implements Listener
 
     private void transactionEvent(Player player, Economy economy)
     {
+        if (economy == null)
+            return;
         if (!oldBalances.containsKey(player))
         {
             oldBalances.put(player, economy.getBalance(player));
