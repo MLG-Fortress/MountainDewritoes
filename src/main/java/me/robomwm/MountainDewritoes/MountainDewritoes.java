@@ -334,6 +334,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
             new ArmorAugmentation(this);
         }
         new AntiLag(this);
+        new FoodDebugListener(this);
         if (customItemRegistry != null) {
             new FirstJoin(this);
         }

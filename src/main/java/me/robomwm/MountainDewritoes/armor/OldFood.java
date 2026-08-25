@@ -1,5 +1,6 @@
 package me.robomwm.MountainDewritoes.armor;
 
+import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,8 +39,11 @@ public class OldFood implements Listener
             return;
         if (player.getHealth() >= player.getAttribute(Attribute.MAX_HEALTH).getValue())
             return;
-        if (getFood(event.getItem()) > 0)
+        if (getFood(event.getItem()) > 0) {
+            DebugCommand.debug("OldFood preEat: " + player.getName() + " food 20->19 health " + player.getHealth() + " item " + event.getItem().getType());
             player.setFoodLevel(19);
+            DebugCommand.debug("OldFood preEat after: food=" + player.getFoodLevel());
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -66,6 +70,7 @@ public class OldFood implements Listener
 
         EntityRegainHealthEvent healthEvent = new EntityRegainHealthEvent(event.getPlayer(), healthToAdd, EntityRegainHealthEvent.RegainReason.EATING);
         instance.getServer().getPluginManager().callEvent(healthEvent);
+        DebugCommand.debug("OldFood onEat: " + player.getName() + " item " + event.getItem().getType() + " health " + health + "->" + (health + healthToAdd) + " healthEvent cancelled=" + healthEvent.isCancelled() + " consumeCancelled=" + event.isCancelled() + " food=" + player.getFoodLevel() + " handRaised=" + player.isHandRaised());
         if (healthEvent.isCancelled())
             event.setCancelled(true);
         else
