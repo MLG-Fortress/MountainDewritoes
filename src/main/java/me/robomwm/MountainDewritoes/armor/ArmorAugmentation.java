@@ -1,6 +1,5 @@
 package me.robomwm.MountainDewritoes.armor;
 
-import me.robomwm.MountainDewritoes.Commands.DebugCommand;
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -139,10 +138,6 @@ public class ArmorAugmentation implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onGettingHungry(FoodLevelChangeEvent event)
     {
-        if (event.getEntity() instanceof Player) {
-            Player p = (Player) event.getEntity();
-            DebugCommand.debug("ArmorAug onGettingHungry cancel: player=" + p.getName() + " " + p.getFoodLevel() + "->" + event.getFoodLevel() + " handRaised=" + p.isHandRaised());
-        }
         event.setCancelled(true);
     }
 
@@ -159,8 +154,6 @@ public class ArmorAugmentation implements Listener
                 {
                     if (player.getFoodLevel() >= 20)
                         continue;
-                    int before = player.getFoodLevel();
-                    DebugCommand.debug("ATPgeneration: " + player.getName() + " " + before + "->" + (before+1) + " handRaised=" + player.isHandRaised());
                     player.setFoodLevel(player.getFoodLevel() + 1);
                 }
             }
