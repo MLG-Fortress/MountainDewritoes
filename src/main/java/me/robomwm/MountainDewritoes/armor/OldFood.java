@@ -66,7 +66,7 @@ public class OldFood implements Listener
 
         EntityRegainHealthEvent healthEvent = new EntityRegainHealthEvent(event.getPlayer(), healthToAdd, EntityRegainHealthEvent.RegainReason.EATING);
         instance.getServer().getPluginManager().callEvent(healthEvent);
-        if (event.isCancelled())
+        if (healthEvent.isCancelled())
             event.setCancelled(true);
         else
             player.setHealth(health + healthToAdd);
