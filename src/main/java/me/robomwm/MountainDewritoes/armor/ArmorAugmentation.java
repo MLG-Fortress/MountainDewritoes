@@ -135,9 +135,17 @@ public class ArmorAugmentation implements Listener
     }
 
     //That's a dorito bar, not a hunger bar.
+    public static boolean diagnosticAllowFood = false;
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     private void onGettingHungry(FoodLevelChangeEvent event)
     {
+        if (diagnosticAllowFood) {
+            if (event.getEntity() instanceof Player) {
+                Player p = (Player) event.getEntity();
+                me.robomwm.MountainDewritoes.Commands.DebugCommand.debug("ArmorAug diagnostic ALLOW FoodLevelChange: player=" + p.getName() + " " + p.getFoodLevel() + "->" + event.getFoodLevel() + " (not cancelled for burp test)");
+            }
+            return;
+        }
         event.setCancelled(true);
     }
 

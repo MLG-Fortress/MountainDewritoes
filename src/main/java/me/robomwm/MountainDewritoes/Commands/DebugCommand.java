@@ -70,6 +70,16 @@ public class DebugCommand implements CommandExecutor
 
         switch(args[0].toLowerCase())
         {
+            case "burp":
+                // Diagnostic for #113: allow FoodLevelChangeEvent to test if cancel suppresses burp
+                me.robomwm.MountainDewritoes.armor.ArmorAugmentation.diagnosticAllowFood = !me.robomwm.MountainDewritoes.armor.ArmorAugmentation.diagnosticAllowFood;
+                sender.sendMessage("diagnosticAllowFood=" + me.robomwm.MountainDewritoes.armor.ArmorAugmentation.diagnosticAllowFood + " (when true, FoodLevelChangeEvent NOT cancelled, burp should play if cancel was cause)");
+                // also ensure debug on for logs
+                if (!debug) {
+                    debug = true;
+                    sender.sendMessage("debug auto-enabled for FoodDebugListener");
+                }
+                return true;
             case "botconvo":
                 if (talking != null)
                 {
