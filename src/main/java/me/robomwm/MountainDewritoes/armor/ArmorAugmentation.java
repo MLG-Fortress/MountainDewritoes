@@ -159,11 +159,6 @@ public class ArmorAugmentation implements Listener
                 {
                     if (player.getFoodLevel() >= 20)
                         continue;
-                    // Don't regen doritos mid-eat (eat=32t, regen=20t race beats burp - see #113)
-                    if (player.isHandRaised()) {
-                        DebugCommand.debug("ATPgeneration skip (eating): " + player.getName() + " food=" + player.getFoodLevel() + " handRaised=true");
-                        continue;
-                    }
                     int before = player.getFoodLevel();
                     DebugCommand.debug("ATPgeneration: " + player.getName() + " " + before + "->" + (before+1) + " handRaised=" + player.isHandRaised());
                     player.setFoodLevel(player.getFoodLevel() + 1);
