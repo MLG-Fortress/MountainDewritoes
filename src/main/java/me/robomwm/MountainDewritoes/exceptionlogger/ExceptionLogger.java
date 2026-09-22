@@ -2,11 +2,17 @@ package me.robomwm.MountainDewritoes.exceptionlogger;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -17,11 +23,19 @@ import java.util.logging.*;
  * Only logs one instance of each unique exception per plugin (deduplicated, never expires).
  * File writes run on a dedicated single-threaded executor: never on the server thread,
  * and serialized so concurrent exceptions cannot interleave in the log files.
+ * Keeps a rolling buffer of the last few executed commands (players and console);
+ * on exception they are printed under a CONTEXT header so the log shows
+ * what led up to the error.
  */
-public class ExceptionLogger
+public class ExceptionLogger implements Listener
 {
     private final MountainDewritoes plugin;
     private final Map<String, Set<String>> loggedExceptions;
+
+    // Rolling buffer of the most recent commands executed on the server,
+    // printed as context in exception logs.
+    private static final int MAX_CONTEXT_ENTRIES = 5;
+    private final Deque<String> recentCommands = new ConcurrentLinkedDeque<>();
 
     // Single-threaded writer: keeps file I/O off the server thread and
     // serializes appends so concurrent exceptions cannot interleave.
@@ -38,6 +52,7 @@ public class ExceptionLogger
         this.loggedExceptions = new ConcurrentHashMap<>();
 
         setupExceptionHandler();
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     /**
@@ -56,6 +71,38 @@ public class ExceptionLogger
             logExecutor.shutdownNow();
             Thread.currentThread().interrupt();
         }
+    }
+
+    /**
+     * Record a player command as context for future exceptions.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+    {
+        addContext("COMMAND by " + event.getPlayer().getName() + ": " + event.getMessage());
+    }
+
+    /**
+     * Record a console command as context for future exceptions.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onServerCommand(ServerCommandEvent event)
+    {
+        addContext("COMMAND by console: " + event.getCommand());
+    }
+
+    /**
+     * Add a free-text breadcrumb (e.g. "starting warp import") to the context
+     * buffer. Only the last few entries are kept; they are printed with
+     * exception logs to show what led up to the error.
+     */
+    public void addContext(String context)
+    {
+        if (context == null || context.isEmpty())
+            return;
+        recentCommands.addLast("[" + new Date() + "] " + context);
+        while (recentCommands.size() > MAX_CONTEXT_ENTRIES)
+            recentCommands.pollFirst();
     }
 
     /**
@@ -390,6 +437,19 @@ public class ExceptionLogger
                     PrintWriter causePw = new PrintWriter(causeSw);
                     cause.printStackTrace(causePw);
                     bufferedWriter.write(causeSw.toString());
+                    bufferedWriter.write("\n");
+                }
+
+                // Recent commands, for context on how the exception came about
+                if (!recentCommands.isEmpty())
+                {
+                    bufferedWriter.write("CONTEXT (Recent operations before exception):");
+                    bufferedWriter.write("\n");
+                    for (String contextEntry : recentCommands)
+                    {
+                        bufferedWriter.write("  " + contextEntry);
+                        bufferedWriter.write("\n");
+                    }
                     bufferedWriter.write("\n");
                 }
 
