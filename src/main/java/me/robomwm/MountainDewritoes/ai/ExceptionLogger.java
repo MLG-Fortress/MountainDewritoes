@@ -93,12 +93,14 @@ public class ExceptionLogger implements Listener
     private static class ContextState
     {
         final ContextEntry firstCommand;
+        final String entryId;
         boolean confirmed;
         boolean invalidated;
 
-        ContextState(ContextEntry firstCommand)
+        ContextState(ContextEntry firstCommand, String entryId)
         {
             this.firstCommand = firstCommand;
+            this.entryId = entryId;
         }
     }
 
@@ -192,6 +194,7 @@ public class ExceptionLogger implements Listener
             ContextEntry command = captureLastCommand();
 
             boolean firstSeen;
+            String entryId = null;
             synchronized (contextLock)
             {
                 // Have we logged this exact exception before? (Safe to ask
@@ -202,11 +205,12 @@ public class ExceptionLogger implements Listener
                     // First time seeing it: remember what command was just run,
                     // but don't save it yet. It only gets saved if this
                     // exception happens again after the same command.
-                    contextStates.put(exceptionKey, new ContextState(command));
+                    entryId = UUID.randomUUID().toString();
+                    contextStates.put(exceptionKey, new ContextState(command, entryId));
                 }
                 else
                 {
-                    maybeConfirmContext(pluginName, exceptionKey, throwable, command);
+                    maybeConfirmContext(pluginName, exceptionKey, command);
                 }
             }
 
@@ -217,7 +221,8 @@ public class ExceptionLogger implements Listener
 
             // Hand the file writing to the background thread
             final String loggedPluginName = pluginName;
-            logExecutor.submit(() -> writeSafely(loggedPluginName, throwable, thread));
+            final String loggedEntryId = entryId;
+            logExecutor.submit(() -> writeSafely(loggedPluginName, throwable, thread, loggedEntryId));
 
         } catch (Exception e)
         {
@@ -244,16 +249,18 @@ public class ExceptionLogger implements Listener
             ContextEntry command = captureLastCommand();
 
             boolean firstSeen;
+            String entryId = null;
             synchronized (contextLock)
             {
                 firstSeen = addLoggedException(pluginName, exceptionKey);
                 if (firstSeen)
                 {
-                    contextStates.put(exceptionKey, new ContextState(command));
+                    entryId = UUID.randomUUID().toString();
+                    contextStates.put(exceptionKey, new ContextState(command, entryId));
                 }
                 else
                 {
-                    maybeConfirmContext(pluginName, exceptionKey, throwable, command);
+                    maybeConfirmContext(pluginName, exceptionKey, command);
                 }
             }
 
@@ -263,7 +270,8 @@ public class ExceptionLogger implements Listener
             }
 
             Thread thread = Thread.currentThread();
-            logExecutor.submit(() -> writeSafely(pluginName, throwable, thread));
+            final String loggedEntryId = entryId;
+            logExecutor.submit(() -> writeSafely(pluginName, throwable, thread, loggedEntryId));
         }
         catch (Exception e)
         {
@@ -276,11 +284,11 @@ public class ExceptionLogger implements Listener
      * Write the log file, but if writing fails, don't feed that failure back
      * into the exception handler or it would loop forever.
      */
-    private void writeSafely(String pluginName, Throwable throwable, Thread thread)
+    private void writeSafely(String pluginName, Throwable throwable, Thread thread, String entryId)
     {
         try
         {
-            logExceptionToFile(pluginName, throwable, thread);
+            logExceptionToFile(pluginName, throwable, thread, entryId);
         }
         catch (Throwable t)
         {
@@ -445,7 +453,7 @@ public class ExceptionLogger implements Listener
      * contextLock). Saves the command only if it's the same one as last time;
      * if it changed, it was probably a coincidence, so we save nothing.
      */
-    private void maybeConfirmContext(String pluginName, String exceptionKey, Throwable throwable, ContextEntry command)
+    private void maybeConfirmContext(String pluginName, String exceptionKey, ContextEntry command)
     {
         ContextState state = contextStates.get(exceptionKey);
         if (state == null || state.confirmed || state.invalidated)
@@ -455,7 +463,8 @@ public class ExceptionLogger implements Listener
                 && command.text.equals(state.firstCommand.text))
         {
             state.confirmed = true;
-            logExecutor.submit(() -> writeConfirmedContextSafely(pluginName, throwable, command));
+            final String confirmedEntryId = state.entryId;
+            logExecutor.submit(() -> writeConfirmedContextSafely(pluginName, confirmedEntryId, command));
         }
         else
         {
@@ -464,37 +473,74 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Add the confirmed command to the plugin's log file, right after the
-     * original exception entry. If writing fails, report it normally; don't
+     * Merge the confirmed command into the exception's original log entry.
+     * Runs on the writer thread after the entry was written, so the entry
+     * is always there first. If writing fails, report it normally; don't
      * send it back through the exception handler or it would loop forever.
      */
-    private void writeConfirmedContextSafely(String pluginName, Throwable throwable, ContextEntry command)
+    private void writeConfirmedContextSafely(String pluginName, String entryId, ContextEntry command)
     {
         try
         {
-            File pluginDataFolder = plugin.getDataFolder();
-            if (!pluginDataFolder.exists())
+            File logFile = new File(plugin.getDataFolder(), sanitizeFileName(pluginName) + "_exceptions.log");
+            List<String> lines = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(logFile)))
             {
-                pluginDataFolder.mkdirs();
+                String line;
+                while ((line = reader.readLine()) != null)
+                    lines.add(line);
             }
 
-            File logFile = new File(pluginDataFolder, sanitizeFileName(pluginName) + "_exceptions.log");
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true)))
+            int entryLine = -1;
+            for (int i = 0; i < lines.size(); i++)
             {
-                writer.write("\n");
-                writer.write("================================================================================");
-                writer.write("\n");
-                writer.write("CONFIRMED CONTEXT LOGGED AT: " + new Date().toString());
-                writer.write("\n");
-                writer.write("FOR EXCEPTION: " + throwable.getClass().getName() + ": "
-                        + (throwable.getMessage() != null ? throwable.getMessage() : "null"));
-                writer.write("\n");
-                writer.write("(This exception keeps happening after the same command, so it's likely related.)");
-                writer.write("\n");
-                writer.write("COMMAND: [" + new Date(command.timestamp) + "] " + command.text);
-                writer.write("\n");
-                writer.write("================================================================================");
-                writer.write("\n");
+                if (lines.get(i).equals("ENTRY ID: " + entryId))
+                {
+                    entryLine = i;
+                    break;
+                }
+            }
+            if (entryLine < 0)
+            {
+                plugin.getLogger().warning("ExceptionLogger could not find log entry " + entryId + " to add confirmed context");
+                return;
+            }
+
+            // The entry ends at the second separator after the ENTRY ID line
+            // (the first one closes the header).
+            int separatorsSeen = 0;
+            int insertAt = -1;
+            for (int i = entryLine; i < lines.size(); i++)
+            {
+                if (lines.get(i).startsWith("=========="))
+                {
+                    separatorsSeen++;
+                    if (separatorsSeen == 2)
+                    {
+                        insertAt = i;
+                        break;
+                    }
+                }
+            }
+            if (insertAt < 0)
+            {
+                plugin.getLogger().warning("ExceptionLogger could not find end of log entry " + entryId);
+                return;
+            }
+
+            lines.addAll(insertAt, Arrays.asList(
+                    "CONFIRMED CONTEXT:",
+                    "(This exception keeps happening after the same command, so it's likely related.)",
+                    "COMMAND: [" + new Date(command.timestamp) + "] " + command.text,
+                    ""));
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, false)))
+            {
+                for (String line : lines)
+                {
+                    writer.write(line);
+                    writer.newLine();
+                }
             }
         }
         catch (Throwable t)
@@ -507,7 +553,7 @@ public class ExceptionLogger implements Listener
      * Write an exception to the plugin's log file. Always runs on the
      * background writer thread, never the server thread.
      */
-    private void logExceptionToFile(String pluginName, Throwable throwable, Thread thread)
+    private void logExceptionToFile(String pluginName, Throwable throwable, Thread thread, String entryId)
     {
         // Everything goes in MountainDewritoes' data folder
         File pluginDataFolder = plugin.getDataFolder();
@@ -537,6 +583,8 @@ public class ExceptionLogger implements Listener
                 bufferedWriter.write("================================================================================");
                 bufferedWriter.write("\n");
                 bufferedWriter.write("EXCEPTION LOGGED AT: " + new Date().toString());
+                bufferedWriter.write("\n");
+                bufferedWriter.write("ENTRY ID: " + entryId);
                 bufferedWriter.write("\n");
                 bufferedWriter.write("PLUGIN: " + pluginName);
                 bufferedWriter.write("\n");
