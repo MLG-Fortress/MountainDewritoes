@@ -12,7 +12,6 @@ import org.bukkit.plugin.Plugin;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,23 +22,22 @@ import java.util.logging.*;
  * Each unique exception is only logged once per plugin, no matter how often it happens.
  * Writing happens on its own background thread, so it never slows down the server,
  * and two writes can't get tangled up when exceptions happen at the same time.
- * Remembers the last few commands that were run (by players and by the server).
- * Those commands are only saved with an exception if the same exception keeps
- * happening after the same commands; a one-time coincidence is ignored.
+ * Remembers the last command that was run (by a player or the server).
+ * That command is only saved with an exception if the same exception keeps
+ * happening after the same command; a one-time coincidence is ignored.
  */
 public class ExceptionLogger implements Listener
 {
     private final MountainDewritoes plugin;
     private final Map<String, Set<String>> loggedExceptions;
 
-    // The last few commands run on the server. Commands older than
-    // CONTEXT_WINDOW_MILLIS don't count; they're too old to have caused anything.
-    private static final int MAX_CONTEXT_ENTRIES = 5;
-    private static final long CONTEXT_WINDOW_MILLIS = 5 * 60 * 1000;
-    private final Deque<ContextEntry> recentCommands = new ConcurrentLinkedDeque<>();
+    // The last command run on the server. A command older than
+    // CONTEXT_WINDOW_MILLIS doesn't count; it's too old to have caused anything.
+    private static final long CONTEXT_WINDOW_MILLIS = 10 * 1000;
+    private volatile ContextEntry lastCommand;
 
-    // Remembers what the recent commands were the first time each exception
-    // happened, so we can check if they're the same when it happens again.
+    // Remembers what the last command was the first time each exception
+    // happened, so we can check if it's the same when it happens again.
     // The lock keeps two threads from checking and updating this at once.
     private final Map<String, ContextState> contextStates = new ConcurrentHashMap<>();
     private final Object contextLock = new Object();
@@ -94,13 +92,13 @@ public class ExceptionLogger implements Listener
 
     private static class ContextState
     {
-        final List<ContextEntry> firstContext;
+        final ContextEntry firstCommand;
         boolean confirmed;
         boolean invalidated;
 
-        ContextState(List<ContextEntry> firstContext)
+        ContextState(ContextEntry firstCommand)
         {
-            this.firstContext = firstContext;
+            this.firstCommand = firstCommand;
         }
     }
 
@@ -124,20 +122,14 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Save a short note (e.g. "saving player data") with the recent commands.
-     * Only the last few are kept. For plugins to note what they were doing,
-     * in case an exception follows.
+     * Save a short note (e.g. "saving player data") as the last thing that happened.
+     * For plugins to note what they were doing, in case an exception follows.
      */
     public void addContext(String context)
     {
         if (context == null || context.isEmpty())
             return;
-        long now = System.currentTimeMillis();
-        recentCommands.addLast(new ContextEntry(now, context));
-        while (recentCommands.size() > MAX_CONTEXT_ENTRIES)
-            recentCommands.pollFirst();
-        while (!recentCommands.isEmpty() && now - recentCommands.peekFirst().timestamp > CONTEXT_WINDOW_MILLIS)
-            recentCommands.pollFirst();
+        lastCommand = new ContextEntry(System.currentTimeMillis(), context);
     }
 
     /**
@@ -197,7 +189,7 @@ public class ExceptionLogger implements Listener
 
             // Build an ID for this exception so we can tell if we've seen it before
             String exceptionKey = createExceptionKey(throwable, pluginName);
-            List<ContextEntry> contextSnapshot = captureContextSnapshot();
+            ContextEntry command = captureLastCommand();
 
             boolean firstSeen;
             synchronized (contextLock)
@@ -207,14 +199,14 @@ public class ExceptionLogger implements Listener
                 firstSeen = addLoggedException(pluginName, exceptionKey);
                 if (firstSeen)
                 {
-                    // First time seeing it: remember what commands were just run,
-                    // but don't save them yet. They only get saved if this
-                    // exception happens again after the same commands.
-                    contextStates.put(exceptionKey, new ContextState(contextSnapshot));
+                    // First time seeing it: remember what command was just run,
+                    // but don't save it yet. It only gets saved if this
+                    // exception happens again after the same command.
+                    contextStates.put(exceptionKey, new ContextState(command));
                 }
                 else
                 {
-                    maybeConfirmContext(pluginName, exceptionKey, throwable, contextSnapshot);
+                    maybeConfirmContext(pluginName, exceptionKey, throwable, command);
                 }
             }
 
@@ -249,7 +241,7 @@ public class ExceptionLogger implements Listener
                 return;
 
             String exceptionKey = createExceptionKey(throwable, pluginName);
-            List<ContextEntry> contextSnapshot = captureContextSnapshot();
+            ContextEntry command = captureLastCommand();
 
             boolean firstSeen;
             synchronized (contextLock)
@@ -257,11 +249,11 @@ public class ExceptionLogger implements Listener
                 firstSeen = addLoggedException(pluginName, exceptionKey);
                 if (firstSeen)
                 {
-                    contextStates.put(exceptionKey, new ContextState(contextSnapshot));
+                    contextStates.put(exceptionKey, new ContextState(command));
                 }
                 else
                 {
-                    maybeConfirmContext(pluginName, exceptionKey, throwable, contextSnapshot);
+                    maybeConfirmContext(pluginName, exceptionKey, throwable, command);
                 }
             }
 
@@ -437,44 +429,33 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Copy the recent commands, leaving out the old ones. Times are kept so
-     * they can be shown later; when comparing, only the command text matters.
+     * Get the last command, or null if there wasn't one recently.
+     * The timestamp is kept so it can be shown later.
      */
-    private List<ContextEntry> captureContextSnapshot()
+    private ContextEntry captureLastCommand()
     {
-        long cutoff = System.currentTimeMillis() - CONTEXT_WINDOW_MILLIS;
-        List<ContextEntry> snapshot = new ArrayList<>();
-        for (ContextEntry entry : recentCommands)
-        {
-            if (entry.timestamp >= cutoff)
-                snapshot.add(entry);
-        }
-        return snapshot;
-    }
-
-    private static List<String> contextTexts(List<ContextEntry> entries)
-    {
-        List<String> texts = new ArrayList<>(entries.size());
-        for (ContextEntry entry : entries)
-            texts.add(entry.text);
-        return texts;
+        ContextEntry entry = lastCommand;
+        if (entry == null || System.currentTimeMillis() - entry.timestamp > CONTEXT_WINDOW_MILLIS)
+            return null;
+        return entry;
     }
 
     /**
      * Runs when an exception we've already logged happens again (while holding
-     * contextLock). Saves the recent commands only if they're the same as last
-     * time; if they changed, it was probably a coincidence, so we save nothing.
+     * contextLock). Saves the command only if it's the same one as last time;
+     * if it changed, it was probably a coincidence, so we save nothing.
      */
-    private void maybeConfirmContext(String pluginName, String exceptionKey, Throwable throwable, List<ContextEntry> snapshot)
+    private void maybeConfirmContext(String pluginName, String exceptionKey, Throwable throwable, ContextEntry command)
     {
         ContextState state = contextStates.get(exceptionKey);
         if (state == null || state.confirmed || state.invalidated)
             return;
 
-        if (!snapshot.isEmpty() && contextTexts(snapshot).equals(contextTexts(state.firstContext)))
+        if (command != null && state.firstCommand != null
+                && command.text.equals(state.firstCommand.text))
         {
             state.confirmed = true;
-            logExecutor.submit(() -> writeConfirmedContextSafely(pluginName, throwable, snapshot));
+            logExecutor.submit(() -> writeConfirmedContextSafely(pluginName, throwable, command));
         }
         else
         {
@@ -483,11 +464,11 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Add the confirmed commands to the plugin's log file, right after the
+     * Add the confirmed command to the plugin's log file, right after the
      * original exception entry. If writing fails, report it normally; don't
      * send it back through the exception handler or it would loop forever.
      */
-    private void writeConfirmedContextSafely(String pluginName, Throwable throwable, List<ContextEntry> context)
+    private void writeConfirmedContextSafely(String pluginName, Throwable throwable, ContextEntry command)
     {
         try
         {
@@ -508,15 +489,10 @@ public class ExceptionLogger implements Listener
                 writer.write("FOR EXCEPTION: " + throwable.getClass().getName() + ": "
                         + (throwable.getMessage() != null ? throwable.getMessage() : "null"));
                 writer.write("\n");
-                writer.write("(Recurred with the same recent commands, so this context is likely related.)");
+                writer.write("(This exception keeps happening after the same command, so it's likely related.)");
                 writer.write("\n");
-                writer.write("CONTEXT (Recent operations before exception):");
+                writer.write("COMMAND: [" + new Date(command.timestamp) + "] " + command.text);
                 writer.write("\n");
-                for (ContextEntry entry : context)
-                {
-                    writer.write("  [" + new Date(entry.timestamp) + "] " + entry.text);
-                    writer.write("\n");
-                }
                 writer.write("================================================================================");
                 writer.write("\n");
             }
