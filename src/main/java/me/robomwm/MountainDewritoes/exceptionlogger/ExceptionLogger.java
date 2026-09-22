@@ -127,7 +127,7 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Add a free-text breadcrumb (e.g. "starting warp import") to the context
+     * Add a free-text breadcrumb (e.g. "saving player data") to the context
      * buffer. Only the last few entries are kept; they are printed with
      * exception logs to show what led up to the error.
      */
