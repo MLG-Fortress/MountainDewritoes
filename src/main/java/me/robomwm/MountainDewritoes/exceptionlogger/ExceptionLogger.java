@@ -19,31 +19,28 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
 /**
- * ExceptionLogger - Logs exceptions from any plugin to files in MountainDewritoes' data folder.
- * Only logs one instance of each unique exception per plugin (deduplicated, never expires).
- * File writes run on a dedicated single-threaded executor: never on the server thread,
- * and serialized so concurrent exceptions cannot interleave in the log files.
- * Keeps a rolling buffer of recently executed commands (players and console).
- * Context is only recorded for an exception that recurs with the same recent
- * commands; one-off coincidences are treated as noise and never recorded.
+ * Writes exceptions from any plugin to files in MountainDewritoes' data folder.
+ * Each unique exception is only logged once per plugin, no matter how often it happens.
+ * Writing happens on its own background thread, so it never slows down the server,
+ * and two writes can't get tangled up when exceptions happen at the same time.
+ * Remembers the last few commands that were run (by players and by the server).
+ * Those commands are only saved with an exception if the same exception keeps
+ * happening after the same commands; a one-time coincidence is ignored.
  */
 public class ExceptionLogger implements Listener
 {
     private final MountainDewritoes plugin;
     private final Map<String, Set<String>> loggedExceptions;
 
-    // Rolling buffer of recently executed commands on the server. Context is
-    // only ever recorded for an exception that recurs with the same recent
-    // commands; anything else is treated as coincidence and omitted.
-    // Entries older than CONTEXT_WINDOW_MILLIS are stale and never used.
+    // The last few commands run on the server. Commands older than
+    // CONTEXT_WINDOW_MILLIS don't count; they're too old to have caused anything.
     private static final int MAX_CONTEXT_ENTRIES = 5;
     private static final long CONTEXT_WINDOW_MILLIS = 5 * 60 * 1000;
     private final Deque<ContextEntry> recentCommands = new ConcurrentLinkedDeque<>();
 
-    // First-seen context per exception key, used to confirm that the context
-    // is stable across occurrences before recording it. The key already
-    // includes the plugin name. Compound check-and-update is guarded by
-    // contextLock.
+    // Remembers what the recent commands were the first time each exception
+    // happened, so we can check if they're the same when it happens again.
+    // The lock keeps two threads from checking and updating this at once.
     private final Map<String, ContextState> contextStates = new ConcurrentHashMap<>();
     private final Object contextLock = new Object();
 
@@ -59,8 +56,8 @@ public class ExceptionLogger implements Listener
         }
     }
 
-    // Single-threaded writer: keeps file I/O off the server thread and
-    // serializes appends so concurrent exceptions cannot interleave.
+    // One background thread does all the file writing, so it never runs on the
+    // server thread and two writes can't get tangled together.
     private final ExecutorService logExecutor = Executors.newSingleThreadExecutor(r ->
     {
         Thread thread = new Thread(r, "ExceptionLogger-Writer");
@@ -108,7 +105,7 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Record a player command as context for future exceptions.
+     * Remember a player's command in case an exception happens soon after.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event)
@@ -117,8 +114,8 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Record a non-player command (console, command block, or plugin-dispatched)
-     * as context for future exceptions.
+     * Remember a command from the console, a command block, or another plugin
+     * in case an exception happens soon after.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onServerCommand(ServerCommandEvent event)
@@ -127,9 +124,9 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Add a free-text breadcrumb (e.g. "saving player data") to the context
-     * buffer. Only the last few entries are kept; they are printed with
-     * exception logs to show what led up to the error.
+     * Save a short note (e.g. "saving player data") with the recent commands.
+     * Only the last few are kept. For plugins to note what they were doing,
+     * in case an exception follows.
      */
     public void addContext(String context)
     {
@@ -198,21 +195,21 @@ public class ExceptionLogger implements Listener
                 pluginName = "unknown";
             }
 
-            // Create a unique key for this exception
+            // Build an ID for this exception so we can tell if we've seen it before
             String exceptionKey = createExceptionKey(throwable, pluginName);
             List<ContextEntry> contextSnapshot = captureContextSnapshot();
 
             boolean firstSeen;
             synchronized (contextLock)
             {
-                // Skip duplicates; the add is atomic so concurrent identical
-                // exceptions cannot both slip through
+                // Have we logged this exact exception before? (Safe to ask
+                // from several threads at once.)
                 firstSeen = addLoggedException(pluginName, exceptionKey);
                 if (firstSeen)
                 {
-                    // First occurrence: remember the context, but don't record
-                    // it yet. It is only kept if the exception recurs with the
-                    // same context.
+                    // First time seeing it: remember what commands were just run,
+                    // but don't save them yet. They only get saved if this
+                    // exception happens again after the same commands.
                     contextStates.put(exceptionKey, new ContextState(contextSnapshot));
                 }
                 else
@@ -226,19 +223,19 @@ public class ExceptionLogger implements Listener
                 return;
             }
 
-            // Write off-thread; the single-threaded executor serializes appends
+            // Hand the file writing to the background thread
             final String loggedPluginName = pluginName;
             logExecutor.submit(() -> writeSafely(loggedPluginName, throwable, thread));
 
         } catch (Exception e)
         {
-            // Don't let our exception handler cause more exceptions
+            // Don't throw another exception while handling one
             plugin.getLogger().warning("ExceptionLogger failed to log exception: " + e.getMessage());
         }
     }
 
     /**
-     * Handle an exception directly (for cases where we catch exceptions explicitly)
+     * Log an exception we caught ourselves, rather than through the handler.
      */
     public void handleException(Plugin plugin, Throwable throwable)
     {
@@ -278,14 +275,14 @@ public class ExceptionLogger implements Listener
         }
         catch (Exception e)
         {
-            // Don't let our exception handler cause more exceptions
+            // Don't throw another exception while handling one
             this.plugin.getLogger().warning("ExceptionLogger failed to log exception: " + e.getMessage());
         }
     }
 
     /**
-     * Invoke logExceptionToFile without ever routing writer failures back
-     * through the exception handler (that would recurse).
+     * Write the log file, but if writing fails, don't feed that failure back
+     * into the exception handler or it would loop forever.
      */
     private void writeSafely(String pluginName, Throwable throwable, Thread thread)
     {
@@ -300,11 +297,11 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Find which plugin caused the exception based on thread and stack trace
+     * Figure out which plugin caused the exception from the thread name and stack trace
      */
     private String findPluginFromThread(Thread thread, Throwable throwable)
     {
-        // First, check if we can identify the plugin from the thread name
+        // Try the thread name first
         String threadName = thread.getName();
 
         // Common patterns: "PluginName-1", "Craft Scheduler for PluginName", etc.
@@ -337,17 +334,17 @@ public class ExceptionLogger implements Listener
             }
         }
 
-        // Check the stack trace for plugin classes
+        // Try the stack trace next
         StackTraceElement[] stackTrace = throwable.getStackTrace();
         for (StackTraceElement element : stackTrace)
         {
             String className = element.getClassName();
 
-            // Look for plugin package patterns
+            // Skip Bukkit's and Minecraft's own classes
             if (className.startsWith("org.bukkit") || className.startsWith("net.minecraft"))
                 continue;
 
-            // Check if this class belongs to a loaded plugin by package
+            // See if this class belongs to one of the loaded plugins
             for (Plugin plugin : Bukkit.getPluginManager().getPlugins())
             {
                 try {
@@ -360,7 +357,7 @@ public class ExceptionLogger implements Listener
             }
         }
 
-        // If we're in MountainDewritoes itself, return our name
+        // Or maybe the exception came from us
         for (StackTraceElement element : throwable.getStackTrace())
         {
             if (element.getClassName().startsWith("me.robomwm.MountainDewritoes"))
@@ -371,7 +368,7 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Sanitize plugin name to be safe for use as a filename
+     * Clean up a plugin name so it's safe to use as a file name
      */
     private String sanitizeFileName(String pluginName)
     {
@@ -403,24 +400,24 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Create a unique key for an exception to identify duplicates
+     * Build an ID for an exception so we can spot repeats
      */
     private String createExceptionKey(Throwable throwable, String pluginName)
     {
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(pluginName).append(":");
 
-        // Include the exception class name
+        // What kind of exception it was
         keyBuilder.append(throwable.getClass().getName());
 
-        // Include the message (first 100 chars to avoid overly long keys)
+        // What it said (first 100 characters, so the ID doesn't get huge)
         String message = throwable.getMessage();
         if (message != null)
         {
             keyBuilder.append(":").append(message.length() > 100 ? message.substring(0, 100) : message);
         }
 
-        // Include the first few stack trace elements (most significant ones)
+        // Where it happened (top of the stack trace)
         StackTraceElement[] stackTrace = throwable.getStackTrace();
         for (int i = 0; i < Math.min(3, stackTrace.length); i++)
         {
@@ -431,8 +428,8 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Mark an exception as logged for a plugin.
-     * @return true if this is the first time seeing it, false if already logged
+     * Remember that we logged this exception.
+     * @return true if this is the first time we've seen it
      */
     private boolean addLoggedException(String pluginName, String exceptionKey)
     {
@@ -440,8 +437,8 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Snapshot the current recent-command buffer, excluding stale entries.
-     * Timestamps are kept for display; confirmation compares command texts.
+     * Copy the recent commands, leaving out the old ones. Times are kept so
+     * they can be shown later; when comparing, only the command text matters.
      */
     private List<ContextEntry> captureContextSnapshot()
     {
@@ -464,10 +461,9 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Called under contextLock when an already-logged exception recurs.
-     * Records the context only if this occurrence has the same recent
-     * commands as the first one; otherwise the context is deemed
-     * coincidental and never recorded for this exception.
+     * Runs when an exception we've already logged happens again (while holding
+     * contextLock). Saves the recent commands only if they're the same as last
+     * time; if they changed, it was probably a coincidence, so we save nothing.
      */
     private void maybeConfirmContext(String pluginName, String exceptionKey, Throwable throwable, List<ContextEntry> snapshot)
     {
@@ -487,10 +483,9 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Append a confirmed-context block to the plugin's exception log.
-     * Runs on the writer executor, serialized after the original entry.
-     * Writer failures go to the plugin logger, never back through the
-     * exception handler (that would recurse).
+     * Add the confirmed commands to the plugin's log file, right after the
+     * original exception entry. If writing fails, report it normally; don't
+     * send it back through the exception handler or it would loop forever.
      */
     private void writeConfirmedContextSafely(String pluginName, Throwable throwable, List<ContextEntry> context)
     {
@@ -533,12 +528,12 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Log exception to a file in MountainDewritoes' data folder, one file per plugin.
-     * Always runs on the single-threaded writer executor, never the server thread.
+     * Write an exception to the plugin's log file. Always runs on the
+     * background writer thread, never the server thread.
      */
     private void logExceptionToFile(String pluginName, Throwable throwable, Thread thread)
     {
-        // All exception logs go directly to MountainDewritoes' data folder
+        // Everything goes in MountainDewritoes' data folder
         File pluginDataFolder = plugin.getDataFolder();
 
         // Create the directory if it doesn't exist
@@ -547,7 +542,7 @@ public class ExceptionLogger implements Listener
             pluginDataFolder.mkdirs();
         }
 
-        // Create a log file for this plugin (one file per plugin)
+        // One log file per plugin
         File logFile = new File(pluginDataFolder, sanitizeFileName(pluginName) + "_exceptions.log");
 
         try
@@ -558,7 +553,7 @@ public class ExceptionLogger implements Listener
                 logFile.createNewFile();
             }
 
-            // Write the exception details (append mode)
+            // Add to the end of the file
             try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(logFile, true)))
             {
                 // Write separator
@@ -617,7 +612,7 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Custom Handler for catching exceptions from Bukkit's logger
+     * Catches exceptions that plugins log through Bukkit's logger
      */
     private static class ExceptionLoggingHandler extends Handler
     {
@@ -668,7 +663,7 @@ public class ExceptionLogger implements Listener
                     } catch (Exception ignored) {}
                 }
             }
-            // Check if it's from MountainDewritoes itself
+            // Or maybe it's from us
             for (StackTraceElement element : stackTrace)
             {
                 if (element.getClassName().startsWith("me.robomwm.MountainDewritoes"))
