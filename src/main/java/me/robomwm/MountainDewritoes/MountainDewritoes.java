@@ -22,7 +22,7 @@ import me.robomwm.MountainDewritoes.Commands.TipCommand;
 import me.robomwm.MountainDewritoes.Commands.ViewDistanceCommand;
 import me.robomwm.MountainDewritoes.Commands.VoiceCommand;
 import me.robomwm.MountainDewritoes.Commands.WarpCommand;
-import me.robomwm.MountainDewritoes.exceptionlogger.ExceptionLogger;
+import me.robomwm.MountainDewritoes.ai.ExceptionLogger;
 import me.robomwm.MountainDewritoes.Events.ReverseOsmosis;
 import me.robomwm.MountainDewritoes.Music.AtmosphericManager;
 import me.robomwm.MountainDewritoes.NotOverwatch.Ogrewatch;

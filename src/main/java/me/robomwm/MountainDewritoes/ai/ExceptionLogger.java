@@ -1,4 +1,4 @@
-package me.robomwm.MountainDewritoes.exceptionlogger;
+package me.robomwm.MountainDewritoes.ai;
 
 import me.robomwm.MountainDewritoes.MountainDewritoes;
 import org.bukkit.Bukkit;
