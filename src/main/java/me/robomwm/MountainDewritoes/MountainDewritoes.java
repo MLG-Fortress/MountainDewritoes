@@ -419,6 +419,8 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         for (String key : usedMetadata.keySet())
             for (Metadatable target : usedMetadata.get(key))
                 target.removeMetadata(key, this);
+        if (exceptionLogger != null)
+            exceptionLogger.shutdown();
     }
 
     public void dispatchCommand(String command)
