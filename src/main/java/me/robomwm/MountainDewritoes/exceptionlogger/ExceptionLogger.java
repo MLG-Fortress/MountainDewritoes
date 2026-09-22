@@ -83,12 +83,13 @@ public class ExceptionLogger implements Listener
     }
 
     /**
-     * Record a console command as context for future exceptions.
+     * Record a non-player command (console, command block, or plugin-dispatched)
+     * as context for future exceptions.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onServerCommand(ServerCommandEvent event)
     {
-        addContext("COMMAND by console: " + event.getCommand());
+        addContext("COMMAND by " + event.getSender().getName() + ": " + event.getCommand());
     }
 
     /**
