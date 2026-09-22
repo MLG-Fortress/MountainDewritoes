@@ -33,9 +33,24 @@ public class ExceptionLogger implements Listener
     private final Map<String, Set<String>> loggedExceptions;
 
     // Rolling buffer of the most recent commands executed on the server,
-    // printed as context in exception logs.
+    // printed as context in exception logs. Entries older than
+    // CONTEXT_WINDOW_MILLIS are stale: an old command almost certainly
+    // didn't cause the error, so it is pruned and never printed.
     private static final int MAX_CONTEXT_ENTRIES = 5;
-    private final Deque<String> recentCommands = new ConcurrentLinkedDeque<>();
+    private static final long CONTEXT_WINDOW_MILLIS = 5 * 60 * 1000;
+    private final Deque<ContextEntry> recentCommands = new ConcurrentLinkedDeque<>();
+
+    private static class ContextEntry
+    {
+        final long timestamp;
+        final String text;
+
+        ContextEntry(long timestamp, String text)
+        {
+            this.timestamp = timestamp;
+            this.text = text;
+        }
+    }
 
     // Single-threaded writer: keeps file I/O off the server thread and
     // serializes appends so concurrent exceptions cannot interleave.
@@ -101,8 +116,11 @@ public class ExceptionLogger implements Listener
     {
         if (context == null || context.isEmpty())
             return;
-        recentCommands.addLast("[" + new Date() + "] " + context);
+        long now = System.currentTimeMillis();
+        recentCommands.addLast(new ContextEntry(now, context));
         while (recentCommands.size() > MAX_CONTEXT_ENTRIES)
+            recentCommands.pollFirst();
+        while (!recentCommands.isEmpty() && now - recentCommands.peekFirst().timestamp > CONTEXT_WINDOW_MILLIS)
             recentCommands.pollFirst();
     }
 
@@ -441,12 +459,22 @@ public class ExceptionLogger implements Listener
                     bufferedWriter.write("\n");
                 }
 
-                // Recent commands, for context on how the exception came about
-                if (!recentCommands.isEmpty())
+                // Recent commands, for context on how the exception came about.
+                // Only entries inside the recency window are printed; anything
+                // older is unrelated noise, so the section is omitted entirely
+                // when nothing is recent.
+                long cutoff = System.currentTimeMillis() - CONTEXT_WINDOW_MILLIS;
+                List<String> freshContext = new ArrayList<>();
+                for (ContextEntry entry : recentCommands)
+                {
+                    if (entry.timestamp >= cutoff)
+                        freshContext.add("[" + new Date(entry.timestamp) + "] " + entry.text);
+                }
+                if (!freshContext.isEmpty())
                 {
                     bufferedWriter.write("CONTEXT (Recent operations before exception):");
                     bufferedWriter.write("\n");
-                    for (String contextEntry : recentCommands)
+                    for (String contextEntry : freshContext)
                     {
                         bufferedWriter.write("  " + contextEntry);
                         bufferedWriter.write("\n");
