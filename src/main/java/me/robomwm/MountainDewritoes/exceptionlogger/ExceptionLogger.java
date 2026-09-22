@@ -23,22 +23,29 @@ import java.util.logging.*;
  * Only logs one instance of each unique exception per plugin (deduplicated, never expires).
  * File writes run on a dedicated single-threaded executor: never on the server thread,
  * and serialized so concurrent exceptions cannot interleave in the log files.
- * Keeps a rolling buffer of the last few executed commands (players and console);
- * on exception they are printed under a CONTEXT header so the log shows
- * what led up to the error.
+ * Keeps a rolling buffer of recently executed commands (players and console).
+ * Context is only recorded for an exception that recurs with the same recent
+ * commands; one-off coincidences are treated as noise and never recorded.
  */
 public class ExceptionLogger implements Listener
 {
     private final MountainDewritoes plugin;
     private final Map<String, Set<String>> loggedExceptions;
 
-    // Rolling buffer of the most recent commands executed on the server,
-    // printed as context in exception logs. Entries older than
-    // CONTEXT_WINDOW_MILLIS are stale: an old command almost certainly
-    // didn't cause the error, so it is pruned and never printed.
+    // Rolling buffer of recently executed commands on the server. Context is
+    // only ever recorded for an exception that recurs with the same recent
+    // commands; anything else is treated as coincidence and omitted.
+    // Entries older than CONTEXT_WINDOW_MILLIS are stale and never used.
     private static final int MAX_CONTEXT_ENTRIES = 5;
     private static final long CONTEXT_WINDOW_MILLIS = 5 * 60 * 1000;
     private final Deque<ContextEntry> recentCommands = new ConcurrentLinkedDeque<>();
+
+    // First-seen context per exception key, used to confirm that the context
+    // is stable across occurrences before recording it. The key already
+    // includes the plugin name. Compound check-and-update is guarded by
+    // contextLock.
+    private final Map<String, ContextState> contextStates = new ConcurrentHashMap<>();
+    private final Object contextLock = new Object();
 
     private static class ContextEntry
     {
@@ -85,6 +92,18 @@ public class ExceptionLogger implements Listener
         {
             logExecutor.shutdownNow();
             Thread.currentThread().interrupt();
+        }
+    }
+
+    private static class ContextState
+    {
+        final List<ContextEntry> firstContext;
+        boolean confirmed;
+        boolean invalidated;
+
+        ContextState(List<ContextEntry> firstContext)
+        {
+            this.firstContext = firstContext;
         }
     }
 
@@ -181,10 +200,28 @@ public class ExceptionLogger implements Listener
 
             // Create a unique key for this exception
             String exceptionKey = createExceptionKey(throwable, pluginName);
+            List<ContextEntry> contextSnapshot = captureContextSnapshot();
 
-            // Skip duplicates; the add is atomic so concurrent identical
-            // exceptions cannot both slip through
-            if (!addLoggedException(pluginName, exceptionKey))
+            boolean firstSeen;
+            synchronized (contextLock)
+            {
+                // Skip duplicates; the add is atomic so concurrent identical
+                // exceptions cannot both slip through
+                firstSeen = addLoggedException(pluginName, exceptionKey);
+                if (firstSeen)
+                {
+                    // First occurrence: remember the context, but don't record
+                    // it yet. It is only kept if the exception recurs with the
+                    // same context.
+                    contextStates.put(exceptionKey, new ContextState(contextSnapshot));
+                }
+                else
+                {
+                    maybeConfirmContext(pluginName, exceptionKey, throwable, contextSnapshot);
+                }
+            }
+
+            if (!firstSeen)
             {
                 return;
             }
@@ -215,8 +252,23 @@ public class ExceptionLogger implements Listener
                 return;
 
             String exceptionKey = createExceptionKey(throwable, pluginName);
+            List<ContextEntry> contextSnapshot = captureContextSnapshot();
 
-            if (!addLoggedException(pluginName, exceptionKey))
+            boolean firstSeen;
+            synchronized (contextLock)
+            {
+                firstSeen = addLoggedException(pluginName, exceptionKey);
+                if (firstSeen)
+                {
+                    contextStates.put(exceptionKey, new ContextState(contextSnapshot));
+                }
+                else
+                {
+                    maybeConfirmContext(pluginName, exceptionKey, throwable, contextSnapshot);
+                }
+            }
+
+            if (!firstSeen)
             {
                 return;
             }
@@ -388,6 +440,99 @@ public class ExceptionLogger implements Listener
     }
 
     /**
+     * Snapshot the current recent-command buffer, excluding stale entries.
+     * Timestamps are kept for display; confirmation compares command texts.
+     */
+    private List<ContextEntry> captureContextSnapshot()
+    {
+        long cutoff = System.currentTimeMillis() - CONTEXT_WINDOW_MILLIS;
+        List<ContextEntry> snapshot = new ArrayList<>();
+        for (ContextEntry entry : recentCommands)
+        {
+            if (entry.timestamp >= cutoff)
+                snapshot.add(entry);
+        }
+        return snapshot;
+    }
+
+    private static List<String> contextTexts(List<ContextEntry> entries)
+    {
+        List<String> texts = new ArrayList<>(entries.size());
+        for (ContextEntry entry : entries)
+            texts.add(entry.text);
+        return texts;
+    }
+
+    /**
+     * Called under contextLock when an already-logged exception recurs.
+     * Records the context only if this occurrence has the same recent
+     * commands as the first one; otherwise the context is deemed
+     * coincidental and never recorded for this exception.
+     */
+    private void maybeConfirmContext(String pluginName, String exceptionKey, Throwable throwable, List<ContextEntry> snapshot)
+    {
+        ContextState state = contextStates.get(exceptionKey);
+        if (state == null || state.confirmed || state.invalidated)
+            return;
+
+        if (!snapshot.isEmpty() && contextTexts(snapshot).equals(contextTexts(state.firstContext)))
+        {
+            state.confirmed = true;
+            logExecutor.submit(() -> writeConfirmedContextSafely(pluginName, throwable, snapshot));
+        }
+        else
+        {
+            state.invalidated = true;
+        }
+    }
+
+    /**
+     * Append a confirmed-context block to the plugin's exception log.
+     * Runs on the writer executor, serialized after the original entry.
+     * Writer failures go to the plugin logger, never back through the
+     * exception handler (that would recurse).
+     */
+    private void writeConfirmedContextSafely(String pluginName, Throwable throwable, List<ContextEntry> context)
+    {
+        try
+        {
+            File pluginDataFolder = plugin.getDataFolder();
+            if (!pluginDataFolder.exists())
+            {
+                pluginDataFolder.mkdirs();
+            }
+
+            File logFile = new File(pluginDataFolder, sanitizeFileName(pluginName) + "_exceptions.log");
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true)))
+            {
+                writer.write("\n");
+                writer.write("================================================================================");
+                writer.write("\n");
+                writer.write("CONFIRMED CONTEXT LOGGED AT: " + new Date().toString());
+                writer.write("\n");
+                writer.write("FOR EXCEPTION: " + throwable.getClass().getName() + ": "
+                        + (throwable.getMessage() != null ? throwable.getMessage() : "null"));
+                writer.write("\n");
+                writer.write("(Recurred with the same recent commands, so this context is likely related.)");
+                writer.write("\n");
+                writer.write("CONTEXT (Recent operations before exception):");
+                writer.write("\n");
+                for (ContextEntry entry : context)
+                {
+                    writer.write("  [" + new Date(entry.timestamp) + "] " + entry.text);
+                    writer.write("\n");
+                }
+                writer.write("================================================================================");
+                writer.write("\n");
+            }
+        }
+        catch (Throwable t)
+        {
+            plugin.getLogger().warning("ExceptionLogger failed to write confirmed context: " + t.getMessage());
+        }
+    }
+
+    /**
      * Log exception to a file in MountainDewritoes' data folder, one file per plugin.
      * Always runs on the single-threaded writer executor, never the server thread.
      */
@@ -456,29 +601,6 @@ public class ExceptionLogger implements Listener
                     PrintWriter causePw = new PrintWriter(causeSw);
                     cause.printStackTrace(causePw);
                     bufferedWriter.write(causeSw.toString());
-                    bufferedWriter.write("\n");
-                }
-
-                // Recent commands, for context on how the exception came about.
-                // Only entries inside the recency window are printed; anything
-                // older is unrelated noise, so the section is omitted entirely
-                // when nothing is recent.
-                long cutoff = System.currentTimeMillis() - CONTEXT_WINDOW_MILLIS;
-                List<String> freshContext = new ArrayList<>();
-                for (ContextEntry entry : recentCommands)
-                {
-                    if (entry.timestamp >= cutoff)
-                        freshContext.add("[" + new Date(entry.timestamp) + "] " + entry.text);
-                }
-                if (!freshContext.isEmpty())
-                {
-                    bufferedWriter.write("CONTEXT (Recent operations before exception):");
-                    bufferedWriter.write("\n");
-                    for (String contextEntry : freshContext)
-                    {
-                        bufferedWriter.write("  " + contextEntry);
-                        bufferedWriter.write("\n");
-                    }
                     bufferedWriter.write("\n");
                 }
 
