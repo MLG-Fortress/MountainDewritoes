@@ -34,14 +34,14 @@ public class StaffRestartCommand implements CommandExecutor, Listener
 
     private CommandSender name = null;
     private String reason = null;
-    private boolean pendingShutdown = false;
+    private boolean pendingRestart = false;
     private boolean updateComplete = false;
     private Process updateProcess;
 
     @EventHandler(priority = EventPriority.MONITOR)
     private void onPlayerLeave(PlayerQuitEvent event)
     {
-        if (reason == null || pendingShutdown)
+        if (reason == null || pendingRestart)
             return;
         new BukkitRunnable()
         {
@@ -53,7 +53,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                     if (!onlinePlayer.hasPermission("mlgstaff"))
                         return;
                 }
-                shutdown();
+                beginRestart();
             }
         }.runTaskLater(instance, 1L);
     }
@@ -76,7 +76,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
 
         if (args.length > 0 && (args[0].equalsIgnoreCase("abort") || args[0].equalsIgnoreCase("cancel")))
         {
-            abortShutdown();
+            abortRestart();
             abortUpdate();
             sender.sendMessage("Restart aborted.");
             return true;
@@ -89,7 +89,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                 if (!onlinePlayer.hasPermission("mlgstaff"))
                 {
                     sender.sendMessage("Hmm, luks lik we hav sum playas on da serbur rite now, but I've scheduled a /restart to occur as soon as they leave. Use " + ChatColor.GOLD + "/restart abort " + ChatColor.RESET + "to cancel.");
-                    scheduleShutdown(sender, reason);
+                    scheduleRestart(sender, reason);
                     return true;
                 }
             }
@@ -110,41 +110,41 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             this.name = sender;
             this.reason = reason;
             this.updateComplete = true;
-            this.pendingShutdown = true;
+            this.pendingRestart = true;
             abortUpdate();
-            actuallyShutdown();
+            actuallyRestart();
             return true;
         }
 
         sender.sendMessage("Restart process initialized. Will restart as soon as plugins finish updating.");
-        scheduleShutdown(sender, reason);
-        shutdown();
+        scheduleRestart(sender, reason);
+        beginRestart();
 
 
         return true;
     }
 
 
-    private void scheduleShutdown(CommandSender name, String reason)
+    private void scheduleRestart(CommandSender name, String reason)
     {
         this.name = name;
         this.reason = reason;
     }
 
-    private boolean shutdown()
+    private boolean beginRestart()
     {
-        if (pendingShutdown)
+        if (pendingRestart)
             return false;
-        pendingShutdown = true;
+        pendingRestart = true;
 
         instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(), "broadcast Server restart process initialized. Restart will occur as soon as the plugins finish updating.");
         update(false);
         return true;
     }
 
-    private void abortShutdown()
+    private void abortRestart()
     {
-        this.pendingShutdown = false;
+        this.pendingRestart = false;
         this.name = null;
         this.reason = null;
     }
@@ -155,11 +155,11 @@ public class StaffRestartCommand implements CommandExecutor, Listener
             this.updateProcess.destroy();
     }
 
-    private boolean update(boolean noShutdown)
+    private boolean update(boolean noRestart)
     {
-        if (updateComplete && !noShutdown)
+        if (updateComplete && !noRestart)
         {
-            actuallyShutdown();
+            actuallyRestart();
             return true;
         }
         if (updateProcess != null && updateProcess.isAlive())
@@ -206,7 +206,7 @@ public class StaffRestartCommand implements CommandExecutor, Listener
                         updateComplete = true;
                         updateProcess = null;
                         instance.getServer().broadcastMessage(ChatColor.GRAY + "Update complete.");
-                        actuallyShutdown();
+                        actuallyRestart();
                     }
                 }
             }.runTaskTimer(instance, 200L, 20L);
@@ -220,11 +220,11 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         return true;
     }
 
-    private void actuallyShutdown()
+    private void actuallyRestart()
     {
-        if (!pendingShutdown || reason == null || !updateComplete)
+        if (!pendingRestart || reason == null || !updateComplete)
             return;
-        pendingShutdown = false;
+        pendingRestart = false;
         for (Player onlinePlayer : instance.getServer().getOnlinePlayers())
         {
             onlinePlayer.kickPlayer("Serbur restartin cuz " + name.getName() + " sez " + reason);
