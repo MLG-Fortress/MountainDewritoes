@@ -234,6 +234,6 @@ public class StaffRestartCommand implements CommandExecutor, Listener
         for (World world : instance.getServer().getWorlds())
             world.save();
 
-        instance.getServer().shutdown();
+        instance.getServer().restart();
     }
 }
