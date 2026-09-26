@@ -233,6 +233,7 @@ public class MountainDewritoes extends JavaPlugin implements Listener
         {
             world.setPVP(false);
             world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         }
 
 //        survivalWorlds.add(getServer().getWorld("mall"));
