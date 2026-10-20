@@ -88,7 +88,7 @@ public class NickCommand implements CommandExecutor, Listener
                 return true;
             }
             //player.performCommand("enick " + convertColor(color) + player.getName());
-            player.setDisplayName(color + chat.getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
+            player.setDisplayName(color + getPlayerPrefix(player) + player.getName() + ChatColor.RESET);
             plugin.getPlayerDataStore().setNameColor(player, color);
             player.sendMessage("Your name's color is now " + color + color.name().toLowerCase());
             return true;
@@ -114,12 +114,33 @@ public class NickCommand implements CommandExecutor, Listener
         return false;
     }
 
+    /**
+     * Read the chat prefix without letting a missing permissions record break
+     * the caller.
+     *
+     * <p>LuckPerms refuses unsafe offline lookups on the main thread, and a
+     * brand new player looks exactly like that on their very first join. The
+     * prefix is simply not known yet, so carry on without one instead of
+     * throwing out of the join handler.
+     */
+    private String getPlayerPrefix(Player player)
+    {
+        try
+        {
+            return chat.getPlayerPrefix(player);
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+    }
+
     //Automatically give a color to new players
     @EventHandler(priority = EventPriority.LOWEST)
     private void colorizeNewPlayers(PlayerJoinEvent event)
     {
         ChatColor color = plugin.getPlayerDataStore().getNameColor(event.getPlayer());
-        event.getPlayer().setDisplayName(color + chat.getPlayerPrefix(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
+        event.getPlayer().setDisplayName(color + getPlayerPrefix(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
     }
 
     //Now resides in GrandioseAPI

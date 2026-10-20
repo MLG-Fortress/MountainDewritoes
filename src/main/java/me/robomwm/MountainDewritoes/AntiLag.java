@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.PluginManager;
 
@@ -24,7 +22,6 @@ public class AntiLag implements Listener
 {
 //    private Map<Player, Integer> viewDistance = new HashMap<>();
 
-    private int onlinePlayers;
     private MountainDewritoes plugin;
     private PluginManager pluginManager;
     //private boolean ranDisabler = true;
@@ -195,34 +192,31 @@ public class AntiLag implements Listener
         }
     }
 
-    @EventHandler
-    private void onPlayerJoin(PlayerJoinEvent event)
+    /**
+     * Whether anybody is on the server right now.
+     *
+     * <p>This used to be a counter kept by hand, incremented on join and
+     * decremented on quit. It drifted out of step with the real player list
+     * and went negative, which meant the rotator and snowbar checks below
+     * stopped cancelling their events, so the anti lag work kept running
+     * with nobody on the server. The server's own player list cannot drift.
+     */
+    private boolean isAnyoneOnline()
     {
-        onlinePlayers++;
-    }
-
-    @EventHandler
-    private void onQuit(PlayerQuitEvent event)
-    {
-        onlinePlayers--;
-        if (onlinePlayers < 0)
-        {
-            plugin.getLogger().severe("dahek, how is onlinePlayers count " + onlinePlayers);
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector onlinePlayers count somehow is at " + onlinePlayers);
-        }
+        return !plugin.getServer().getOnlinePlayers().isEmpty();
     }
 
     @EventHandler(ignoreCancelled = true)
     private void onlySpinForPpl(RotatorSpinEvent event)
     {
-        if (onlinePlayers == 0 || event.getRotator().getLocation().getWorld().getPlayers().isEmpty())
+        if (!isAnyoneOnline() || event.getRotator().getLocation().getWorld().getPlayers().isEmpty())
             event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
     private void onlySnowForPpl(SnowbarSnowEvent event)
     {
-        if (onlinePlayers == 0 || event.getSnowbar().getBase().getLocation().getWorld().getPlayers().isEmpty())
+        if (!isAnyoneOnline() || event.getSnowbar().getBase().getLocation().getWorld().getPlayers().isEmpty())
             event.setCancelled(true);
     }
 }
