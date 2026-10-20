@@ -15,6 +15,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Created on 2/22/2018.
  *
@@ -24,7 +28,26 @@ public class AntiLag implements Listener
 {
 //    private Map<Player, Integer> viewDistance = new HashMap<>();
 
-    private int onlinePlayers;
+    /**
+     * The players we believe are on the server, by id.
+     *
+     * <p>This used to be a number that went up on join and down on quit.
+     * A number assumes every player fires exactly one join and exactly one
+     * quit, and that assumption does not hold. A plugin can remove a player
+     * from the server on its own, and then the quit event fires twice while
+     * the join event only fired once, so the count ends up one short for
+     * every player that went that way.
+     *
+     * <p>A negative count is not zero, so the rotator and snowbar checks
+     * below stopped cancelling their events, and the anti lag work kept
+     * running with nobody on the server. That is the opposite of what this
+     * class is for.
+     *
+     * <p>A set of ids cannot go negative, cannot be counted twice, and is
+     * safe to touch from more than one thread.
+     */
+    private final Set<UUID> onlinePlayers = ConcurrentHashMap.newKeySet();
+
     private MountainDewritoes plugin;
     private PluginManager pluginManager;
     //private boolean ranDisabler = true;
@@ -33,6 +56,13 @@ public class AntiLag implements Listener
     {
         this.plugin = plugin;
         this.pluginManager = plugin.getServer().getPluginManager();
+        // Players who were already here when the plugin turned on never
+        // fired a join event for us, so count them from the start. This runs
+        // once, on the main thread, while the plugin is enabling.
+        for (Player player : plugin.getServer().getOnlinePlayers())
+        {
+            onlinePlayers.add(player.getUniqueId());
+        }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getLogger().info("max:" + Runtime.getRuntime().maxMemory() + " free:" + Runtime.getRuntime().freeMemory() + " total:" + Runtime.getRuntime().totalMemory());
         World spawnWorld = plugin.getServer().getWorld("firstjoin");
@@ -198,31 +228,41 @@ public class AntiLag implements Listener
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event)
     {
-        onlinePlayers++;
+        onlinePlayers.add(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
     private void onQuit(PlayerQuitEvent event)
     {
-        onlinePlayers--;
-        if (onlinePlayers < 0)
-        {
-            plugin.getLogger().severe("dahek, how is onlinePlayers count " + onlinePlayers);
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "communicationconnector onlinePlayers count somehow is at " + onlinePlayers);
-        }
+        // Removing an id that is not there does nothing, so a second quit
+        // for the same player cannot push the count down any further.
+        onlinePlayers.remove(event.getPlayer().getUniqueId());
+    }
+
+    /**
+     * Whether anybody is on the server right now.
+     *
+     * <p>This does not read the server's player list on purpose. That list is
+     * not safe to read from a task that is not on the main thread, and the
+     * join and quit events this class watches can arrive from another
+     * thread. The set of ids is safe from any thread.
+     */
+    private boolean isAnyoneOnline()
+    {
+        return !onlinePlayers.isEmpty();
     }
 
     @EventHandler(ignoreCancelled = true)
     private void onlySpinForPpl(RotatorSpinEvent event)
     {
-        if (onlinePlayers == 0 || event.getRotator().getLocation().getWorld().getPlayers().isEmpty())
+        if (!isAnyoneOnline() || event.getRotator().getLocation().getWorld().getPlayers().isEmpty())
             event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
     private void onlySnowForPpl(SnowbarSnowEvent event)
     {
-        if (onlinePlayers == 0 || event.getSnowbar().getBase().getLocation().getWorld().getPlayers().isEmpty())
+        if (!isAnyoneOnline() || event.getSnowbar().getBase().getLocation().getWorld().getPlayers().isEmpty())
             event.setCancelled(true);
     }
 }
